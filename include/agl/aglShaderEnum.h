@@ -23,4 +23,12 @@ enum ShaderSymbolType
     cShaderSymbolType_Num,
 };
 
+enum ShaderMode
+{
+    cShaderMode_UniformRegister,
+    cShaderMode_UniformBlock,
+    cShaderMode_GeometryShader,
+    cShaderMode_Invalid
+};
+
 }

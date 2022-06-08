@@ -30,19 +30,19 @@ public:
 
     void verify() const
     {
-        if (ref().sig_word != DataType::cSignature)
+        if (ref().mSigWord != DataType::cSignature)
         {
-            const char* signature = ptr()->signature;
+            const char* signature = ptr()->mSignature;
             // SEAD_ASSERT_MSG(false, "Wrong binary. [%c%c%c%c].",
             //                        signature[0], signature[1],
             //                        signature[2], signature[3]);
         }
 
-        if (ref().version != DataType::cVersion)
+        if (ref().mVersion != DataType::cVersion)
         {
             // SEAD_ASSERT_MSG(false, "Version error.current:%d binary:%d",
             //                        DataType::cVersion,
-            //                        ref().version);
+            //                        ref().mVersion);
         }
     }
 
@@ -181,12 +181,12 @@ public:
         return ref().mNum;
     }
 
-    ElemType get(s32 i) const
+    ElemType get(s32 n) const
     {
-        // No bounds check... ?
+        // SEAD_ASSERT(0 <= n && n <= static_cast< int >( this->getNum() ));
 
         constIterator it = begin();
-        constIterator it_end = constIterator(i, NULL);
+        constIterator it_end = constIterator(n, NULL);
 
         while (it != it_end)
             ++it;

@@ -1,4 +1,7 @@
+#include <agl/detail/aglFileIOMgr.h>
+#include <agl/detail/aglPrivateResource.h>
 #include <agl/shader/aglShader.h>
+#include <agl/shader/aglShaderCompileInfo.h>
 
 namespace agl {
 
@@ -6,6 +9,39 @@ Shader::Shader()
     : mBinary(NULL)
     , mCompileInfo(NULL)
 {
+}
+
+u32 Shader::setUp(bool compile_source, bool) const
+{
+    u32 ret = 2;
+
+    if (mCompileInfo && compile_source)
+    {
+        sead::HeapSafeString* temp_text = detail::PrivateResource::instance()->getShaderText();
+#ifdef cafe
+        mCompileInfo->calcCompileSource(getShaderType(), temp_text, ShaderCompileInfo::cTarget_GX2, true);
+#else
+        mCompileInfo->calcCompileSource(getShaderType(), temp_text, ShaderCompileInfo::cTarget_GL, true);
+#endif
+
+        static const char* sSavePath[cShaderType_Num] = {
+            "%AGL_ROOT%/tools/temporary/temp_vs.sh",
+            "%AGL_ROOT%/tools/temporary/temp_fs.sh",
+            "%AGL_ROOT%/tools/temporary/temp_gs.sh"
+        };
+
+        detail::FileIOMgr::DialogArg arg;
+        arg.mSavePath = sSavePath[getShaderType()];
+
+        detail::FileIOMgr::instance()->save(temp_text->cstr(), temp_text->calcLength(), arg);
+
+        ret = 0;
+    }
+
+    if (mBinary)
+        ret = 0;
+
+    return ret;
 }
 
 void Shader::setBinary(const void* binary)

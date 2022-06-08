@@ -60,7 +60,45 @@ public:
     Shader* getShader(ShaderType type);
     const Shader* getShader(ShaderType type) const;
 
-    /* ShaderMode */ u32 setUpAllVariation();
+#ifdef cafe
+    GX2VertexShader* getVertexShaderBinary()
+    {
+        validate_();
+        return mVertexShader.getBinary();
+    }
+
+    const GX2VertexShader* getVertexShaderBinary() const
+    {
+        validate_();
+        return mVertexShader.getBinary();
+    }
+
+    GX2PixelShader* getFragmentShaderBinary()
+    {
+        validate_();
+        return mFragmentShader.getBinary();
+    }
+
+    const GX2PixelShader* getFragmentShaderBinary() const
+    {
+        validate_();
+        return mFragmentShader.getBinary();
+    }
+
+    GX2GeometryShader* getGeometryShaderBinary()
+    {
+        validate_();
+        return mGeometryShader.getBinary();
+    }
+
+    const GX2GeometryShader* getGeometryShaderBinary() const
+    {
+        validate_();
+        return mGeometryShader.getBinary();
+    }
+#endif // cafe
+
+    u32 setUpAllVariation(); // I don't know the actual return type
     void reserveSetUpAllVariation();
 
     s32 getVariationNum() const;
@@ -68,6 +106,20 @@ public:
 
     ShaderProgram* getVariation(s32 index);
     const ShaderProgram* getVariation(s32 index) const;
+
+    void updateVariation(s32 index) // I don't know the actual name
+    {
+        ShaderProgram* program = getVariation(index);
+        program->mFlag.set(8 | 2);
+        program->validate_();
+    }
+
+    void updateAttributeLocation() const;
+    void updateUniformLocation() const;
+    void updateUniformBlockLocation() const;
+    void updateSamplerLocation() const;
+
+    void dump() const;
 
     void cleanUp();
 
@@ -77,6 +129,13 @@ public:
     void destroySamplerLocation();
 
 private:
+    u32 validate_() const;
+    u32 forceValidate_() const;
+
+    void setUpForVariation_() const;
+
+    void setShaderGX2_() const;
+
     class SharedData;
     class VariationBuffer;
 
@@ -92,6 +151,8 @@ private:
         void setMacroValue(s32 macro_index, s32 value_index, const sead::SafeString& value);
 
         void create(sead::Heap* heap);
+
+        s32 getMacroAndValueArray(s32 index, const char** macro_array, const char** value_array) const;
 
         class Macro
         {
@@ -130,13 +191,16 @@ private:
     const VariationBuffer* getVariation_() const { return mpSharedData->mpVariationBuffer; }
 
 private:
-    sead::BitFlag8 mFlags;
+    static const u32 cVariationMacroMax = 1024;
+    static const u32 cVariationValueMax = 1024;
+
+    mutable sead::BitFlag8 mFlag;
     u16 mVariationID;
-    DisplayList mDisplayList;
-    sead::Buffer<AttributeLocation> mAttributeLocation;
-    sead::Buffer<UniformLocation> mUniformLocation;
-    sead::Buffer<UniformBlockLocation> mUniformBlockLocation;
-    sead::Buffer<SamplerLocation> mSamplerLocation;
+    mutable DisplayList mDisplayList;
+    mutable sead::Buffer<AttributeLocation> mAttributeLocation;
+    mutable sead::Buffer<UniformLocation> mUniformLocation;
+    mutable sead::Buffer<UniformBlockLocation> mUniformBlockLocation;
+    mutable sead::Buffer<SamplerLocation> mSamplerLocation;
     VertexShader mVertexShader;
     FragmentShader mFragmentShader;
     GeometryShader mGeometryShader;

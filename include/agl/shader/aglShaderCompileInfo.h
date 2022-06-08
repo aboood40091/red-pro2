@@ -7,17 +7,33 @@
 
 namespace agl {
 
+enum ShaderType;
+
 class ShaderCompileInfo : public sead::INamable
 {
+public:
+    enum Target
+    {
+        cTarget_GL,
+        cTarget_GX2,
+        cTarget_Num
+    };
+
 public:
     ShaderCompileInfo();
     virtual ~ShaderCompileInfo();
 
     void create(s32 num_macro, s32 num_variation, sead::Heap* heap);
+
+    void clearVariation();
+    void pushBackVariation(const char* name, const char* value);
+
+    void calcCompileSource(ShaderType type, sead::BufferedSafeString* p_buffer, Target target, bool) const;
+
     void destroy();
 
 protected:
-    const sead::SafeString* _8;
+    const sead::SafeString* mSourceText;
     const sead::BufferedSafeString* _c;
     sead::PtrArray<const char> mMacroName;
     sead::PtrArray<const char> mMacroValue;

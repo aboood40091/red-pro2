@@ -1,9 +1,13 @@
+#include <agl/aglDisplayList.h>
 #include <agl/aglShaderProgram.h>
+#include <agl/shader/aglShaderCompileInfo.h>
+
+#include <gfx/seadGraphics.h>
 
 namespace agl {
 
 ShaderProgram::ShaderProgram()
-    : mFlags(0)
+    : mFlag(0)
     , mVariationID(0)
     , mDisplayList()
     , mAttributeLocation()
@@ -150,24 +154,203 @@ const ShaderProgram* ShaderProgram::getVariation(s32 index) const
     return &variation_buffer->mProgram[index - 1];
 }
 
+u32 ShaderProgram::setUpAllVariation()
+{
+    u32 ret;
+
+    if (mpSharedData->mpVariationBuffer)
+    {
+        ret = mpSharedData->mpVariationBuffer->mpOriginal->validate_();
+        if (ret == 0)
+        {
+            for (sead::Buffer<ShaderProgram>::iterator it = mpSharedData->mpVariationBuffer->mProgram.begin(), it_end = mpSharedData->mpVariationBuffer->mProgram.end(); it != it_end; ++it)
+            {
+                ret = it->validate_();
+                if (ret != 0)
+                    break;
+            }
+        }
+    }
+    else
+    {
+        ret = validate_();
+    }
+
+    return ret;
+}
+
 void ShaderProgram::reserveSetUpAllVariation()
 {
     if (mpSharedData->mpVariationBuffer)
     {
-        mpSharedData->mpVariationBuffer->mpOriginal->mFlags.setBit(1);
+        mpSharedData->mpVariationBuffer->mpOriginal->mFlag.set(2);
         for (sead::Buffer<ShaderProgram>::iterator it = mpSharedData->mpVariationBuffer->mProgram.begin(), it_end = mpSharedData->mpVariationBuffer->mProgram.end(); it != it_end; ++it)
-            it->mFlags.setBit(1);
+            it->mFlag.set(2);
     }
     else
     {
-        mFlags.setBit(1);
+        mFlag.set(2);
     }
+}
+
+void ShaderProgram::updateAttributeLocation() const
+{
+    for (sead::Buffer<AttributeLocation>::iterator it = mAttributeLocation.begin(), it_end = mAttributeLocation.end(); it != it_end; ++it)
+        it->search(*this);
+}
+
+void ShaderProgram::updateUniformLocation() const
+{
+    for (sead::Buffer<UniformLocation>::iterator it = mUniformLocation.begin(), it_end = mUniformLocation.end(); it != it_end; ++it)
+        it->search(*this);
+}
+
+void ShaderProgram::updateUniformBlockLocation() const
+{
+    for (sead::Buffer<UniformBlockLocation>::iterator it = mUniformBlockLocation.begin(), it_end = mUniformBlockLocation.end(); it != it_end; ++it)
+        it->search(*this);
+}
+
+void ShaderProgram::updateSamplerLocation() const
+{
+    for (sead::Buffer<SamplerLocation>::iterator it = mSamplerLocation.begin(), it_end = mSamplerLocation.end(); it != it_end; ++it)
+        it->search(*this);
+}
+
+u32 ShaderProgram::validate_() const
+{
+    if (mFlag.isOn(2))
+    {
+        mFlag.reset(2);
+        return forceValidate_();
+    }
+
+    return 0;
+}
+
+u32 ShaderProgram::forceValidate_() const
+{
+    u32 ret = 0;
+    bool compile_source = mFlag.isOn(1);
+
+    setUpForVariation_();
+
+    if (mVertexShader.setUp(compile_source, mFlag.isOn(8)) != 0)
+    {
+        ret = 1;
+    }
+    else if (mFragmentShader.setUp(compile_source, mFlag.isOn(8)) != 0)
+    {
+        ret = 2;
+    }
+    else if (mGeometryShader.setUp(compile_source, mFlag.isOn(8)) == 1)
+    {
+        ret = 3;
+    }
+    else
+    {
+        if (mFlag.isOn(1))
+        {
+            // compileGX2_(); <--- No idea why this is no longer here
+            //                     Compiles and loads sharcfb from host pc
+            dump();
+
+            if (mDisplayList.getBuffer() != NULL)
+            {
+                void* p_dl;
+                size_t size = DisplayList::suspend(&p_dl);
+                {
+                    mDisplayList.beginDisplayList();
+                    {
+                        setShaderGX2_();
+                    }
+                    mDisplayList.endDisplayList();
+                }
+                DisplayList::resume(p_dl, size);
+            }
+        }
+        else
+        {
+            if (mDisplayList.getBuffer() != NULL)
+            {
+                sead::Graphics::instance()->lockDrawContext();
+                {
+                    mDisplayList.beginDisplayList();
+                    {
+                        setShaderGX2_();
+                    }
+                    mDisplayList.endDisplayList();
+                }
+                sead::Graphics::instance()->unlockDrawContext();
+            }
+        }
+
+        mFlag.set(1);
+    }
+
+    if (mFlag.isOn(1))
+    {
+        updateUniformLocation();
+        updateUniformBlockLocation();
+        updateAttributeLocation();
+        updateSamplerLocation();
+    }
+
+    // TODO
+    // if (mpSharedData->_10)
+    //     mpSharedData->_10->vf0C(this);
+
+    return ret;
+}
+
+void ShaderProgram::setUpForVariation_() const
+{
+    if (!mpSharedData->mpVariationBuffer)
+        return;
+
+    const ShaderProgram* program = mpSharedData->mpVariationBuffer->mpOriginal;
+
+    const char* macro_array[cVariationMacroMax];
+    const char* value_array[cVariationValueMax];
+    s32 num_macro_value = mpSharedData->mpVariationBuffer->getMacroAndValueArray(mVariationID, macro_array, value_array);
+
+    for (s32 type = 0; type < cShaderType_Num; type++)
+    {
+        ShaderCompileInfo* compile_info = program->getShader(ShaderType(type))->getCompileInfo();
+        if (!compile_info)
+            continue;
+
+        compile_info->clearVariation();
+
+        for (s32 i_variation_type = 0; i_variation_type < num_macro_value; i_variation_type++)
+        {
+            // SEAD_ASSERT(i_variation_type < cVariationMacroMax);
+            // SEAD_ASSERT(i_variation_type < cVariationValueMax);
+            compile_info->pushBackVariation(macro_array[i_variation_type], value_array[i_variation_type]);
+        }
+
+        getShader(ShaderType(type))->setCompileInfo(compile_info);
+    }
+}
+
+void ShaderProgram::setShaderGX2_() const
+{
+#ifdef cafe
+    if (mVertexShader.getBinary())
+        GX2SetVertexShader(mVertexShader.getBinary());
+
+    if (mFragmentShader.getBinary())
+        GX2SetPixelShader(mFragmentShader.getBinary());
+
+    if (mGeometryShader.getBinary())
+        GX2SetGeometryShader(mGeometryShader.getBinary());
+#endif // cafe
 }
 
 void ShaderProgram::cleanUp()
 {
-    if (mFlags.isOnBit(0))
-        mFlags.resetBit(0);
+    if (mFlag.isOn(1))
+        mFlag.reset(1);
 }
 
 void ShaderProgram::destroyAttribute()
@@ -267,6 +450,27 @@ void ShaderProgram::VariationBuffer::create(sead::Heap* heap)
     }
 
     mProgram.allocBuffer(num_variation - 1, heap);
+}
+
+s32 ShaderProgram::VariationBuffer::getMacroAndValueArray(s32 index, const char** macro_array, const char** value_array) const
+{
+    // SEAD_ASSERT(macro_array != nullptr);
+    // SEAD_ASSERT(value_array != nullptr);
+
+    for (sead::Buffer<Macro>::constIterator itr_type = mMacro.begin(), it_end = mMacro.end(); itr_type != it_end; ++itr_type)
+    {
+        s32 value_index; // = 0;
+        // if (itr_type->_18 != 0)
+            value_index = index / itr_type->_18;
+        // SEAD_ASSERT(itr_type.getIndex() < cVariationMacroMax);
+        // SEAD_ASSERT(itr_type.getIndex() < cVariationValueMax);
+        macro_array[itr_type.getIndex()] = itr_type->mName.cstr();
+        value_array[itr_type.getIndex()] = itr_type->mValue[value_index].cstr();
+
+        index -= value_index * itr_type->_18;
+    }
+
+    return mMacro.size();
 }
 
 }

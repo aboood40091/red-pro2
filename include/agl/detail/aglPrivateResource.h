@@ -16,13 +16,13 @@ public:
     PrivateResource();
     virtual ~PrivateResource();
 
-    sead::Heap* getShaderCompileHeap() { return mShaderCompileHeap; }
-    const sead::Heap* getShaderCompileHeap() const { return mShaderCompileHeap; }
+    sead::Heap* getShaderCompileHeap() const { return mShaderCompileHeap; }
+    sead::HeapSafeString* getShaderText() const { return mShaderText; }
 
 private:
     sead::Heap* mWorkHeap; // ExpHeap*
     sead::Heap* mShaderCompileHeap; // ExpHeap*
-    sead::SafeString* _18; // HeapSafeString?
+    sead::HeapSafeString* mShaderText;
     sead::Buffer<u8> _1c;
     u32 _24;
     u8 _28[4];

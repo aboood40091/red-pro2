@@ -1,5 +1,6 @@
 #include <agl/aglShaderProgramArchive.h>
 #include <agl/detail/aglPrivateResource.h>
+#include <agl/detail/aglShaderTextUtil.h>
 
 #include <time/seadTickTime.h>
 
@@ -72,10 +73,10 @@ ShaderProgramArchive::ShaderProgramArchive()
     , _20(0)
     , _24(0)
     , _28(0)
-    , _2a()
+    , mFlag()
     , mProgramEx()
     , mSource()
-    , mSourceCode()
+    , mSourceText()
     , mSourceName()
 {
     // detail::RootNode::setNodeMeta(this, "Icon = LAYOUT, Security = agl_shader");
@@ -99,7 +100,7 @@ void ShaderProgramArchive::destroyResFile_()
     if (mResText.isValid())
     {
         mProgramEx.freeBuffer();
-        mSourceCode.freeBuffer();
+        mSourceText.freeBuffer();
         mSourceName.freeBuffer();
         mSource.freeBuffer();
     }
@@ -111,7 +112,7 @@ void ShaderProgramArchive::createWithOption(ResBinaryShaderArchive res_binary_ar
     mResBinary = res_binary_archive;
 
     if (flag & 2)
-        _2a.setBit(0);
+        mFlag.set(1);
 
     if (mResBinary.isValid())
     {
@@ -197,7 +198,22 @@ void ShaderProgramArchive::createWithOption(ResBinaryShaderArchive res_binary_ar
 bool ShaderProgramArchive::setUp()
 {
     updateCompileInfo();
-    return setUp_(_2a.isOnBit(0));
+    return setUp_(mFlag.isOn(1));
+}
+
+void ShaderProgramArchive::updateCompileInfo()
+{
+    sead::TickTime time;
+
+    for (sead::Buffer<ShaderSource>::iterator it = mSource.begin(), it_end = mSource.end(); it != it_end; ++it)
+        if (it->mFlag.isOn(1))
+            it->expand();
+
+    for (sead::Buffer<ShaderProgramEx>::iterator it = mProgramEx.begin(), it_end = mProgramEx.end(); it != it_end; ++it)
+        it->updateRawText();
+
+    for (sead::Buffer<ShaderSource>::iterator it = mSource.begin(), it_end = mSource.end(); it != it_end; ++it)
+        it->mFlag.reset(1);
 }
 
 void ShaderProgramArchive::setResShaderArchive_(ResShaderArchive res_archive, sead::Heap* heap)
@@ -227,7 +243,7 @@ void ShaderProgramArchive::setResShaderArchive_(ResShaderArchive res_archive, se
 
     mSource.allocBuffer(mResText.getResShaderSourceNum(), heap);
 
-    mSourceCode.allocBuffer(mSource.size(), heap);
+    mSourceText.allocBuffer(mSource.size(), heap);
     mSourceName.allocBuffer(mSource.size(), heap);
 
     mProgramEx.allocBuffer(mProgram.size(), heap);
@@ -325,12 +341,12 @@ bool ShaderProgramArchive::setUp_(bool unk)
 
 ShaderProgramArchive::ShaderSource::ShaderSource()
     : IDisposer()
-    , mFlags(1 << 0)
+    , mFlag(1)
     , mpArchive(NULL)
     , mRes()
-    , mCode(NULL)
-    , _24(NULL)
-    , _28()
+    , mText(NULL)
+    , mRawText(NULL)
+    , mUsedInSource()
 {
 }
 
@@ -340,18 +356,41 @@ void ShaderProgramArchive::ShaderSource::initialize(ShaderProgramArchive* archiv
     mRes = res;
     mIndex = index;
 
-    mFlags.changeBit(1, is_used);
+    mFlag.change(2, is_used);
 
-    mCode = new sead::HeapSafeString(detail::PrivateResource::instance()->getShaderCompileHeap(), res.getCode(), res.ref().mCodeLen * 2);
+    mText = new sead::HeapSafeString(detail::PrivateResource::instance()->getShaderCompileHeap(), res.getText(), res.ref().mTextLen * 2);
 
     mpArchive->mSourceName[mIndex] = mRes.getName();
-    mpArchive->mSourceCode[mIndex] = mCode->cstr();
+    mpArchive->mSourceText[mIndex] = mText->cstr();
 
-    _28.allocBuffer(mpArchive->mSource.size(), heap);
-    for (sead::Buffer<bool>::iterator it = _28.begin(), it_end = _28.end(); it != it_end; ++it)
+    mUsedInSource.allocBuffer(mpArchive->mSource.size(), heap);
+    for (sead::Buffer<bool>::iterator it = mUsedInSource.begin(), it_end = mUsedInSource.end(); it != it_end; ++it)
         *it = false;
 
     // detail::RootNode::setNodeMeta(this, "Icon = NOTE");
+}
+
+void ShaderProgramArchive::ShaderSource::expand()
+{
+    if (mFlag.isOnAll(1))
+    {
+        delete mRawText;
+
+        // SEAD_ASSERT(mpArchive->mSource.size() < 1024);
+        bool source_is_used[1024];
+
+        mRawText = detail::ShaderTextUtil::createRawText(
+            *mText,
+            mpArchive->mSourceName.getBufferPtr(),
+            mpArchive->mSourceText.getBufferPtr(),
+            mpArchive->mSource.size(),
+            source_is_used,
+            detail::PrivateResource::instance()->getShaderCompileHeap()
+        );
+
+        for (sead::Buffer<ShaderSource>::iterator it = mpArchive->mSource.begin(), it_end = mpArchive->mSource.end(); it != it_end; ++it)
+            it->mUsedInSource[mIndex] = source_is_used[it.getIndex()];
+    }
 }
 
 ShaderProgramArchive::ShaderProgramEx::ShaderProgramEx()
@@ -359,8 +398,8 @@ ShaderProgramArchive::ShaderProgramEx::ShaderProgramEx()
     , mpArchive(NULL)
     , mCompileInfoEx()
     , _110()
-    , _118(0)
-    , _11c(0)
+    , mVariationIndex(0)
+    , mFlag(0)
 {
 }
 
@@ -409,6 +448,29 @@ void ShaderProgramArchive::ShaderProgramEx::initialize(ShaderProgramArchive* arc
         *it = 0;
 
     // detail::RootNode::setNodeMeta(this, "Icon = CIRCLE_ORENGE");
+}
+
+void ShaderProgramArchive::ShaderProgramEx::updateRawText()
+{
+    // TODO: sead::SafeArray
+    {
+        typedef sead::Buffer<ShaderCompileInfoEx>::iterator _Iterator;
+        for (_Iterator it = _Iterator(mCompileInfoEx), it_end = _Iterator(mCompileInfoEx, cShaderType_Num); it != it_end; ++it)
+        {
+            ShaderSource* source = it->mSource;
+            if (source && source->mFlag.isOn(1))
+            {
+                it->mSourceText = source->mRawText;
+                mpArchive->getShaderProgram(mIndex).reserveSetUpAllVariation();
+            }
+        }
+    }
+}
+
+void ShaderProgramArchive::ShaderProgramEx::updateAnalyze()
+{
+    if (mFlag.isOn(1))
+        mpArchive->mProgram[mIndex].updateVariation(mVariationIndex);
 }
 
 }

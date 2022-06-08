@@ -14,7 +14,6 @@ namespace agl {
 
 class ShaderProgramArchive : public sead::IDisposer
 {
-public:
     class ShaderSource : public sead::IDisposer
     {
     public:
@@ -22,12 +21,13 @@ public:
 
         virtual ~ShaderSource()
         {
-            delete _24;
-            delete mCode;
-            _28.freeBuffer();
+            delete mRawText;
+            delete mText;
+            mUsedInSource.freeBuffer();
         }
 
         void initialize(ShaderProgramArchive* archive, s32 index, ResShaderSource res, bool is_used, sead::Heap* heap);
+        void expand();
 
         const char* getName() const
         {
@@ -36,16 +36,16 @@ public:
 
     private:
         s32 mIndex;
-        sead::BitFlag32 mFlags;
+        sead::BitFlag32 mFlag;
         ShaderProgramArchive* mpArchive;
         ResShaderSource mRes;
-        sead::HeapSafeString* mCode;
-        sead::BufferedSafeString* _24; // ^^
-        sead::Buffer<bool> _28;
+        sead::HeapSafeString* mText;
+        sead::HeapSafeString* mRawText;
+        sead::Buffer<bool> mUsedInSource;
+
+        friend class ShaderProgramArchive;
     };
     static_assert(sizeof(ShaderSource) == 0x30, "agl::ShaderProgramArchive::ShaderSource size mismatch");
-
-    class ShaderProgramEx;
 
     class ShaderCompileInfoEx : ShaderCompileInfo
     {
@@ -62,7 +62,7 @@ public:
     private:
         ShaderSource* mSource;
 
-        friend class ShaderProgramEx;
+        friend class ShaderProgramArchive;
     };
     static_assert(sizeof(ShaderCompileInfoEx) == 0x58, "agl::ShaderProgramArchive::ShaderCompileInfoEx size mismatch");
 
@@ -76,7 +76,7 @@ public:
         }
 
         void initialize(ShaderProgramArchive* archive, s32 index, ResShaderProgram res, sead::Heap* heap);
-
+        void updateRawText();
         void updateAnalyze();
 
     private:
@@ -84,8 +84,10 @@ public:
         ShaderProgramArchive* mpArchive;
         ShaderCompileInfoEx mCompileInfoEx[cShaderType_Num];
         sead::Buffer<u32> _110; // No idea buffer of what
-        u32 _118;
-        sead::BitFlag8 _11c;
+        s32 mVariationIndex;
+        sead::BitFlag8 mFlag;
+
+        friend class ShaderProgramArchive;
     };
     static_assert(sizeof(ShaderProgramEx) == 0x124, "agl::ShaderProgramArchive::ShaderProgramEx size mismatch");
 
@@ -135,10 +137,10 @@ private:
     u32 _20;
     u32 _24;
     u16 _28;
-    sead::BitFlag16 _2a;
+    sead::BitFlag16 mFlag;
     sead::Buffer<ShaderProgramEx> mProgramEx;
     sead::Buffer<ShaderSource> mSource;
-    sead::Buffer<const char*> mSourceCode;
+    sead::Buffer<const char*> mSourceText;
     sead::Buffer<const char*> mSourceName;
 
     friend class ShaderSource;

@@ -4,7 +4,7 @@ namespace agl {
 
 ShaderCompileInfo::ShaderCompileInfo()
     : sead::INamable("unititled")
-    , _8(NULL)
+    , mSourceText(NULL)
     , _c(NULL)
     , mMacroName()
     , mMacroValue()
@@ -33,6 +33,18 @@ void ShaderCompileInfo::create(s32 num_macro, s32 num_variation, sead::Heap* hea
         mVariationName.allocBuffer(num_variation, heap);
         mVariationValue.allocBuffer(num_variation, heap);
     }
+}
+
+void ShaderCompileInfo::clearVariation()
+{
+    mVariationName.clear();
+    mVariationValue.clear();
+}
+
+void ShaderCompileInfo::pushBackVariation(const char* name, const char* value)
+{
+    mVariationName.pushBack(name);
+    mVariationValue.pushBack(value);
 }
 
 void ShaderCompileInfo::destroy()
