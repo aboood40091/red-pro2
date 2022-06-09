@@ -18,6 +18,7 @@ public:
 
     sead::Heap* getShaderCompileHeap() const { return mShaderCompileHeap; }
     sead::HeapSafeString* getShaderText() const { return mShaderText; }
+    sead::Heap* getDebugHeap() const { return mDebugHeap; }
 
 private:
     sead::Heap* mWorkHeap; // ExpHeap*

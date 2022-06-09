@@ -31,7 +31,7 @@ u32 Shader::setUp(bool compile_source, bool) const
         };
 
         detail::FileIOMgr::DialogArg arg;
-        arg.mSavePath = sSavePath[getShaderType()];
+        arg.mPath = sSavePath[getShaderType()];
 
         detail::FileIOMgr::instance()->save(temp_text->cstr(), temp_text->calcLength(), arg);
 

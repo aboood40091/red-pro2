@@ -129,7 +129,7 @@ void ShaderProgramArchive::createWithOption(ResBinaryShaderArchive res_binary_ar
         if (create_dl)
         {
             u32 dl_buf_size = mResBinary.getResShaderBinaryNum() * dl_size;
-            dl_buf = new (heap, 0x20) u8[dl_buf_size];
+            dl_buf = new (heap, DisplayList::cDisplayListAlignment) u8[dl_buf_size];
 #ifdef cafe
             DCFlushRange(dl_buf, dl_buf_size);
 #endif // cafe

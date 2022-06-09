@@ -20,28 +20,28 @@ void DisplayList::setBuffer(u8* buffer, size_t size)
     if (buffer)
     {
        mpBuffer = buffer;
-       mBufferMaxSize = size;
+       mSize = size;
     }
     else
     {
         mpBuffer = NULL;
-        mBufferMaxSize = 0;
+        mSize = 0;
     }
 }
 
 void DisplayList::clear()
 {
     mpBuffer = NULL;
-    mBufferMaxSize = 0;
-    mDLSize = 0;
+    mSize = 0;
+    mValidSize = 0;
 }
 
 bool DisplayList::beginDisplayList()
 {
-    mDLSize = 0;
+    mValidSize = 0;
 
 #ifdef cafe
-    GX2BeginDisplayListEx(mpBuffer, mBufferMaxSize, GX2_DISABLE);
+    GX2BeginDisplayListEx(mpBuffer, mSize, GX2_DISABLE);
     return true;
 #else
     return false;
@@ -58,8 +58,8 @@ size_t DisplayList::endDisplayList()
     size_t dl_size = GX2EndDisplayList(dl);
     dl = (void*)((uintptr_t)dl + dl_size);
 
-    mDLSize = (uintptr_t)dl - (uintptr_t)mpBuffer;
-    return mDLSize;
+    mValidSize = (uintptr_t)dl - (uintptr_t)mpBuffer;
+    return mValidSize;
 #else
     return 0;
 #endif

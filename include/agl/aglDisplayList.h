@@ -7,6 +7,13 @@ namespace agl {
 class DisplayList
 {
 public:
+#ifdef cafe
+    static const u32 cDisplayListAlignment = 0x20;
+#else
+    static const u32 cDisplayListAlignment = 4;
+#endif
+
+public:
     DisplayList();
     virtual ~DisplayList();
 
@@ -26,8 +33,8 @@ public:
 
 private:
     u8* mpBuffer;
-    u32 mBufferMaxSize;
-    u32 mDLSize;
+    size_t mSize;
+    size_t mValidSize;
 };
 static_assert(sizeof(DisplayList) == 0x10, "agl::DisplayList size mismatch");
 
