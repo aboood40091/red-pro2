@@ -9,6 +9,8 @@ FileIOMgr* FileIOMgr::sInstance = NULL;
 
 bool FileIOMgr::showDialog(sead::hostio::FileInfo* p_info, const sead::SafeString& mode, const sead::SafeString& id, const sead::SafeString& filter, const sead::SafeString& filename) const
 {
+    // SEAD_ASSERT(p_info != nullptr);
+
     sead::SafeString id_ = (!id.isEqual("")) // Why not use id.isEmpty() ??
                                     ? id
                                     : filter;

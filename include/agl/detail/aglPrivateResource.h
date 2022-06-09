@@ -18,13 +18,14 @@ public:
 
     sead::Heap* getShaderCompileHeap() const { return mShaderCompileHeap; }
     sead::HeapSafeString* getShaderText() const { return mShaderText; }
+    sead::Buffer<char>& getShaderWorkBuffer() { return mShaderWorkBuffer; }
     sead::Heap* getDebugHeap() const { return mDebugHeap; }
 
 private:
     sead::Heap* mWorkHeap; // ExpHeap*
     sead::Heap* mShaderCompileHeap; // ExpHeap*
     sead::HeapSafeString* mShaderText;
-    sead::Buffer<u8> _1c;
+    sead::Buffer<char> mShaderWorkBuffer;
     u32 _24;
     u8 _28[4];
     sead::Heap* mDebugHeap;

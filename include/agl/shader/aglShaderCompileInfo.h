@@ -34,7 +34,7 @@ public:
 
 protected:
     const sead::SafeString* mSourceText;
-    const sead::BufferedSafeString* _c;
+    sead::BufferedSafeString* mRawText;
     sead::PtrArray<const char> mMacroName;
     sead::PtrArray<const char> mMacroValue;
     sead::PtrArray<const char> mVariationName;
