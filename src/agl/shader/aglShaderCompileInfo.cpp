@@ -95,12 +95,12 @@ void ShaderCompileInfo::calcCompileSource(ShaderType type, sead::BufferedSafeStr
         "#define AGL_GEOMETRY_SHADER \n"
     };
 
-    p_buffer->copyAt(-1, sMacroDefine[is_gl ? 0 : 1]);
-    p_buffer->copyAt(-1, "// ----- These macros are auto defined by AGL.-----\n");
-    p_buffer->copyAt(-1, sTypeDefine[type]);
-    p_buffer->copyAt(-1, sTargetDefine[is_gl ? 0 : 1]);
-    p_buffer->copyAt(-1, "// ------------------------------------------------\n");
-    p_buffer->copyAt(-1, text);
+    p_buffer->append(sMacroDefine[is_gl ? 0 : 1]);
+    p_buffer->append("// ----- These macros are auto defined by AGL.-----\n");
+    p_buffer->append(sTypeDefine[type]);
+    p_buffer->append(sTargetDefine[is_gl ? 0 : 1]);
+    p_buffer->append("// ------------------------------------------------\n");
+    p_buffer->append(text);
 
     if (mMacroName.size() > 0)
     {
