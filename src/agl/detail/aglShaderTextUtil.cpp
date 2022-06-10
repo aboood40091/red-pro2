@@ -111,19 +111,18 @@ void ShaderTextUtil::replaceMacro(sead::BufferedSafeString* p_text, const char* 
                     if (macro_replaced[i_match_macro])
                         continue;
 
-                    const char* match_macro = macro[i_match_macro];
+                    const char* const match_macro = macro[i_match_macro];
                     bool match = true;
 
-                    while (*match_macro != '\0')
+                    for (s32 i = 0; match_macro[i] != '\0'; i++)
                     {
-                        if (p_src[macro_pos] != *match_macro)
+                        if (p_src[macro_pos] != match_macro[i])
                         {
                             match = false;
                             break;
                         }
 
                         macro_pos++;
-                        match_macro++;
                     }
 
                     if (!match || (p_src[macro_pos] != ' ' &&
