@@ -103,7 +103,7 @@ FileIOMgr::DialogArg::DialogArg()
     , mDefaultID("agl_default")
     , mPath()
     , mOutPath(NULL)
-    , _24(32)
+    , mLoadAlignment(0x20) // Why not sead::FileDevice::cBufferMinAlignment is beyond me
 {
 }
 
