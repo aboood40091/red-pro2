@@ -97,6 +97,79 @@ bool FileIOMgr::save(const void* p_buf, u32 size, const DialogArg& arg)
     return ret;
 }
 
+s32 FileIOMgr::load(const DialogArg& arg)
+{
+    s32 ret = -1;
+
+    // TODO: scoped lock
+    mCriticalSection.lock();
+    do
+    {
+        s32 index = -1;
+        File* pBinary = NULL;
+
+        for (sead::Buffer<File>::iterator it = mBuffer.begin(), it_end = mBuffer.end(); it != it_end; ++it)
+        {
+            if (it->mpData == NULL)
+            {
+                index = it.getIndex();
+                pBinary = &(*it);
+                break;
+            }
+        }
+        // SEAD_ASSERT(0 <= index);
+
+        sead::hostio::FileInfo file_info;
+
+        if (arg.mPath.isEmpty())
+        {
+            if (!showDialog(&file_info, "Open", arg.mDefaultID, arg.mDefaultFilter, arg.mDefaultFilename))
+                break;
+        }
+        else
+        {
+            file_info.path = arg.mPath;
+        }
+
+        sead::FileDevice::LoadArg load_arg;
+        load_arg.path = file_info.path;
+        load_arg.heap = PrivateResource::instance()->getDebugHeap();
+        load_arg.alignment = arg.mLoadAlignment;
+
+        // SEAD_ASSERT(pBinary->mpData == nullptr);
+        pBinary->mpData = mFileDevice->tryLoad(load_arg);
+        if (pBinary->mpData)
+        {
+            pBinary->mSize = load_arg.read_size;
+
+            if (arg.mOutPath)
+                arg.mOutPath->copy(file_info.path);
+
+            ret = index;
+        }
+        break;
+    }
+    while (false);
+    mCriticalSection.unlock();
+
+    return ret;
+}
+
+void FileIOMgr::close(s32 index)
+{
+    // TODO: scoped lock
+    mCriticalSection.lock();
+    {
+        if (mBuffer[index].mpData)
+        {
+            delete[] mBuffer[index].mpData;
+            mBuffer[index].mpData = NULL;
+            mBuffer[index].mSize = 0;
+        }
+    }
+    mCriticalSection.unlock();
+}
+
 FileIOMgr::DialogArg::DialogArg()
     : mDefaultFilter()
     , mDefaultFilename()
