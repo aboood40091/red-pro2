@@ -1,6 +1,6 @@
-#include <ResArchive.h>
-#include <ResMgr.h>
-#include <ShaderHolder.h>
+#include <graphics/ResArchive.h>
+#include <graphics/ShaderHolder.h>
+#include <root/ResMgr.h>
 
 #include <gfx/seadGraphics.h>
 #include <math/seadMathCalcCommon.h>

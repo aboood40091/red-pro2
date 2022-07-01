@@ -27,7 +27,7 @@ class UniformLocation : public sead::INamable, public ShaderLocation
 {
 public:
     UniformLocation()
-        : sead::INamable()
+        : sead::INamable("Undefined")
         , ShaderLocation()
     {
     }
@@ -40,7 +40,7 @@ class UniformBlockLocation : public sead::INamable, public ShaderLocation
 {
 public:
     UniformBlockLocation()
-        : sead::INamable()
+        : sead::INamable("Undefined")
         , ShaderLocation()
     {
     }
@@ -53,7 +53,7 @@ class SamplerLocation : public sead::INamable, public ShaderLocation
 {
 public:
     SamplerLocation()
-        : sead::INamable()
+        : sead::INamable("Undefined")
         , ShaderLocation()
     {
     }
@@ -66,7 +66,7 @@ class AttributeLocation : public sead::INamable, public ShaderLocation
 {
 public:
     AttributeLocation()
-        : sead::INamable()
+        : sead::INamable("Undefined")
         , ShaderLocation()
     {
     }

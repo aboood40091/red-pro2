@@ -1,6 +1,6 @@
 #pragma once
 
-#include <basis/seadTypes.h>
+#include <heap/seadHeap.h>
 
 namespace agl {
 
@@ -27,6 +27,9 @@ public:
 
     bool beginDisplayList();
     size_t endDisplayList();
+
+    bool beginDisplayListTemporary(size_t size);
+    size_t endDisplayListTemporary(sead::Heap* heap);
 
     static size_t suspend(void** p_dl);
     static void resume(void* dl, size_t size);
