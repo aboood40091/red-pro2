@@ -1,6 +1,7 @@
 #pragma once
 
-#include <basis/seadTypes.h>
+#include <heap/seadHeap.h>
+#include <math/seadVector.h>
 
 namespace agl {
 
@@ -23,6 +24,10 @@ class UniformBlock
     static_assert(sizeof(Header) == 8, "agl::UniformBlock::Header size mismatch");
 
 public:
+    static const u32 cUniformBlockAlignment = 0x100;
+    static const u32 cCPUCacheLineSize = 0x20;
+
+public:
     enum Type
     {
         cType_bool  = 0,
@@ -31,15 +36,19 @@ public:
         cType_vec2  = 3,
         cType_vec3  = 4,
         cType_vec4  = 5,
+
+        // "not implemented yet."
       //cType_      = 6,
       //cType_      = 7,
       //cType_      = 8,
       //cType_      = 9,
       //cType_      = 10,
       //cType_      = 11,
-      //cType_      = 12,
-      //cType_      = 13,
-      //cType_      = 14,
+
+      //cType_      = 12, // mat4?
+      //cType_      = 13, // ^^
+      //cType_      = 14, // ^^
+
         cType_Num   = 15
     };
 
@@ -51,14 +60,17 @@ public:
     void declare(Type type, s32 num);
     void declare(const UniformBlock& block);
     void create(sead::Heap* heap);
+    void destroy();
     void dcbz() const;
-    void flush(void* p_memory, bool invalidate) const;
-    void flush(bool invalidate) const { flush(mCurrentBuffer, invalidate); }
-    void flushNoSync(void* p_memory, bool invalidate) const;
-    void flushNoSync(bool invalidate) const { flushNoSync(mCurrentBuffer, invalidate); }
+    void flush(void* p_memory, bool invalidate_gpu) const;
+    void flush(bool invalidate_gpu) const { flush(mCurrentBuffer, invalidate_gpu); }
+    void flushNoSync(void* p_memory, bool invalidate_gpu) const;
+    void flushNoSync(bool invalidate_gpu) const { flushNoSync(mCurrentBuffer, invalidate_gpu); }
 
     void setBool(void* p_memory, s32 index, bool data, s32 array_index = 0) const;
     void setBool(s32 index, bool data, s32 array_index = 0) const;
+    void setBool(void* p_memory, s32 index, const bool* p_data, s32 array_num, s32 array_index = 0) const;
+    void setBool(s32 index, const bool* p_data, s32 array_num, s32 array_index = 0) const;
 
     void setInt(void* p_memory, s32 index, s32 data, s32 array_index = 0) const;
     void setInt(s32 index, s32 data, s32 array_index = 0) const;
@@ -89,11 +101,23 @@ private:
     void setData_(void* p_memory, s32 index, const void* p_data, s32 array_index, s32 array_num) const;
 
 private:
+    enum Flags
+    {
+        cFlag_OwnHeader = 1 << 0,
+        cFlag_OwnBuffer = 1 << 1
+    };
+
     Header* mpHeader;
-    void* mCurrentBuffer;
+    u8* mCurrentBuffer;
     u32 mBlockSize;
     sead::BitFlag8 mFlag;
 };
 static_assert(sizeof(UniformBlock) == 0x14, "agl::UniformBlock size mismatch");
 
 }
+
+#ifdef __cplusplus
+
+#include <agl/aglUniformBlock.hpp>
+
+#endif // __cplusplus

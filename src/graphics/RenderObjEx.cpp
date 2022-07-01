@@ -270,3 +270,8 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     mOpaShapeInfo.sort(&sortShapeRenderInfoCmp);
     mXluShapeInfo.sort(&sortShapeRenderInfoCmp);
 }
+
+void RenderObjEx::disableMaterialDL()
+{
+    mMaterialNoDL = true;
+}

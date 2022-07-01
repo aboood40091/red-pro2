@@ -1,4 +1,5 @@
 #include <agl/aglDisplayList.h>
+#include <agl/detail/aglPrivateResource.h>
 
 #ifdef cafe
 #include <cafe.h>
@@ -63,6 +64,45 @@ size_t DisplayList::endDisplayList()
 #else
     return 0;
 #endif
+}
+
+bool DisplayList::beginDisplayListBuffer(u8* buffer, size_t size)
+{
+    // SEAD_ASSERT(0 < size);
+#ifdef cafe
+    DCInvalidateRange(buffer, size);
+#endif // cafe
+    setBuffer(buffer, size);
+    return beginDisplayList();
+}
+
+size_t DisplayList::endDisplayListBuffer(sead::Heap* heap)
+{
+    u8* buffer = NULL;
+    size_t size = endDisplayList();
+    if (size != 0)
+    {
+        buffer = new (heap, cDisplayListAlignment) u8[size];
+#ifdef cafe
+        DCFlushRange(buffer, size);
+#endif // cafe
+    }
+    setBuffer(buffer, size);
+    return size;
+}
+
+bool DisplayList::beginDisplayListTemporary(size_t size)
+{
+    u8* buffer = new (detail::PrivateResource::instance()->getWorkHeap(), cDisplayListAlignment) u8[size];
+    return beginDisplayListBuffer(buffer, size);
+}
+
+size_t DisplayList::endDisplayListTemporary(sead::Heap* heap)
+{
+    u8* buffer = mpBuffer;
+    size_t size = endDisplayListBuffer(heap);
+    delete[] buffer;
+    return size;
 }
 
 size_t DisplayList::suspend(void** p_dl)

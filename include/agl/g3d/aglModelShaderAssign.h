@@ -1,5 +1,7 @@
 #pragma once
 
+#include <heap/seadHeap.h>
+
 #include <agl/aglShaderLocation.h>
 
 #include <nw/g3d/fnd/g3d_GfxObject.h>
@@ -19,8 +21,11 @@ public:
     ModelShaderAttribute();
     ~ModelShaderAttribute();
 
+    void create(sead::Heap* heap);
+    void clear();
+
     s32 getVertexBufferNum() const { return mVertexBufferNum; }
-    nw::g3d::fnd::GfxBuffer* getVertexBuffer(s32 index) const { return mVertexBuffer[index]; }
+    const nw::g3d::fnd::GfxBuffer* getVertexBuffer(s32 index) const { return mpVertexBuffer[index]; }
     void setVertexBuffer(const nw::g3d::fnd::GfxBuffer* p_buffer, s32 index);
 
     void activateVertexBuffer() const;
@@ -28,7 +33,7 @@ public:
 private:
     u8 _0;
     u8 mVertexBufferNum;
-    nw::g3d::fnd::GfxBuffer* mVertexBuffer[16]; // sead::UnsafeArray
+    const nw::g3d::fnd::GfxBuffer* mpVertexBuffer[16]; // sead::UnsafeArray
     nw::g3d::fnd::GfxFetchShader mFetchShader;
 };
 static_assert(sizeof(ModelShaderAttribute) == 0x6C, "agl::g3d::ModelShaderAttribute size mismatch");
@@ -41,14 +46,22 @@ public:
 
     ShaderProgram* getShaderProgram() const { return mpProgram; }
 
+    s32 getSamplerNum() const { return mSamplerNum; }
+    nw::g3d::res::ResSampler* getResSampler(s32 index) const { return mpResSampler[index]; }
+
     ModelShaderAttribute& getAttribute() { return mAttribute; }
     const ModelShaderAttribute& getAttribute() const { return mAttribute; }
+
+    void create(sead::Heap* heap);
+
+private:
+    void clear_();
 
 private:
     ShaderProgram* mpProgram;
     UniformBlockLocation mUniformBlockLocation;
-    SamplerLocation mSamplerLocation[16];       // sead::SafeArray?
-    nw::g3d::res::ResSampler* mpResSampler[16]; // sead::SafeArray?
+    SamplerLocation mSamplerLocation[16];       // sead::UnsafeArray
+    nw::g3d::res::ResSampler* mpResSampler[16]; // sead::UnsafeArray
     u8 mSamplerNum;
     ModelShaderAttribute mAttribute;
 };

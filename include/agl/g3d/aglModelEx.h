@@ -1,7 +1,5 @@
 #pragma once
 
-#include <heap/seadHeap.h>
-
 #include <agl/g3d/aglModelShaderAssign.h>
 
 #include <nw/g3d/g3d_MaterialObj.h>
@@ -21,6 +19,11 @@ public:
     {
         return mpMaterialObj;
     }
+
+    void init(agl::g3d::ModelEx* p_model, u32 index, sead::Heap* heap);
+
+    void replaceUBO(const nw::g3d::fnd::GfxBuffer_t& buffer);
+    void fixUpUBO();
 
 private:
     ModelEx* mpModelEx;

@@ -28,6 +28,9 @@ public:
     bool beginDisplayList();
     size_t endDisplayList();
 
+    bool beginDisplayListBuffer(u8* buffer, size_t size);
+    size_t endDisplayListBuffer(sead::Heap* heap);
+
     bool beginDisplayListTemporary(size_t size);
     size_t endDisplayListTemporary(sead::Heap* heap);
 

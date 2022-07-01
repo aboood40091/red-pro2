@@ -27,9 +27,6 @@ class RenderObjEx : public RenderObj
     SEAD_RTTI_OVERRIDE(RenderObjEx, RenderObj)
 
 public:
-    static const u32 cLightMapNum = 2;
-
-public:
     struct ShaderAssign
     {
         void initialize(agl::ShaderProgram* p_shader_program)
@@ -86,8 +83,8 @@ public:
             sead::MemUtil::fill(idx_sampler, u8(-1), sizeof(idx_sampler));
         }
 
-        s32 idx_texture[cLightMapNum];
-        s32 idx_sampler[cLightMapNum];
+        s32 idx_texture[LightMapMgr::cLightMapNum];
+        s32 idx_sampler[LightMapMgr::cLightMapNum];
     };
     static_assert(sizeof(LightMap) == 0x10, "RenderObjEx::LightMap size mismatch");
 
@@ -260,7 +257,15 @@ public:
 public:
     void create(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode, sead::Heap* heap);
 
+    agl::g3d::ModelEx& getModelEx() { return mModelEx; }
+    const agl::g3d::ModelEx& getModelEx() const { return mModelEx; }
+
+    Shape& getShape(s32 index) { return mShape[index]; }
+    const Shape& getShape(s32 index) const { return mShape[index]; }
+
     void activateMaterial(const agl::g3d::ModelShaderAssign& shader_assign, const nw::g3d::MaterialObj* p_material, const LightMap& light_map) const;
+
+    void disableMaterialDL();
 
 private:
     void createViewShapes_(s32 num_view, sead::Heap* heap);
