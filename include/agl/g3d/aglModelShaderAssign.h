@@ -6,6 +6,7 @@
 
 #include <nw/g3d/fnd/g3d_GfxObject.h>
 #include <nw/g3d/res/g3d_ResMaterial.h>
+#include <nw/g3d/g3d_MaterialObj.h>
 
 namespace agl {
 
@@ -46,6 +47,9 @@ public:
 
     ShaderProgram* getShaderProgram() const { return mpProgram; }
 
+    SamplerLocation& getSamplerLocation(s32 index) { return mSamplerLocation[index]; }
+    const SamplerLocation& getSamplerLocation(s32 index) const { return mSamplerLocation[index]; }
+
     s32 getSamplerNum() const { return mSamplerNum; }
     nw::g3d::res::ResSampler* getResSampler(s32 index) const { return mpResSampler[index]; }
 
@@ -53,6 +57,9 @@ public:
     const ModelShaderAttribute& getAttribute() const { return mAttribute; }
 
     void create(sead::Heap* heap);
+
+    void activateMaterialUniformBlock(const nw::g3d::MaterialObj* p_material) const;
+    void activateTextureSampler(const nw::g3d::MaterialObj* p_material) const;
 
 private:
     void clear_();

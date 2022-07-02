@@ -12,6 +12,9 @@ public:
     LightMapMgr();
     /* virtual */ ~LightMapMgr();
 
+    LightMap& getLightMap(s32 index) { return mLightMap[index]; }
+    const LightMap& getLightMap(s32 index) const { return mLightMap[index]; }
+
     s32 searchIndex(const sead::SafeString& name) const;
 
 private:

@@ -18,6 +18,9 @@ public:
     LightMapMgr(const sead::TaskConstructArg& arg);
     virtual ~LightMapMgr();
 
+    agl::lght::LightMapMgr& getLightMapMgr() { return mLightMapMgr; }
+    const agl::lght::LightMapMgr& getLightMapMgr() const { return mLightMapMgr; }
+
     void setRenderObjLightMap(RenderObjEx& render_obj, bool no_mat_dl) const;
 
 private:

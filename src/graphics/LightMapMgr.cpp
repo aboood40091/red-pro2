@@ -28,10 +28,10 @@ void LightMapMgr::setRenderObjLightMap(RenderObjEx& render_obj, bool no_mat_dl) 
                 const nw::g3d::res::ResTexture* p_res_texture = p_material->GetResTexture(p_res_sampler->GetIndex());
                 if (p_res_texture)
                 {
-                    s32 idx_light_map = mLightMapMgr.searchIndex(p_res_texture->GetName());
-                    if (idx_light_map > -1)
+                    s32 idx_lghtmap = mLightMapMgr.searchIndex(p_res_texture->GetName());
+                    if (idx_lghtmap > -1)
                     {
-                        light_map.idx_texture[num_light_map] = idx_light_map;
+                        light_map.idx_lghtmap[num_light_map] = idx_lghtmap;
                         light_map.idx_sampler[num_light_map] = idx_sampler;
 
                         if (++num_light_map >= cLightMapNum)

@@ -41,10 +41,10 @@ public:
             sampler_location[0].setName("cShadowMap");
             sampler_location[1].setName("cReflectionMap");
 
-            searchLocation();
+            updateLocation();
         }
 
-        void searchLocation()
+        void updateLocation()
         {
             if (p_shader_program)
             {
@@ -79,11 +79,11 @@ public:
     {
         void clear()
         {
-            sead::MemUtil::fill(idx_texture, u8(-1), sizeof(idx_texture));
+            sead::MemUtil::fill(idx_lghtmap, u8(-1), sizeof(idx_lghtmap));
             sead::MemUtil::fill(idx_sampler, u8(-1), sizeof(idx_sampler));
         }
 
-        s32 idx_texture[LightMapMgr::cLightMapNum];
+        s32 idx_lghtmap[LightMapMgr::cLightMapNum];
         s32 idx_sampler[LightMapMgr::cLightMapNum];
     };
     static_assert(sizeof(LightMap) == 0x10, "RenderObjEx::LightMap size mismatch");

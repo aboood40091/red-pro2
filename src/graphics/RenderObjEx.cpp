@@ -271,6 +271,28 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     mXluShapeInfo.sort(&sortShapeRenderInfoCmp);
 }
 
+void RenderObjEx::activateMaterial(const agl::g3d::ModelShaderAssign& shader_assign, const nw::g3d::MaterialObj* p_material, const LightMap& light_map) const
+{
+    shader_assign.activateMaterialUniformBlock(p_material);
+    shader_assign.activateTextureSampler(p_material);
+
+    for (s32 i = 0; i < LightMapMgr::cLightMapNum; i++)
+    {
+        s32 idx_lghtmap = light_map.idx_lghtmap[i];
+        if (idx_lghtmap != -1)
+        {
+            s32 idx_sampler = light_map.idx_sampler[i];
+            if (idx_sampler != -1)
+            {
+                LightMapMgr::instance()->getLightMapMgr()
+                    .getLightMap(idx_lghtmap)
+                        .getTextureSampler()
+                            .activate(shader_assign.getSamplerLocation(idx_sampler), 12 + i);
+            }
+        }
+    }
+}
+
 void RenderObjEx::disableMaterialDL()
 {
     mMaterialNoDL = true;
