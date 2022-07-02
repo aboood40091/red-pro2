@@ -87,4 +87,54 @@ void ModelShaderAssign::clear_()
     }
 }
 
+void ModelShaderAssign::activateMaterialUniformBlock(const nw::g3d::MaterialObj* p_material) const
+{
+    if (mUniformBlockLocation.isValid() && p_material->GetMatBlock().GetSize() > 0)
+    {
+        if (mUniformBlockLocation.getVertexLocation() != -1)
+            p_material->GetMatBlock().LoadVertexUniforms(mUniformBlockLocation.getVertexLocation());
+
+        if (mUniformBlockLocation.getGeometryLocation() != -1)
+            p_material->GetMatBlock().LoadGeometryUniforms(mUniformBlockLocation.getGeometryLocation());
+
+        if (mUniformBlockLocation.getFragmentLocation() != -1)
+            p_material->GetMatBlock().LoadFragmentUniforms(mUniformBlockLocation.getFragmentLocation());
+    }
+}
+
+void ModelShaderAssign::activateTextureSampler(const nw::g3d::MaterialObj* p_material) const
+{
+    for (u32 i = 0; i < mSamplerNum; i++)
+    {
+        const nw::g3d::res::ResSampler* p_res_sampler = mpResSampler[i];
+        const nw::g3d::res::ResTexture* p_res_texture = p_material->GetResTexture(p_res_sampler->GetIndex());
+
+        if (p_res_texture)
+        {
+            const nw::g3d::fnd::GfxSampler* p_gfx_sampler = p_res_sampler->GetGfxSampler();
+            const nw::g3d::fnd::GfxTexture* p_gfx_texture = p_res_texture->GetGfxTexture();
+
+            const agl::SamplerLocation& sampler_location = mSamplerLocation[i];
+
+            if (sampler_location.getVertexLocation() != -1)
+            {
+                p_gfx_sampler->LoadVertexSampler(sampler_location.getVertexLocation());
+                p_gfx_texture->LoadVertexTexture(sampler_location.getVertexLocation());
+            }
+
+            if (sampler_location.getGeometryLocation() != -1)
+            {
+                p_gfx_sampler->LoadGeometrySampler(sampler_location.getGeometryLocation());
+                p_gfx_texture->LoadGeometryTexture(sampler_location.getGeometryLocation());
+            }
+
+            if (sampler_location.getFragmentLocation() != -1)
+            {
+                p_gfx_sampler->LoadFragmentSampler(sampler_location.getFragmentLocation());
+                p_gfx_texture->LoadFragmentTexture(sampler_location.getFragmentLocation());
+            }
+        }
+    }
+}
+
 } }

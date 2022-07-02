@@ -14,6 +14,17 @@ public:
     {
     }
 
+    bool isValid() const
+    {
+        return getVertexLocation()   != -1 ||
+               getFragmentLocation() != -1 ||
+               getGeometryLocation() != -1;
+    }
+
+    s32 getVertexLocation() const { return mVS; }
+    s32 getFragmentLocation() const { return mFS; }
+    s32 getGeometryLocation() const { return mGS; }
+
 protected:
     s16 mVS;
     s16 mFS;
