@@ -1,9 +1,9 @@
 #pragma once
 
-#include <agl/util/agl/res/aglResBinaryShaderProgram.h>
-#include <agl/util/agl/res/aglResShaderBinary.h>
-#include <agl/util/agl/res/aglResShaderProgram.h>
-#include <agl/util/agl/res/aglResShaderSource.h>
+#include <util/common/aglResBinaryShaderProgram.h>
+#include <util/common/aglResShaderBinary.h>
+#include <util/common/aglResShaderProgram.h>
+#include <util/common/aglResShaderSource.h>
 
 namespace agl {
 

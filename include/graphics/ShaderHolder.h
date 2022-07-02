@@ -1,9 +1,8 @@
 #pragma once
 
+#include <common/aglShaderProgramArchive.h>
 #include <heap/seadDisposer.h>
 #include <prim/seadSafeString.h>
-
-#include <agl/aglShaderProgramArchive.h>
 
 class ShaderHolder
 {

@@ -2,8 +2,7 @@
 
 #include <framework/seadCalculateTask.h>
 #include <framework/seadTaskMgr.h>
-
-#include <agl/light/aglLightMapMgr.h>
+#include <light/aglLightMapMgr.h>
 
 class RenderObjEx;
 

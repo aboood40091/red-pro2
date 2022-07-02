@@ -1,6 +1,5 @@
 #include <container/seadBuffer.h>
-
-#include <agl/g3d/aglModelShaderAssign.h>
+#include <g3d/aglModelShaderAssign.h>
 
 namespace agl { namespace g3d {
 

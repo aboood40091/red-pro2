@@ -1,4 +1,4 @@
-#include <agl/detail/aglPrivateResource.h>
+#include <detail/aglPrivateResource.h>
 
 namespace agl { namespace detail {
 

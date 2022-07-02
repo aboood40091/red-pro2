@@ -1,8 +1,7 @@
 #pragma once
 
+#include <common/aglTextureSampler.h>
 #include <prim/seadSafeString.h>
-
-#include <agl/aglTextureSampler.h>
 
 namespace agl { namespace lght {
 

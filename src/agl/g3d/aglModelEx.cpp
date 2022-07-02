@@ -1,4 +1,4 @@
-#include <agl/g3d/aglModelEx.h>
+#include <g3d/aglModelEx.h>
 
 namespace agl { namespace g3d {
 

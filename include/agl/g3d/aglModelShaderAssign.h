@@ -1,8 +1,7 @@
 #pragma once
 
+#include <common/aglShaderLocation.h>
 #include <heap/seadHeap.h>
-
-#include <agl/aglShaderLocation.h>
 
 #include <nw/g3d/fnd/g3d_GfxObject.h>
 #include <nw/g3d/res/g3d_ResMaterial.h>

@@ -1,5 +1,5 @@
-#include <agl/detail/aglFileIOMgr.h>
-#include <agl/detail/aglPrivateResource.h>
+#include <detail/aglFileIOMgr.h>
+#include <detail/aglPrivateResource.h>
 
 #include <prim/seadMemUtil.h>
 

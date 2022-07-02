@@ -2,10 +2,9 @@
 #include <graphics/ShaderHolder.h>
 #include <root/ResMgr.h>
 
+#include <g3d/aglShaderUtilG3D.h>
 #include <gfx/seadGraphics.h>
 #include <math/seadMathCalcCommon.h>
-
-#include <agl/g3d/aglShaderUtilG3D.h>
 
 ResArchive::ResArchive()
     : mResFile(NULL)

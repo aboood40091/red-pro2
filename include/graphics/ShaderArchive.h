@@ -1,7 +1,7 @@
 #pragma once
 
-#include <agl/aglShaderProgramArchive.h>
-#include <agl/util/agl/res/aglResShaderArchive.h>
+#include <common/aglShaderProgramArchive.h>
+#include <util/common/aglResShaderArchive.h>
 
 struct ShaderArchive
 {

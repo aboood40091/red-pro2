@@ -1,10 +1,9 @@
 #pragma once
 
+#include <common/aglShaderLocation.h>
+#include <common/aglTextureData.h>
 #include <gfx/seadColor.h>
 #include <prim/seadBitFlag.h>
-
-#include <agl/aglShaderLocation.h>
-#include <agl/aglTextureData.h>
 
 namespace agl {
 

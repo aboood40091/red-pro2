@@ -1,7 +1,7 @@
 #pragma once
 
-#include <agl/aglShaderEnum.h>
-#include <agl/util/agl/res/aglResCommon.h>
+#include <common/aglShaderEnum.h>
+#include <util/common/aglResCommon.h>
 
 namespace agl {
 

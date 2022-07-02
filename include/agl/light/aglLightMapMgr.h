@@ -1,8 +1,7 @@
 #pragma once
 
 #include <container/seadBuffer.h>
-
-#include <agl/util/light/aglLightMap.h>
+#include <util/light/aglLightMap.h>
 
 namespace agl { namespace lght {
 

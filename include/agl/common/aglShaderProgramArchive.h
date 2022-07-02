@@ -1,14 +1,13 @@
 #pragma once
 
-#include <agl/aglShaderProgram.h>
-#include <agl/util/agl/res/aglResShaderArchive.h>
-#include <agl/util/agl/res/aglResShaderSource.h>
-#include <agl/util/agl/shader/aglShaderCompileInfo.h>
-
+#include <common/aglShaderProgram.h>
 #include <container/seadBuffer.h>
 #include <heap/seadDisposer.h>
 #include <prim/seadBitFlag.h>
 #include <prim/seadSafeString.h>
+#include <util/common/aglResShaderArchive.h>
+#include <util/common/aglResShaderSource.h>
+#include <util/common/aglShaderCompileInfo.h>
 
 namespace agl {
 

@@ -2,7 +2,7 @@
 
 #include <prim/seadRuntimeTypeInfo.h>
 
-// #include <agl/lyr/aglLayer.h>
+// #include <layer/aglLayer.h>
 
 class Layer /* : public agl::lyr::Layer // size: 0x420 */
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <agl/aglShaderEnum.h>
+#include <common/aglShaderEnum.h>
 
 #ifdef cafe
 #include <cafe/gx2.h>

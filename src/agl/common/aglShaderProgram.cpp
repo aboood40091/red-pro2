@@ -1,10 +1,9 @@
-#include <agl/aglDisplayList.h>
-#include <agl/aglShaderProgram.h>
-#include <agl/detail/aglFileIOMgr.h>
-#include <agl/detail/aglPrivateResource.h>
-#include <agl/util/agl/shader/aglShaderCompileInfo.h>
-
+#include <common/aglDisplayList.h>
+#include <common/aglShaderProgram.h>
+#include <detail/aglFileIOMgr.h>
+#include <detail/aglPrivateResource.h>
 #include <gfx/seadGraphics.h>
+#include <util/common/aglShaderCompileInfo.h>
 
 namespace agl {
 

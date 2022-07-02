@@ -1,5 +1,5 @@
-#include <agl/aglShaderLocation.h>
-#include <agl/aglShaderProgram.h>
+#include <common/aglShaderLocation.h>
+#include <common/aglShaderProgram.h>
 
 namespace agl {
 

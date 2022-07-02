@@ -3,11 +3,10 @@
 #include <graphics/RenderObj.h>
 #include <graphics/ResArchive.h>
 
+#include <common/aglUniformBlock.h>
 #include <container/seadBuffer.h>
 #include <container/seadPtrArray.h>
-
-#include <agl/g3d/aglModelEx.h>
-#include <agl/aglUniformBlock.h>
+#include <g3d/aglModelEx.h>
 
 #include <nw/g3d/g3d_SkeletalAnimObj.h>
 #include <nw/g3d/g3d_ShapeObj.h>

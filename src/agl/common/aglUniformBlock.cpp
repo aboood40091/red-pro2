@@ -1,4 +1,4 @@
-#include <agl/aglUniformBlock.h>
+#include <common/aglUniformBlock.h>
 
 // TODO: Move to the proper headers
 #define SEAD_MACRO_UTIL_ROUNDUP(x, y) ((x) + (y) - 1 & (u32)-(y))

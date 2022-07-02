@@ -1,6 +1,6 @@
 #pragma once
 
-#include <agl/aglTextureEnum.h>
+#include <common/aglTextureEnum.h>
 
 namespace agl {
 

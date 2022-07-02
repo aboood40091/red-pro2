@@ -1,5 +1,5 @@
-#include <agl/aglDisplayList.h>
-#include <agl/detail/aglPrivateResource.h>
+#include <common/aglDisplayList.h>
+#include <detail/aglPrivateResource.h>
 
 #ifdef cafe
 #include <cafe.h>

@@ -1,6 +1,5 @@
-#include <agl/detail/aglShaderTextUtil.h>
-
 #include <basis/seadNew.h>
+#include <detail/aglShaderTextUtil.h>
 #include <prim/seadMemUtil.h>
 #include <prim/seadSafeString.h>
 

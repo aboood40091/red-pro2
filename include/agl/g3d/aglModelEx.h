@@ -1,6 +1,6 @@
 #pragma once
 
-#include <agl/g3d/aglModelShaderAssign.h>
+#include <g3d/aglModelShaderAssign.h>
 
 #include <nw/g3d/g3d_ModelObj.h>
 

@@ -1,9 +1,8 @@
-#include <agl/util/agl/res/aglResShaderArchive.h>
-#include <agl/util/agl/res/aglResShaderVariation.h>
-#include <agl/util/agl/res/aglResShaderSymbol.h>
-#include <agl/util/agl/shader/aglShader.h>
-
 #include <prim/seadEndian.h>
+#include <util/common/aglResShaderArchive.h>
+#include <util/common/aglResShaderVariation.h>
+#include <util/common/aglResShaderSymbol.h>
+#include <util/common/aglShader.h>
 
 #ifdef cafe
 #include <cafe.h>

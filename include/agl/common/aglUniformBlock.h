@@ -118,6 +118,6 @@ static_assert(sizeof(UniformBlock) == 0x14, "agl::UniformBlock size mismatch");
 
 #ifdef __cplusplus
 
-#include <agl/aglUniformBlock.hpp>
+#include <common/aglUniformBlock.hpp>
 
 #endif // __cplusplus

@@ -1,4 +1,4 @@
-#include <agl/light/aglLightMapMgr.h>
+#include <light/aglLightMapMgr.h>
 
 namespace agl { namespace lght {
 

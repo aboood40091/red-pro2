@@ -1,7 +1,6 @@
-#include <agl/aglShaderProgramArchive.h>
-#include <agl/detail/aglPrivateResource.h>
-#include <agl/detail/aglShaderTextUtil.h>
-
+#include <common/aglShaderProgramArchive.h>
+#include <detail/aglPrivateResource.h>
+#include <detail/aglShaderTextUtil.h>
 #include <time/seadTickTime.h>
 
 #ifdef cafe
