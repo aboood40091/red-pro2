@@ -1,9 +1,9 @@
 #pragma once
 
 #include <agl/aglShaderProgram.h>
-#include <agl/res/aglResShaderArchive.h>
-#include <agl/res/aglResShaderSource.h>
-#include <agl/shader/aglShaderCompileInfo.h>
+#include <agl/util/agl/res/aglResShaderArchive.h>
+#include <agl/util/agl/res/aglResShaderSource.h>
+#include <agl/util/agl/shader/aglShaderCompileInfo.h>
 
 #include <container/seadBuffer.h>
 #include <heap/seadDisposer.h>

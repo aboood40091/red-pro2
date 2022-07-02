@@ -2,7 +2,7 @@
 #include <agl/aglShaderProgram.h>
 #include <agl/detail/aglFileIOMgr.h>
 #include <agl/detail/aglPrivateResource.h>
-#include <agl/shader/aglShaderCompileInfo.h>
+#include <agl/util/agl/shader/aglShaderCompileInfo.h>
 
 #include <gfx/seadGraphics.h>
 

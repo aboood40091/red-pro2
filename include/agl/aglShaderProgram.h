@@ -6,9 +6,9 @@
 
 #include <agl/aglDisplayList.h>
 #include <agl/aglShaderLocation.h>
-#include <agl/res/aglResShaderSymbol.h>
-#include <agl/res/aglResShaderVariation.h>
-#include <agl/shader/aglShader.h>
+#include <agl/util/agl/res/aglResShaderSymbol.h>
+#include <agl/util/agl/res/aglResShaderVariation.h>
+#include <agl/util/agl/shader/aglShader.h>
 
 namespace agl {
 

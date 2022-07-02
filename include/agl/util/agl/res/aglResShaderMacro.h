@@ -1,6 +1,6 @@
 #pragma once
 
-#include <agl/res/aglResCommon.h>
+#include <agl/util/agl/res/aglResCommon.h>
 
 namespace agl {
 

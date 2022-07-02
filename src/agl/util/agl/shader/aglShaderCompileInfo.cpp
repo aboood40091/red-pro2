@@ -1,7 +1,7 @@
 #include <agl/aglShaderEnum.h>
 #include <agl/detail/aglShaderTextUtil.h>
 #include <agl/detail/aglPrivateResource.h>
-#include <agl/shader/aglShaderCompileInfo.h>
+#include <agl/util/agl/shader/aglShaderCompileInfo.h>
 
 namespace agl {
 

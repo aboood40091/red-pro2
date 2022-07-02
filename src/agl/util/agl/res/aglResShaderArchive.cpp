@@ -1,7 +1,7 @@
-#include <agl/res/aglResShaderArchive.h>
-#include <agl/res/aglResShaderVariation.h>
-#include <agl/res/aglResShaderSymbol.h>
-#include <agl/shader/aglShader.h>
+#include <agl/util/agl/res/aglResShaderArchive.h>
+#include <agl/util/agl/res/aglResShaderVariation.h>
+#include <agl/util/agl/res/aglResShaderSymbol.h>
+#include <agl/util/agl/shader/aglShader.h>
 
 #include <prim/seadEndian.h>
 
