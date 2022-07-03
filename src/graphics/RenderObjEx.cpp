@@ -271,6 +271,11 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     mXluShapeInfo.sort(&sortShapeRenderInfoCmp);
 }
 
+s32 RenderObjEx::sortShapeRenderInfoCmp(const ShapeRenderInfo* a, const ShapeRenderInfo* b)
+{
+    return a->priority - b->priority;
+}
+
 void RenderObjEx::activateMaterial(const agl::g3d::ModelShaderAssign& shader_assign, const nw::g3d::MaterialObj* p_material, const LightMap& light_map) const
 {
     shader_assign.activateMaterialUniformBlock(p_material);
