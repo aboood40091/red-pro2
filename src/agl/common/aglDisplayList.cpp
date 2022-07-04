@@ -19,15 +19,10 @@ DisplayList::~DisplayList()
 void DisplayList::setBuffer(u8* buffer, size_t size)
 {
     if (buffer)
-    {
-       mpBuffer = buffer;
        mSize = size;
-    }
     else
-    {
-        mpBuffer = NULL;
         mSize = 0;
-    }
+    mpBuffer = buffer;
 }
 
 void DisplayList::clear()
@@ -55,11 +50,8 @@ size_t DisplayList::endDisplayList()
     void* dl;
     size_t size;
     GX2GetCurrentDisplayList(&dl, &size);
-
     size_t dl_size = GX2EndDisplayList(dl);
-    dl = (void*)((uintptr_t)dl + dl_size);
-
-    mValidSize = (uintptr_t)dl - (uintptr_t)mpBuffer;
+    mValidSize = dl_size + ((uintptr_t)dl - (uintptr_t)mpBuffer);
     return mValidSize;
 #else
     return 0;
@@ -83,6 +75,7 @@ size_t DisplayList::endDisplayListBuffer(sead::Heap* heap)
     if (size != 0)
     {
         buffer = new (heap, cDisplayListAlignment) u8[size];
+        sead::MemUtil::copy(buffer, mpBuffer, size);
 #ifdef cafe
         DCFlushRange(buffer, size);
 #endif // cafe

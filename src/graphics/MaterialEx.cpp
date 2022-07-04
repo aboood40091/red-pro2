@@ -41,24 +41,22 @@ void MaterialEx::setTexSrtMtx(s32 index, const sead::Vector2f& scale, const u32&
             f32 sin_r, cos_r;
             sead::Mathf::sinCosIdx(&sin_r, &cos_r, rotate);
 
-            sead::Matrix34f& mtx = getTexSrtMtx(index); // mTexSrtMtx[index]
+            getTexSrtMtx(index).m[0][0] =  scale.x * cos_r;
+            getTexSrtMtx(index).m[0][1] =  scale.x * sin_r;
+            getTexSrtMtx(index).m[0][2] =  0.0f;
+            getTexSrtMtx(index).m[0][3] =  translate.x;
 
-            mtx.m[0][0] =  scale.x * cos_r;
-            mtx.m[0][1] =  scale.x * sin_r;
-            mtx.m[0][2] =  0.0f;
-            mtx.m[0][3] =  translate.x;
+            getTexSrtMtx(index).m[1][0] = -scale.y * sin_r;
+            getTexSrtMtx(index).m[1][1] =  scale.y * cos_r;
+            getTexSrtMtx(index).m[1][2] =  0.0f;
+            getTexSrtMtx(index).m[1][3] =  translate.y;
 
-            mtx.m[1][0] = -scale.y * sin_r;
-            mtx.m[1][1] =  scale.y * cos_r;
-            mtx.m[1][2] =  0.0f;
-            mtx.m[1][3] =  translate.y;
+            getTexSrtMtx(index).m[2][0] =  0.0f;
+            getTexSrtMtx(index).m[2][1] =  0.0f;
+            getTexSrtMtx(index).m[2][2] =  0.0f;
+            getTexSrtMtx(index).m[2][3] =  1.0f;
 
-            mtx.m[2][0] =  0.0f;
-            mtx.m[2][1] =  0.0f;
-            mtx.m[2][2] =  0.0f;
-            mtx.m[2][3] =  1.0f;
-
-            srt.pEffectMtx = (nw::g3d::math::Mtx34*)(&mtx);
+            srt.pEffectMtx = (nw::g3d::math::Mtx34*)(&getTexSrtMtx(index));
         }
     }
 }
@@ -83,42 +81,40 @@ void MaterialEx::setTexSrt(s32 index, const sead::Vector2f& scale, const u32& ro
 void MaterialEx::getTexSrt(s32 index, sead::Vector2f* p_scale, u32* p_rotate, sead::Vector2f* p_translate) const
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTexMtxStr[index].cstr());
-    if (param_index >= 0)
+    if (param_index < 0 || mMaterialObj->GetResShaderParam(param_index)->GetOffset() < 0)
     {
-        if (mMaterialObj->GetResShaderParam(param_index)->GetOffset() >= 0)
+        if (p_scale)
         {
-            const nw::g3d::res::TexSrt& srt = mMaterialObj->GetShaderParam<nw::g3d::res::TexSrtEx>(param_index)->srt;
-            if (p_scale)
-            {
-                p_scale->x = srt.sx;
-                p_scale->y = srt.sy;
-            }
-            if (p_rotate)
-            {
-                *p_rotate = sead::Mathf::rad2idx(srt.r);
-            }
-            if (p_translate)
-            {
-                p_translate->x = srt.tx;
-                p_translate->y = srt.ty;
-            }
-            return;
+            p_scale->x = 1.0f;
+            p_scale->y = 1.0f;
+        }
+        if (p_rotate)
+        {
+            *p_rotate = 0;
+        }
+        if (p_translate)
+        {
+            p_translate->x = 0.0f;
+            p_translate->y = 0.0f;
         }
     }
-
-    if (p_scale)
+    else
     {
-        p_scale->x = 1.0f;
-        p_scale->y = 1.0f;
-    }
-    if (p_rotate)
-    {
-        *p_rotate = 0;
-    }
-    if (p_translate)
-    {
-        p_translate->x = 0.0f;
-        p_translate->y = 0.0f;
+        const nw::g3d::res::TexSrt& srt = mMaterialObj->GetShaderParam<nw::g3d::res::TexSrtEx>(param_index)->srt;
+        if (p_scale)
+        {
+            p_scale->x = srt.sx;
+            p_scale->y = srt.sy;
+        }
+        if (p_rotate)
+        {
+            *p_rotate = sead::Mathf::rad2idx(srt.r);
+        }
+        if (p_translate)
+        {
+            p_translate->x = srt.tx;
+            p_translate->y = srt.ty;
+        }
     }
 }
 

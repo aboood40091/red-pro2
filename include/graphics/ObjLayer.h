@@ -17,6 +17,11 @@ public:
         SEAD_RTTI_OVERRIDE(Node, Layer::Node)
 
     public:
+        Node()
+            : Layer::Node()
+        {
+        }
+
         virtual void calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, ObjLayerRenderer* renderer) = 0;
         virtual void updateView(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, ObjLayerRenderer* renderer) = 0;
         virtual void drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, ObjLayerRenderer* renderer) = 0;

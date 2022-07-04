@@ -8,15 +8,17 @@ void LightMapMgr::setRenderObjLightMap(RenderObjEx& render_obj, bool no_mat_dl) 
     if (!mIsInitialized)
         return;
 
-    for (s32 idx_shape = 0, num_shape = render_obj.getModelEx().GetShapeCount(); idx_shape < num_shape; idx_shape++)
+    agl::g3d::ModelEx& model = render_obj.getModelEx();
+
+    for (s32 idx_shape = 0, num_shape = model.GetShapeCount(); idx_shape < num_shape; idx_shape++)
     {
         RenderObjEx::LightMap& light_map = render_obj.getShape(idx_shape).light_map;
         light_map.clear();
 
-        agl::g3d::ModelShaderAssign& shader_assign = render_obj.getModelEx().getShaderAssign(idx_shape);
+        agl::g3d::ModelShaderAssign& shader_assign = model.getShaderAssign(idx_shape);
 
-        s32 idx_material = render_obj.getModelEx().GetShape(idx_shape)->GetMaterialIndex();
-        const nw::g3d::MaterialObj* p_material = render_obj.getModelEx().GetMaterial(idx_material);
+        s32 idx_material = model.GetShape(idx_shape)->GetMaterialIndex();
+        const nw::g3d::MaterialObj* p_material = model.GetMaterial(idx_material);
 
         s32 num_light_map = 0;
 

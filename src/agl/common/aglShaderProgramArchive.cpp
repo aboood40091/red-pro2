@@ -190,7 +190,7 @@ void ShaderProgramArchive::createWithOption(ResBinaryShaderArchive res_binary_ar
 
     setResShaderArchive_(res_archive, heap);
 
-    for (sead::Buffer<ShaderProgram>::iterator it = mProgram.begin(), it_end = mProgram.end(); it != it_end; ++it)
+    for (sead::Buffer<ShaderProgram>::iterator it = mProgram.begin(); !it.isEnd(); ++it)
         it->reserveSetUpAllVariation();
 }
 
@@ -204,14 +204,14 @@ void ShaderProgramArchive::updateCompileInfo()
 {
     sead::TickTime time;
 
-    for (sead::Buffer<ShaderSource>::iterator it = mSource.begin(), it_end = mSource.end(); it != it_end; ++it)
+    for (sead::Buffer<ShaderSource>::iterator it = mSource.begin(); !it.isEnd(); ++it)
         if (it->mFlag.isOn(1))
             it->expand();
 
-    for (sead::Buffer<ShaderProgramEx>::iterator it = mProgramEx.begin(), it_end = mProgramEx.end(); it != it_end; ++it)
+    for (sead::Buffer<ShaderProgramEx>::iterator it = mProgramEx.begin(); !it.isEnd(); ++it)
         it->updateRawText();
 
-    for (sead::Buffer<ShaderSource>::iterator it = mSource.begin(), it_end = mSource.end(); it != it_end; ++it)
+    for (sead::Buffer<ShaderSource>::iterator it = mSource.begin(); !it.isEnd(); ++it)
         it->mFlag.reset(1);
 }
 
@@ -317,10 +317,10 @@ bool ShaderProgramArchive::setUp_(bool unk)
     _28 += 1;
     sead::TickTime time;
 
-    for (sead::Buffer<ShaderProgramEx>::iterator it = mProgramEx.begin(), it_end = mProgramEx.end(); it != it_end; ++it)
+    for (sead::Buffer<ShaderProgramEx>::iterator it = mProgramEx.begin(); !it.isEnd(); ++it)
         it->updateAnalyze();
 
-    for (sead::Buffer<ShaderProgram>::iterator it = mProgram.begin(), it_end = mProgram.end(); it != it_end; ++it)
+    for (sead::Buffer<ShaderProgram>::iterator it = mProgram.begin(); !it.isEnd(); ++it)
     {
         // TODO
         // it->mpSharedData->_10 = _20;
@@ -363,7 +363,7 @@ void ShaderProgramArchive::ShaderSource::initialize(ShaderProgramArchive* archiv
     mpArchive->mSourceText[mIndex] = mText->cstr();
 
     mUsedInSource.allocBuffer(mpArchive->mSource.size(), heap);
-    for (sead::Buffer<bool>::iterator it = mUsedInSource.begin(), it_end = mUsedInSource.end(); it != it_end; ++it)
+    for (sead::Buffer<bool>::iterator it = mUsedInSource.begin(); !it.isEnd(); ++it)
         *it = false;
 
     // detail::RootNode::setNodeMeta(this, "Icon = NOTE");
@@ -387,7 +387,7 @@ void ShaderProgramArchive::ShaderSource::expand()
             detail::PrivateResource::instance()->getShaderCompileHeap()
         );
 
-        for (sead::Buffer<ShaderSource>::iterator it = mpArchive->mSource.begin(), it_end = mpArchive->mSource.end(); it != it_end; ++it)
+        for (sead::Buffer<ShaderSource>::iterator it = mpArchive->mSource.begin(); !it.isEnd(); ++it)
             it->mUsedInSource[mIndex] = source_is_used[it.getIndex()];
     }
 }
@@ -412,7 +412,7 @@ void ShaderProgramArchive::ShaderProgramEx::initialize(ShaderProgramArchive* arc
     // TODO: sead::SafeArray
     {
         typedef sead::Buffer<ShaderCompileInfoEx>::iterator _Iterator;
-        for (_Iterator it = _Iterator(mCompileInfoEx), it_end = _Iterator(mCompileInfoEx, cShaderType_Num); it != it_end; ++it)
+        for (_Iterator it = _Iterator(mCompileInfoEx, cShaderType_Num); !it.isEnd(); ++it)
         {
             u32 source_index = res.ref().mSourceIndex[it.getIndex()];
             ShaderType type = ShaderType(it.getIndex());
@@ -443,7 +443,7 @@ void ShaderProgramArchive::ShaderProgramEx::initialize(ShaderProgramArchive* arc
     }
 
     _110.allocBuffer(program.getVariationMacroNum(), heap);
-    for (sead::Buffer<u32>::iterator it = _110.begin(), it_end = _110.end(); it != it_end; ++it)
+    for (sead::Buffer<u32>::iterator it = _110.begin(); !it.isEnd(); ++it)
         *it = 0;
 
     // detail::RootNode::setNodeMeta(this, "Icon = CIRCLE_ORENGE");
@@ -454,7 +454,7 @@ void ShaderProgramArchive::ShaderProgramEx::updateRawText()
     // TODO: sead::SafeArray
     {
         typedef sead::Buffer<ShaderCompileInfoEx>::iterator _Iterator;
-        for (_Iterator it = _Iterator(mCompileInfoEx), it_end = _Iterator(mCompileInfoEx, cShaderType_Num); it != it_end; ++it)
+        for (_Iterator it = _Iterator(mCompileInfoEx, cShaderType_Num); !it.isEnd(); ++it)
         {
             ShaderSource* source = it->mSource;
             if (source && source->mFlag.isOn(1))

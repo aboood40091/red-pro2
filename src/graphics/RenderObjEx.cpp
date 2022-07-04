@@ -28,7 +28,7 @@ RenderObjEx::RenderObjEx()
     , _12c(3)
     , mBoundingFlag(0)
     , mpViewShapeBuffer()
-    , mBounding()
+    , mBounding((nw::g3d::Sphere){ reinterpret_cast<const nw::g3d::math::Vec3&>(sead::Vector3f::zero), 1.0f })
     , mpAABB(NULL)
     , mShapeFlag(1)
     , _154() // TODO
@@ -54,7 +54,17 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
         break;
     case 2:
         mBoundingFlag.set(7 | 0x20);
-        mpAABB = new (heap) nw::g3d::AABB;
+        nw::g3d::AABB* aabb = new (heap) nw::g3d::AABB;
+        if (aabb)
+        {
+            aabb->min.Set(sead::Mathf::maxNumber(), sead::Mathf::maxNumber(), sead::Mathf::maxNumber());
+            aabb->max.Set(sead::Mathf::minNumber(), sead::Mathf::minNumber(), sead::Mathf::minNumber());
+            mpAABB = aabb;
+        }
+        else
+        {
+            mpAABB = NULL;
+        }
         break;
     }
 
@@ -146,12 +156,12 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     sead::Graphics::instance()->lockDrawContext();
     {
         mpMaterial.allocBuffer(mModelEx.GetMaterialCount(), heap);
-        for (sead::Buffer<MaterialEx*>::iterator it = mpMaterial.begin(), it_end = mpMaterial.end(); it != it_end; ++it)
+        for (sead::Buffer<MaterialEx*>::iterator it = mpMaterial.begin(); !it.isEnd(); ++it)
             *it = new (heap) MaterialEx(mModelEx.GetMaterial(it.getIndex()));
 
         mShape.allocBuffer(mModelEx.GetShapeCount(), heap);
         const agl::UniformBlock* base_uniform_block = NULL;
-        for (sead::Buffer<Shape>::iterator it = mShape.begin(), it_end = mShape.end(); it != it_end; ++it)
+        for (sead::Buffer<Shape>::iterator it = mShape.begin(); !it.isEnd(); ++it)
         {
             s32 idx_shape = it.getIndex();
             const nw::g3d::ShapeObj* shape_obj = mModelEx.GetShape(idx_shape);
@@ -289,10 +299,12 @@ void RenderObjEx::activateMaterial(const agl::g3d::ModelShaderAssign& shader_ass
             s32 idx_sampler = light_map.idx_sampler[i];
             if (idx_sampler != -1)
             {
+                const agl::SamplerLocation& location = shader_assign.getSamplerLocation(idx_sampler);
+
                 LightMapMgr::instance()->getLightMapMgr()
                     .getLightMap(idx_lghtmap)
                         .getTextureSampler()
-                            .activate(shader_assign.getSamplerLocation(idx_sampler), 12 + i);
+                            .activate(location, 12 + i);
             }
         }
     }

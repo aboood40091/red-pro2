@@ -14,6 +14,10 @@ public:
         SEAD_RTTI_BASE(Node)
 
     public:
+        Node()
+        {
+        }
+
         virtual void calc() = 0;
     };
 

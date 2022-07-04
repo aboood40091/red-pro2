@@ -32,13 +32,12 @@ public:
         {
             this->p_shader_program = p_shader_program;
 
-            uniform_block_location[0].setName("MdlEnvView");
-            uniform_block_location[1].setName("MdlMtx");
-            uniform_block_location[2].setName("Shp");
-            uniform_block_location[3].setName("Mat");
-
-            sampler_location[0].setName("cShadowMap");
-            sampler_location[1].setName("cReflectionMap");
+            env_location.setName("MdlEnvView");
+            mtx_location.setName("MdlMtx");
+            shp_location.setName("Shp");
+            mat_location.setName("Mat");
+            sdw_location.setName("cShadowMap");
+            rfl_location.setName("cReflectionMap");
 
             updateLocation();
         }
@@ -47,19 +46,22 @@ public:
         {
             if (p_shader_program)
             {
-                uniform_block_location[0].search(*p_shader_program);
-                uniform_block_location[1].search(*p_shader_program);
-                uniform_block_location[2].search(*p_shader_program);
-                uniform_block_location[3].search(*p_shader_program);
-
-                sampler_location[0].search(*p_shader_program);
-                sampler_location[1].search(*p_shader_program);
+                env_location.search(*p_shader_program);
+                mtx_location.search(*p_shader_program);
+                shp_location.search(*p_shader_program);
+                mat_location.search(*p_shader_program);
+                sdw_location.search(*p_shader_program);
+                rfl_location.search(*p_shader_program);
             }
         }
 
         agl::ShaderProgram* p_shader_program;
-        agl::UniformBlockLocation uniform_block_location[4];
-        agl::SamplerLocation sampler_location[2];
+        agl::UniformBlockLocation env_location;
+        agl::UniformBlockLocation mtx_location;
+        agl::UniformBlockLocation shp_location;
+        agl::UniformBlockLocation mat_location;
+        agl::SamplerLocation sdw_location;
+        agl::SamplerLocation rfl_location;
     };
     static_assert(sizeof(ShaderAssign) == 0x64, "RenderObjEx::ShaderAssign size mismatch");
 
