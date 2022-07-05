@@ -7,6 +7,7 @@
 #include <container/seadBuffer.h>
 #include <container/seadPtrArray.h>
 #include <g3d/aglModelEx.h>
+#include <math/seadBoundBox.h>
 
 #include <nw/g3d/g3d_SkeletalAnimObj.h>
 #include <nw/g3d/g3d_ShapeObj.h>
@@ -143,7 +144,7 @@ public:
     void setMtxRT(const sead::Matrix34f& mtxRT) override
     {
         mMtxRT = mtxRT;
-        mBoundingFlag.set(2);
+        mViewFlag.set(2);
     }
 
     const sead::Matrix34f& getMtxRT() const override
@@ -154,7 +155,7 @@ public:
     void setScale(const sead::Vector3f& scale) override
     {
         mScale = scale;
-        mBoundingFlag.set(2);
+        mViewFlag.set(2);
     }
 
     const sead::Vector3f& getScale() const override
@@ -194,12 +195,12 @@ public:
 
     void setBoundingEnable(bool enable) override // deleted
     {
-        mBoundingFlag.change(1, enable);
+        mViewFlag.change(1, enable);
     }
 
     bool getBoundingEnable() const override
     {
-        return mBoundingFlag.isOn(1);
+        return mViewFlag.isOn(1);
     }
 
     const nw::g3d::Sphere& getBounding() const override
@@ -269,6 +270,26 @@ public:
     void disableMaterialDL();
 
 private:
+    void setBoundingFlag_(s32 index)
+    {
+        mBoundingFlagArray[index >> 5] |= 1 << (index & 0x1F);
+    }
+
+    bool getBoundingFlag_(s32 index) const
+    {
+        return mBoundingFlagArray[index >> 5] & 1 << (index & 0x1F);
+    }
+
+    void setSubBoundingFlag_(s32 index)
+    {
+        mSubBoundingFlagArray[index >> 5] |= 1 << (index & 0x1F);
+    }
+
+    bool getSubBoundingFlag_(s32 index) const
+    {
+        return mSubBoundingFlagArray[index >> 5] & 1 << (index & 0x1F);
+    }
+
     void createViewShapes_(s32 num_view, sead::Heap* heap);
     void initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw::g3d::MaterialObj* p_material, const nw::g3d::ShapeObj* p_shape);
     void updateBounding_();
@@ -297,13 +318,13 @@ private:
     sead::Vector3f mScale;
     u8 _128;
     sead::BitFlag32 _12c;
-    sead::BitFlag32 mBoundingFlag;
+    sead::BitFlag32 mViewFlag;
     sead::Buffer< sead::Buffer<nw::g3d::ShapeObj*> > mpViewShapeBuffer; // Idk
     nw::g3d::Sphere mBounding;
-    nw::g3d::AABB* mpAABB;
+    sead::BoundBox3f* mpSubBounding;
     sead::BitFlag32 mShapeFlag; // & 4: a shape has shadow cast, & 2: a shape has reflection, & 1: a shape is visible
-    u8 _154[0x28];
-    u8 _17c[0x28];
+    u32 mBoundingFlagArray[10];    // sead::UnsafeArray?
+    u32 mSubBoundingFlagArray[10]; // sead::UnsafeArray?
     sead::BitFlag32 _1a4;
     bool mMaterialNoDL;
 };

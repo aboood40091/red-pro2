@@ -27,13 +27,13 @@ RenderObjEx::RenderObjEx()
     , mScale(sead::Vector3f::ones)
     , _128(0)
     , _12c(3)
-    , mBoundingFlag(0)
+    , mViewFlag(0)
     , mpViewShapeBuffer()
     , mBounding((nw::g3d::Sphere){ reinterpret_cast<const nw::g3d::math::Vec3&>(sead::Vector3f::zero), 1.0f })
-    , mpAABB(NULL)
+    , mpSubBounding(NULL)
     , mShapeFlag(1)
-    , _154() // TODO
-    , _17c() // ^^
+    , mBoundingFlagArray() // TODO
+    , mSubBoundingFlagArray() // ^^
     , _1a4()
     , mMaterialNoDL(false)
 {
@@ -48,24 +48,14 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     switch (bounding_mode)
     {
     case 0:
-        mBoundingFlag.reset(7);
+        mViewFlag.reset(7);
         break;
     case 1:
-        mBoundingFlag.set(7);
+        mViewFlag.set(7);
         break;
     case 2:
-        mBoundingFlag.set(7 | 0x20);
-        nw::g3d::AABB* aabb = new (heap) nw::g3d::AABB;
-        if (aabb)
-        {
-            aabb->min.Set(sead::Mathf::maxNumber(), sead::Mathf::maxNumber(), sead::Mathf::maxNumber());
-            aabb->max.Set(sead::Mathf::minNumber(), sead::Mathf::minNumber(), sead::Mathf::minNumber());
-            mpAABB = aabb;
-        }
-        else
-        {
-            mpAABB = NULL;
-        }
+        mViewFlag.set(7 | 0x20);
+        mpSubBounding = new (heap) sead::BoundBox3f();
         break;
     }
 
@@ -216,7 +206,7 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
             }
         }
 
-        if (mBoundingFlag.isOn(1))
+        if (mViewFlag.isOn(1))
         {
             createViewShapes_(num_view, heap);
             updateBounding_();
@@ -385,6 +375,107 @@ void RenderObjEx::activateMaterial(const agl::g3d::ModelShaderAssign& shader_ass
                         .getTextureSampler()
                             .activate(location, 12 + i);
             }
+        }
+    }
+}
+
+void RenderObjEx::updateBounding_()
+{
+    if (mViewFlag.isOn(1 << 4))
+        mViewFlag.reset(1 << 2);
+
+    if (mViewFlag.isOn(1 << 1) ||
+        mViewFlag.isOn(1 << 2) && mViewFlag.isOff(1 << 3))
+    {
+        mModelEx.CalcBounding();
+
+        nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
+        if (p_bounding)
+        {
+            mBounding.center.x = p_bounding->center.x;
+            mBounding.center.y = p_bounding->center.y;
+            mBounding.center.z = p_bounding->center.z;
+            mBounding.radius = p_bounding->radius;
+        }
+
+        // ???
+        sead::MemUtil::fill(mSubBoundingFlagArray, u8(-1), sizeof(u32) * 9);
+        // ??????
+        mSubBoundingFlagArray[9] = 0xFFFFFFFF;
+
+        mViewFlag.reset(1 << 2 | 1 << 1);
+    }
+    else if (mViewFlag.isOn(1 << 2) /* && mViewFlag.isOn(1 << 3) */)
+    {
+        bool enable = false;
+        nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
+
+        for (s32 idx_shape = 0; idx_shape < mModelEx.GetShapeCount(); idx_shape++)
+        {
+            nw::g3d::ShapeObj* p_shape = mModelEx.GetShape(idx_shape);
+
+            if (p_shape->GetVtxSkinCount() != 0 ||
+                getBoundingFlag_(p_shape->GetBoneIndex()))
+            {
+                p_shape->CalcBounding(mModelEx.GetSkeleton());
+
+                if (idx_shape < 32*10)
+                    setSubBoundingFlag_(idx_shape);
+
+                p_bounding->Merge(*p_bounding, *p_shape->GetBounding());
+
+                enable = true;
+            }
+        }
+
+        if (enable && p_bounding)
+        {
+            mBounding.center.x = p_bounding->center.x;
+            mBounding.center.y = p_bounding->center.y;
+            mBounding.center.z = p_bounding->center.z;
+            mBounding.radius = p_bounding->radius;
+        }
+
+        mViewFlag.reset(1 << 2);
+    }
+
+    if (mViewFlag.isOn(1 << 5))
+    {
+        u32* p_sub_flag_array = mSubBoundingFlagArray;
+
+        bool has_sub_bounding = false;
+        for (s32 i = 0; i < 10; i++)
+        {
+            if (p_sub_flag_array[i] != 0)
+            {
+                has_sub_bounding = true;
+                break;
+            }
+        }
+
+        if (has_sub_bounding)
+        {
+            nw::g3d::AABB aabb;
+            aabb.min.Set(sead::Mathf::maxNumber(), sead::Mathf::maxNumber(), sead::Mathf::maxNumber());
+            aabb.max.Set(sead::Mathf::minNumber(), sead::Mathf::minNumber(), sead::Mathf::minNumber());
+
+            const nw::g3d::SkeletonObj* p_skeleton = mModelEx.GetSkeleton();
+
+            for (s32 idx_shape = 0; idx_shape < mModelEx.GetShapeCount(); idx_shape++)
+            {
+                nw::g3d::ShapeObj* p_shape = mModelEx.GetShape(idx_shape);
+
+                if (getSubBoundingFlag_(idx_shape))
+                    p_shape->CalcSubBounding(p_skeleton);
+
+                aabb.Merge(aabb, *p_shape->GetSubBoundingArray());
+            }
+
+            sead::MemUtil::fill(p_sub_flag_array, 0, sizeof(u32) * 10);
+
+            mpSubBounding->setUndef();
+            mpSubBounding->setMax(reinterpret_cast<const sead::Vector3f&>(aabb.max));
+            mpSubBounding->setMin(reinterpret_cast<const sead::Vector3f&>(aabb.min));
         }
     }
 }
