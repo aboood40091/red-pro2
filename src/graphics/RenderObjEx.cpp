@@ -1,5 +1,6 @@
 #include <graphics/LightMapMgr.h>
 #include <graphics/RenderObjEx.h>
+#include <graphics/RenderObjViewRelated.h>
 
 #include <gfx/seadGraphics.h>
 
@@ -281,9 +282,87 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     mXluShapeInfo.sort(&sortShapeRenderInfoCmp);
 }
 
+void RenderObjEx::createViewShapes_(s32 num_view, sead::Heap* heap)
+{
+    mpViewShapeBuffer.allocBuffer(num_view, heap);
+    for (s32 i = 0; i < num_view; i++)
+    {
+        RenderObjViewRelated::allocBuffer(mpViewShapeBuffer[i], mModelEx.GetShapeCount(), heap);
+        mpViewShapeBuffer[i].fill(NULL);
+    }
+}
+
 s32 RenderObjEx::sortShapeRenderInfoCmp(const ShapeRenderInfo* a, const ShapeRenderInfo* b)
 {
     return a->priority - b->priority;
+}
+
+void RenderObjEx::initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw::g3d::MaterialObj* p_material, const nw::g3d::ShapeObj* p_shape)
+{
+    bool invisible = false;
+
+    render_info.flag.makeAllZero();
+
+    s32 idx_shadow_cast = p_material->GetResource()->GetRenderInfoIndex("shadow_cast");
+    if (idx_shadow_cast >= 0 && !sead::SafeString(p_material->GetResource()->GetRenderInfo(idx_shadow_cast)->GetString(0)).isEqual("yes"))
+    {
+        if (sead::SafeString(p_material->GetResource()->GetRenderInfo(idx_shadow_cast)->GetString(0)).isEqual("shadow-only"))
+        {
+            mShapeFlag.set(1 << 2);
+            render_info.flag.set(1 << 2);
+            invisible = true;
+        }
+    }
+    else
+    {
+        mShapeFlag.set(1 << 2);
+        render_info.flag.set(1 << 2);
+    }
+
+    s32 idx_polygon_offset = p_material->GetResource()->GetRenderInfoIndex("polygon_offset");
+    if (idx_polygon_offset >= 0)
+    {
+        if (!sead::SafeString(p_material->GetResource()->GetRenderInfo(idx_polygon_offset)->GetString(0)).isEqual("yes"))
+        {
+            // TODO
+        }
+
+        // TODO
+    }
+    else
+    {
+        render_info.polygon_offset = -1;
+    }
+
+    s32 idx_reflection = p_material->GetResource()->GetRenderInfoIndex("reflection");
+    if (idx_reflection >= 0)
+    {
+        if (sead::SafeString(p_material->GetResource()->GetRenderInfo(idx_reflection)->GetString(0)).isEqual("yes"))
+        {
+            render_info.flag.set(1 << 1);
+            mShapeFlag.set(1 << 1);
+        }
+        else if (sead::SafeString(p_material->GetResource()->GetRenderInfo(idx_reflection)->GetString(0)).isEqual("reflection-only"))
+        {
+            render_info.flag.set(1 << 1);
+            mShapeFlag.set(1 << 1);
+            invisible = true;
+        }
+    }
+
+    if (!invisible)
+    {
+        render_info.flag.set(1 << 0);
+        mShapeFlag.set(1 << 0);
+    }
+
+    s32 idx_priority = p_material->GetResource()->GetRenderInfoIndex("priority");
+    if (idx_priority >= 0)
+    {
+        const s32* p_priority = p_material->GetResource()->GetRenderInfo(idx_reflection)->GetInt();
+        if (p_priority)
+            render_info.priority = *p_priority * 0x10000 + p_shape->GetMaterialIndex();
+    }
 }
 
 void RenderObjEx::activateMaterial(const agl::g3d::ModelShaderAssign& shader_assign, const nw::g3d::MaterialObj* p_material, const LightMap& light_map) const
