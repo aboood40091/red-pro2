@@ -18,6 +18,7 @@ public:
     void calc() override;
 
     bool init(RenderObjEx* p_render_obj, ResArchive* p_res_archive, sead::PtrArray<ResArchive>* p_res_archive_array, sead::Heap* heap);
+    void bindRenderObj(RenderObjEx* p_render_obj, s32 index);
     void playColorAnim(ResArchive* p_res_archive, const sead::SafeString& name);
     void playTexSrtAnim(ResArchive* p_res_archive, const sead::SafeString& name);
 

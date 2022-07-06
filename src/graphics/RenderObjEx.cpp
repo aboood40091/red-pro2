@@ -751,6 +751,43 @@ u32 RenderObjEx::getBoneCount() const
     return mModelEx.GetSkeleton()->GetResource()->GetBoneCount();
 }
 
+void RenderObjEx::setSklAnim(s32 index, Animation* anim)
+{
+    SkeletalAnimation* p_skl_anim = static_cast<SkeletalAnimation*>(anim);
+    p_skl_anim->bindRenderObj(this, index);
+    mpSklAnim[index] = p_skl_anim;
+}
+
+void RenderObjEx::setTexAnim(s32 index, Animation* anim)
+{
+    TexPatternAnimation* p_tex_anim = static_cast<TexPatternAnimation*>(anim);
+    p_tex_anim->bindRenderObj(this, index);
+    mpTexAnim[index] = p_tex_anim;
+
+    mMaterialNoDL = true;
+}
+
+void RenderObjEx::setShuAnim(s32 index, Animation* anim)
+{
+    ShaderParamAnimation* p_shu_anim = static_cast<ShaderParamAnimation*>(anim);
+    p_shu_anim->bindRenderObj(this, index);
+    mpShuAnim[index] = p_shu_anim;
+}
+
+void RenderObjEx::setVisAnim(s32 index, Animation* anim)
+{
+    VisibilityAnimation* p_vis_anim = static_cast<VisibilityAnimation*>(anim);
+    p_vis_anim->bindRenderObj(this, index);
+    mpVisAnim[index] = p_vis_anim;
+}
+
+void RenderObjEx::setShaAnim(s32 index, Animation* anim)
+{
+    ShapeAnimation* p_sha_anim = static_cast<ShapeAnimation*>(anim);
+    p_sha_anim->bindRenderObj(this, index);
+    mpShaAnim[index] = p_sha_anim;
+}
+
 void RenderObjEx::disableMaterialDL()
 {
     mMaterialNoDL = true;

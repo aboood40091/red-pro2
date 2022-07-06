@@ -18,6 +18,7 @@ public:
     void calc() override;
 
     bool init(RenderObjEx* p_render_obj, ResArchive* p_res_archive, sead::PtrArray<ResArchive>* p_res_archive_array, sead::Heap* heap);
+    void bindRenderObj(RenderObjEx* p_render_obj, s32 index);
     void play(ResArchive* p_res_archive, const sead::SafeString& name);
 
     nw::g3d::ShapeAnimObj& getAnimObj() { return mAnimObj; }
