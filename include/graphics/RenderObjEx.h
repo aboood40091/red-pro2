@@ -208,7 +208,7 @@ public:
         return mBounding;
     }
 
-    void initViewShapesBuffer(void*, ObjLayer* layer, ObjLayerRenderer* renderer) override;
+    void calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, ObjLayer* p_shadow_layer, ObjLayerRenderer* renderer) override;
 
     sead::SafeString getName() const override
     {
@@ -290,7 +290,7 @@ private:
         return mSubBoundingFlagArray[index >> 5] & 1 << (index & 0x1F);
     }
 
-    void createViewShapes_(s32 num_view, sead::Heap* heap);
+    void createViewShapeShadowFlagBuffer_(s32 num_view, sead::Heap* heap);
     void initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw::g3d::MaterialObj* p_material, const nw::g3d::ShapeObj* p_shape);
     static s32 sortShapeRenderInfoCmp(const ShapeRenderInfo* a, const ShapeRenderInfo* b);
     void updateBounding_();
@@ -320,8 +320,8 @@ private:
     u8 _128;
     sead::BitFlag32 _12c;
     sead::BitFlag32 mViewFlag;
-    sead::Buffer< sead::Buffer<nw::g3d::ShapeObj*> > mpViewShapeBuffer; // Idk
-    nw::g3d::Sphere mBounding;
+    sead::Buffer< sead::Buffer<sead::BitFlag32> > mViewShapeShadowFlagBuffer; // Idk
+    nw::g3d::Sphere mBounding; // sead::Sphere< sead::Vector3<float> >
     sead::BoundBox3f* mpSubBounding;
     sead::BitFlag32 mShapeFlag; // & 4: a shape has shadow cast, & 2: a shape has reflection, & 1: a shape is visible
     u32 mBoundingFlagArray[10];    // sead::UnsafeArray?

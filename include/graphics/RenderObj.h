@@ -8,6 +8,12 @@
 
 #include <nw/g3d/g3d_ShapeObj.h>
 
+namespace agl { namespace sdw {
+
+class DepthShadow;
+
+} }
+
 class RenderObj : public ObjLayer::Node, public sead::IDisposer
 {
     SEAD_RTTI_OVERRIDE(RenderObj, ObjLayer::Node)
@@ -42,7 +48,7 @@ public:
     virtual void setBoundingEnable(bool enable) = 0;
     virtual bool getBoundingEnable() const = 0;
     virtual const nw::g3d::Sphere& getBounding() const = 0;
-    virtual void initViewShapesBuffer(void*, ObjLayer* layer, ObjLayerRenderer* renderer) = 0;
+    virtual void calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, ObjLayer* p_shadow_layer, ObjLayerRenderer* renderer) = 0;
     virtual sead::SafeString getName() const = 0;
     virtual void setSklAnimBlendWeight(s32 index, f32 weight) = 0;
     virtual f32 getSklAnimBlendWeight(s32 index) const = 0;

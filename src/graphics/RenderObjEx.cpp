@@ -1,6 +1,6 @@
 #include <graphics/LightMapMgr.h>
 #include <graphics/RenderObjEx.h>
-#include <graphics/RenderObjViewRelated.h>
+#include <graphics/RenderObjShadowUtil.h>
 
 #include <gfx/seadGraphics.h>
 
@@ -28,7 +28,7 @@ RenderObjEx::RenderObjEx()
     , _128(0)
     , _12c(3)
     , mViewFlag(0)
-    , mpViewShapeBuffer()
+    , mViewShapeShadowFlagBuffer()
     , mBounding((nw::g3d::Sphere){ reinterpret_cast<const nw::g3d::math::Vec3&>(sead::Vector3f::zero), 1.0f })
     , mpSubBounding(NULL)
     , mShapeFlag(1)
@@ -208,7 +208,7 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
 
         if (mViewFlag.isOn(1))
         {
-            createViewShapes_(num_view, heap);
+            createViewShapeShadowFlagBuffer_(num_view, heap);
             updateBounding_();
         }
     }
@@ -272,13 +272,13 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     mXluShapeInfo.sort(&sortShapeRenderInfoCmp);
 }
 
-void RenderObjEx::createViewShapes_(s32 num_view, sead::Heap* heap)
+void RenderObjEx::createViewShapeShadowFlagBuffer_(s32 num_view, sead::Heap* heap)
 {
-    mpViewShapeBuffer.allocBuffer(num_view, heap);
+    mViewShapeShadowFlagBuffer.allocBuffer(num_view, heap);
     for (s32 i = 0; i < num_view; i++)
     {
-        RenderObjViewRelated::allocBuffer(mpViewShapeBuffer[i], mModelEx.GetShapeCount(), heap);
-        mpViewShapeBuffer[i].fill(NULL);
+        RenderObjShadowUtil::allocBuffer(mViewShapeShadowFlagBuffer[i], mModelEx.GetShapeCount(), heap);
+        mViewShapeShadowFlagBuffer[i].fill(sead::BitFlag32(0));
     }
 }
 
