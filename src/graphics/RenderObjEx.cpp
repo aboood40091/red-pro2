@@ -803,6 +803,26 @@ const char* RenderObjEx::getMaterialName(s32 index) const
     return mModelEx.GetMaterialName(index);
 }
 
+void RenderObjEx::setMaterialVisibility(s32 index, bool visibility)
+{
+    mModelEx.SetMatVisibility(index, visibility);
+}
+
+bool RenderObjEx::getMaterialVisibility(s32 index) const
+{
+    return mModelEx.IsMatVisible(index);
+}
+
+void RenderObjEx::setBoneVisibility(s32 index, bool visibility)
+{
+    mModelEx.SetBoneVisibility(index, visibility);
+}
+
+bool RenderObjEx::getBoneVisibility(s32 index) const
+{
+    return mModelEx.IsBoneVisible(index);
+}
+
 void RenderObjEx::disableMaterialDL()
 {
     mMaterialNoDL = true;
