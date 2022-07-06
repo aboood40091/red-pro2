@@ -566,6 +566,22 @@ void RenderObjEx::calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const
     mModelEx.CalcView(view_index, reinterpret_cast<const nw::g3d::math::Mtx34&>(view_mtx));
 }
 
+// -------- Non-matching, but I think I implemented these better --------
+
+bool RenderObjEx::hasOpa() const
+{
+    return (_12c.isOn(1 << 0) && !mOpaShapeInfo.isEmpty()) ||
+           (_12c.isOn(1 << 3) && !mXluShapeInfo.isEmpty());
+}
+
+bool RenderObjEx::hasXlu() const
+{
+    return (_12c.isOn(1 << 2) && !mOpaShapeInfo.isEmpty()) ||
+           (_12c.isOn(1 << 1) && !mXluShapeInfo.isEmpty());
+}
+
+// ----------------------------------------------------------------------
+
 void RenderObjEx::updateAnimations()
 {
     if (mpSklAnim.isBufferReady())
