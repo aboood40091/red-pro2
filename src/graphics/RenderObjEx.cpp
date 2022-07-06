@@ -709,6 +709,33 @@ void RenderObjEx::updateModel()
         updateBounding_();
 }
 
+void RenderObjEx::setBoneLocalSRT(s32 index, const sead::Matrix34f& mtxRT, const sead::Vector3f& scale)
+{
+    nw::g3d::LocalMtx& local_mtx = mModelEx.GetSkeleton()->GetLocalMtxArray()[index];
+    reinterpret_cast<sead::Matrix34f&>(local_mtx.mtxRT) = mtxRT;
+    reinterpret_cast<sead::Vector3f&>(local_mtx.scale) = scale;
+    local_mtx.EndEdit();
+}
+
+void RenderObjEx::getBoneLocalSRT(s32 index, sead::Matrix34f* mtxRT, sead::Vector3f* scale) const
+{
+    const nw::g3d::LocalMtx& local_mtx = mModelEx.GetSkeleton()->GetLocalMtxArray()[index];
+    if (mtxRT) *mtxRT = reinterpret_cast<const sead::Matrix34f&>(local_mtx.mtxRT);
+    if (scale) *scale = reinterpret_cast<const sead::Vector3f&>(local_mtx.scale);
+}
+
+void RenderObjEx::setBoneWorldSRT(s32 index, const sead::Matrix34f& mtxSRT)
+{
+    nw::g3d::math::Mtx34& world_mtx = mModelEx.GetSkeleton()->GetWorldMtxArray()[index];
+    reinterpret_cast<sead::Matrix34f&>(world_mtx) = mtxSRT;
+}
+
+void RenderObjEx::getBoneWorldSRT(s32 index, sead::Matrix34f& mtxSRT) const
+{
+    const nw::g3d::math::Mtx34& world_mtx = mModelEx.GetSkeleton()->GetWorldMtxArray()[index];
+    mtxSRT = reinterpret_cast<const sead::Matrix34f&>(world_mtx);
+}
+
 void RenderObjEx::disableMaterialDL()
 {
     mMaterialNoDL = true;
