@@ -292,10 +292,10 @@ private:
 
     void createViewShapes_(s32 num_view, sead::Heap* heap);
     void initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw::g3d::MaterialObj* p_material, const nw::g3d::ShapeObj* p_shape);
+    static s32 sortShapeRenderInfoCmp(const ShapeRenderInfo* a, const ShapeRenderInfo* b);
     void updateBounding_();
     void applyBlendWeight_(s32 shape_index);
-
-    static s32 sortShapeRenderInfoCmp(const ShapeRenderInfo* a, const ShapeRenderInfo* b);
+    static void setBoundingFlagArray_(u32 flag_array[], const SkeletalAnimation& anim);
 
 private:
     agl::g3d::ModelEx mModelEx;

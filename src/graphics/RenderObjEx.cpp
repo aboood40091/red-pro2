@@ -147,12 +147,12 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     sead::Graphics::instance()->lockDrawContext();
     {
         mpMaterial.allocBuffer(mModelEx.GetMaterialCount(), heap);
-        for (sead::Buffer<MaterialEx*>::iterator it = mpMaterial.begin(); !it.isEnd(); ++it)
+        for (sead::Buffer<MaterialEx*>::iterator it = mpMaterial.begin(), it_end = mpMaterial.end(); it != it_end; ++it)
             *it = new (heap) MaterialEx(mModelEx.GetMaterial(it.getIndex()));
 
         mShape.allocBuffer(mModelEx.GetShapeCount(), heap);
         const agl::UniformBlock* base_uniform_block = NULL;
-        for (sead::Buffer<Shape>::iterator it = mShape.begin(); !it.isEnd(); ++it)
+        for (sead::Buffer<Shape>::iterator it = mShape.begin(), it_end = mShape.end(); it != it_end; ++it)
         {
             s32 idx_shape = it.getIndex();
             const nw::g3d::ShapeObj* shape_obj = mModelEx.GetShape(idx_shape);
@@ -471,7 +471,7 @@ void RenderObjEx::updateBounding_()
                 aabb.Merge(aabb, *p_shape->GetSubBoundingArray());
             }
 
-            sead::MemUtil::fill(p_sub_flag_array, 0, sizeof(u32) * 10);
+            sead::MemUtil::fillZero(p_sub_flag_array, sizeof(u32) * 10);
 
             mpSubBounding->setUndef();
             mpSubBounding->setMax(reinterpret_cast<const sead::Vector3f&>(aabb.max));
@@ -540,7 +540,7 @@ void RenderObjEx::applyBlendWeight_(s32 shape_index)
         }
     }
 
-    for (sead::Buffer<nw::g3d::fnd::GfxBuffer>::constIterator it = shape.vtx_buffer.constBegin(); !it.isEnd(); ++it)
+    for (sead::Buffer<nw::g3d::fnd::GfxBuffer>::constIterator it = shape.vtx_buffer.constBegin(), it_end = shape.vtx_buffer.constEnd(); it != it_end; ++it)
         it->DCFlush();
 }
 

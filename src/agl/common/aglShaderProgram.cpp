@@ -50,7 +50,7 @@ void ShaderProgram::initialize(const sead::SafeString& name, sead::Heap* heap)
     // TODO: sead::SafeArray
     {
         typedef sead::Buffer<ResShaderSymbolArray>::iterator _Iterator;
-        for (_Iterator it = _Iterator(mpSharedData->mResShaderSymbolArray, cShaderSymbolType_Num); !it.isEnd(); ++it)
+        for (_Iterator it = _Iterator(mpSharedData->mResShaderSymbolArray), it_end = _Iterator(mpSharedData->mResShaderSymbolArray, cShaderSymbolType_Num); it != it_end; ++it)
             *it = NULL;
     }
 }
@@ -75,7 +75,7 @@ void ShaderProgram::createVariation(sead::Heap* heap)
 {
     mpSharedData->mpVariationBuffer->create(heap);
 
-    for (sead::Buffer<ShaderProgram>::iterator it = mpSharedData->mpVariationBuffer->mProgram.begin(); !it.isEnd(); ++it)
+    for (sead::Buffer<ShaderProgram>::iterator it = mpSharedData->mpVariationBuffer->mProgram.begin(), it_end = mpSharedData->mpVariationBuffer->mProgram.end(); it != it_end; ++it)
     {
         it->mpSharedData = mpSharedData;
         it->mVariationID = it.getIndex() + 1;
@@ -163,7 +163,7 @@ u32 ShaderProgram::setUpAllVariation()
         ret = mpSharedData->mpVariationBuffer->mpOriginal->validate_();
         if (ret == 0)
         {
-            for (sead::Buffer<ShaderProgram>::iterator it = mpSharedData->mpVariationBuffer->mProgram.begin(); !it.isEnd(); ++it)
+            for (sead::Buffer<ShaderProgram>::iterator it = mpSharedData->mpVariationBuffer->mProgram.begin(), it_end = mpSharedData->mpVariationBuffer->mProgram.end(); it != it_end; ++it)
             {
                 ret = it->validate_();
                 if (ret != 0)
@@ -184,7 +184,7 @@ void ShaderProgram::reserveSetUpAllVariation()
     if (mpSharedData->mpVariationBuffer)
     {
         mpSharedData->mpVariationBuffer->mpOriginal->mFlag.set(2);
-        for (sead::Buffer<ShaderProgram>::iterator it = mpSharedData->mpVariationBuffer->mProgram.begin(); !it.isEnd(); ++it)
+        for (sead::Buffer<ShaderProgram>::iterator it = mpSharedData->mpVariationBuffer->mProgram.begin(), it_end = mpSharedData->mpVariationBuffer->mProgram.end(); it != it_end; ++it)
             it->mFlag.set(2);
     }
     else
@@ -195,25 +195,25 @@ void ShaderProgram::reserveSetUpAllVariation()
 
 void ShaderProgram::updateAttributeLocation() const
 {
-    for (sead::Buffer<AttributeLocation>::iterator it = mAttributeLocation.begin(); !it.isEnd(); ++it)
+    for (sead::Buffer<AttributeLocation>::iterator it = mAttributeLocation.begin(), it_end = mAttributeLocation.end(); it != it_end; ++it)
         it->search(*this);
 }
 
 void ShaderProgram::updateUniformLocation() const
 {
-    for (sead::Buffer<UniformLocation>::iterator it = mUniformLocation.begin(); !it.isEnd(); ++it)
+    for (sead::Buffer<UniformLocation>::iterator it = mUniformLocation.begin(), it_end = mUniformLocation.end(); it != it_end; ++it)
         it->search(*this);
 }
 
 void ShaderProgram::updateUniformBlockLocation() const
 {
-    for (sead::Buffer<UniformBlockLocation>::iterator it = mUniformBlockLocation.begin(); !it.isEnd(); ++it)
+    for (sead::Buffer<UniformBlockLocation>::iterator it = mUniformBlockLocation.begin(), it_end = mUniformBlockLocation.end(); it != it_end; ++it)
         it->search(*this);
 }
 
 void ShaderProgram::updateSamplerLocation() const
 {
-    for (sead::Buffer<SamplerLocation>::iterator it = mSamplerLocation.begin(); !it.isEnd(); ++it)
+    for (sead::Buffer<SamplerLocation>::iterator it = mSamplerLocation.begin(), it_end = mSamplerLocation.end(); it != it_end; ++it)
         it->search(*this);
 }
 
@@ -426,7 +426,7 @@ void ShaderProgram::destroyAttribute()
     VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
     if (variation_buffer)
     {
-        for (sead::Buffer<ShaderProgram>::iterator it = variation_buffer->mProgram.begin(); !it.isEnd(); ++it)
+        for (sead::Buffer<ShaderProgram>::iterator it = variation_buffer->mProgram.begin(), it_end = variation_buffer->mProgram.end(); it != it_end; ++it)
             it->mAttributeLocation.freeBuffer();
     }
 }
@@ -438,7 +438,7 @@ void ShaderProgram::destroyUniform()
     VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
     if (variation_buffer)
     {
-        for (sead::Buffer<ShaderProgram>::iterator it = variation_buffer->mProgram.begin(); !it.isEnd(); ++it)
+        for (sead::Buffer<ShaderProgram>::iterator it = variation_buffer->mProgram.begin(), it_end = variation_buffer->mProgram.end(); it != it_end; ++it)
             it->mUniformLocation.freeBuffer();
     }
 }
@@ -450,7 +450,7 @@ void ShaderProgram::destroyUniformBlock()
     VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
     if (variation_buffer)
     {
-        for (sead::Buffer<ShaderProgram>::iterator it = variation_buffer->mProgram.begin(); !it.isEnd(); ++it)
+        for (sead::Buffer<ShaderProgram>::iterator it = variation_buffer->mProgram.begin(), it_end = variation_buffer->mProgram.end(); it != it_end; ++it)
             it->mUniformBlockLocation.freeBuffer();
     }
 }
@@ -462,7 +462,7 @@ void ShaderProgram::destroySamplerLocation()
     VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
     if (variation_buffer)
     {
-        for (sead::Buffer<ShaderProgram>::iterator it = variation_buffer->mProgram.begin(); !it.isEnd(); ++it)
+        for (sead::Buffer<ShaderProgram>::iterator it = variation_buffer->mProgram.begin(), it_end = variation_buffer->mProgram.end(); it != it_end; ++it)
             it->mSamplerLocation.freeBuffer();
     }
 }
@@ -477,7 +477,7 @@ ShaderProgram::VariationBuffer::~VariationBuffer()
 {
     mProgram.freeBuffer();
 
-    for (sead::Buffer<Macro>::iterator it = mMacro.begin(); !it.isEnd(); ++it)
+    for (sead::Buffer<Macro>::iterator it = mMacro.begin(), it_end = mMacro.end(); it != it_end; ++it)
         it->mValue.freeBuffer();
 
     mMacro.freeBuffer();
@@ -507,7 +507,7 @@ void ShaderProgram::VariationBuffer::create(sead::Heap* heap)
 {
     u32 num_variation = 1;
 
-    for (sead::Buffer<Macro>::iterator it = mMacro.begin(); !it.isEnd(); ++it)
+    for (sead::Buffer<Macro>::iterator it = mMacro.begin(), it_end = mMacro.end(); it != it_end; ++it)
     {
         for (s32 i = it.getIndex() + 1; i < mMacro.size(); i++)
             it->_18 *= mMacro[i].mValue.size();
@@ -523,7 +523,7 @@ s32 ShaderProgram::VariationBuffer::getMacroAndValueArray(s32 index, const char*
     // SEAD_ASSERT(macro_array != nullptr);
     // SEAD_ASSERT(value_array != nullptr);
 
-    for (sead::Buffer<Macro>::constIterator itr_type = mMacro.begin(); !itr_type.isEnd(); ++itr_type)
+    for (sead::Buffer<Macro>::constIterator itr_type = mMacro.begin(), it_end = mMacro.end(); itr_type != it_end; ++itr_type)
     {
         s32 value_index; // = 0;
         // if (itr_type->_18 != 0)

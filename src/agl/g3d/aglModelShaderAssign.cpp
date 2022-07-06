@@ -33,7 +33,7 @@ void ModelShaderAttribute::clear()
     // TODO: sead::SafeArray
     {
         typedef sead::Buffer<const nw::g3d::fnd::GfxBuffer*>::iterator _Iterator;
-        for (_Iterator it = _Iterator(mpVertexBuffer, 16); !it.isEnd(); ++it)
+        for (_Iterator it = _Iterator(mpVertexBuffer), it_end = _Iterator(mpVertexBuffer, 16); it != it_end; ++it)
             *it = NULL;
     }
 }
@@ -82,7 +82,7 @@ void ModelShaderAssign::clear_()
     // TODO: sead::SafeArray
     {
         typedef sead::Buffer<nw::g3d::res::ResSampler*>::iterator _Iterator;
-        for (_Iterator it = _Iterator(mpResSampler, 16); !it.isEnd(); ++it)
+        for (_Iterator it = _Iterator(mpResSampler), it_end = _Iterator(mpResSampler, 16); it != it_end; ++it)
             *it = NULL;
     }
 }

@@ -108,7 +108,7 @@ s32 FileIOMgr::load(const DialogArg& arg)
         s32 index = -1;
         File* pBinary = NULL;
 
-        for (sead::Buffer<File>::iterator it = mBuffer.begin(); !it.isEnd(); ++it)
+        for (sead::Buffer<File>::iterator it = mBuffer.begin(), it_end = mBuffer.end(); it != it_end; ++it)
         {
             if (it->mpData == NULL)
             {
