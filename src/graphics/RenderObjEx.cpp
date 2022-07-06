@@ -736,6 +736,21 @@ void RenderObjEx::getBoneWorldSRT(s32 index, sead::Matrix34f& mtxSRT) const
     mtxSRT = reinterpret_cast<const sead::Matrix34f&>(world_mtx);
 }
 
+s32 RenderObjEx::getBoneIdx(const sead::SafeString& name) const
+{
+    return mModelEx.GetSkeleton()->GetResource()->GetBoneIndex(name.cstr());
+}
+
+const char* RenderObjEx::getBoneName(s32 index) const
+{
+    return mModelEx.GetSkeleton()->GetResource()->GetBoneName(index);
+}
+
+u32 RenderObjEx::getBoneCount() const
+{
+    return mModelEx.GetSkeleton()->GetResource()->GetBoneCount();
+}
+
 void RenderObjEx::disableMaterialDL()
 {
     mMaterialNoDL = true;
