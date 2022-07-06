@@ -480,6 +480,87 @@ void RenderObjEx::updateBounding_()
     }
 }
 
+void RenderObjEx::applyBlendWeight_(s32 shape_index)
+{
+    Shape& shape = mShape[shape_index];
+    if (!shape.vtx_buffer.isBufferReady())
+        return;
+
+    nw::g3d::ShapeObj* p_shape = mModelEx.GetShape(shape_index);
+
+    f32 blend_weight_array[64];
+    const u8* v_data_array[64];
+
+    s32 num_key_shape = p_shape->GetKeyShapeCount();
+
+    for (s32 idx_key_shape = 0; idx_key_shape < num_key_shape; idx_key_shape++)
+        blend_weight_array[idx_key_shape] = p_shape->GetBlendWeight(idx_key_shape);
+
+    for (s32 idx_attrib = 0; idx_attrib < p_shape->GetTargetAttribCount(); idx_attrib++)
+    {
+        const nw::g3d::res::ResKeyShape* p_base_res_key_shape = p_shape->GetResKeyShape(0);
+        const nw::g3d::res::ResVtxAttrib* p_base_res_vtx_attrib = p_shape->GetResVtxAttrib(p_base_res_key_shape->ref().targetAttribIndices[idx_attrib]);
+
+        if (p_base_res_vtx_attrib->GetFormat() != GX2_ATTRIB_FORMAT_32_32_32_FLOAT)
+            return;
+
+        nw::g3d::fnd::GfxBuffer& base_buffer = shape.vtx_buffer[p_base_res_vtx_attrib->GetBufferIndex()];
+        u8* p_data = static_cast<u8*>(base_buffer.GetData()) + p_base_res_vtx_attrib->GetOffset();
+
+        for (s32 idx_key_shape = 0; idx_key_shape < num_key_shape; idx_key_shape++)
+        {
+            const nw::g3d::res::ResKeyShape* p_res_key_shape = p_shape->GetResKeyShape(idx_key_shape);
+            const nw::g3d::res::ResVtxAttrib* p_res_vtx_attrib = p_shape->GetResVtxAttrib(p_res_key_shape->ref().targetAttribIndices[idx_attrib]);
+
+            const nw::g3d::fnd::GfxBuffer& buffer = p_shape->GetVertexBuffer(p_res_vtx_attrib->GetBufferIndex());
+            v_data_array[idx_key_shape] = static_cast<const u8*>(buffer.GetData()) + p_res_vtx_attrib->GetOffset();
+        }
+
+        u32 stride = base_buffer.GetStride();
+        u32 elem_num = base_buffer.GetSize() / stride;
+        u32 offset = 0;
+
+        while (elem_num > 0)
+        {
+            sead::Vector3f* p_dst = (sead::Vector3f*)(p_data + offset);
+            p_dst->set(0.0f, 0.0f, 0.0f);
+
+            for (s32 idx_key_shape = 0; idx_key_shape < num_key_shape; idx_key_shape++)
+            {
+                const sead::Vector3f* p_src = (const sead::Vector3f*)(v_data_array[idx_key_shape] + offset);
+                f32 blend_weight = blend_weight_array[idx_key_shape];
+
+                p_dst->x = p_src->x * blend_weight + p_dst->x;
+                p_dst->y = p_src->y * blend_weight + p_dst->y;
+                p_dst->z = p_src->z * blend_weight + p_dst->z;
+            }
+
+            elem_num--;
+            offset += stride;
+        }
+    }
+
+    for (sead::Buffer<nw::g3d::fnd::GfxBuffer>::constIterator it = shape.vtx_buffer.constBegin(); !it.isEnd(); ++it)
+        it->DCFlush();
+}
+
+void RenderObjEx::calc()
+{
+    mModelEx.CalcMtxBlock();
+    mModelEx.CalcShape();
+    mModelEx.CalcMaterial();
+
+    if (mpShaAnim.isBufferReady())
+    {
+        for (s32 idx_shape = 0, num_shape = mModelEx.GetShapeCount(); idx_shape < num_shape; idx_shape++)
+        {
+            nw::g3d::ShapeObj* p_shape = mModelEx.GetShape(idx_shape);
+            if (p_shape->GetKeyShapeCount() != 0 && p_shape->HasValidBlendWeight())
+                applyBlendWeight_(idx_shape);
+        }
+    }
+}
+
 void RenderObjEx::disableMaterialDL()
 {
     mMaterialNoDL = true;

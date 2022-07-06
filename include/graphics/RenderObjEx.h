@@ -293,6 +293,7 @@ private:
     void createViewShapes_(s32 num_view, sead::Heap* heap);
     void initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw::g3d::MaterialObj* p_material, const nw::g3d::ShapeObj* p_shape);
     void updateBounding_();
+    void applyBlendWeight_(s32 shape_index);
 
     static s32 sortShapeRenderInfoCmp(const ShapeRenderInfo* a, const ShapeRenderInfo* b);
 
