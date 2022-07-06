@@ -682,6 +682,17 @@ void RenderObjEx::updateAnimations()
     mViewFlag.set(1 << 2);
 }
 
+void RenderObjEx::updateModel()
+{
+    sead::Matrix34f world_mtx = getMtxRT();
+    world_mtx.scaleBases(getScale().x, getScale().y, getScale().z);
+
+    mModelEx.CalcWorld(reinterpret_cast<const nw::g3d::math::Mtx34&>(world_mtx));
+
+    if (mViewFlag.isOn(1 << 0))
+        updateBounding_();
+}
+
 void RenderObjEx::disableMaterialDL()
 {
     mMaterialNoDL = true;
