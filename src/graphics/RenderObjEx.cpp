@@ -566,6 +566,122 @@ void RenderObjEx::calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const
     mModelEx.CalcView(view_index, reinterpret_cast<const nw::g3d::math::Mtx34&>(view_mtx));
 }
 
+void RenderObjEx::updateAnimations()
+{
+    if (mpSklAnim.isBufferReady())
+    {
+        SkeletalAnimation* p_blend_start_anim = NULL;
+        bool blend = false;
+
+        sead::Buffer<SkeletalAnimation*>::constIterator it_end = mpSklAnim.constEnd();
+
+        for (sead::Buffer<SkeletalAnimation*>::constIterator it = mpSklAnim.constBegin(); it != it_end; ++it)
+        {
+            SkeletalAnimation* p_anim = *it;
+            if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+            {
+                if (sead::Mathf::abs(mSklAnimBlendWeight[it.getIndex()]) > 0.001f)
+                {
+                    if (p_blend_start_anim == NULL)
+                    {
+                        p_blend_start_anim = p_anim;
+                    }
+                    else
+                    {
+                        blend = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (mViewFlag.isOn(1 << 3))
+            sead::MemUtil::fillZero(mBoundingFlagArray, sizeof(mBoundingFlagArray));
+
+        if (blend)
+        {
+            mSklAnimBlender.ClearResult();
+
+            for (sead::Buffer<SkeletalAnimation*>::constIterator it = mpSklAnim.constBegin(); it != it_end; ++it)
+            {
+                SkeletalAnimation* p_anim = *it;
+                if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+                {
+                    p_anim->calc();
+                    mSklAnimBlender.Blend(&p_anim->getAnimObj(), mSklAnimBlendWeight[it.getIndex()]);
+
+                    if (mViewFlag.isOn(1 << 3))
+                        setBoundingFlagArray_(mBoundingFlagArray, *p_anim);
+                }
+            }
+
+            mSklAnimBlender.ApplyTo(mModelEx.GetSkeleton());
+        }
+        else if (p_blend_start_anim != NULL)
+        {
+            p_blend_start_anim->calc();
+            p_blend_start_anim->getAnimObj().ApplyTo(mModelEx.GetSkeleton());
+
+            if (mViewFlag.isOn(1 << 3))
+                setBoundingFlagArray_(mBoundingFlagArray, *p_blend_start_anim);
+        }
+    }
+
+    if (mpTexAnim.isBufferReady())
+    {
+        for (s32 i = 0; i < mpTexAnim.size(); i++)
+        {
+            TexPatternAnimation* p_anim = mpTexAnim[i];
+            if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+            {
+                p_anim->calc();
+                p_anim->getAnimObj().ApplyTo(&mModelEx);
+            }
+        }
+    }
+
+    if (mpShuAnim.isBufferReady())
+    {
+        for (s32 i = 0; i < mpShuAnim.size(); i++)
+        {
+            ShaderParamAnimation* p_anim = mpShuAnim[i];
+            if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+            {
+                p_anim->calc();
+                p_anim->getAnimObj().ApplyTo(&mModelEx);
+            }
+        }
+    }
+
+    if (mpVisAnim.isBufferReady())
+    {
+        for (s32 i = 0; i < mpVisAnim.size(); i++)
+        {
+            VisibilityAnimation* p_anim = mpVisAnim[i];
+            if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+            {
+                p_anim->calc();
+                p_anim->getAnimObj().ApplyTo(&mModelEx);
+            }
+        }
+    }
+
+    if (mpShaAnim.isBufferReady())
+    {
+        for (s32 i = 0; i < mpShaAnim.size(); i++)
+        {
+            ShapeAnimation* p_anim = mpShaAnim[i];
+            if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+            {
+                p_anim->calc();
+                p_anim->getAnimObj().ApplyTo(&mModelEx);
+            }
+        }
+    }
+
+    mViewFlag.set(1 << 2);
+}
+
 void RenderObjEx::disableMaterialDL()
 {
     mMaterialNoDL = true;
