@@ -561,6 +561,11 @@ void RenderObjEx::calc()
     }
 }
 
+void RenderObjEx::calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, ObjLayerRenderer* renderer)
+{
+    mModelEx.CalcView(view_index, reinterpret_cast<const nw::g3d::math::Mtx34&>(view_mtx));
+}
+
 void RenderObjEx::disableMaterialDL()
 {
     mMaterialNoDL = true;
