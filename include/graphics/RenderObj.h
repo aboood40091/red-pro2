@@ -24,7 +24,7 @@ public:
     virtual const sead::Vector3f& getScale() const = 0;
     virtual bool hasOpa() const = 0;
     virtual bool hasXlu() const = 0;
-    virtual s32 getBoneIdx(const sead::SafeString& name) const = 0;
+    virtual s32 getBoneIndex(const sead::SafeString& name) const = 0;
     virtual const char* getBoneName(s32 index) const = 0;
     virtual u32 getBoneCount() const = 0;
     virtual void setBoneLocalSRT(s32 index, const sead::Matrix34f& mtxRT, const sead::Vector3f& scale) = 0;

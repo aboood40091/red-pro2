@@ -736,7 +736,7 @@ void RenderObjEx::getBoneWorldSRT(s32 index, sead::Matrix34f& mtxSRT) const
     mtxSRT = reinterpret_cast<const sead::Matrix34f&>(world_mtx);
 }
 
-s32 RenderObjEx::getBoneIdx(const sead::SafeString& name) const
+s32 RenderObjEx::getBoneIndex(const sead::SafeString& name) const
 {
     return mModelEx.GetSkeleton()->GetResource()->GetBoneIndex(name.cstr());
 }
@@ -786,6 +786,21 @@ void RenderObjEx::setShaAnim(s32 index, Animation* anim)
     ShapeAnimation* p_sha_anim = static_cast<ShapeAnimation*>(anim);
     p_sha_anim->bindRenderObj(this, index);
     mpShaAnim[index] = p_sha_anim;
+}
+
+u32 RenderObjEx::getMaterialCount() const
+{
+    return mModelEx.GetMaterialCount();
+}
+
+s32 RenderObjEx::getMaterialIndex(const sead::SafeString& name) const
+{
+    return mModelEx.GetMaterialIndex(name.cstr());
+}
+
+const char* RenderObjEx::getMaterialName(s32 index) const
+{
+    return mModelEx.GetMaterialName(index);
 }
 
 void RenderObjEx::disableMaterialDL()

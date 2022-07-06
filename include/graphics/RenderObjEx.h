@@ -168,7 +168,7 @@ public:
     // Determines if there are any shapes that can be drawn by draw*Xlu()
     bool hasXlu() const override;
 
-    s32 getBoneIdx(const sead::SafeString& name) const override;
+    s32 getBoneIndex(const sead::SafeString& name) const override;
     const char* getBoneName(s32 index) const override;
     u32 getBoneCount() const override;
 
