@@ -27,7 +27,7 @@ RenderObjEx::RenderObjEx()
     , mScale(sead::Vector3f::ones)
     , _128(0)
     , _12c(3)
-    , mViewFlag(0)
+    , mBoundingEnableFlag(0)
     , mViewShapeShadowFlagBuffer()
     , mBounding((nw::g3d::Sphere){ reinterpret_cast<const nw::g3d::math::Vec3&>(sead::Vector3f::zero), 1.0f })
     , mpSubBounding(NULL)
@@ -48,13 +48,26 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     switch (bounding_mode)
     {
     case 0:
-        mViewFlag.reset(7);
+        mBoundingEnableFlag.reset(
+            1 << 0 |
+            1 << 1 |
+            1 << 2
+        );
         break;
     case 1:
-        mViewFlag.set(7);
+        mBoundingEnableFlag.set(
+            1 << 0 |
+            1 << 1 |
+            1 << 2
+        );
         break;
     case 2:
-        mViewFlag.set(7 | 0x20);
+        mBoundingEnableFlag.set(
+            1 << 0 |
+            1 << 1 |
+            1 << 2 |
+            1 << 5
+        );
         mpSubBounding = new (heap) sead::BoundBox3f();
         break;
     }
@@ -206,7 +219,7 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
             }
         }
 
-        if (mViewFlag.isOn(1))
+        if (mBoundingEnableFlag.isOn(1 << 0))
         {
             createViewShapeShadowFlagBuffer_(num_view, heap);
             updateBounding_();
@@ -381,11 +394,11 @@ void RenderObjEx::activateMaterial(const agl::g3d::ModelShaderAssign& shader_ass
 
 void RenderObjEx::updateBounding_()
 {
-    if (mViewFlag.isOn(1 << 4))
-        mViewFlag.reset(1 << 2);
+    if (mBoundingEnableFlag.isOn(1 << 4))
+        mBoundingEnableFlag.reset(1 << 2);
 
-    if (mViewFlag.isOn(1 << 1) ||
-        mViewFlag.isOn(1 << 2) && mViewFlag.isOff(1 << 3))
+    if (mBoundingEnableFlag.isOn(1 << 1) ||
+        mBoundingEnableFlag.isOn(1 << 2) && mBoundingEnableFlag.isOff(1 << 3))
     {
         mModelEx.CalcBounding();
 
@@ -403,9 +416,12 @@ void RenderObjEx::updateBounding_()
         // ??????
         mSubBoundingFlagArray[9] = 0xFFFFFFFF;
 
-        mViewFlag.reset(1 << 2 | 1 << 1);
+        mBoundingEnableFlag.reset(
+            1 << 1 |
+            1 << 2
+        );
     }
-    else if (mViewFlag.isOn(1 << 2) /* && mViewFlag.isOn(1 << 3) */)
+    else if (mBoundingEnableFlag.isOn(1 << 2) /* && mBoundingEnableFlag.isOn(1 << 3) */)
     {
         bool enable = false;
         nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
@@ -436,10 +452,12 @@ void RenderObjEx::updateBounding_()
             mBounding.radius = p_bounding->radius;
         }
 
-        mViewFlag.reset(1 << 2);
+        mBoundingEnableFlag.reset(
+            1 << 2
+        );
     }
 
-    if (mViewFlag.isOn(1 << 5))
+    if (mBoundingEnableFlag.isOn(1 << 5))
     {
         u32* p_sub_flag_array = mSubBoundingFlagArray;
 
@@ -611,7 +629,7 @@ void RenderObjEx::updateAnimations()
             }
         }
 
-        if (mViewFlag.isOn(1 << 3))
+        if (mBoundingEnableFlag.isOn(1 << 3))
             sead::MemUtil::fillZero(mBoundingFlagArray, sizeof(mBoundingFlagArray));
 
         if (blend)
@@ -626,7 +644,7 @@ void RenderObjEx::updateAnimations()
                     p_anim->calc();
                     mSklAnimBlender.Blend(&p_anim->getAnimObj(), mSklAnimBlendWeight[it.getIndex()]);
 
-                    if (mViewFlag.isOn(1 << 3))
+                    if (mBoundingEnableFlag.isOn(1 << 3))
                         setBoundingFlagArray_(mBoundingFlagArray, *p_anim);
                 }
             }
@@ -638,7 +656,7 @@ void RenderObjEx::updateAnimations()
             p_blend_start_anim->calc();
             p_blend_start_anim->getAnimObj().ApplyTo(mModelEx.GetSkeleton());
 
-            if (mViewFlag.isOn(1 << 3))
+            if (mBoundingEnableFlag.isOn(1 << 3))
                 setBoundingFlagArray_(mBoundingFlagArray, *p_blend_start_anim);
         }
     }
@@ -695,7 +713,7 @@ void RenderObjEx::updateAnimations()
         }
     }
 
-    mViewFlag.set(1 << 2);
+    mBoundingEnableFlag.set(1 << 2);
 }
 
 void RenderObjEx::updateModel()
@@ -705,7 +723,7 @@ void RenderObjEx::updateModel()
 
     mModelEx.CalcWorld(reinterpret_cast<const nw::g3d::math::Mtx34&>(world_mtx));
 
-    if (mViewFlag.isOn(1 << 0))
+    if (mBoundingEnableFlag.isOn(1 << 0))
         updateBounding_();
 }
 
