@@ -200,6 +200,15 @@ bool ShaderProgramArchive::setUp()
     return setUp_(mFlag.isOn(1));
 }
 
+s32 ShaderProgramArchive::searchShaderProgramIndex(const sead::SafeString& name) const
+{
+    for (sead::Buffer<ShaderProgram>::constIterator it = mProgram.begin(), it_end = mProgram.end(); it != it_end; ++it)
+        if (it->getName().isEqual(name))
+            return it.getIndex();
+
+    return -1;
+}
+
 void ShaderProgramArchive::updateCompileInfo()
 {
     sead::TickTime time;
