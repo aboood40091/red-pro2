@@ -25,6 +25,8 @@ public:
     void create(sead::Heap* heap);
     void clear();
 
+    void bind(const nw::g3d::res::ResMaterial* p_res_mat, const nw::g3d::res::ResShape* p_res_shp, const ShaderProgram* p_program, bool, bool);
+
     s32 getVertexBufferNum() const { return mVertexBufferNum; }
     const nw::g3d::fnd::GfxBuffer* getVertexBuffer(s32 index) const { return mpVertexBuffer[index]; }
     void setVertexBuffer(const nw::g3d::fnd::GfxBuffer* p_buffer, s32 index);
@@ -58,6 +60,7 @@ public:
 
     void create(sead::Heap* heap);
 
+    void bind(const nw::g3d::res::ResMaterial* p_res_mat, const ShaderProgram* p_program, bool, bool);
     void bindShader(const nw::g3d::res::ResMaterial* p_res_mat, const nw::g3d::res::ResShape* p_res_shp, const ShaderProgram* p_program, const char* = "Mat");
 
     void activateMaterialUniformBlock(const nw::g3d::MaterialObj* p_material) const;
@@ -65,6 +68,7 @@ public:
 
 private:
     void clear_();
+    void updateLocation_(const char* uniform_block_name);
 
 private:
     ShaderProgram* mpProgram;

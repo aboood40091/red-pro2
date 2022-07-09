@@ -87,6 +87,17 @@ void ModelShaderAssign::clear_()
     }
 }
 
+void ModelShaderAssign::bindShader(const nw::g3d::res::ResMaterial* p_res_mat, const nw::g3d::res::ResShape* p_res_shp, const ShaderProgram* p_program, const char*)
+{
+    clear_();
+    if (p_program)
+    {
+        bind(p_res_mat, p_program, false, true);
+        mAttribute.bind(p_res_mat, p_res_shp, p_program, false, true);
+        updateLocation_("Mat");
+    }
+}
+
 void ModelShaderAssign::activateMaterialUniformBlock(const nw::g3d::MaterialObj* p_material) const
 {
     if (mUniformBlockLocation.isValid() && p_material->GetMatBlock().GetSize() > 0)
