@@ -325,12 +325,21 @@ void RenderObjEx::initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const
     s32 idx_polygon_offset = p_material->GetResource()->GetRenderInfoIndex("polygon_offset");
     if (idx_polygon_offset >= 0)
     {
-        if (!sead::SafeString(p_material->GetResource()->GetRenderInfo(idx_polygon_offset)->GetString(0)).isEqual("yes"))
+        sead::SafeString str_polygon_offset = p_material->GetResource()->GetRenderInfo(idx_polygon_offset)->GetString(0);
+        if (str_polygon_offset.comparen("yes", 3) == 0)
         {
-            // TODO
-        }
+            char c = str_polygon_offset[3];
 
-        // TODO
+            s32 polygon_offset = 0;
+            if (c - '0' < 10)
+                polygon_offset = c - '0';
+
+            render_info.polygon_offset = polygon_offset;
+        }
+        else
+        {
+            render_info.polygon_offset = -1;
+        }
     }
     else
     {
