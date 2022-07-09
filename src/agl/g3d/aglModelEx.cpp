@@ -23,6 +23,23 @@ void MaterialEx::init(agl::g3d::ModelEx* p_model, u32 index, sead::Heap* heap)
     mMatBlock = static_cast<nw::g3d::fnd::GfxBuffer_t&>(mpMaterialObj->GetMatBlock());
 }
 
+void MaterialEx::bindShader(const ShaderProgram* p_program)
+{
+    mpProgram = p_program;
+
+    for (s32 idx_shape = 0; idx_shape < mpModelEx->GetShapeCount(); idx_shape++)
+    {
+        if (&mpModelEx->getMaterialEx(mpModelEx->GetShape(idx_shape)->GetMaterialIndex()) == this)
+        {
+            mpModelEx->getShaderAssign(idx_shape).bindShader(
+                mpMaterialObj->GetResource(),
+                mpModelEx->GetShape(idx_shape)->GetResource(),
+                p_program
+            );
+        }
+    }
+}
+
 void MaterialEx::replaceUBO(const nw::g3d::fnd::GfxBuffer_t& buffer)
 {
     static_cast<nw::g3d::fnd::GfxBuffer_t&>(mpMaterialObj->GetMatBlock()) = buffer;

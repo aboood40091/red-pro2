@@ -5,6 +5,7 @@
 
 #include <nw/g3d/fnd/g3d_GfxObject.h>
 #include <nw/g3d/res/g3d_ResMaterial.h>
+#include <nw/g3d/res/g3d_ResShape.h>
 #include <nw/g3d/g3d_MaterialObj.h>
 
 namespace agl {
@@ -56,6 +57,8 @@ public:
     const ModelShaderAttribute& getAttribute() const { return mAttribute; }
 
     void create(sead::Heap* heap);
+
+    void bindShader(const nw::g3d::res::ResMaterial* p_res_mat, const nw::g3d::res::ResShape* p_res_shp, const ShaderProgram* p_program, const char* = "Mat");
 
     void activateMaterialUniformBlock(const nw::g3d::MaterialObj* p_material) const;
     void activateTextureSampler(const nw::g3d::MaterialObj* p_material) const;
