@@ -7,7 +7,7 @@
 
 class ObjLayerRenderer;
 
-class ObjLayer /* : public Layer // size: 0x42C */
+class ObjLayer : public Layer
 {
     // SEAD_RTTI_OVERRIDE(ObjLayer, Layer)
 
@@ -35,7 +35,11 @@ public:
         sead::Vector3f mOrderPos; // I think. Precisely used for z ordering.
     };
 
+    s32 getViewIndex() const { return mViewIndex; }
+
 public:
-    // ...
+    ObjLayerRenderer* mRenderer;
+    s32 mViewIndex;
+    void* _428;
 };
-// static_assert(sizeof(ObjLayer) == 0x42C, "ObjLayer size mismatch");
+static_assert(sizeof(ObjLayer) == 0x42C, "ObjLayer size mismatch");

@@ -203,7 +203,7 @@ public:
         return mBoundingEnableFlag.isOn(1 << 0);
     }
 
-    const nw::g3d::Sphere& getBounding() const override
+    const sead::Sphere3f& getBounding() const override
     {
         return mBounding;
     }
@@ -320,8 +320,8 @@ private:
     u8 _128;
     sead::BitFlag32 _12c;
     sead::BitFlag32 mBoundingEnableFlag;
-    sead::Buffer< sead::Buffer<sead::BitFlag32> > mViewShapeShadowFlagBuffer; // Idk
-    nw::g3d::Sphere mBounding; // sead::Sphere< sead::Vector3<float> >
+    sead::Buffer< sead::Buffer<sead::BitFlag32> > mViewShapeShadowFlagBuffer;
+    sead::Sphere3f mBounding;
     sead::BoundBox3f* mpSubBounding;
     sead::BitFlag32 mShapeFlag; // & 4: a shape has shadow cast, & 2: a shape has reflection, & 1: a shape is visible
     u32 mBoundingFlagArray[10];    // sead::UnsafeArray?

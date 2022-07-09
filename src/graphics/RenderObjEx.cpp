@@ -29,7 +29,7 @@ RenderObjEx::RenderObjEx()
     , _12c(3)
     , mBoundingEnableFlag(0)
     , mViewShapeShadowFlagBuffer()
-    , mBounding((nw::g3d::Sphere){ reinterpret_cast<const nw::g3d::math::Vec3&>(sead::Vector3f::zero), 1.0f })
+    , mBounding(sead::Vector3f::zero, 1.0f )
     , mpSubBounding(NULL)
     , mShapeFlag(1)
     , mBoundingFlagArray() // TODO
@@ -402,13 +402,11 @@ void RenderObjEx::updateBounding_()
     {
         mModelEx.CalcBounding();
 
-        nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
+        const nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
         if (p_bounding)
         {
-            mBounding.center.x = p_bounding->center.x;
-            mBounding.center.y = p_bounding->center.y;
-            mBounding.center.z = p_bounding->center.z;
-            mBounding.radius = p_bounding->radius;
+            mBounding.setCenter(reinterpret_cast<const sead::Vector3f&>(p_bounding->center));
+            mBounding.setRadius(p_bounding->radius);
         }
 
         // ???
@@ -446,10 +444,8 @@ void RenderObjEx::updateBounding_()
 
         if (enable && p_bounding)
         {
-            mBounding.center.x = p_bounding->center.x;
-            mBounding.center.y = p_bounding->center.y;
-            mBounding.center.z = p_bounding->center.z;
-            mBounding.radius = p_bounding->radius;
+            mBounding.setCenter(reinterpret_cast<sead::Vector3f&>(p_bounding->center));
+            mBounding.setRadius(p_bounding->radius);
         }
 
         mBoundingEnableFlag.reset(
@@ -839,6 +835,110 @@ void RenderObjEx::setBoneVisibility(s32 index, bool visibility)
 bool RenderObjEx::getBoneVisibility(s32 index) const
 {
     return mModelEx.IsBoneVisible(index);
+}
+
+void RenderObjEx::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, ObjLayer* p_shadow_layer, ObjLayerRenderer* renderer)
+{
+    if (!getBoundingEnable())
+        return;
+
+    s32 view_index = p_shadow_layer->getViewIndex();
+    sead::Buffer<sead::BitFlag32>& shape_shadow_flag_buffer = mViewShapeShadowFlagBuffer[view_index];
+
+    u32 view_mask = sead::BitFlag32::makeMask(view_index);
+    _1a4.reset(view_mask);
+
+    DCZeroRange(shape_shadow_flag_buffer.getBufferPtr(), sizeof(sead::BitFlag32) * shape_shadow_flag_buffer.size());
+
+    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mOpaShapeInfo.constBegin(), it_end = mOpaShapeInfo.constEnd(); it != it_end; ++it)
+    {
+        const ShapeRenderInfo& render_info = *it;
+        s32 idx_shape = render_info.idx_shape;
+        const nw::g3d::ShapeObj* p_shape;
+
+        bool has_shadow = true;
+        if (render_info.flag.isOff(1 << 2))
+            has_shadow = false;
+
+        else
+        {
+            p_shape = mModelEx.GetShape(idx_shape);
+            s32 idx_material = p_shape->GetMaterialIndex();
+            s32 idx_bone = p_shape->GetBoneIndex();
+
+            if (!mModelEx.IsMatVisible(idx_material) ||
+                !mModelEx.IsBoneVisible(idx_bone) ||
+                !mModelEx.getMaterialEx(idx_material).get_20())
+            {
+                has_shadow = false;
+            }
+        }
+
+        if (!has_shadow)
+        {
+            shape_shadow_flag_buffer[idx_shape].makeAllZero();
+        }
+        else if (!mBoundingEnableFlag.isOn(1 << 1))
+        {
+            const nw::g3d::Sphere* p_bounding = p_shape->GetBounding();
+            if (p_bounding)
+            {
+                sead::Sphere3f bounding;
+                bounding.setCenter(reinterpret_cast<const sead::Vector3f&>(p_bounding->center));
+                bounding.setRadius(p_bounding->radius);
+
+                sead::BitFlag32* p_shadow_flag = &shape_shadow_flag_buffer[idx_shape];
+                *p_shadow_flag = p_depth_shadow->checkAndUpdate(bounding);
+                if (!p_shadow_flag->isZero())
+                    _1a4.set(view_mask);
+            }
+        }
+    }
+
+    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mXluShapeInfo.constBegin(), it_end = mXluShapeInfo.constEnd(); it != it_end; ++it)
+    {
+        const ShapeRenderInfo& render_info = *it;
+        s32 idx_shape = render_info.idx_shape;
+        const nw::g3d::ShapeObj* p_shape;
+
+        bool has_shadow = true;
+        if (render_info.flag.isOff(1 << 2))
+            has_shadow = false;
+
+        else
+        {
+            p_shape = mModelEx.GetShape(idx_shape);
+            s32 idx_material = p_shape->GetMaterialIndex();
+            s32 idx_bone = p_shape->GetBoneIndex();
+
+            if (!mModelEx.IsMatVisible(idx_material) ||
+                !mModelEx.IsBoneVisible(idx_bone) ||
+                !mModelEx.getMaterialEx(idx_material).get_20())
+            {
+                has_shadow = false;
+            }
+        }
+
+        if (!has_shadow)
+        {
+            shape_shadow_flag_buffer[idx_shape].makeAllZero();
+        }
+        else // if (!mBoundingEnableFlag.isOn(1 << 1))
+        {
+            const nw::g3d::Sphere* p_bounding = p_shape->GetBounding();
+            if (p_bounding)
+            {
+                sead::Sphere3f bounding;
+                bounding.setCenter(reinterpret_cast<const sead::Vector3f&>(p_bounding->center));
+                bounding.setRadius(p_bounding->radius);
+
+                sead::BitFlag32* p_shadow_flag = &shape_shadow_flag_buffer[idx_shape];
+                *p_shadow_flag = p_depth_shadow->checkAndUpdate(bounding);
+                if (!p_shadow_flag->isZero())
+                    _1a4.set(view_mask);
+            }
+        }
+    }
 }
 
 void RenderObjEx::disableMaterialDL()

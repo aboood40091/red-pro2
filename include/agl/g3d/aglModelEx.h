@@ -24,6 +24,8 @@ public:
     void replaceUBO(const nw::g3d::fnd::GfxBuffer_t& buffer);
     void fixUpUBO();
 
+    bool get_20() const { return _20; }
+
 private:
     ModelEx* mpModelEx;
     nw::g3d::MaterialObj* mpMaterialObj;

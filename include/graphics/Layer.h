@@ -4,7 +4,7 @@
 
 // #include <layer/aglLayer.h>
 
-class Layer /* : public agl::lyr::Layer // size: 0x420 */
+class Layer /* : public agl::lyr::Layer */
 {
     // SEAD_RTTI_OVERRIDE(Layer, agl::lyr::Layer)
 
@@ -22,5 +22,7 @@ public:
     };
 
 public:
-    // ...
+    u32 _0[(0x41C - 0x0) / sizeof(u32)]; // agl::lyr::Layer
+    u8 _41c;
 };
+static_assert(sizeof(Layer) == 0x420, "Layer size mismatch");
