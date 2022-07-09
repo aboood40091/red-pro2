@@ -1,6 +1,7 @@
 #include <graphics/LightMapMgr.h>
 #include <graphics/RenderObjEx.h>
 #include <graphics/RenderObjShadowUtil.h>
+#include <graphics/ShaderHolder.h>
 
 #include <gfx/seadGraphics.h>
 
@@ -73,9 +74,12 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     }
 
     nw::g3d::ModelObj::InitArg model_arg(res_model);
+    model_arg.ViewCount(num_view);
+
     if (bounding_mode != 0)
         model_arg.EnableBounding();
-    model_arg.ViewCount(num_view);
+    else
+        model_arg.DisableBounding();
 
     size_t buffer_size = nw::g3d::ModelObj::CalcBufferSize(model_arg);
     mpBuffer = new (heap, nw::g3d::ModelObj::BUFFER_ALIGNMENT) u8[buffer_size];
@@ -139,20 +143,72 @@ void RenderObjEx::create(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
         for (s32 idx_material = 0; idx_material < mModelEx.GetMaterialCount(); idx_material++)
         {
             agl::g3d::MaterialEx& material = mModelEx.getMaterialEx(idx_material);
+            sead::SafeString shader_archive_name;
 
-            nw::g3d::res::ResShaderAssign* res_shader_assign = material.getMaterialObj()->GetResource()->GetShaderAssign();
-            sead::SafeString shader_archive_name = (res_shader_assign && res_shader_assign->GetShaderArchiveName())
-                                                        ? res_shader_assign->GetShaderArchiveName()
-                                                        : sead::SafeString::cEmptyString;
+            bool name_set = false;
 
-            // TODO
+            const nw::g3d::res::ResShaderAssign* res_shader_assign = material.getMaterialObj()->GetResource()->GetShaderAssign();
+            if (res_shader_assign)
+            {
+                const char* p_name = res_shader_assign->GetShaderArchiveName();
+                if (p_name)
+                {
+                    shader_archive_name = p_name;
+                    name_set = true;
+                }
+            }
+
+            if (!name_set)
+                shader_archive_name = sead::SafeString::cEmptyString;
+
+            bool is_local = false;
 
             if (shader_archive)
             {
-                // ...
+                if (shader_archive_name.isEmpty() ||
+                    shader_archive_name.comparen("nw4f", 4) != 0)
+                {
+                    is_local = true;
+                }
             }
 
-            // ...
+            const nw::g3d::res::ResMaterial* p_res_material = material.getMaterialObj()->GetResource();
+
+            if (is_local)
+            {
+                material.bindShaderResAssign(shader_archive->searchShaderProgram(p_res_material->GetName()), NULL, NULL);
+            }
+            else
+            {
+                const nw::g3d::res::ResShaderAssign* res_shader_assign = p_res_material->GetShaderAssign(); // ??
+                if (!shader_archive_name.isEmpty())
+                {
+                    const agl::ShaderProgramArchive* g_shader_program_archive = ShaderHolder::instance()->getShaderArchive(res_shader_assign->GetShaderArchiveName());
+                    if (g_shader_program_archive)
+                    {
+                        const agl::ShaderProgram* g_shader_program = g_shader_program_archive->searchShaderProgram(res_shader_assign->GetShadingModelName());
+                        if (g_shader_program)
+                        {
+                            static const char* sModelOptionSymbolIDs[] = {
+                                "NUM_SKINNING_VTX"
+                            };
+                            static const char* sModelOptionSymbolValues[][5] = {
+                                {
+                                    "0",
+                                    "1",
+                                    "2",
+                                    "3",
+                                    "4"
+                                }
+                            };
+                            material.bindShaderResAssign(g_shader_program, sModelOptionSymbolIDs[0], sModelOptionSymbolValues[0]);
+                            continue;
+                        }
+                    }
+                }
+
+                material.bindShader(ShaderHolder::instance()->getNw4fBasicShaderProgram());
+            }
         }
     }
     sead::Graphics::instance()->unlockDrawContext();

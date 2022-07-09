@@ -11,5 +11,7 @@ class ShaderHolder
 public:
     ShaderHolder();
 
-    agl::ShaderProgramArchive* getGlobalShaderArchive(const sead::SafeString& filename);
+    const agl::ShaderProgramArchive* getShaderArchive(const sead::SafeString& filename) const;
+    const agl::ShaderProgramArchive* getNw4fShaderArchive() const;
+    const agl::ShaderProgram* getNw4fBasicShaderProgram() const;
 };

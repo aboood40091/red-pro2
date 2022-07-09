@@ -122,6 +122,16 @@ public:
     void createWithOption(ResBinaryShaderArchive res_binary_archive, ResShaderArchive res_archive, u32 flag, sead::Heap* heap);
     bool setUp();
 
+    s32 searchShaderProgramIndex(const sead::SafeString& name) const;
+
+    const ShaderProgram* searchShaderProgram(const sead::SafeString& name) const
+    {
+        s32 index = searchShaderProgramIndex(name);
+        if (index >= 0 && index < mProgram.size())
+            return mProgram.unsafeGet(index);
+        return NULL;
+    }
+
     void updateCompileInfo();
 
 private:

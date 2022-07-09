@@ -78,7 +78,7 @@ void ResArchive::load(
             }
             else
             {
-                agl::ShaderProgramArchive* g_shader_program_archive = ShaderHolder::instance()->getGlobalShaderArchive(shader_archive_name);
+                const agl::ShaderProgramArchive* g_shader_program_archive = ShaderHolder::instance()->getShaderArchive(shader_archive_name);
                 agl::g3d::ShaderUtilG3D::setMatBlockAndShaderParamOffs(mResFile, g_shader_program_archive, "Mat");
             }
         }
