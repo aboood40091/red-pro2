@@ -596,6 +596,20 @@ bool RenderObjEx::hasXlu() const
 
 // ----------------------------------------------------------------------
 
+void RenderObjEx::setBoundingFlagArray_(u32 flag_array[], const SkeletalAnimation& anim)
+{
+    const nw::g3d::AnimBindTable& bind_table = anim.getAnimObj().GetBindTable();
+    for (s32 idx_anim = 0; idx_anim < bind_table.GetAnimCount(); idx_anim++)
+    {
+        if (bind_table.IsEnabled(idx_anim))
+        {
+            s32 index = bind_table.GetTargetIndex(idx_anim);
+            if (index < 32*10)
+                flag_array[index >> 5] |= 1 << (index & 0x1F);
+        }
+    }
+}
+
 void RenderObjEx::updateAnimations()
 {
     if (mpSklAnim.isBufferReady())
