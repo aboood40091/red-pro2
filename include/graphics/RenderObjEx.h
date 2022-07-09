@@ -1,5 +1,6 @@
 #pragma once
 
+#include <graphics/LightMapMgr.h>
 #include <graphics/RenderObj.h>
 #include <graphics/ResArchive.h>
 

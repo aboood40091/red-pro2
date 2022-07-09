@@ -622,7 +622,7 @@ void RenderObjEx::updateAnimations()
         for (sead::Buffer<SkeletalAnimation*>::constIterator it = mpSklAnim.constBegin(); it != it_end; ++it)
         {
             SkeletalAnimation* p_anim = *it;
-            if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+            if (p_anim && p_anim->isValid())
             {
                 if (sead::Mathf::abs(mSklAnimBlendWeight[it.getIndex()]) > 0.001f)
                 {
@@ -649,7 +649,7 @@ void RenderObjEx::updateAnimations()
             for (sead::Buffer<SkeletalAnimation*>::constIterator it = mpSklAnim.constBegin(); it != it_end; ++it)
             {
                 SkeletalAnimation* p_anim = *it;
-                if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+                if (p_anim && p_anim->isValid())
                 {
                     p_anim->calc();
                     mSklAnimBlender.Blend(&p_anim->getAnimObj(), mSklAnimBlendWeight[it.getIndex()]);
@@ -676,7 +676,7 @@ void RenderObjEx::updateAnimations()
         for (s32 i = 0; i < mpTexAnim.size(); i++)
         {
             TexPatternAnimation* p_anim = mpTexAnim[i];
-            if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+            if (p_anim && p_anim->isValid())
             {
                 p_anim->calc();
                 p_anim->getAnimObj().ApplyTo(&mModelEx);
@@ -689,7 +689,7 @@ void RenderObjEx::updateAnimations()
         for (s32 i = 0; i < mpShuAnim.size(); i++)
         {
             ShaderParamAnimation* p_anim = mpShuAnim[i];
-            if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+            if (p_anim && p_anim->isValid())
             {
                 p_anim->calc();
                 p_anim->getAnimObj().ApplyTo(&mModelEx);
@@ -702,7 +702,7 @@ void RenderObjEx::updateAnimations()
         for (s32 i = 0; i < mpVisAnim.size(); i++)
         {
             VisibilityAnimation* p_anim = mpVisAnim[i];
-            if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+            if (p_anim && p_anim->isValid())
             {
                 p_anim->calc();
                 p_anim->getAnimObj().ApplyTo(&mModelEx);
@@ -715,7 +715,7 @@ void RenderObjEx::updateAnimations()
         for (s32 i = 0; i < mpShaAnim.size(); i++)
         {
             ShapeAnimation* p_anim = mpShaAnim[i];
-            if (p_anim && p_anim->getResource() && p_anim->getRenderObj())
+            if (p_anim && p_anim->isValid())
             {
                 p_anim->calc();
                 p_anim->getAnimObj().ApplyTo(&mModelEx);
