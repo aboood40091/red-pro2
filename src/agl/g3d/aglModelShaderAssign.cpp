@@ -1,5 +1,7 @@
+#include <common/aglShaderProgram.h>
 #include <container/seadBuffer.h>
 #include <g3d/aglModelShaderAssign.h>
+#include <util/common/aglResShaderSymbol.h>
 
 namespace agl { namespace g3d {
 
@@ -81,9 +83,48 @@ void ModelShaderAssign::clear_()
 
     // TODO: sead::SafeArray
     {
-        typedef sead::Buffer<nw::g3d::res::ResSampler*>::iterator _Iterator;
+        typedef sead::Buffer<const nw::g3d::res::ResSampler*>::iterator _Iterator;
         for (_Iterator it = _Iterator(mpResSampler), it_end = _Iterator(mpResSampler, 16); it != it_end; ++it)
             *it = NULL;
+    }
+}
+
+void ModelShaderAssign::bind(const nw::g3d::res::ResMaterial* p_res_mat, const ShaderProgram* p_program, bool use_res_assign, bool use_shader_symbol_id)
+{
+    const nw::g3d::res::ResShaderAssign* p_res_assign;
+    if (use_res_assign)
+        p_res_assign = p_res_mat->GetShaderAssign();
+    else
+        p_res_assign = NULL;
+
+    const ResShaderSymbolArray& symbol_array = p_program->getResShaderSymbolArray(cShaderSymbolType_Sampler);
+    for (ResShaderSymbolArray::constIterator it = symbol_array.begin(), it_end = symbol_array.end(); it != it_end; ++it)
+    {
+        const ResShaderSymbol& symbol = &(*it);
+        if (!symbol.isValid())
+            continue;
+
+        const char* symbol_id = symbol.getID();
+        if (!symbol.isVariationEnable(p_program->getVariationID()))
+            continue;
+
+        const char* sampler_name = NULL;
+        if (p_res_assign)
+            sampler_name = p_res_assign->GetSamplerAssign(symbol_id);
+
+        if (sampler_name == NULL)
+        {
+            if (!use_shader_symbol_id)
+                continue;
+
+            sampler_name = symbol.getID();
+            if (sampler_name == NULL)
+                continue;
+        }
+
+        const nw::g3d::res::ResSampler* p_res_sampler = p_res_mat->GetSampler(sampler_name);
+        if (p_res_sampler)
+            pushBackSampler(p_res_sampler, SamplerLocation(symbol.getName(), *p_program));
     }
 }
 
@@ -96,6 +137,22 @@ void ModelShaderAssign::bindShader(const nw::g3d::res::ResMaterial* p_res_mat, c
         mAttribute.bind(p_res_mat, p_res_shp, p_program, false, true);
         updateLocation_("Mat");
     }
+}
+
+void ModelShaderAssign::updateLocation_(const char* uniform_block_name)
+{
+    mUniformBlockLocation.setName(uniform_block_name);
+    mUniformBlockLocation.search(*mpProgram);
+}
+
+void ModelShaderAssign::pushBackSampler(const nw::g3d::res::ResSampler* p_res_sampler, const SamplerLocation& location)
+{
+    if (!location.isValid())
+        return;
+
+    mSamplerLocation[mSamplerNum] = location;
+    mpResSampler[mSamplerNum] = p_res_sampler;
+    mSamplerNum++;
 }
 
 void ModelShaderAssign::activateMaterialUniformBlock(const nw::g3d::MaterialObj* p_material) const

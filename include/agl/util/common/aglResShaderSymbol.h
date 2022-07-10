@@ -40,6 +40,17 @@ public:
         const DataType* const data = ptr();
         return (void*)((uintptr_t)(data + 1) + data->mNameLen + data->mIDLen);
     }
+
+    const u8* getVariationEnableArray() const
+    {
+        const DataType* const data = ptr();
+        return (const u8*)((uintptr_t)(data + 1) + data->mNameLen + data->mIDLen + data->mDefaultValueSize);
+    }
+
+    bool isVariationEnable(s32 index) const
+    {
+        return getVariationEnableArray()[index];
+    }
 };
 
 class ResShaderSymbolArray : public ResArray<ResShaderSymbol>

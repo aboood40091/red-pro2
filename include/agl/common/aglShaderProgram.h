@@ -17,6 +17,11 @@ public:
     ShaderProgram();
     virtual ~ShaderProgram();
 
+    s32 getVariationID() const
+    {
+        return mVariationID;
+    }
+
     DisplayList& getDisplayList()
     {
         return mDisplayList;
