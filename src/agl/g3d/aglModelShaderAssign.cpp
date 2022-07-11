@@ -40,6 +40,98 @@ void ModelShaderAttribute::clear()
     }
 }
 
+void ModelShaderAttribute::bind(const nw::g3d::res::ResMaterial* p_res_mat, const nw::g3d::res::ResShape* p_res_shp, const ShaderProgram* p_program, bool use_res_assign, bool use_shader_symbol_id)
+{
+    // SEAD_ASSERT(p_res_mat != nullptr);
+    // SEAD_ASSERT(p_res_shp != nullptr);
+
+    const nw::g3d::res::ResShaderAssign* p_res_assign;
+    if (use_res_assign)
+        p_res_assign = p_res_mat->GetShaderAssign();
+    else
+        p_res_assign = NULL;
+
+    const ResShaderSymbolArray& symbol_array = p_program->getResShaderSymbolArray(cShaderSymbolType_Attribute);
+    Attribute attribute[16]; // sead::UnsafeArray<Attribute, 16>
+    s32 attribute_num = 0;
+    for (ResShaderSymbolArray::constIterator it = symbol_array.begin(), it_end = symbol_array.end(); it != it_end; ++it)
+    {
+        const ResShaderSymbol& symbol = &(*it);
+        if (!symbol.isValid())
+            continue;
+
+        const char* symbol_id = symbol.getID();
+        if (!symbol.isVariationEnable(p_program->getVariationID()))
+            continue;
+
+        const char* name = NULL;
+        if (p_res_assign)
+            name = p_res_assign->GetAttribAssign(symbol_id);
+
+        if (name == NULL)
+        {
+            if (!use_shader_symbol_id)
+                continue;
+
+            name = symbol.getID();
+            if (name == NULL)
+                continue;
+        }
+
+        AttributeLocation location(symbol.getName(), *p_program);
+        s32 index = p_res_shp->GetVertex()->GetVtxAttribIndex(name);
+
+        if (location.isValid() && index != -1)
+        {
+            attribute[attribute_num].mName = location.getName();
+            attribute[attribute_num].mIndex = index;
+            attribute[attribute_num].mLocation = location.getVertexLocation();
+            attribute_num++;
+        }
+    }
+
+    const nw::g3d::res::ResVertex* p_res_vtx = p_res_shp->GetVertex();
+
+// void ModelShaderAttribute::bind_(const nw::g3d::res::ResVertex* p_res_vtx, const sead::UnsafeArray<Attribute, 16>& attribute, s32 attribute_num)
+{
+    // SEAD_ASSERT(p_res_vtx != nullptr);
+
+    mVertexBufferNum = 0;
+
+    u32 slot[16];
+    for (s32 idx_attrib = 0; idx_attrib < attribute_num; idx_attrib++)
+        slot[idx_attrib] = 0xFFFFFFFF;
+
+    mFetchShader.Cleanup();
+    mFetchShader.SetAttribCount(attribute_num);
+    mFetchShader.CalcSize();
+    mFetchShader.SetDefault(mFetchShader.GetGX2FetchShader()->shaderPtr);
+
+    for (s32 idx_attrib = 0; idx_attrib < attribute_num; idx_attrib++)
+    {
+        const nw::g3d::res::ResVtxAttrib* p_res_vtx_attrib = p_res_vtx->GetVtxAttrib(attribute[idx_attrib].mIndex);
+        const nw::g3d::res::ResBuffer* p_res_buffer = p_res_vtx->GetVtxBuffer(p_res_vtx_attrib->GetBufferIndex());
+
+        if (slot[p_res_vtx_attrib->GetBufferIndex()] == 0xFFFFFFFF)
+        {
+            slot[p_res_vtx_attrib->GetBufferIndex()] = mVertexBufferNum;
+            mpVertexBuffer[mVertexBufferNum] = p_res_vtx->GetVtxBuffer(p_res_vtx_attrib->GetBufferIndex())->GetGfxBuffer();
+            mVertexBufferNum++;
+        }
+
+        mFetchShader.SetLocation(mFetchShader.GetGX2FetchShader()->shaderPtr, idx_attrib, attribute[idx_attrib].mLocation);
+        mFetchShader.SetVertexBuffer(idx_attrib, p_res_buffer->GetGfxBuffer());
+        mFetchShader.SetBufferSlot(mFetchShader.GetGX2FetchShader()->shaderPtr, idx_attrib, slot[p_res_vtx_attrib->GetBufferIndex()]);
+        mFetchShader.SetFormat(mFetchShader.GetGX2FetchShader()->shaderPtr, idx_attrib, p_res_vtx_attrib->GetFormat());
+        mFetchShader.SetOffset(mFetchShader.GetGX2FetchShader()->shaderPtr, idx_attrib, p_res_vtx_attrib->GetOffset());
+    }
+
+    mFetchShader.Setup();
+    mFetchShader.DCFlush();
+}
+
+}
+
 void ModelShaderAttribute::setVertexBuffer(const nw::g3d::fnd::GfxBuffer* p_buffer, s32 index)
 {
     for (u32 idx_attrib = 0; idx_attrib < mFetchShader.GetAttribCount(); idx_attrib++)
@@ -108,21 +200,21 @@ void ModelShaderAssign::bind(const nw::g3d::res::ResMaterial* p_res_mat, const S
         if (!symbol.isVariationEnable(p_program->getVariationID()))
             continue;
 
-        const char* sampler_name = NULL;
+        const char* name = NULL;
         if (p_res_assign)
-            sampler_name = p_res_assign->GetSamplerAssign(symbol_id);
+            name = p_res_assign->GetSamplerAssign(symbol_id);
 
-        if (sampler_name == NULL)
+        if (name == NULL)
         {
             if (!use_shader_symbol_id)
                 continue;
 
-            sampler_name = symbol.getID();
-            if (sampler_name == NULL)
+            name = symbol.getID();
+            if (name == NULL)
                 continue;
         }
 
-        const nw::g3d::res::ResSampler* p_res_sampler = p_res_mat->GetSampler(sampler_name);
+        const nw::g3d::res::ResSampler* p_res_sampler = p_res_mat->GetSampler(name);
         if (p_res_sampler)
             pushBackSampler(p_res_sampler, SamplerLocation(symbol.getName(), *p_program));
     }

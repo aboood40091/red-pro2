@@ -18,6 +18,23 @@ namespace agl { namespace g3d {
 
 class ModelShaderAttribute
 {
+    class Attribute
+    {
+        Attribute()
+            : mIndex(0)
+            , mName("Undefined")
+            , mLocation(0)
+        {
+        }
+
+        s32 mIndex;
+        sead::SafeString mName;
+        s16 mLocation;
+
+        friend class ModelShaderAttribute;
+    };
+    static_assert(sizeof(Attribute) == 0x10, "agl::g3d::ModelShaderAttribute::Attribute size mismatch");
+
 public:
     ModelShaderAttribute();
     ~ModelShaderAttribute();

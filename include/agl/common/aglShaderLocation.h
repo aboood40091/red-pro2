@@ -39,19 +39,16 @@ class UniformLocation : public sead::INamable, public ShaderLocation
 public:
     UniformLocation()
         : sead::INamable("Undefined")
-        , ShaderLocation()
     {
     }
 
     explicit UniformLocation(const sead::SafeString& name)
         : sead::INamable(name)
-        , ShaderLocation()
     {
     }
 
     UniformLocation(const sead::SafeString& name, const ShaderProgram& program)
         : sead::INamable(name)
-        , ShaderLocation()
     {
         search(program);
     }
@@ -72,19 +69,16 @@ class UniformBlockLocation : public sead::INamable, public ShaderLocation
 public:
     UniformBlockLocation()
         : sead::INamable("Undefined")
-        , ShaderLocation()
     {
     }
 
     explicit UniformBlockLocation(const sead::SafeString& name)
         : sead::INamable(name)
-        , ShaderLocation()
     {
     }
 
     UniformBlockLocation(const sead::SafeString& name, const ShaderProgram& program)
         : sead::INamable(name)
-        , ShaderLocation()
     {
         search(program);
     }
@@ -105,19 +99,16 @@ class SamplerLocation : public sead::INamable, public ShaderLocation
 public:
     SamplerLocation()
         : sead::INamable("Undefined")
-        , ShaderLocation()
     {
     }
 
     explicit SamplerLocation(const sead::SafeString& name)
         : sead::INamable(name)
-        , ShaderLocation()
     {
     }
 
     SamplerLocation(const sead::SafeString& name, const ShaderProgram& program)
         : sead::INamable(name)
-        , ShaderLocation()
     {
         search(program);
     }
@@ -133,37 +124,37 @@ public:
 };
 static_assert(sizeof(SamplerLocation) == 0x10, "agl::SamplerLocation size mismatch");
 
-class AttributeLocation : public sead::INamable, public ShaderLocation
+class AttributeLocation : public sead::INamable
 {
 public:
     AttributeLocation()
         : sead::INamable("Undefined")
-        , ShaderLocation()
     {
     }
 
     explicit AttributeLocation(const sead::SafeString& name)
         : sead::INamable(name)
-        , ShaderLocation()
     {
     }
 
     AttributeLocation(const sead::SafeString& name, const ShaderProgram& program)
         : sead::INamable(name)
-        , ShaderLocation()
     {
         search(program);
     }
 
-    AttributeLocation& operator=(const AttributeLocation& rhs)
+    bool isValid() const
     {
-        setName(rhs.getName());
-        ShaderLocation::operator=(static_cast<const ShaderLocation&>(rhs));
-        return *this;
+        return getVertexLocation() != -1;
     }
 
+    s32 getVertexLocation() const { return mVS; }
+
     void search(const ShaderProgram& program);
+
+private:
+    s16 mVS;
 };
-static_assert(sizeof(AttributeLocation) == 0x10, "agl::AttributeLocation size mismatch");
+static_assert(sizeof(AttributeLocation) == 0xC, "agl::AttributeLocation size mismatch");
 
 }
