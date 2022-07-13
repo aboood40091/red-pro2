@@ -64,7 +64,7 @@ public:
     ModelShaderAssign();
     ~ModelShaderAssign();
 
-    ShaderProgram* getShaderProgram() const { return mpProgram; }
+    const ShaderProgram* getShaderProgram() const { return mpProgram; }
 
     SamplerLocation& getSamplerLocation(s32 index) { return mSamplerLocation[index]; }
     const SamplerLocation& getSamplerLocation(s32 index) const { return mSamplerLocation[index]; }
@@ -78,6 +78,7 @@ public:
     void create(sead::Heap* heap);
 
     void bind(const nw::g3d::res::ResMaterial* p_res_mat, const ShaderProgram* p_program, bool use_res_assign, bool use_shader_symbol_id);
+    void bindShaderResAssign(const nw::g3d::res::ResMaterial* p_res_mat, const nw::g3d::res::ResShape* p_res_shp, const ShaderProgram* p_program, const char* = "Mat");
     void bindShader(const nw::g3d::res::ResMaterial* p_res_mat, const nw::g3d::res::ResShape* p_res_shp, const ShaderProgram* p_program, const char* = "Mat");
 
     void pushBackSampler(const nw::g3d::res::ResSampler* p_res_sampler, const SamplerLocation& location);
@@ -90,7 +91,7 @@ private:
     void updateLocation_(const char* uniform_block_name);
 
 private:
-    ShaderProgram* mpProgram;
+    const ShaderProgram* mpProgram;
     UniformBlockLocation mUniformBlockLocation;
     SamplerLocation mSamplerLocation[16];       // sead::UnsafeArray
     const nw::g3d::res::ResSampler* mpResSampler[16]; // sead::UnsafeArray

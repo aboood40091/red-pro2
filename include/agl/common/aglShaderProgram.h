@@ -14,6 +14,10 @@ namespace agl {
 class ShaderProgram
 {
 public:
+    static const u32 cVariationMacroMax = 1024;
+    static const u32 cVariationValueMax = 1024;
+
+public:
     ShaderProgram();
     virtual ~ShaderProgram();
 
@@ -111,6 +115,16 @@ public:
     ShaderProgram* getVariation(s32 index);
     const ShaderProgram* getVariation(s32 index) const;
 
+    s32 searchVariationShaderProgramIndex(s32 macro_num, const char* const* macro_array, const char* const* value_array) const;
+
+    const ShaderProgram* searchVariationShaderProgram(s32 macro_num, const char* const* macro_array, const char* const* value_array) const
+    {
+        s32 index = searchVariationShaderProgramIndex(macro_num, macro_array, value_array);
+        return getVariation(index);
+    }
+
+    const sead::SafeString& searchVariationMacroName(const sead::SafeString& id) const;
+
     void updateVariation(s32 index) // I don't know the actual name
     {
         ShaderProgram* program = getVariation(index);
@@ -154,9 +168,19 @@ private:
         void createMacro(s32 index, const sead::SafeString& name, const sead::SafeString& id, s32 num_value, sead::Heap* heap);
         void setMacroValue(s32 macro_index, s32 value_index, const sead::SafeString& value);
 
+        s32 searchShaderProgramIndex(s32 macro_num, const char* const* macro_array, const char* const* value_array, s32 index) const;
+
+        const sead::SafeString& searchMacroName(const sead::SafeString& id) const;
+
         void create(sead::Heap* heap);
 
         s32 getMacroAndValueArray(s32 index, const char** macro_array, const char** value_array) const;
+
+        template <typename T>
+        s32 getMacroValueIndexArray(s32 index, T* value_index_array) const;
+
+        template <typename T>
+        s32 calcVariationIndex(const T* value_index_array) const;
 
         class Macro
         {
@@ -195,9 +219,6 @@ private:
     const VariationBuffer* getVariation_() const { return mpSharedData->mpVariationBuffer; }
 
 private:
-    static const u32 cVariationMacroMax = 1024;
-    static const u32 cVariationValueMax = 1024;
-
     mutable sead::BitFlag8 mFlag;
     u16 mVariationID;
     mutable DisplayList mDisplayList;

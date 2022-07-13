@@ -129,6 +129,7 @@ public:
         s32 index = searchShaderProgramIndex(name);
         if (index >= 0 && index < mProgram.size())
             return mProgram.unsafeGet(index);
+
         return NULL;
     }
 

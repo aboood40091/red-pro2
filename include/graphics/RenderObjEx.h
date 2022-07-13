@@ -30,7 +30,7 @@ class RenderObjEx : public RenderObj
 public:
     struct ShaderAssign
     {
-        void initialize(agl::ShaderProgram* p_shader_program)
+        void initialize(const agl::ShaderProgram* p_shader_program)
         {
             this->p_shader_program = p_shader_program;
 
@@ -57,7 +57,7 @@ public:
             }
         }
 
-        agl::ShaderProgram* p_shader_program;
+        const agl::ShaderProgram* p_shader_program;
         agl::UniformBlockLocation env_location;
         agl::UniformBlockLocation mtx_location;
         agl::UniformBlockLocation shp_location;

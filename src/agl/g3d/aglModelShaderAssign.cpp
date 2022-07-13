@@ -45,11 +45,11 @@ void ModelShaderAttribute::bind(const nw::g3d::res::ResMaterial* p_res_mat, cons
     // SEAD_ASSERT(p_res_mat != nullptr);
     // SEAD_ASSERT(p_res_shp != nullptr);
 
-    const nw::g3d::res::ResShaderAssign* p_res_assign;
+    const nw::g3d::res::ResShaderAssign* p_res_shader_assign;
     if (use_res_assign)
-        p_res_assign = p_res_mat->GetShaderAssign();
+        p_res_shader_assign = p_res_mat->GetShaderAssign();
     else
-        p_res_assign = NULL;
+        p_res_shader_assign = NULL;
 
     const ResShaderSymbolArray& symbol_array = p_program->getResShaderSymbolArray(cShaderSymbolType_Attribute);
     Attribute attribute[16]; // sead::UnsafeArray<Attribute, 16>
@@ -65,8 +65,8 @@ void ModelShaderAttribute::bind(const nw::g3d::res::ResMaterial* p_res_mat, cons
             continue;
 
         const char* name = NULL;
-        if (p_res_assign)
-            name = p_res_assign->GetAttribAssign(symbol_id);
+        if (p_res_shader_assign)
+            name = p_res_shader_assign->GetAttribAssign(symbol_id);
 
         if (name == NULL)
         {
@@ -183,11 +183,11 @@ void ModelShaderAssign::clear_()
 
 void ModelShaderAssign::bind(const nw::g3d::res::ResMaterial* p_res_mat, const ShaderProgram* p_program, bool use_res_assign, bool use_shader_symbol_id)
 {
-    const nw::g3d::res::ResShaderAssign* p_res_assign;
+    const nw::g3d::res::ResShaderAssign* p_res_shader_assign;
     if (use_res_assign)
-        p_res_assign = p_res_mat->GetShaderAssign();
+        p_res_shader_assign = p_res_mat->GetShaderAssign();
     else
-        p_res_assign = NULL;
+        p_res_shader_assign = NULL;
 
     const ResShaderSymbolArray& symbol_array = p_program->getResShaderSymbolArray(cShaderSymbolType_Sampler);
     for (ResShaderSymbolArray::constIterator it = symbol_array.begin(), it_end = symbol_array.end(); it != it_end; ++it)
@@ -201,8 +201,8 @@ void ModelShaderAssign::bind(const nw::g3d::res::ResMaterial* p_res_mat, const S
             continue;
 
         const char* name = NULL;
-        if (p_res_assign)
-            name = p_res_assign->GetSamplerAssign(symbol_id);
+        if (p_res_shader_assign)
+            name = p_res_shader_assign->GetSamplerAssign(symbol_id);
 
         if (name == NULL)
         {
@@ -220,11 +220,28 @@ void ModelShaderAssign::bind(const nw::g3d::res::ResMaterial* p_res_mat, const S
     }
 }
 
+void ModelShaderAssign::bindShaderResAssign(const nw::g3d::res::ResMaterial* p_res_mat, const nw::g3d::res::ResShape* p_res_shp, const ShaderProgram* p_program, const char*)
+{
+    const nw::g3d::res::ResShaderAssign* p_res_shader_assign = p_res_mat->GetShaderAssign();
+
+    clear_();
+
+    if (p_res_shader_assign && p_program)
+    {
+        mpProgram = p_program;
+        bind(p_res_mat, p_program, true, false);
+        mAttribute.bind(p_res_mat, p_res_shp, p_program, true, false);
+        updateLocation_("Mat");
+    }
+}
+
 void ModelShaderAssign::bindShader(const nw::g3d::res::ResMaterial* p_res_mat, const nw::g3d::res::ResShape* p_res_shp, const ShaderProgram* p_program, const char*)
 {
     clear_();
+
     if (p_program)
     {
+        mpProgram = p_program;
         bind(p_res_mat, p_program, false, true);
         mAttribute.bind(p_res_mat, p_res_shp, p_program, false, true);
         updateLocation_("Mat");

@@ -21,7 +21,7 @@ public:
 
     void init(ModelEx* p_model, u32 index, sead::Heap* heap);
 
-    void bindShaderResAssign(const ShaderProgram* p_program, const char* macro, const char** value_array);
+    void bindShaderResAssign(const ShaderProgram* p_program, const char* skin_macro, const char** skin_value_array);
     void bindShader(const ShaderProgram* p_program);
 
     void replaceUBO(const nw::g3d::fnd::GfxBuffer_t& buffer);
