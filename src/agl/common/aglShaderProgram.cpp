@@ -1,11 +1,17 @@
 #include <common/aglDisplayList.h>
 #include <common/aglShaderProgram.h>
 #include <detail/aglFileIOMgr.h>
+#include <detail/aglGX2.h>
 #include <detail/aglPrivateResource.h>
 #include <gfx/seadGraphics.h>
 #include <util/common/aglShaderCompileInfo.h>
 
 namespace agl {
+
+void ShaderProgram::changeShaderMode(ShaderMode mode)
+{
+    driver::GX2Resource::instance()->setShaderMode(mode);
+}
 
 ShaderProgram::ShaderProgram()
     : mFlag(0)
@@ -82,6 +88,25 @@ void ShaderProgram::createVariation(sead::Heap* heap)
     }
 }
 
+ShaderMode ShaderProgram::activate(ShaderMode current_mode, bool use_dl) const
+{
+    ShaderMode mode = getGeometryShaderBinary() ? cShaderMode_GeometryShader
+                                                : mVertexShader.getShaderMode();
+
+    if (current_mode != mode)
+        changeShaderMode(mode);
+
+    if (mode == cShaderMode_GeometryShader)
+        driver::GX2Resource::instance()->setGeometryShaderRingBuffer();
+
+    if (use_dl && !mDisplayList.isEmpty())
+        mDisplayList.call();
+    else
+        setShaderGX2_();
+
+    return mode;
+}
+
 Shader* ShaderProgram::getShader(ShaderType type)
 {
     switch (type)
@@ -110,66 +135,6 @@ const Shader* ShaderProgram::getShader(ShaderType type) const
     default:
         return NULL;
     }
-}
-
-s32 ShaderProgram::getVariationNum() const
-{
-    const VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
-    if (!variation_buffer)
-        return 1;
-
-    return variation_buffer->mProgram.size() + 1;
-}
-
-s32 ShaderProgram::getVariationMacroNum() const
-{
-    const VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
-    if (!variation_buffer)
-        return 0;
-
-    return variation_buffer->mMacro.size();
-}
-
-ShaderProgram* ShaderProgram::getVariation(s32 index)
-{
-    VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
-    if (!variation_buffer)
-        return this;
-
-    if (index <= 0)
-        return variation_buffer->mpOriginal;
-
-    return &variation_buffer->mProgram[index - 1];
-}
-
-const ShaderProgram* ShaderProgram::getVariation(s32 index) const
-{
-    const VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
-    if (!variation_buffer)
-        return this;
-
-    if (index <= 0)
-        return variation_buffer->mpOriginal;
-
-    return &variation_buffer->mProgram[index - 1];
-}
-
-s32 ShaderProgram::searchVariationShaderProgramIndex(s32 macro_num, const char* const* macro_array, const char* const* value_array) const
-{
-    VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
-    if (!variation_buffer)
-        return 0;
-
-    return variation_buffer->searchShaderProgramIndex(macro_num, macro_array, value_array, mVariationID);
-}
-
-const sead::SafeString& ShaderProgram::searchVariationMacroName(const sead::SafeString& id) const
-{
-    VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
-    if (!variation_buffer)
-        return sead::SafeString::cEmptyString;
-
-    return variation_buffer->searchMacroName(id);
 }
 
 u32 ShaderProgram::setUpAllVariation()
@@ -211,6 +176,66 @@ void ShaderProgram::reserveSetUpAllVariation()
     }
 }
 
+s32 ShaderProgram::getVariationNum() const
+{
+    const VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
+    if (!variation_buffer)
+        return 1;
+
+    return variation_buffer->mProgram.size() + 1;
+}
+
+s32 ShaderProgram::getVariationMacroNum() const
+{
+    const VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
+    if (!variation_buffer)
+        return 0;
+
+    return variation_buffer->mMacro.size();
+}
+
+s32 ShaderProgram::searchVariationShaderProgramIndex(s32 macro_num, const char* const* macro_array, const char* const* value_array) const
+{
+    VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
+    if (!variation_buffer)
+        return 0;
+
+    return variation_buffer->searchShaderProgramIndex(macro_num, macro_array, value_array, mVariationID);
+}
+
+ShaderProgram* ShaderProgram::getVariation(s32 index)
+{
+    VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
+    if (!variation_buffer)
+        return this;
+
+    if (index <= 0)
+        return variation_buffer->mpOriginal;
+
+    return &variation_buffer->mProgram[index - 1];
+}
+
+const ShaderProgram* ShaderProgram::getVariation(s32 index) const
+{
+    const VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
+    if (!variation_buffer)
+        return this;
+
+    if (index <= 0)
+        return variation_buffer->mpOriginal;
+
+    return &variation_buffer->mProgram[index - 1];
+}
+
+const sead::SafeString& ShaderProgram::searchVariationMacroName(const sead::SafeString& id) const
+{
+    VariationBuffer* variation_buffer = mpSharedData->mpVariationBuffer;
+    if (!variation_buffer)
+        return sead::SafeString::cEmptyString;
+
+    return variation_buffer->searchMacroName(id);
+}
+
 void ShaderProgram::updateAttributeLocation() const
 {
     for (sead::Buffer<AttributeLocation>::iterator it = mAttributeLocation.begin(), it_end = mAttributeLocation.end(); it != it_end; ++it)
@@ -250,54 +275,53 @@ void ShaderProgram::dump() const
 
     arg.mPath = "%AGL_ROOT%/tools/temporary/temp.gsh";
     arg.mLoadAlignment = GX2_SHADER_ALIGNMENT;
-    if (detail::FileIOMgr::instance()->load(arg) == -1) // Never unloaded...
-        return;
 
-    if (mFlag.isOff(8))
-        return;
-
-    sead::SafeString disasm_str = "; --------  Disassembly --------------------";
-    sead::SafeString symbol_str = "-----------------Symbol Section ----------------------";
-    s32 disasm_str_len = disasm_str.calcLength();
-    s32 symbol_str_len = symbol_str.calcLength();
-
-    sead::Heap* heap = detail::PrivateResource::instance()->getShaderCompileHeap();
-
-    sead::HeapSafeString* analyze_str = new (heap) sead::HeapSafeString(heap, "", 0x100000);
-
-    static const char* sTempFname[cShaderType_Num] = {
-        "%AGL_ROOT%/tools/temporary/temp_vs.dmp",
-        "%AGL_ROOT%/tools/temporary/temp_ps.dmp",
-        "%AGL_ROOT%/tools/temporary/temp_gs.dmp"
-    };
-
-    static const char* sShaderType[cShaderType_Num] = {
-        "Vertex Shader",
-        "Fragment Shader",
-        "Geometry Shader"
-    };
-
-    for (s32 type = 0; type < cShaderType_Num; type++)
+    if (detail::FileIOMgr::instance()->load(arg) != -1 && // Never unloaded...
+        mFlag.isOn(8))
     {
-        arg.mPath = sTempFname[type];
-        s32 index = detail::FileIOMgr::instance()->load(arg);
-        if (index != -1)
+        sead::SafeString disasm_str = "; --------  Disassembly --------------------";
+        sead::SafeString symbol_str = "-----------------Symbol Section ----------------------";
+        s32 disasm_str_len = disasm_str.calcLength();
+        s32 symbol_str_len = symbol_str.calcLength();
+
+        sead::Heap* heap = detail::PrivateResource::instance()->getShaderCompileHeap();
+
+        sead::HeapSafeString* analyze_str = new (heap) sead::HeapSafeString(heap, "", 0x100000);
+
+        static const char* sTempFname[cShaderType_Num] = {
+            "%AGL_ROOT%/tools/temporary/temp_vs.dmp",
+            "%AGL_ROOT%/tools/temporary/temp_ps.dmp",
+            "%AGL_ROOT%/tools/temporary/temp_gs.dmp"
+        };
+
+        static const char* sShaderType[cShaderType_Num] = {
+            "Vertex Shader",
+            "Fragment Shader",
+            "Geometry Shader"
+        };
+
+        for (s32 type = 0; type < cShaderType_Num; type++)
         {
-            const char* text = (char*)detail::FileIOMgr::instance()->getFile(index).mpData;
-            while (*text != '\0')
+            arg.mPath = sTempFname[type];
+            s32 index = detail::FileIOMgr::instance()->load(arg);
+            if (index != -1)
             {
-                // TODO: Too much is happening here
-                ++text;
-                (void)sShaderType;
+                const char* text = (char*)detail::FileIOMgr::instance()->getFile(index).mpData;
+                while (*text != '\0')
+                {
+                    // TODO: Too much is happening here
+                    ++text;
+                    (void)sShaderType;
+                }
+                detail::FileIOMgr::instance()->close(index);
             }
-            detail::FileIOMgr::instance()->close(index);
         }
+
+        arg.mPath = sead::FormatFixedSafeString<1024>("%%AGL_ROOT%%/tools/temporary/shader_analyze/%s.txt", getName().cstr());
+        detail::FileIOMgr::instance()->save(analyze_str->cstr(), analyze_str->calcLength(), arg);
+
+        delete analyze_str;
     }
-
-    arg.mPath = sead::FormatFixedSafeString<1024>("%%AGL_ROOT%%/tools/temporary/shader_analyze/%s.txt", getName().cstr());
-    detail::FileIOMgr::instance()->save(analyze_str->cstr(), analyze_str->calcLength(), arg);
-
-    delete analyze_str;
 #endif // cafe
 }
 
@@ -532,18 +556,20 @@ s32 ShaderProgram::VariationBuffer::searchShaderProgramIndex(s32 macro_num, cons
     }
     else
     {
-        getMacroValueIndexArray<s32>(index, value_index_array);
+        getMacroValueIndexArray(index, value_index_array);
     }
 
     for (sead::Buffer<Macro>::constIterator itr_type = mMacro.begin(), it_end = mMacro.end(); itr_type != it_end; ++itr_type)
     {
         for (s32 idx_macro = 0; idx_macro < macro_num; idx_macro++)
         {
-            if (itr_type->mName.isEqual(macro_array[idx_macro]))
+            const char* macro_name = macro_array[idx_macro];
+            if (itr_type->mName.isEqual(macro_name))
             {
+                const char* macro_value = value_array[idx_macro];
                 for (sead::Buffer<sead::SafeString>::constIterator itr_value = itr_type->mValue.begin(), value_it_end = itr_type->mValue.end(); itr_value != value_it_end; ++itr_value)
                 {
-                    if (itr_value->isEqual(value_array[idx_macro]))
+                    if (itr_value->isEqual(macro_value))
                     {
                         value_index_array[itr_type.getIndex()] = itr_value.getIndex();
                         break;
@@ -554,7 +580,7 @@ s32 ShaderProgram::VariationBuffer::searchShaderProgramIndex(s32 macro_num, cons
         }
     }
 
-    return calcVariationIndex<s32>(value_index_array);
+    return calcVariationIndex(value_index_array);
 }
 
 const sead::SafeString& ShaderProgram::VariationBuffer::searchMacroName(const sead::SafeString& id) const
@@ -568,7 +594,7 @@ const sead::SafeString& ShaderProgram::VariationBuffer::searchMacroName(const se
 
 void ShaderProgram::VariationBuffer::create(sead::Heap* heap)
 {
-    u32 num_variation = 1;
+    s32 num_variation = 1;
 
     for (sead::Buffer<Macro>::iterator it = mMacro.begin(), it_end = mMacro.end(); it != it_end; ++it)
     {
@@ -602,8 +628,7 @@ s32 ShaderProgram::VariationBuffer::getMacroAndValueArray(s32 index, const char*
     return mMacro.size();
 }
 
-template <typename T>
-s32 ShaderProgram::VariationBuffer::getMacroValueIndexArray(s32 index, T* value_index_array) const
+s32 ShaderProgram::VariationBuffer::getMacroValueIndexArray(s32 index, s32* value_index_array) const
 {
     for (sead::Buffer<Macro>::constIterator itr_type = mMacro.begin(), it_end = mMacro.end(); itr_type != it_end; ++itr_type)
     {
@@ -619,8 +644,7 @@ s32 ShaderProgram::VariationBuffer::getMacroValueIndexArray(s32 index, T* value_
     return mMacro.size();
 }
 
-template <typename T>
-s32 ShaderProgram::VariationBuffer::calcVariationIndex(const T* value_index_array) const
+s32 ShaderProgram::VariationBuffer::calcVariationIndex(const s32* value_index_array) const
 {
     s32 index = 0;
     for (sead::Buffer<Macro>::constIterator itr_type = mMacro.begin(), it_end = mMacro.end(); itr_type != it_end; ++itr_type)

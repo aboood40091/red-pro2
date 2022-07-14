@@ -17,6 +17,8 @@ public:
     static const u32 cVariationMacroMax = 1024;
     static const u32 cVariationValueMax = 1024;
 
+    static void changeShaderMode(ShaderMode mode);
+
 public:
     ShaderProgram();
     virtual ~ShaderProgram();
@@ -65,6 +67,8 @@ public:
 
     void createVariation(sead::Heap* heap);
 
+    ShaderMode activate(ShaderMode current_mode, bool use_dl) const;
+
     Shader* getShader(ShaderType type);
     const Shader* getShader(ShaderType type) const;
 
@@ -112,10 +116,10 @@ public:
     s32 getVariationNum() const;
     s32 getVariationMacroNum() const;
 
+    s32 searchVariationShaderProgramIndex(s32 macro_num, const char* const* macro_array, const char* const* value_array) const;
+
     ShaderProgram* getVariation(s32 index);
     const ShaderProgram* getVariation(s32 index) const;
-
-    s32 searchVariationShaderProgramIndex(s32 macro_num, const char* const* macro_array, const char* const* value_array) const;
 
     const ShaderProgram* searchVariationShaderProgram(s32 macro_num, const char* const* macro_array, const char* const* value_array) const
     {
@@ -175,12 +179,8 @@ private:
         void create(sead::Heap* heap);
 
         s32 getMacroAndValueArray(s32 index, const char** macro_array, const char** value_array) const;
-
-        template <typename T>
-        s32 getMacroValueIndexArray(s32 index, T* value_index_array) const;
-
-        template <typename T>
-        s32 calcVariationIndex(const T* value_index_array) const;
+        s32 getMacroValueIndexArray(s32 index, s32* value_index_array) const;
+        s32 calcVariationIndex(const s32* value_index_array) const;
 
         class Macro
         {

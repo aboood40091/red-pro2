@@ -1,10 +1,6 @@
 #include <common/aglDisplayList.h>
 #include <detail/aglPrivateResource.h>
 
-#ifdef cafe
-#include <cafe.h>
-#endif // cafe
-
 namespace agl {
 
 DisplayList::DisplayList()

@@ -132,6 +132,14 @@ void ModelShaderAttribute::bind(const nw::g3d::res::ResMaterial* p_res_mat, cons
 
 }
 
+void ModelShaderAttribute::activateVertexBuffer() const
+{
+    mFetchShader.Load();
+
+    for (u32 i = 0; i < mVertexBufferNum; i++)
+        mpVertexBuffer[i]->LoadVertices(i);
+}
+
 void ModelShaderAttribute::setVertexBuffer(const nw::g3d::fnd::GfxBuffer* p_buffer, s32 index)
 {
     for (u32 idx_attrib = 0; idx_attrib < mFetchShader.GetAttribCount(); idx_attrib++)
@@ -139,14 +147,6 @@ void ModelShaderAttribute::setVertexBuffer(const nw::g3d::fnd::GfxBuffer* p_buff
             mFetchShader.SetVertexBuffer(idx_attrib, p_buffer);
 
     mpVertexBuffer[index] = p_buffer;
-}
-
-void ModelShaderAttribute::activateVertexBuffer() const
-{
-    mFetchShader.Load();
-
-    for (u32 i = 0; i < mVertexBufferNum; i++)
-        mpVertexBuffer[i]->LoadVertices(i);
 }
 
 ModelShaderAssign::ModelShaderAssign()

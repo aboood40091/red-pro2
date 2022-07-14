@@ -45,10 +45,11 @@ public:
     void bind(const nw::g3d::res::ResMaterial* p_res_mat, const nw::g3d::res::ResShape* p_res_shp, const ShaderProgram* p_program, bool use_res_assign, bool use_shader_symbol_id);
 
     s32 getVertexBufferNum() const { return mVertexBufferNum; }
-    const nw::g3d::fnd::GfxBuffer* getVertexBuffer(s32 index) const { return mpVertexBuffer[index]; }
-    void setVertexBuffer(const nw::g3d::fnd::GfxBuffer* p_buffer, s32 index);
 
     void activateVertexBuffer() const;
+
+    const nw::g3d::fnd::GfxBuffer* getVertexBuffer(s32 index) const { return mpVertexBuffer[index]; }
+    void setVertexBuffer(const nw::g3d::fnd::GfxBuffer* p_buffer, s32 index);
 
 private:
     u8 _0;
