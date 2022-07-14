@@ -13,32 +13,8 @@ namespace agl {
 
 class ShaderProgramArchive : public sead::IDisposer
 {
-    class ShaderSource : public sead::IDisposer
-    {
-    public:
-        ShaderSource();
-        virtual ~ShaderSource();
-
-        void initialize(ShaderProgramArchive* archive, s32 index, ResShaderSource res, bool is_used, sead::Heap* heap);
-        void expand();
-
-        const char* getName() const
-        {
-            return mRes.getName();
-        }
-
-    private:
-        s32 mIndex;
-        sead::BitFlag32 mFlag;
-        ShaderProgramArchive* mpArchive;
-        ResShaderSource mRes;
-        sead::HeapSafeString* mText;
-        sead::HeapSafeString* mRawText;
-        sead::Buffer<bool> mUsedInSource;
-
-        friend class ShaderProgramArchive;
-    };
-    static_assert(sizeof(ShaderSource) == 0x30, "agl::ShaderProgramArchive::ShaderSource size mismatch");
+    class ShaderProgramEx;
+    class ShaderSource;
 
     class ShaderCompileInfoEx
     {
@@ -77,6 +53,33 @@ class ShaderProgramArchive : public sead::IDisposer
         friend class ShaderProgramArchive;
     };
     static_assert(sizeof(ShaderProgramEx) == 0x124, "agl::ShaderProgramArchive::ShaderProgramEx size mismatch");
+
+    class ShaderSource : public sead::IDisposer
+    {
+    public:
+        ShaderSource();
+        virtual ~ShaderSource();
+
+        void initialize(ShaderProgramArchive* archive, s32 index, ResShaderSource res, bool is_used, sead::Heap* heap);
+        void expand();
+
+        const char* getName() const
+        {
+            return mRes.getName();
+        }
+
+    private:
+        s32 mIndex;
+        sead::BitFlag32 mFlag;
+        ShaderProgramArchive* mpArchive;
+        ResShaderSource mRes;
+        sead::HeapSafeString* mText;
+        sead::HeapSafeString* mRawText;
+        sead::Buffer<bool> mUsedInSource;
+
+        friend class ShaderProgramArchive;
+    };
+    static_assert(sizeof(ShaderSource) == 0x30, "agl::ShaderProgramArchive::ShaderSource size mismatch");
 
 public:
     ShaderProgramArchive();

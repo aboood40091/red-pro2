@@ -347,71 +347,6 @@ bool ShaderProgramArchive::setUp_(bool unk)
     return true;
 }
 
-ShaderProgramArchive::ShaderSource::ShaderSource()
-    : IDisposer()
-    , mFlag(1)
-    , mpArchive(NULL)
-    , mRes()
-    , mText(NULL)
-    , mRawText(NULL)
-    , mUsedInSource()
-{
-}
-
-ShaderProgramArchive::ShaderSource::~ShaderSource()
-{
-    delete mRawText;
-    delete mText;
-    mUsedInSource.freeBuffer();
-}
-
-void ShaderProgramArchive::ShaderSource::initialize(ShaderProgramArchive* archive, s32 index, ResShaderSource res, bool is_used, sead::Heap* heap)
-{
-    mpArchive = archive;
-    mRes = res;
-    mIndex = index;
-
-    mFlag.change(2, is_used);
-
-    mText = new sead::HeapSafeString(detail::PrivateResource::instance()->getShaderCompileHeap(), res.getText(), res.ref().mTextLen * 2);
-
-    mpArchive->mSourceName[mIndex] = mRes.getName();
-    mpArchive->mSourceText[mIndex] = mText->cstr();
-
-    mUsedInSource.allocBuffer(mpArchive->mSource.size(), heap);
-    for (sead::Buffer<bool>::iterator it = mUsedInSource.begin(), it_end = mUsedInSource.end(); it != it_end; ++it)
-        *it = false;
-
-    // detail::RootNode::setNodeMeta(this, "Icon = NOTE");
-}
-
-void ShaderProgramArchive::ShaderSource::expand()
-{
-    if (mFlag.isOff(1 << 1))
-        return;
-
-    if (mRawText)
-    {
-        delete mRawText;
-        mRawText = NULL;
-    }
-
-    // SEAD_ASSERT(mpArchive->mSource.size() < 1024);
-    bool source_is_used[1024];
-
-    mRawText = detail::ShaderTextUtil::createRawText(
-        *mText,
-        mpArchive->mSourceName.getBufferPtr(),
-        mpArchive->mSourceText.getBufferPtr(),
-        mpArchive->mSource.size(),
-        source_is_used,
-        detail::PrivateResource::instance()->getShaderCompileHeap()
-    );
-
-    for (sead::Buffer<ShaderSource>::iterator it = mpArchive->mSource.begin(), it_end = mpArchive->mSource.end(); it != it_end; ++it)
-        it->mUsedInSource[mIndex] = source_is_used[it.getIndex()];
-}
-
 ShaderProgramArchive::ShaderProgramEx::ShaderProgramEx()
     : mIndex(0)
     , mpArchive(NULL)
@@ -496,6 +431,71 @@ void ShaderProgramArchive::ShaderProgramEx::updateAnalyze()
 {
     if (mFlag.isOn(1))
         mpArchive->mProgram[mIndex].updateVariation(mVariationIndex);
+}
+
+ShaderProgramArchive::ShaderSource::ShaderSource()
+    : IDisposer()
+    , mFlag(1)
+    , mpArchive(NULL)
+    , mRes()
+    , mText(NULL)
+    , mRawText(NULL)
+    , mUsedInSource()
+{
+}
+
+ShaderProgramArchive::ShaderSource::~ShaderSource()
+{
+    delete mRawText;
+    delete mText;
+    mUsedInSource.freeBuffer();
+}
+
+void ShaderProgramArchive::ShaderSource::initialize(ShaderProgramArchive* archive, s32 index, ResShaderSource res, bool is_used, sead::Heap* heap)
+{
+    mpArchive = archive;
+    mRes = res;
+    mIndex = index;
+
+    mFlag.change(2, is_used);
+
+    mText = new sead::HeapSafeString(detail::PrivateResource::instance()->getShaderCompileHeap(), res.getText(), res.ref().mTextLen * 2);
+
+    mpArchive->mSourceName[mIndex] = mRes.getName();
+    mpArchive->mSourceText[mIndex] = mText->cstr();
+
+    mUsedInSource.allocBuffer(mpArchive->mSource.size(), heap);
+    for (sead::Buffer<bool>::iterator it = mUsedInSource.begin(), it_end = mUsedInSource.end(); it != it_end; ++it)
+        *it = false;
+
+    // detail::RootNode::setNodeMeta(this, "Icon = NOTE");
+}
+
+void ShaderProgramArchive::ShaderSource::expand()
+{
+    if (mFlag.isOff(1 << 1))
+        return;
+
+    if (mRawText)
+    {
+        delete mRawText;
+        mRawText = NULL;
+    }
+
+    // SEAD_ASSERT(mpArchive->mSource.size() < 1024);
+    bool source_is_used[1024];
+
+    mRawText = detail::ShaderTextUtil::createRawText(
+        *mText,
+        mpArchive->mSourceName.getBufferPtr(),
+        mpArchive->mSourceText.getBufferPtr(),
+        mpArchive->mSource.size(),
+        source_is_used,
+        detail::PrivateResource::instance()->getShaderCompileHeap()
+    );
+
+    for (sead::Buffer<ShaderSource>::iterator it = mpArchive->mSource.begin(), it_end = mpArchive->mSource.end(); it != it_end; ++it)
+        it->mUsedInSource[mIndex] = source_is_used[it.getIndex()];
 }
 
 }
