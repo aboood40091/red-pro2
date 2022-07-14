@@ -3,6 +3,7 @@
 #include <common/aglShaderEnum.h>
 #include <heap/seadDisposer.h>
 #include <thread/seadCriticalSection.h>
+#include <util/common/aglShaderOptimizeInfo.h>
 
 namespace agl { namespace driver {
 
@@ -15,11 +16,13 @@ public:
     virtual ~GX2Resource();
 
     void setShaderMode(ShaderMode mode) const;
+    void setShaderMode(ShaderMode mode, const ShaderOptimizeInfo& info) const;
+
     void setGeometryShaderRingBuffer() const;
 
 private:
-    void* mpOptimizeInfo;
-    u32 mDefaultOptimizeInfo[0x10 / sizeof(u32)];
+    ShaderOptimizeInfo* mpOptimizeInfo;
+    ShaderOptimizeInfo mDefaultOptimizeInfo;
     size_t mGeometryShaderInputRingItemSize;
     size_t mGeometryShaderOutputRingItemSize;
     u8* mGeometryShaderInputRingBuffer;
