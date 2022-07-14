@@ -25,14 +25,31 @@ public:
 
     void create(s32 num_macro, s32 num_variation, sead::Heap* heap);
 
+    void clearMacro()
+    {
+        mMacroName.clear();
+        mMacroValue.clear();
+    }
+
+    void pushBackMacro(const char* name, const char* value)
+    {
+        mMacroName.pushBack(name);
+        mMacroValue.pushBack(value);
+    }
+
     void clearVariation();
     void pushBackVariation(const char* name, const char* value);
+
+    void setSourceText(const sead::SafeString* text)
+    {
+        mSourceText = text;
+    }
 
     void calcCompileSource(ShaderType type, sead::BufferedSafeString* p_buffer, Target target, bool) const;
 
     void destroy();
 
-protected:
+private:
     const sead::SafeString* mSourceText;
     sead::BufferedSafeString* mRawText;
     sead::PtrArray<const char> mMacroName;

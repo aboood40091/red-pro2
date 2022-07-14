@@ -17,13 +17,7 @@ class ShaderProgramArchive : public sead::IDisposer
     {
     public:
         ShaderSource();
-
-        virtual ~ShaderSource()
-        {
-            delete mRawText;
-            delete mText;
-            mUsedInSource.freeBuffer();
-        }
+        virtual ~ShaderSource();
 
         void initialize(ShaderProgramArchive* archive, s32 index, ResShaderSource res, bool is_used, sead::Heap* heap);
         void expand();
@@ -46,19 +40,16 @@ class ShaderProgramArchive : public sead::IDisposer
     };
     static_assert(sizeof(ShaderSource) == 0x30, "agl::ShaderProgramArchive::ShaderSource size mismatch");
 
-    class ShaderCompileInfoEx : ShaderCompileInfo
+    class ShaderCompileInfoEx
     {
     public:
         ShaderCompileInfoEx()
-            : ShaderCompileInfo()
-        {
-        }
-
-        virtual ~ShaderCompileInfoEx()
+            : mCompileInfo()
         {
         }
 
     private:
+        ShaderCompileInfo mCompileInfo;
         ShaderSource* mSource;
 
         friend class ShaderProgramArchive;
@@ -69,10 +60,7 @@ class ShaderProgramArchive : public sead::IDisposer
     {
     public:
         ShaderProgramEx();
-
-        virtual ~ShaderProgramEx()
-        {
-        }
+        virtual ~ShaderProgramEx();
 
         void initialize(ShaderProgramArchive* archive, s32 index, ResShaderProgram res, sead::Heap* heap);
         void updateRawText();

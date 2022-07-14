@@ -358,6 +358,13 @@ ShaderProgramArchive::ShaderSource::ShaderSource()
 {
 }
 
+ShaderProgramArchive::ShaderSource::~ShaderSource()
+{
+    delete mRawText;
+    delete mText;
+    mUsedInSource.freeBuffer();
+}
+
 void ShaderProgramArchive::ShaderSource::initialize(ShaderProgramArchive* archive, s32 index, ResShaderSource res, bool is_used, sead::Heap* heap)
 {
     mpArchive = archive;
@@ -380,25 +387,29 @@ void ShaderProgramArchive::ShaderSource::initialize(ShaderProgramArchive* archiv
 
 void ShaderProgramArchive::ShaderSource::expand()
 {
-    if (mFlag.isOnAll(1))
+    if (mFlag.isOff(1 << 1))
+        return;
+
+    if (mRawText)
     {
         delete mRawText;
-
-        // SEAD_ASSERT(mpArchive->mSource.size() < 1024);
-        bool source_is_used[1024];
-
-        mRawText = detail::ShaderTextUtil::createRawText(
-            *mText,
-            mpArchive->mSourceName.getBufferPtr(),
-            mpArchive->mSourceText.getBufferPtr(),
-            mpArchive->mSource.size(),
-            source_is_used,
-            detail::PrivateResource::instance()->getShaderCompileHeap()
-        );
-
-        for (sead::Buffer<ShaderSource>::iterator it = mpArchive->mSource.begin(), it_end = mpArchive->mSource.end(); it != it_end; ++it)
-            it->mUsedInSource[mIndex] = source_is_used[it.getIndex()];
+        mRawText = NULL;
     }
+
+    // SEAD_ASSERT(mpArchive->mSource.size() < 1024);
+    bool source_is_used[1024];
+
+    mRawText = detail::ShaderTextUtil::createRawText(
+        *mText,
+        mpArchive->mSourceName.getBufferPtr(),
+        mpArchive->mSourceText.getBufferPtr(),
+        mpArchive->mSource.size(),
+        source_is_used,
+        detail::PrivateResource::instance()->getShaderCompileHeap()
+    );
+
+    for (sead::Buffer<ShaderSource>::iterator it = mpArchive->mSource.begin(), it_end = mpArchive->mSource.end(); it != it_end; ++it)
+        it->mUsedInSource[mIndex] = source_is_used[it.getIndex()];
 }
 
 ShaderProgramArchive::ShaderProgramEx::ShaderProgramEx()
@@ -408,6 +419,10 @@ ShaderProgramArchive::ShaderProgramEx::ShaderProgramEx()
     , _110()
     , mVariationIndex(0)
     , mFlag(0)
+{
+}
+
+ShaderProgramArchive::ShaderProgramEx::~ShaderProgramEx()
 {
 }
 
@@ -426,34 +441,36 @@ void ShaderProgramArchive::ShaderProgramEx::initialize(ShaderProgramArchive* arc
             u32 source_index = res.ref().mSourceIndex[it.getIndex()];
             ShaderType type = ShaderType(it.getIndex());
 
-            if (source_index == 0xFFFFFFFF)
+            if (source_index != 0xFFFFFFFF)
+            {
+                it->mSource = &mpArchive->mSource[source_index];
+
+                const ResShaderMacroArray macro_arr = res.getResShaderMacroArray(type);
+                it->mCompileInfo.create(macro_arr.getNum(), program.getVariationMacroNum(), heap);
+
+                it->mCompileInfo.setName(it->mSource->getName());
+
+                for (ResShaderMacroArray::constIterator macro_it = macro_arr.begin(), macro_it_end = macro_arr.end(); macro_it != macro_it_end; ++macro_it)
+                {
+                    const ResShaderMacro macro(&(*macro_it));
+                    it->mCompileInfo.pushBackMacro(macro.getName(), macro.getValue());
+                }
+
+                program.getShader(type)->setCompileInfo(&it->mCompileInfo);
+            }
+            else
             {
                 it->mSource = NULL;
-                continue;
             }
-
-            it->mSource = &mpArchive->mSource[source_index];
-
-            const ResShaderMacroArray macro_arr = res.getResShaderMacroArray(type);
-            it->create(macro_arr.getNum(), program.getVariationMacroNum(), heap);
-
-            it->setName(it->mSource->getName());
-
-            for (ResShaderMacroArray::constIterator macro_it = macro_arr.begin(), macro_it_end = macro_arr.end(); macro_it != macro_it_end; ++macro_it)
-            {
-                const ResShaderMacro macro(&(*macro_it));
-
-                it->mMacroName.pushBack(macro.getName());
-                it->mMacroValue.pushBack(macro.getValue());
-            }
-
-            program.getShader(type)->setCompileInfo(&(*it));
         }
     }
 
-    _110.allocBuffer(program.getVariationMacroNum(), heap);
-    for (sead::Buffer<u32>::iterator it = _110.begin(), it_end = _110.end(); it != it_end; ++it)
-        *it = 0;
+    if (program.getVariationMacroNum() > 0)
+    {
+        _110.allocBuffer(program.getVariationMacroNum(), heap);
+        for (sead::Buffer<u32>::iterator it = _110.begin(), it_end = _110.end(); it != it_end; ++it)
+            *it = 0;
+    }
 
     // detail::RootNode::setNodeMeta(this, "Icon = CIRCLE_ORENGE");
 }
@@ -468,7 +485,7 @@ void ShaderProgramArchive::ShaderProgramEx::updateRawText()
             ShaderSource* source = it->mSource;
             if (source && source->mFlag.isOn(1))
             {
-                it->mSourceText = source->mRawText;
+                it->mCompileInfo.setSourceText(source->mRawText);
                 mpArchive->getShaderProgram(mIndex).reserveSetUpAllVariation();
             }
         }
