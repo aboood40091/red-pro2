@@ -1,8 +1,8 @@
 #define override
 #include <graphics/ModelNW.h>
-#include <graphics/ShapeAnimation.h>
+#include <graphics/TexturePatternAnimation.h>
 
-void ShapeAnimation::bindModel(const ModelNW* p_model, s32 index)
+void TexturePatternAnimation::bindModel(const ModelNW* p_model, s32 index)
 {
     if (mpModel)
         unbindModel();
@@ -14,13 +14,13 @@ void ShapeAnimation::bindModel(const ModelNW* p_model, s32 index)
         bindAnimObj_();
 }
 
-void ShapeAnimation::unbindModel()
+void TexturePatternAnimation::unbindModel()
 {
     mpModel = NULL;
     mIndex = -1;
 }
 
-void ShapeAnimation::bindAnimObj_()
+void TexturePatternAnimation::bindAnimObj_()
 {
     if (mpRes)
     {

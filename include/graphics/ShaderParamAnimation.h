@@ -8,27 +8,27 @@
 
 #include <nw/g3d/g3d_ShaderParamAnimObj.h>
 
-class RenderObjEx;
-class ResArchive;
+class ModelNW;
+class ModelResource;
 
 class ShaderParamAnimation : public Animation
 {
 public:
     ShaderParamAnimation();
 
-    bool init(RenderObjEx* p_render_obj, ResArchive* p_res_archive, sead::PtrArray<ResArchive>* p_res_archive_array, sead::Heap* heap);
+    bool init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap);
 
-    bool isValid() const { return mpRes && mpRenderObj; }
+    bool isValid() const { return mpRes && mpModel; }
 
-    void bindRenderObj(RenderObjEx* p_render_obj, s32 index);
-    void unbindRenderObj();
+    void bindModel(const ModelNW* p_model, s32 index);
+    void unbindModel();
 
 private:
     void bindAnimObj_();
 
 public:
-    void playColorAnim(ResArchive* p_res_archive, const sead::SafeString& name);
-    void playTexSrtAnim(ResArchive* p_res_archive, const sead::SafeString& name);
+    void playColorAnim(const ModelResource* p_mdl_res, const sead::SafeString& name);
+    void playTexSrtAnim(const ModelResource* p_mdl_res, const sead::SafeString& name);
 
     void calc() override;
 
@@ -37,13 +37,13 @@ public:
 
     nw::g3d::res::ResShaderParamAnim* getResource() const { return mpRes; }
 
-    RenderObjEx* getRenderObj() const { return mpRenderObj; }
+    const ModelNW* getModel() const { return mpModel; }
     s32 getIndex() const { return mIndex; }
 
 private:
     nw::g3d::ShaderParamAnimObj mAnimObj;
     nw::g3d::res::ResShaderParamAnim* mpRes;
-    RenderObjEx* mpRenderObj;
+    const ModelNW* mpModel;
     s32 mIndex;
     void* mpBuffer;
 };

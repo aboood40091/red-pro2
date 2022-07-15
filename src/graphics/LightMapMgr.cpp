@@ -1,18 +1,18 @@
 #include <graphics/LightMapMgr.h>
-#include <graphics/RenderObjEx.h>
+#include <graphics/ModelNW.h>
 
 SEAD_TASK_SINGLETON_DISPOSER_IMPL(LightMapMgr)
 
-void LightMapMgr::setRenderObjLightMap(RenderObjEx& render_obj, bool no_mat_dl) const
+void LightMapMgr::setModelLightMap(ModelNW* p_model, bool set_mdl_dl_dirty) const
 {
     if (!mIsInitialized)
         return;
 
-    agl::g3d::ModelEx& model = render_obj.getModelEx();
+    agl::g3d::ModelEx& model = p_model->getModelEx();
 
     for (s32 idx_shape = 0, num_shape = model.GetShapeCount(); idx_shape < num_shape; idx_shape++)
     {
-        RenderObjEx::LightMap& light_map = render_obj.getShape(idx_shape).light_map;
+        ModelNW::LightMap& light_map = p_model->getShape(idx_shape).light_map;
         light_map.clear();
 
         agl::g3d::ModelShaderAssign& shader_assign = model.getShaderAssign(idx_shape);
@@ -44,6 +44,6 @@ void LightMapMgr::setRenderObjLightMap(RenderObjEx& render_obj, bool no_mat_dl) 
         }
     }
 
-    if (no_mat_dl)
-        render_obj.disableMaterialDL();
+    if (set_mdl_dl_dirty)
+        p_model->setDisplayListDirty();
 }

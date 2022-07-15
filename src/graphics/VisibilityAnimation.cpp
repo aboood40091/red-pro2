@@ -1,22 +1,22 @@
 #define override
-#include <graphics/RenderObjEx.h>
+#include <graphics/ModelNW.h>
 #include <graphics/VisibilityAnimation.h>
 
-void VisibilityAnimation::bindRenderObj(RenderObjEx* p_render_obj, s32 index)
+void VisibilityAnimation::bindModel(const ModelNW* p_model, s32 index)
 {
-    if (mpRenderObj)
-        unbindRenderObj();
+    if (mpModel)
+        unbindModel();
 
-    mpRenderObj = p_render_obj;
+    mpModel = p_model;
     mIndex = index;
 
     if (mpRes)
         bindAnimObj_();
 }
 
-void VisibilityAnimation::unbindRenderObj()
+void VisibilityAnimation::unbindModel()
 {
-    mpRenderObj = NULL;
+    mpModel = NULL;
     mIndex = -1;
 }
 
@@ -24,7 +24,7 @@ void VisibilityAnimation::bindAnimObj_()
 {
     if (mpRes)
     {
-        mAnimObj.Bind(mpRenderObj->getModelEx().GetResource());
+        mAnimObj.Bind(mpModel->getModelEx().GetResource());
         mAnimObj.ClearResult();
     }
 }

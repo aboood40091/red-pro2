@@ -1,4 +1,4 @@
-#include <graphics/ResArchive.h>
+#include <graphics/ModelResource.h>
 #include <graphics/ShaderHolder.h>
 #include <root/ResMgr.h>
 
@@ -6,30 +6,30 @@
 #include <gfx/seadGraphics.h>
 #include <math/seadMathCalcCommon.h>
 
-ResArchive::ResArchive()
+ModelResource::ModelResource()
     : mResFile(NULL)
-    , mShaderArchive()
+    , mModelShaderArchive()
     , _1c(0)
 {
 }
 
-ResArchive::~ResArchive()
+ModelResource::~ModelResource()
 {
     if (mResFile)
         destroy();
 }
 
-void ResArchive::destroy()
+void ModelResource::destroy()
 {
     for (s32 i = 0; i < mResFile->GetModelCount(); i++)
-        if (mShaderArchive[i].obj)
-            mShaderArchive[i].obj->destroy();
+        if (mModelShaderArchive[i].obj)
+            mModelShaderArchive[i].obj->destroy();
 
     mResFile->Cleanup();
     mResFile = NULL;
 }
 
-void ResArchive::load(
+void ModelResource::load(
     sead::ArchiveRes* archive, const sead::SafeString& filename,
     const nw::g3d::res::ResFile* tex_res_file, sead::Heap* heap
 )
@@ -50,7 +50,7 @@ void ResArchive::load(
         mResFile->Bind(tex_res_file, 1);
 
     s32 num_model = mResFile->GetModelCount();
-    if (!mShaderArchive.tryAllocBuffer(num_model, heap))
+    if (!mModelShaderArchive.tryAllocBuffer(num_model, heap))
         return;
 
     for (s32 idx_model = 0; idx_model < num_model; idx_model++)
@@ -85,7 +85,7 @@ void ResArchive::load(
 
         if (!is_local)
         {
-            mShaderArchive[idx_model].obj = NULL;
+            mModelShaderArchive[idx_model].obj = NULL;
             // They forgot to free "shader_program_archive"...
         }
         else
@@ -96,9 +96,9 @@ void ResArchive::load(
                 )
             );
 
-            mShaderArchive[idx_model].obj = shader_program_archive;
-            mShaderArchive[idx_model].res_binary_archive = res_binary_shader_archive;
-            mShaderArchive[idx_model].res_archive = NULL;
+            mModelShaderArchive[idx_model].obj = shader_program_archive;
+            mModelShaderArchive[idx_model].res_binary_archive = res_binary_shader_archive;
+            mModelShaderArchive[idx_model].res_archive = NULL;
 
             shader_program_archive->createWithOption(res_binary_shader_archive, NULL, 0, heap);
 
@@ -108,14 +108,14 @@ void ResArchive::load(
             }
             sead::Graphics::instance()->unlockDrawContext();
 
-            mShaderArchive[idx_model].initialized = true;
+            mModelShaderArchive[idx_model].initialized = true;
 
             agl::g3d::ShaderUtilG3D::setMatBlockAndShaderParamOffs(mResFile, shader_program_archive, "Mat");
         }
     }
 }
 
-agl::ShaderProgramArchive* ResArchive::getShaderProgramArchive(s32 idx_model) const
+agl::ShaderProgramArchive* ModelResource::getModelShaderProgramArchive(s32 idx_model) const
 {
-    return mShaderArchive[idx_model].obj;
+    return mModelShaderArchive[idx_model].obj;
 }

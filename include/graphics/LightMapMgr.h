@@ -4,7 +4,7 @@
 #include <framework/seadTaskMgr.h>
 #include <light/aglLightMapMgr.h>
 
-class RenderObjEx;
+class ModelNW;
 
 class LightMapMgr : public sead::CalculateTask
 {
@@ -20,7 +20,7 @@ public:
     agl::lght::LightMapMgr& getLightMapMgr() { return mLightMapMgr; }
     const agl::lght::LightMapMgr& getLightMapMgr() const { return mLightMapMgr; }
 
-    void setRenderObjLightMap(RenderObjEx& render_obj, bool no_mat_dl) const;
+    void setModelLightMap(ModelNW* p_model, bool set_mdl_dl_dirty) const;
 
 private:
     u32 _cc[(0x2070 - 0xCC) / sizeof(u32)];

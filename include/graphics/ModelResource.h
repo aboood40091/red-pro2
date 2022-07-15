@@ -1,6 +1,6 @@
 #pragma once
 
-#include <graphics/ShaderArchive.h>
+#include <graphics/ModelShaderArchive.h>
 
 #include <container/seadBuffer.h>
 #include <heap/seadDisposer.h>
@@ -9,11 +9,11 @@
 
 #include <nw/g3d/res/g3d_ResFile.h>
 
-class ResArchive : public sead::IDisposer
+class ModelResource : public sead::IDisposer
 {
 public:
-    ResArchive();
-    virtual ~ResArchive();
+    ModelResource();
+    virtual ~ModelResource();
 
     void destroy();
 
@@ -22,11 +22,11 @@ public:
         const nw::g3d::res::ResFile* tex_res_file, sead::Heap* heap
     );
 
-    agl::ShaderProgramArchive* getShaderProgramArchive(s32 idx_model) const;
+    agl::ShaderProgramArchive* getModelShaderProgramArchive(s32 idx_model) const;
 
 private:
     nw::g3d::res::ResFile* mResFile;
-    sead::Buffer<ShaderArchive> mShaderArchive;
+    sead::Buffer<ModelShaderArchive> mModelShaderArchive;
     u32 _1c;
 };
-static_assert(sizeof(ResArchive) == 0x20, "ResArchive size mismatch");
+static_assert(sizeof(ModelResource) == 0x20, "ModelResource size mismatch");

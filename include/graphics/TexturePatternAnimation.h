@@ -6,15 +6,15 @@
 #include <heap/seadHeap.h>
 #include <prim/seadSafeString.h>
 
-#include <nw/g3d/g3d_VisibilityAnimObj.h>
+#include <nw/g3d/g3d_TexPatternAnimObj.h>
 
 class ModelNW;
 class ModelResource;
 
-class VisibilityAnimation : public Animation
+class TexturePatternAnimation : public Animation
 {
 public:
-    VisibilityAnimation();
+    TexturePatternAnimation();
 
     bool init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap);
 
@@ -31,19 +31,18 @@ public:
 
     void calc() override;
 
-    nw::g3d::VisibilityAnimObj& getAnimObj() { return mAnimObj; }
-    const nw::g3d::VisibilityAnimObj& getAnimObj() const { return mAnimObj; }
+    nw::g3d::TexPatternAnimObj& getAnimObj() { return mAnimObj; }
+    const nw::g3d::TexPatternAnimObj& getAnimObj() const { return mAnimObj; }
 
-    nw::g3d::res::ResVisibilityAnim* getResource() const { return mpRes; }
+    nw::g3d::res::ResTexPatternAnim* getResource() const { return mpRes; }
 
     const ModelNW* getModel() const { return mpModel; }
     s32 getIndex() const { return mIndex; }
 
 private:
-    nw::g3d::VisibilityAnimObj mAnimObj;
-    nw::g3d::res::ResVisibilityAnim* mpRes;
+    nw::g3d::TexPatternAnimObj mAnimObj;
+    nw::g3d::res::ResTexPatternAnim* mpRes;
     const ModelNW* mpModel;
     s32 mIndex;
-    void* mpBuffer;
 };
-static_assert(sizeof(VisibilityAnimation) == 0x84, "VisibilityAnimation size mismatch");
+static_assert(sizeof(TexturePatternAnimation) == 0x84, "TexturePatternAnimation size mismatch");

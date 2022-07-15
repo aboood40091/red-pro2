@@ -1,9 +1,10 @@
 #pragma once
 
 #include <graphics/LightMapMgr.h>
-#include <graphics/RenderObj.h>
-#include <graphics/ResArchive.h>
+#include <graphics/Model.h>
 
+#include <common/aglDisplayList.h>
+#include <common/aglShaderProgramArchive.h>
 #include <common/aglUniformBlock.h>
 #include <container/seadBuffer.h>
 #include <container/seadPtrArray.h>
@@ -15,17 +16,17 @@
 
 #define override
 
-#include <graphics/MaterialEx.h>
+#include <graphics/MaterialNW.h>
 
 #include <graphics/SkeletalAnimation.h>
-#include <graphics/TexPatternAnimation.h>
+#include <graphics/TexturePatternAnimation.h>
 #include <graphics/ShaderParamAnimation.h>
 #include <graphics/VisibilityAnimation.h>
 #include <graphics/ShapeAnimation.h>
 
-class RenderObjEx : public RenderObj
+class ModelNW : public Model
 {
-    SEAD_RTTI_OVERRIDE(RenderObjEx, RenderObj)
+    SEAD_RTTI_OVERRIDE(ModelNW, Model)
 
 public:
     struct ShaderAssign
@@ -65,7 +66,7 @@ public:
         agl::SamplerLocation sdw_location;
         agl::SamplerLocation rfl_location;
     };
-    static_assert(sizeof(ShaderAssign) == 0x64, "RenderObjEx::ShaderAssign size mismatch");
+    static_assert(sizeof(ShaderAssign) == 0x64, "ModelNW::ShaderAssign size mismatch");
 
     struct ShapeRenderInfo
     {
@@ -76,7 +77,7 @@ public:
         agl::DisplayList attrib_dl;
         agl::DisplayList mat_dl;
     };
-    static_assert(sizeof(ShapeRenderInfo) == 0x30, "RenderObjEx::ShapeRenderInfo size mismatch");
+    static_assert(sizeof(ShapeRenderInfo) == 0x30, "ModelNW::ShapeRenderInfo size mismatch");
 
     struct LightMap
     {
@@ -89,7 +90,7 @@ public:
         s32 idx_lghtmap[LightMapMgr::cLightMapNum];
         s32 idx_sampler[LightMapMgr::cLightMapNum];
     };
-    static_assert(sizeof(LightMap) == 0x10, "RenderObjEx::LightMap size mismatch");
+    static_assert(sizeof(LightMap) == 0x10, "ModelNW::LightMap size mismatch");
 
     struct Shape
     {
@@ -97,17 +98,17 @@ public:
         LightMap light_map;
         sead::Buffer<nw::g3d::fnd::GfxBuffer> vtx_buffer;
     };
-    static_assert(sizeof(Shape) == 0x2C, "RenderObjEx::Shape size mismatch");
+    static_assert(sizeof(Shape) == 0x2C, "ModelNW::Shape size mismatch");
 
 public:
     // Calculates the drawing resources for skeleton matrices, shapes and materials
     void calc() override;
 
     // Updates buffers for the GPU
-    void calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, ObjLayerRenderer* renderer) override;
+    void calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) override;
 
     // (Does nothing)
-    void updateView(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, ObjLayerRenderer* renderer) override
+    void updateView(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) override
     {
     }
 
@@ -117,15 +118,15 @@ public:
     // 1. Shadow-only shapes and reflection-only shapes are always invisible
     // 2. Shadow casting for a shape is automatically enabled if "shadow_cast" is not present in its material's render info
 
-    void drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, ObjLayerRenderer* renderer) override;
-    void drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, ObjLayerRenderer* renderer) override;
+    void drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) override;
+    void drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) override;
 
     // This draws the shadow of shadow-casting shapes
-    void drawShadowOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, ObjLayerRenderer* renderer) override;
+    void drawShadowOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) override;
 
     // These draws the reflection on shapes
-    void drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, ObjLayerRenderer* renderer) override;
-    void drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, ObjLayerRenderer* renderer) override;
+    void drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) override;
+    void drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) override;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -135,16 +136,16 @@ public:
     }
 
 public:
-    RenderObjEx();
-    virtual ~RenderObjEx();
+    ModelNW();
+    virtual ~ModelNW();
 
     void updateAnimations() override;
     void updateModel() override;
 
     // Rotation + Translation matrix
-    void setMtxRT(const sead::Matrix34f& mtxRT) override
+    void setMtxRT(const sead::Matrix34f& rt) override
     {
-        mMtxRT = mtxRT;
+        mMtxRT = rt;
         mBoundingEnableFlag.set(1 << 1);
     }
 
@@ -169,21 +170,21 @@ public:
     // Determines if there are any shapes that can be drawn by draw*Xlu()
     bool hasXlu() const override;
 
-    s32 getBoneIndex(const sead::SafeString& name) const override;
+    s32 searchBoneIndex(const sead::SafeString& name) const override;
     const char* getBoneName(s32 index) const override;
-    u32 getBoneCount() const override;
+    u32 getBoneNum() const override;
 
-    void setBoneLocalSRT(s32 index, const sead::Matrix34f& mtxRT, const sead::Vector3f& scale) override;
-    void getBoneLocalSRT(s32 index, sead::Matrix34f* mtxRT = NULL, sead::Vector3f* scale = NULL) const override;
+    void setBoneLocalMatrix(s32 index, const sead::Matrix34f& rt, const sead::Vector3f& scale) override;
+    void getBoneLocalMatrix(s32 index, sead::Matrix34f* rt = NULL, sead::Vector3f* scale = NULL) const override;
 
-    void setBoneWorldSRT(s32 index, const sead::Matrix34f& mtxSRT) override;
-    void getBoneWorldSRT(s32 index, sead::Matrix34f& mtxSRT) const override;
+    void setBoneWorldMatrix(s32 index, const sead::Matrix34f& mtx) override;
+    void getBoneWorldMatrix(s32 index, sead::Matrix34f* mtx) const override;
 
-    void setBoneVisibility(s32 index, bool visibility) override;
-    bool getBoneVisibility(s32 index) const override; // deleted
+    void setBoneVisible(s32 index, bool visible) override;
+    bool isBoneVisible(s32 index) const override; // deleted
 
-    u32 getMaterialCount() const override;
-    s32 getMaterialIndex(const sead::SafeString& name) const override;
+    u32 getMaterialNum() const override;
+    s32 searchMaterialIndex(const sead::SafeString& name) const override;
     const char* getMaterialName(s32 index) const override;
 
     Material* getMaterial(s32 index) const override
@@ -191,8 +192,8 @@ public:
         return mpMaterial[index];
     }
 
-    void setMaterialVisibility(s32 index, bool visibility) override;
-    bool getMaterialVisibility(s32 index) const override; // deleted
+    void setMaterialVisible(s32 index, bool visible) override;
+    bool isMaterialVisible(s32 index) const override; // deleted
 
     void setBoundingEnable(bool enable) override // deleted
     {
@@ -209,7 +210,7 @@ public:
         return mBounding;
     }
 
-    void calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, ObjLayer* p_shadow_layer, ObjLayerRenderer* renderer) override;
+    void calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjBaseLayer* p_shadow_layer, RenderMgr* p_render_mgr) override;
 
     sead::SafeString getName() const override
     {
@@ -258,7 +259,7 @@ public:
     }
 
 public:
-    void create(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode, sead::Heap* heap);
+    void initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode, sead::Heap* heap);
 
     agl::g3d::ModelEx& getModelEx() { return mModelEx; }
     const agl::g3d::ModelEx& getModelEx() const { return mModelEx; }
@@ -268,7 +269,7 @@ public:
 
     void activateMaterial(const agl::g3d::ModelShaderAssign& shader_assign, const nw::g3d::MaterialObj* p_material, const LightMap& light_map) const;
 
-    void disableMaterialDL();
+    void setDisplayListDirty();
 
 private:
     void setBoundingFlag_(s32 index)
@@ -294,7 +295,7 @@ private:
     void createViewShapeShadowFlagBuffer_(s32 num_view, sead::Heap* heap);
     void initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw::g3d::MaterialObj* p_material, const nw::g3d::ShapeObj* p_shape);
     static s32 sortShapeRenderInfoCmp(const ShapeRenderInfo* a, const ShapeRenderInfo* b);
-    void updateBounding_();
+    void calcBounding_();
     void applyBlendWeight_(s32 shape_index);
     static void setBoundingFlagArray_(u32 flag_array[], const SkeletalAnimation& anim);
 
@@ -302,7 +303,7 @@ private:
     agl::g3d::ModelEx mModelEx;
     nw::g3d::SkeletalAnimBlender mSklAnimBlender;
     sead::Buffer<SkeletalAnimation*> mpSklAnim;
-    sead::Buffer<TexPatternAnimation*> mpTexAnim;
+    sead::Buffer<TexturePatternAnimation*> mpTexAnim;
     sead::Buffer<ShaderParamAnimation*> mpShuAnim;
     sead::Buffer<VisibilityAnimation*> mpVisAnim;
     sead::Buffer<ShapeAnimation*> mpShaAnim;
@@ -314,7 +315,7 @@ private:
     sead::PtrArray<ShapeRenderInfo> mOpaShapeInfo;
     sead::PtrArray<ShapeRenderInfo> mXluShapeInfo;
     sead::Buffer<ShaderAssign> mShaderAssign;
-    sead::Buffer<MaterialEx*> mpMaterial;
+    sead::Buffer<MaterialNW*> mpMaterial;
     sead::Buffer<Shape> mShape;
     sead::Matrix34f mMtxRT;
     sead::Vector3f mScale;
@@ -328,6 +329,6 @@ private:
     u32 mBoundingFlagArray[10];    // sead::UnsafeArray?
     u32 mSubBoundingFlagArray[10]; // sead::UnsafeArray?
     sead::BitFlag32 _1a4;
-    bool mMaterialNoDL;
+    bool mDisplayListDirty;
 };
-static_assert(sizeof(RenderObjEx) == 0x1AC, "RenderObjEx size mismatch"); // Incomplete
+static_assert(sizeof(ModelNW) == 0x1AC, "ModelNW size mismatch"); // Incomplete

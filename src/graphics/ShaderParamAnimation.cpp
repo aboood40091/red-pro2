@@ -1,27 +1,27 @@
 #define override
-#include <graphics/RenderObjEx.h>
+#include <graphics/ModelNW.h>
 #include <graphics/ShaderParamAnimation.h>
 
-void ShaderParamAnimation::bindRenderObj(RenderObjEx* p_render_obj, s32 index)
+void ShaderParamAnimation::bindModel(const ModelNW* p_model, s32 index)
 {
-    if (mpRenderObj)
-        unbindRenderObj();
+    if (mpModel)
+        unbindModel();
 
-    mpRenderObj = p_render_obj;
+    mpModel = p_model;
     mIndex = index;
 
     if (mpRes)
         bindAnimObj_();
 }
 
-void ShaderParamAnimation::unbindRenderObj()
+void ShaderParamAnimation::unbindModel()
 {
-    mpRenderObj = NULL;
+    mpModel = NULL;
     mIndex = -1;
 }
 
 void ShaderParamAnimation::bindAnimObj_()
 {
     if (mpRes)
-        mAnimObj.Bind(mpRenderObj->getModelEx().GetResource());
+        mAnimObj.Bind(mpModel->getModelEx().GetResource());
 }

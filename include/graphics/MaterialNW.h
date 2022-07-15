@@ -4,10 +4,10 @@
 
 #include <nw/g3d/g3d_MaterialObj.h>
 
-class MaterialEx : public Material
+class MaterialNW : public Material
 {
 public:
-    MaterialEx(nw::g3d::MaterialObj* material)
+    MaterialNW(nw::g3d::MaterialObj* material)
         : mMaterialObj(material)
         , mTexSrtMtx()
     {

@@ -1,5 +1,5 @@
 #define override
-#include <graphics/MaterialEx.h>
+#include <graphics/MaterialNW.h>
 
 namespace {
 
@@ -29,7 +29,7 @@ const sead::SafeString sTevKColorStr[4] = {
 
 }
 
-void MaterialEx::setTexSrtMtx(s32 index, const sead::Vector2f& scale, const u32& rotate, const sead::Vector2f& translate)
+void MaterialNW::setTexSrtMtx(s32 index, const sead::Vector2f& scale, const u32& rotate, const sead::Vector2f& translate)
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTexMtxStr[index].cstr());
     if (param_index >= 0)
@@ -61,7 +61,7 @@ void MaterialEx::setTexSrtMtx(s32 index, const sead::Vector2f& scale, const u32&
     }
 }
 
-void MaterialEx::setTexSrt(s32 index, const sead::Vector2f& scale, const u32& rotate, const sead::Vector2f& translate)
+void MaterialNW::setTexSrt(s32 index, const sead::Vector2f& scale, const u32& rotate, const sead::Vector2f& translate)
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTexMtxStr[index].cstr());
     if (param_index >= 0)
@@ -78,7 +78,7 @@ void MaterialEx::setTexSrt(s32 index, const sead::Vector2f& scale, const u32& ro
     }
 }
 
-void MaterialEx::getTexSrt(s32 index, sead::Vector2f* p_scale, u32* p_rotate, sead::Vector2f* p_translate) const
+void MaterialNW::getTexSrt(s32 index, sead::Vector2f* p_scale, u32* p_rotate, sead::Vector2f* p_translate) const
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTexMtxStr[index].cstr());
     if (param_index < 0 || mMaterialObj->GetResShaderParam(param_index)->GetOffset() < 0)
@@ -118,7 +118,7 @@ void MaterialEx::getTexSrt(s32 index, sead::Vector2f* p_scale, u32* p_rotate, se
     }
 }
 
-void MaterialEx::setTevColor(s32 index, const sead::Color4f& color)
+void MaterialNW::setTevColor(s32 index, const sead::Color4f& color)
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTevColorStr[index].cstr());
     if (param_index >= 0)
@@ -132,7 +132,7 @@ void MaterialEx::setTevColor(s32 index, const sead::Color4f& color)
     }
 }
 
-void MaterialEx::getTevColor(s32 index, sead::Color4f& color) const
+void MaterialNW::getTevColor(s32 index, sead::Color4f& color) const
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTevColorStr[index].cstr());
     if (param_index >= 0)
@@ -146,7 +146,7 @@ void MaterialEx::getTevColor(s32 index, sead::Color4f& color) const
     }
 }
 
-void MaterialEx::setTevKColor(s32 index, const sead::Color4f& color)
+void MaterialNW::setTevKColor(s32 index, const sead::Color4f& color)
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTevKColorStr[index].cstr());
     if (param_index >= 0)
@@ -160,7 +160,7 @@ void MaterialEx::setTevKColor(s32 index, const sead::Color4f& color)
     }
 }
 
-void MaterialEx::getTevKColor(s32 index, sead::Color4f& color) const
+void MaterialNW::getTevKColor(s32 index, sead::Color4f& color) const
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTevKColorStr[index].cstr());
     if (param_index >= 0)
