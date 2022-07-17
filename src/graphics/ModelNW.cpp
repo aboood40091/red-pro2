@@ -1,6 +1,8 @@
+#include <graphics/CullViewFrustum.h>
 #include <graphics/LightMapMgr.h>
 #include <graphics/ModelNW.h>
 #include <graphics/ModelNWShadowUtil.h>
+#include <graphics/RenderMgr.h>
 #include <graphics/ShaderHolder.h>
 
 #include <gfx/seadGraphics.h>
@@ -27,7 +29,7 @@ ModelNW::ModelNW()
     , mMtxRT(sead::Matrix34f::ident)
     , mScale(sead::Vector3f::ones)
     , _128(0)
-    , _12c(3)
+    , mRenderFlag(3)
     , mBoundingEnableFlag(0)
     , mViewShapeShadowFlagBuffer()
     , mBounding(sead::Vector3f::zero, 1.0f )
@@ -35,7 +37,7 @@ ModelNW::ModelNW()
     , mShapeFlag(1)
     , mBoundingFlagArray() // TODO
     , mSubBoundingFlagArray() // ^^
-    , _1a4()
+    , mViewDepthShadowEnableFlag()
     , mDisplayListDirty(false)
 {
 }
@@ -645,18 +647,248 @@ void ModelNW::calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sea
     mModelEx.CalcView(view_index, reinterpret_cast<const nw::g3d::math::Mtx34&>(view_mtx));
 }
 
+void ModelNW::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+{
+    if (mShapeFlag.isOff(1 << 0))
+        return;
+
+    const nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
+    const CullViewFrustum* p_cull = p_render_mgr->getViewInfo(view_index).p_cull;
+    if (p_bounding && p_cull)
+        if (!p_cull->getViewVolume().TestIntersection(*p_bounding))
+            return;
+
+    DrawInfo draw_info;
+    draw_info.view_index = view_index;
+    draw_info.p_view_mtx = &view_mtx;
+    draw_info.p_proj_mtx = &proj_mtx;
+    draw_info.p_shader_program = NULL;
+    draw_info.p_shader_assign = NULL;
+    draw_info.material_index = -1;
+    draw_info.draw_shape = true;
+    draw_info.draw_reflection = false;
+    draw_info.shader_mode = agl::cShaderMode_Invalid;
+    draw_info.polygon_offset = -1;
+    draw_info.p_cull = p_cull;
+
+    if (mRenderFlag.isOn(1 << 0))
+        drawOpa_(draw_info, p_render_mgr);
+
+    if (mRenderFlag.isOn(1 << 3))
+        drawXlu_(draw_info, p_render_mgr);
+
+    agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
+}
+
+void ModelNW::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+{
+    if (mShapeFlag.isOff(1 << 0))
+        return;
+
+    const nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
+    const CullViewFrustum* p_cull = p_render_mgr->getViewInfo(view_index).p_cull;
+    if (p_bounding && p_cull)
+        if (!p_cull->getViewVolume().TestIntersection(*p_bounding))
+            return;
+
+    DrawInfo draw_info;
+    draw_info.view_index = view_index;
+    draw_info.p_view_mtx = &view_mtx;
+    draw_info.p_proj_mtx = &proj_mtx;
+    draw_info.p_shader_program = NULL;
+    draw_info.p_shader_assign = NULL;
+    draw_info.material_index = -1;
+    draw_info.draw_shape = true;
+    draw_info.draw_reflection = false;
+    draw_info.shader_mode = agl::cShaderMode_Invalid;
+    draw_info.polygon_offset = -1;
+    draw_info.p_cull = p_cull;
+
+    if (mRenderFlag.isOn(1 << 2))
+        drawOpa_(draw_info, p_render_mgr);
+
+    if (mRenderFlag.isOn(1 << 1))
+        drawXlu_(draw_info, p_render_mgr);
+
+    agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
+}
+
+void ModelNW::drawShadowOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+{
+    if (mShapeFlag.isOff(1 << 2) || mViewDepthShadowEnableFlag.isOff(1 << view_index))
+        return;
+
+    const CullViewFrustum* p_cull = p_render_mgr->getViewInfo(view_index).p_cull;
+
+    bool bounding_enable = mBoundingEnableFlag.isOn(1 << 0);
+    mBoundingEnableFlag.reset(1 << 0);
+
+    DrawInfo draw_info;
+    draw_info.view_index = view_index;
+    draw_info.p_view_mtx = &view_mtx;
+    draw_info.p_proj_mtx = &proj_mtx;
+    draw_info.p_shader_program = NULL;
+    draw_info.p_shader_assign = NULL;
+    draw_info.material_index = -1;
+    draw_info.draw_shape = false;
+    draw_info.draw_reflection = false;
+    draw_info.shader_mode = agl::cShaderMode_Invalid;
+    draw_info.polygon_offset = -1;
+    draw_info.p_cull = p_cull;
+
+    sead::Buffer<sead::BitFlag32>& shape_shadow_flag_buffer = mViewShapeShadowFlagBuffer[view_index];
+
+    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mOpaShapeInfo.constBegin(), it_end = mOpaShapeInfo.constEnd(); it != it_end; ++it)
+    {
+        const ShapeRenderInfo& render_info = *it;
+        s32 idx_shape = render_info.idx_shape;
+        const nw::g3d::ShapeObj* p_shape;
+
+        bool has_shadow = true;
+        if (render_info.flag.isOff(1 << 2))
+            has_shadow = false;
+
+        else
+        {
+            p_shape = mModelEx.GetShape(idx_shape);
+            s32 idx_material = p_shape->GetMaterialIndex();
+            s32 idx_bone = p_shape->GetBoneIndex();
+
+            if (!mModelEx.IsMatVisible(idx_material) ||
+                !mModelEx.IsBoneVisible(idx_bone) ||
+                !mModelEx.getMaterialEx(idx_material).get_20())
+            {
+                has_shadow = false;
+            }
+        }
+
+        if (!has_shadow || shape_shadow_flag_buffer[idx_shape].isOff(1 << 0))
+        {
+            continue;
+        }
+        else
+        {
+            drawShape_(draw_info, render_info, p_render_mgr);
+        }
+    }
+
+    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mXluShapeInfo.constBegin(), it_end = mXluShapeInfo.constEnd(); it != it_end; ++it)
+    {
+        const ShapeRenderInfo& render_info = *it;
+        s32 idx_shape = render_info.idx_shape;
+        const nw::g3d::ShapeObj* p_shape;
+
+        bool has_shadow = true;
+        if (render_info.flag.isOff(1 << 2))
+            has_shadow = false;
+
+        else
+        {
+            p_shape = mModelEx.GetShape(idx_shape);
+            s32 idx_material = p_shape->GetMaterialIndex();
+            s32 idx_bone = p_shape->GetBoneIndex();
+
+            if (!mModelEx.IsMatVisible(idx_material) ||
+                !mModelEx.IsBoneVisible(idx_bone) ||
+                !mModelEx.getMaterialEx(idx_material).get_20())
+            {
+                has_shadow = false;
+            }
+        }
+
+        if (!has_shadow || shape_shadow_flag_buffer[idx_shape].isOff(1 << 0))
+        {
+            continue;
+        }
+        else
+        {
+            drawShape_(draw_info, render_info, p_render_mgr);
+        }
+    }
+
+    mBoundingEnableFlag.change(1 << 0, bounding_enable);
+
+    agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
+}
+
+void ModelNW::drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+{
+    if (mShapeFlag.isOff(1 << 1))
+        return;
+
+    const nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
+    const CullViewFrustum* p_cull = p_render_mgr->getViewInfo(view_index).p_cull;
+    if (p_bounding && p_cull)
+        if (!p_cull->getViewVolume().TestIntersection(*p_bounding))
+            return;
+
+    DrawInfo draw_info;
+    draw_info.view_index = view_index;
+    draw_info.p_view_mtx = &view_mtx;
+    draw_info.p_proj_mtx = &proj_mtx;
+    draw_info.p_shader_program = NULL;
+    draw_info.p_shader_assign = NULL;
+    draw_info.material_index = -1;
+    draw_info.draw_shape = true;
+    draw_info.draw_reflection = true;
+    draw_info.shader_mode = agl::cShaderMode_Invalid;
+    draw_info.polygon_offset = -1;
+    draw_info.p_cull = p_cull;
+
+    if (mRenderFlag.isOn(1 << 0))
+        drawOpa_(draw_info, p_render_mgr);
+
+    if (mRenderFlag.isOn(1 << 3))
+        drawXlu_(draw_info, p_render_mgr);
+
+    agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
+}
+
+void ModelNW::drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+{
+    if (mShapeFlag.isOff(1 << 1))
+        return;
+
+    const nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
+    const CullViewFrustum* p_cull = p_render_mgr->getViewInfo(view_index).p_cull;
+    if (p_bounding && p_cull)
+        if (!p_cull->getViewVolume().TestIntersection(*p_bounding))
+            return;
+
+    DrawInfo draw_info;
+    draw_info.view_index = view_index;
+    draw_info.p_view_mtx = &view_mtx;
+    draw_info.p_proj_mtx = &proj_mtx;
+    draw_info.p_shader_program = NULL;
+    draw_info.p_shader_assign = NULL;
+    draw_info.material_index = -1;
+    draw_info.draw_shape = true;
+    draw_info.draw_reflection = true;
+    draw_info.shader_mode = agl::cShaderMode_Invalid;
+    draw_info.polygon_offset = -1;
+    draw_info.p_cull = p_cull;
+
+    if (mRenderFlag.isOn(1 << 1))
+        drawXlu_(draw_info, p_render_mgr);
+
+    if (mRenderFlag.isOn(1 << 2))
+        drawOpa_(draw_info, p_render_mgr);
+
+    agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
+}
+
 // -------- Non-matching, but I think I implemented these better --------
 
 bool ModelNW::hasOpa() const
 {
-    return (_12c.isOn(1 << 0) && !mOpaShapeInfo.isEmpty()) ||
-           (_12c.isOn(1 << 3) && !mXluShapeInfo.isEmpty());
+    return (mRenderFlag.isOn(1 << 0) && !mOpaShapeInfo.isEmpty()) ||
+           (mRenderFlag.isOn(1 << 3) && !mXluShapeInfo.isEmpty());
 }
 
 bool ModelNW::hasXlu() const
 {
-    return (_12c.isOn(1 << 2) && !mOpaShapeInfo.isEmpty()) ||
-           (_12c.isOn(1 << 1) && !mXluShapeInfo.isEmpty());
+    return (mRenderFlag.isOn(1 << 2) && !mOpaShapeInfo.isEmpty()) ||
+           (mRenderFlag.isOn(1 << 1) && !mXluShapeInfo.isEmpty());
 }
 
 // ----------------------------------------------------------------------
@@ -918,14 +1150,14 @@ bool ModelNW::isBoneVisible(s32 index) const
 
 void ModelNW::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjBaseLayer* p_shadow_layer, RenderMgr* p_render_mgr)
 {
-    if (!getBoundingEnable())
+    if (!isBoundingEnable())
         return;
 
     s32 view_index = p_shadow_layer->getViewIndex();
     sead::Buffer<sead::BitFlag32>& shape_shadow_flag_buffer = mViewShapeShadowFlagBuffer[view_index];
 
     u32 view_mask = sead::BitFlag32::makeMask(view_index);
-    _1a4.reset(view_mask);
+    mViewDepthShadowEnableFlag.reset(view_mask);
 
     DCZeroRange(shape_shadow_flag_buffer.getBufferPtr(), sizeof(sead::BitFlag32) * shape_shadow_flag_buffer.size());
 
@@ -969,7 +1201,7 @@ void ModelNW::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, Re
                 sead::BitFlag32* p_shadow_flag = &shape_shadow_flag_buffer[idx_shape];
                 *p_shadow_flag = p_depth_shadow->checkAndUpdate(bounding);
                 if (!p_shadow_flag->isZero())
-                    _1a4.set(view_mask);
+                    mViewDepthShadowEnableFlag.set(view_mask);
             }
         }
     }
@@ -1014,7 +1246,7 @@ void ModelNW::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, Re
                 sead::BitFlag32* p_shadow_flag = &shape_shadow_flag_buffer[idx_shape];
                 *p_shadow_flag = p_depth_shadow->checkAndUpdate(bounding);
                 if (!p_shadow_flag->isZero())
-                    _1a4.set(view_mask);
+                    mViewDepthShadowEnableFlag.set(view_mask);
             }
         }
     }

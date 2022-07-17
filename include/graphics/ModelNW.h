@@ -24,6 +24,8 @@
 #include <graphics/VisibilityAnimation.h>
 #include <graphics/ShapeAnimation.h>
 
+class CullViewFrustum;
+
 class ModelNW : public Model
 {
     SEAD_RTTI_OVERRIDE(ModelNW, Model)
@@ -99,6 +101,22 @@ public:
         sead::Buffer<nw::g3d::fnd::GfxBuffer> vtx_buffer;
     };
     static_assert(sizeof(Shape) == 0x2C, "ModelNW::Shape size mismatch");
+
+    struct DrawInfo
+    {
+        s32 view_index;
+        const sead::Matrix34f* p_view_mtx;
+        const sead::Matrix44f* p_proj_mtx;
+        const agl::ShaderProgram* p_shader_program;
+        const ShaderAssign* p_shader_assign;
+        s32 material_index;
+        bool draw_shape;
+        bool draw_reflection;
+        agl::ShaderMode shader_mode;
+        s32 polygon_offset;
+        const CullViewFrustum* p_cull;
+    };
+    static_assert(sizeof(DrawInfo) == 0x28, "ModelNW::DrawInfo size mismatch");
 
 public:
     // Calculates the drawing resources for skeleton matrices, shapes and materials
@@ -200,7 +218,7 @@ public:
         mBoundingEnableFlag.change(1 << 0, enable);
     }
 
-    bool getBoundingEnable() const override
+    bool isBoundingEnable() const override
     {
         return mBoundingEnableFlag.isOn(1 << 0);
     }
@@ -299,6 +317,11 @@ private:
     void applyBlendWeight_(s32 shape_index);
     static void setBoundingFlagArray_(u32 flag_array[], const SkeletalAnimation& anim);
 
+    void drawOpa_(const DrawInfo& draw_info, const RenderMgr* p_render_mgr) const;
+    void drawXlu_(const DrawInfo& draw_info, const RenderMgr* p_render_mgr) const;
+
+    void drawShape_(const DrawInfo& draw_info, const ShapeRenderInfo& render_info, const RenderMgr* p_render_mgr) const;
+
 private:
     agl::g3d::ModelEx mModelEx;
     nw::g3d::SkeletalAnimBlender mSklAnimBlender;
@@ -320,7 +343,7 @@ private:
     sead::Matrix34f mMtxRT;
     sead::Vector3f mScale;
     u8 _128;
-    sead::BitFlag32 _12c;
+    sead::BitFlag32 mRenderFlag;
     sead::BitFlag32 mBoundingEnableFlag;
     sead::Buffer< sead::Buffer<sead::BitFlag32> > mViewShapeShadowFlagBuffer;
     sead::Sphere3f mBounding;
@@ -328,7 +351,7 @@ private:
     sead::BitFlag32 mShapeFlag; // & 4: a shape has shadow cast, & 2: a shape has reflection, & 1: a shape is visible
     u32 mBoundingFlagArray[10];    // sead::UnsafeArray?
     u32 mSubBoundingFlagArray[10]; // sead::UnsafeArray?
-    sead::BitFlag32 _1a4;
+    sead::BitFlag32 mViewDepthShadowEnableFlag;
     bool mDisplayListDirty;
 };
 static_assert(sizeof(ModelNW) == 0x1AC, "ModelNW size mismatch"); // Incomplete

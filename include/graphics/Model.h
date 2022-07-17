@@ -42,7 +42,7 @@ public:
     virtual void setMaterialVisible(s32 index, bool visible) = 0;
     virtual bool isMaterialVisible(s32 index) const = 0;
     virtual void setBoundingEnable(bool enable) = 0;
-    virtual bool getBoundingEnable() const = 0;
+    virtual bool isBoundingEnable() const = 0;
     virtual const sead::Sphere3f& getBounding() const = 0;
     virtual void calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjBaseLayer* p_shadow_layer, RenderMgr* p_render_mgr) = 0;
     virtual sead::SafeString getName() const = 0;
