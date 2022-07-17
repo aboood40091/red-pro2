@@ -6,6 +6,7 @@
 #include <graphics/ShaderHolder.h>
 
 #include <gfx/seadGraphics.h>
+#include <util/aglPrimitiveTexture.h>
 
 ModelNW::ModelNW()
     : Model()
@@ -645,6 +646,182 @@ void ModelNW::calc()
 void ModelNW::calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
 {
     mModelEx.CalcView(view_index, reinterpret_cast<const nw::g3d::math::Mtx34&>(view_mtx));
+}
+
+void ModelNW::drawOpa_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const
+{
+    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mOpaShapeInfo.constBegin(), it_end = mOpaShapeInfo.constEnd(); it != it_end; ++it)
+        drawShape_(draw_info, *it, p_render_mgr);
+}
+
+void ModelNW::drawXlu_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const
+{
+    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mXluShapeInfo.constBegin(), it_end = mXluShapeInfo.constEnd(); it != it_end; ++it)
+        drawShape_(draw_info, *it, p_render_mgr);
+}
+
+void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info, const RenderMgr* p_render_mgr) const
+{
+    s32 idx_shape = render_info.idx_shape;
+    const nw::g3d::ShapeObj* p_shape = mModelEx.GetShape(idx_shape);
+
+    s32 idx_material = p_shape->GetMaterialIndex();
+    const nw::g3d::MaterialObj* p_material = mModelEx.getMaterialEx(idx_material).getMaterialObj();
+
+    const agl::g3d::ModelShaderAssign& shader_assign = mModelEx.getShaderAssign(idx_shape);
+
+    s32 idx_bone = p_shape->GetBoneIndex();
+
+    if (!mModelEx.IsMatVisible(idx_material) ||
+        !mModelEx.IsBoneVisible(idx_bone) ||
+        !mModelEx.getMaterialEx(idx_material).get_20())
+    {
+        return;
+    }
+
+    if (draw_info.draw_reflection)
+    {
+        if (render_info.flag.isOff(1 << 1))
+            return;
+    }
+    else if (draw_info.draw_shape)
+    {
+        if (render_info.flag.isOff(1 << 0))
+            return;
+    }
+
+    s32 bounding_interset = 1;
+    if (mBoundingEnableFlag.isOn(1 << 0) && draw_info.p_cull)
+        if (bounding_interset = draw_info.p_cull->getViewVolume().TestIntersectionEx(*p_shape->GetBounding()), bounding_interset < 0)
+            return;
+
+    const agl::ShaderProgram* p_shader_program = shader_assign.getShaderProgram();
+    if (draw_info.p_shader_program != p_shader_program)
+    {
+        draw_info.p_shader_program = p_shader_program;
+        draw_info.p_shader_assign = const_cast<ShaderAssign*>(&mShaderAssign[idx_shape]);
+        draw_info.shader_mode = p_shader_program->activate(draw_info.shader_mode);
+        draw_info.material_index = -1;
+
+        if (draw_info.p_shader_program != draw_info.p_shader_assign->p_shader_program)
+        {
+            draw_info.p_shader_assign->p_shader_program = draw_info.p_shader_program;
+            draw_info.p_shader_assign->updateLocation();
+
+            render_info.attrib_dl.clear();
+            render_info.mat_dl.clear();
+        }
+
+        p_render_mgr->getModelEnvView().getUniformBlock(draw_info.view_index).setUniform(draw_info.p_shader_assign->env_location);
+
+        if (draw_info.p_shader_assign->sdw_location.isValid())
+        {
+            const agl::TextureSampler& tex_sampler = p_render_mgr->getShadowMap()
+                                                        ? *p_render_mgr->getShadowMap()
+                                                        : agl::utl::PrimitiveTexture::instance()->getTextureSampler(9);
+
+            tex_sampler.activate(draw_info.p_shader_assign->sdw_location, 15);
+        }
+
+        if (draw_info.p_shader_assign->rfl_location.isValid())
+        {
+            const agl::TextureSampler& tex_sampler = p_render_mgr->getReflectionMap()
+                                                        ? *p_render_mgr->getReflectionMap()
+                                                        : agl::utl::PrimitiveTexture::instance()->getTextureSampler(2);
+
+            tex_sampler.activate(draw_info.p_shader_assign->rfl_location, 14);
+        }
+    }
+
+    s32 shp_vtx_location = draw_info.p_shader_assign->shp_location.getVertexLocation();
+    if (shp_vtx_location != -1)
+        p_shape->GetShpBlock(draw_info.view_index).LoadVertexUniforms(shp_vtx_location);
+
+    s32 shp_frg_location = draw_info.p_shader_assign->shp_location.getFragmentLocation();
+    if (shp_frg_location != -1)
+        p_shape->GetShpBlock(draw_info.view_index).LoadFragmentUniforms(shp_frg_location);
+
+    s32 mtx_vtx_location = draw_info.p_shader_assign->mtx_location.getVertexLocation();
+    if (mtx_vtx_location != -1)
+    {
+        if (p_shape->IsRigidBody())
+            p_shape->GetShpBlock(draw_info.view_index).LoadVertexUniforms(mtx_vtx_location);
+
+        else
+            mModelEx.GetSkeleton()->GetMtxBlock().LoadVertexUniforms(mtx_vtx_location);
+    }
+
+    if (draw_info.material_index != idx_material)
+    {
+        draw_info.material_index = idx_material;
+
+        if (!render_info.mat_dl.isEmpty() && !mDisplayListDirty)
+            render_info.mat_dl.call();
+
+        else
+            activateMaterial(shader_assign, p_material, mShape[idx_shape].light_map);
+
+        if (_128 == 0)
+        {
+            if (draw_info.draw_shape)
+            {
+                p_material->GetResRenderState()->Load();
+
+                if (render_info.polygon_offset >= 0)
+                {
+                    nw::g3d::fnd::GfxPolygonCtrl polygon_ctrl = p_material->GetResRenderState()->GetPolygonCtrl();
+                    polygon_ctrl.SetPolygonOffsetFrontEnable(GX2_ENABLE);
+                    polygon_ctrl.Load();
+
+                    if (draw_info.polygon_offset != render_info.polygon_offset)
+                    {
+                        draw_info.polygon_offset = render_info.polygon_offset;
+                        p_render_mgr->getViewInfo(draw_info.view_index).layer->setPolygonOffset(draw_info.polygon_offset);
+                    }
+                }
+            }
+            else
+            {
+                nw::g3d::fnd::GfxPolygonCtrl polygon_ctrl = p_material->GetResRenderState()->GetPolygonCtrl();
+                polygon_ctrl.SetPolygonOffsetFrontEnable(GX2_ENABLE);
+                polygon_ctrl.Load();
+
+                p_material->GetResRenderState()->GetDepthCtrl().Load();
+
+                nw::g3d::fnd::GfxAlphaTest alpha_test = p_material->GetResRenderState()->GetAlphaTest();
+                alpha_test.SetRefValue(0.5f);
+                alpha_test.Load();
+            }
+        }
+    }
+
+    if (!render_info.attrib_dl.isEmpty())
+        render_info.attrib_dl.call();
+
+    else
+        shader_assign.getAttribute().activateVertexBuffer();
+
+    const CullViewFrustum* p_cull = draw_info.p_cull;
+    const nw::g3d::res::ResMesh* p_res_mesh = p_shape->GetResMesh();
+
+    if (bounding_interset == 0 && mBoundingEnableFlag.isOn(1 << 0) && p_cull && p_res_mesh->GetSubMeshCount() > 1)
+    {
+        if (getSubBoundingFlag_(idx_shape))
+        {
+            const_cast<nw::g3d::ShapeObj*>(p_shape)->CalcSubBounding(mModelEx.GetSkeleton());
+
+            if (idx_shape < 32*10)
+                const_cast<ModelNW*>(this)->resetSubBoundingFlag_(idx_shape);
+        }
+
+        nw::g3d::CullingContext ctx;
+        while (p_shape->TestSubMeshIntersection(&ctx, p_cull->getViewVolume()))
+            p_res_mesh->DrawSubMesh(ctx.submeshIndex, ctx.submeshCount);
+    }
+    else
+    {
+        p_res_mesh->DrawSubMesh(0, p_shape->GetSubMeshCount());
+    }
 }
 
 void ModelNW::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)

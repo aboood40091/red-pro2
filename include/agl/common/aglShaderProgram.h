@@ -67,7 +67,7 @@ public:
 
     void createVariation(sead::Heap* heap);
 
-    ShaderMode activate(ShaderMode current_mode, bool use_dl) const;
+    ShaderMode activate(ShaderMode current_mode = cShaderMode_Invalid, bool use_dl = true) const;
 
     Shader* getShader(ShaderType type);
     const Shader* getShader(ShaderType type) const;

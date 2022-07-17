@@ -1,16 +1,25 @@
 #pragma once
 
-#include <basis/seadTypes.h>
-// #include <layer/aglLayer.h>
+#include <layer/aglLayer.h>
 
 // No idea what the actual name of this class is
 
-class Layer /* : public agl::lyr::Layer */
+#define override
+
+class Layer : public agl::lyr::Layer
 {
-    // SEAD_RTTI_OVERRIDE(Layer, agl::lyr::Layer)
+    SEAD_RTTI_OVERRIDE(Layer, agl::lyr::Layer)
+
+public:
+    Layer();
+    virtual ~Layer();
+
+    void preDrawImpl(const agl::lyr::RenderInfo& render_info) const override;
+    void postDrawImpl(const agl::lyr::RenderInfo& render_info) const override;
+
+    // ...
 
 protected:
-    u32 _0[(0x41C - 0x0) / sizeof(u32)]; // agl::lyr::Layer
     u8 _41c;
 };
 static_assert(sizeof(Layer) == 0x420, "Layer size mismatch");

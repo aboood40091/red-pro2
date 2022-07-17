@@ -76,8 +76,8 @@ public:
         s32 priority;
         sead::BitFlag32 flag;
         s32 polygon_offset;
-        agl::DisplayList attrib_dl;
-        agl::DisplayList mat_dl;
+        mutable agl::DisplayList attrib_dl;
+        mutable agl::DisplayList mat_dl;
     };
     static_assert(sizeof(ShapeRenderInfo) == 0x30, "ModelNW::ShapeRenderInfo size mismatch");
 
@@ -108,7 +108,7 @@ public:
         const sead::Matrix34f* p_view_mtx;
         const sead::Matrix44f* p_proj_mtx;
         const agl::ShaderProgram* p_shader_program;
-        const ShaderAssign* p_shader_assign;
+        ShaderAssign* p_shader_assign;
         s32 material_index;
         bool draw_shape;
         bool draw_reflection;
@@ -305,6 +305,11 @@ private:
         mSubBoundingFlagArray[index >> 5] |= 1 << (index & 0x1F);
     }
 
+    void resetSubBoundingFlag_(s32 index)
+    {
+        mSubBoundingFlagArray[index >> 5] &= ~(1 << (index & 0x1F));
+    }
+
     bool getSubBoundingFlag_(s32 index) const
     {
         return mSubBoundingFlagArray[index >> 5] & 1 << (index & 0x1F);
@@ -317,10 +322,10 @@ private:
     void applyBlendWeight_(s32 shape_index);
     static void setBoundingFlagArray_(u32 flag_array[], const SkeletalAnimation& anim);
 
-    void drawOpa_(const DrawInfo& draw_info, const RenderMgr* p_render_mgr) const;
-    void drawXlu_(const DrawInfo& draw_info, const RenderMgr* p_render_mgr) const;
+    void drawOpa_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const;
+    void drawXlu_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const;
 
-    void drawShape_(const DrawInfo& draw_info, const ShapeRenderInfo& render_info, const RenderMgr* p_render_mgr) const;
+    void drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info, const RenderMgr* p_render_mgr) const;
 
 private:
     agl::g3d::ModelEx mModelEx;

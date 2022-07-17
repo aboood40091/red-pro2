@@ -156,6 +156,29 @@ void UniformBlock::flush(void* p_memory, bool invalidate_gpu) const
 #endif // cafe
 }
 
+bool UniformBlock::setUniform(const void* p_data, const UniformBlockLocation& location, u32 offset, size_t size) const
+{
+    if (!location.isValid())
+        return false;
+
+    const u8* ptr = (const u8*)p_data + offset;
+
+#ifdef cafe
+    if (location.getVertexLocation() != -1)
+        GX2SetVertexUniformBlock(location.getVertexLocation(), size, ptr);
+
+    if (location.getFragmentLocation() != -1)
+        GX2SetPixelUniformBlock(location.getFragmentLocation(), size, ptr);
+
+    if (location.getGeometryLocation() != -1)
+        GX2SetGeometryUniformBlock(location.getGeometryLocation(), size, ptr);
+
+    return true;
+#else
+    return false;
+#endif
+}
+
 void UniformBlock::setData_(void* p_memory, s32 index, const void* p_data, s32 array_index, s32 array_num) const
 {
     // SEAD_ASSERT(mpHeader != nullptr && mpHeader->mpMember != nullptr);

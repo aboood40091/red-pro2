@@ -30,6 +30,10 @@ public:
 
 public:
     const ModelEnvView& getModelEnvView() const { return mModelEnvView; }
+
+    agl::TextureSampler* getShadowMap() const { return mShadowMap; }
+    agl::TextureSampler* getReflectionMap() const { return mReflectionMap; }
+
     ViewInfo& getViewInfo(s32 view_index) { return mViewInfo[view_index]; }
     const ViewInfo& getViewInfo(s32 view_index) const { return mViewInfo[view_index]; }
 

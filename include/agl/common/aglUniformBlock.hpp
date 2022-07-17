@@ -4,6 +4,11 @@ namespace agl {
 
 // There are some asserts which I won't bother with (for now)
 
+inline bool UniformBlock::setUniform(const UniformBlockLocation& location) const
+{
+    return setUniform(mCurrentBuffer, location, 0, mBlockSize);
+}
+
 inline void UniformBlock::setBool(void* p_memory, s32 index, bool data, s32 array_index) const
 {
     setInt(p_memory, index, data, array_index);

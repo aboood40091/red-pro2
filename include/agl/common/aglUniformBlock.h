@@ -1,5 +1,6 @@
 #pragma once
 
+#include <common/aglShaderLocation.h>
 #include <heap/seadHeap.h>
 #include <math/seadVector.h>
 
@@ -66,6 +67,9 @@ public:
     void flush(bool invalidate_gpu) const { flush(mCurrentBuffer, invalidate_gpu); }
     void flushNoSync(void* p_memory, bool invalidate_gpu) const;
     void flushNoSync(bool invalidate_gpu) const { flushNoSync(mCurrentBuffer, invalidate_gpu); }
+
+    bool setUniform(const void* p_data, const UniformBlockLocation& location, u32 offset, size_t size) const;
+    bool setUniform(const UniformBlockLocation& location) const;
 
     void setBool(void* p_memory, s32 index, bool data, s32 array_index = 0) const;
     void setBool(s32 index, bool data, s32 array_index = 0) const;
