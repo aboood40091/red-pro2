@@ -1,13 +1,10 @@
 #pragma once
 
-#include <math/seadMatrix.h>
-#include <math/seadVector.h>
-#include <prim/seadRuntimeTypeInfo.h>
+#include <math/rio_Matrix.h>
+#include <math/rio_Vector.h>
 
 class RenderObjBase
 {
-    SEAD_RTTI_BASE(RenderObjBase)
-
 public:
     RenderObjBase()
     {
@@ -20,23 +17,21 @@ class RenderMgr;
 
 class RenderObj : public RenderObjBase
 {
-    SEAD_RTTI_OVERRIDE(RenderObj, RenderObjBase)
-
 public:
     RenderObj()
         : RenderObjBase()
     {
     }
 
-    virtual void calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) = 0;
-    virtual void updateView(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) = 0;
-    virtual void drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) = 0;
-    virtual void drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) = 0;
-    virtual void drawShadowOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) { }
-    virtual void drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) { }
-    virtual void drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) { }
+    virtual void calcGPU(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) = 0;
+    virtual void updateView(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) = 0;
+    virtual void drawOpa(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) = 0;
+    virtual void drawXlu(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) = 0;
+    virtual void drawShadowOpa(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) { }
+    virtual void drawReflectionOpa(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) { }
+    virtual void drawReflectionXlu(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) { }
     virtual bool hasShadow() const { return false; }
 
 protected:
-    sead::Vector3f mOrderPos; // I think. Precisely used for z ordering.
+    rio::Vector3f mOrderPos; // I think. Precisely used for z ordering.
 };

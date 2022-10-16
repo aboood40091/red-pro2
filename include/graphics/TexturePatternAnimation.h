@@ -2,9 +2,7 @@
 
 #include <graphics/Animation.h>
 
-#include <container/seadPtrArray.h>
-#include <heap/seadHeap.h>
-#include <prim/seadSafeString.h>
+#include <container/PtrArray.h>
 
 #include <nw/g3d/g3d_TexPatternAnimObj.h>
 
@@ -15,8 +13,9 @@ class TexturePatternAnimation : public Animation
 {
 public:
     TexturePatternAnimation();
+    ~TexturePatternAnimation();
 
-    bool init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap);
+    bool init(const ModelNW* p_model, const ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array);
 
     bool isValid() const { return mpRes && mpModel; }
 
@@ -27,9 +26,9 @@ private:
     void bindAnimObj_();
 
 public:
-    void play(const ModelResource* p_mdl_res, const sead::SafeString& name);
+    void play(const ModelResource* p_mdl_res, const char* name);
 
-    bool forceBind(const sead::SafeString& name, const nw::g3d::res::ResTexture* p_texture);
+    bool forceBind(const char* name, const nw::g3d::res::ResTexture* p_texture);
 
     void calc() override;
 
@@ -49,5 +48,8 @@ private:
     nw::g3d::res::ResTexPatternAnim* mpRes;
     const ModelNW* mpModel;
     s32 mIndex;
+
+    // Custom
+    void* mpBuffer;
 };
-static_assert(sizeof(TexturePatternAnimation) == 0x84, "TexturePatternAnimation size mismatch");
+static_assert(sizeof(TexturePatternAnimation) == 0x84 + 4, "TexturePatternAnimation size mismatch");

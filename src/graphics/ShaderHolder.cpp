@@ -2,9 +2,10 @@
 
 ShaderHolder* ShaderHolder::sInstance = NULL;
 
-const agl::ShaderProgramArchive* ShaderHolder::getShaderArchive(const sead::SafeString& filename) const
+const agl::ShaderProgramArchive* ShaderHolder::getShaderArchive(const char* filename) const
 {
     // Don't think I'll decompile this
+    RIO_ASSERT(false);
     return NULL;
 }
 

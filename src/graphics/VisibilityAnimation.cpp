@@ -1,4 +1,3 @@
-#define override
 #include <graphics/ModelNW.h>
 #include <graphics/ModelResource.h>
 #include <graphics/VisibilityAnimation.h>
@@ -6,15 +5,27 @@
 VisibilityAnimation::VisibilityAnimation()
     : Animation()
     , mAnimObj()
-    , mpRes(NULL)
-    , mpModel(NULL)
+    , mpRes(nullptr)
+    , mpModel(nullptr)
     , mIndex(-1)
-    , mpBuffer(NULL)
+    , mpBuffer(nullptr)
 {
 }
 
-bool VisibilityAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
+VisibilityAnimation::~VisibilityAnimation()
 {
+    if (mpBuffer)
+    {
+        rio::MemUtil::free(mpBuffer);
+        mpBuffer = nullptr;
+    }
+}
+
+bool VisibilityAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array)
+{
+    RIO_ASSERT(p_model != nullptr);
+    RIO_ASSERT(p_mdl_res != nullptr);
+
     nw::g3d::VisibilityAnimObj::InitArg arg;
     arg.SetMaxBoneCount(p_model->getModelEx().GetResource()->GetSkeleton()->GetBoneCount());
     arg.SetMaxMatCount(p_model->getModelEx().GetResource()->GetMaterialCount());
@@ -25,22 +36,28 @@ bool VisibilityAnimation::init(const ModelNW* p_model, const ModelResource* p_md
     updateInitArg_(&arg, p_mdl_res);
     if (p_anim_mdl_res_array)
     {
-        for (sead::PtrArray<ModelResource>::constIterator itr = p_anim_mdl_res_array->constBegin(), itr_end = p_anim_mdl_res_array->constEnd(); itr != itr_end; ++itr)
+        for (PtrArray<ModelResource>::constIterator itr = p_anim_mdl_res_array->constBegin(), itr_end = p_anim_mdl_res_array->constEnd(); itr != itr_end; ++itr)
             updateInitArg_(&arg, &(*itr));
     }
 
     size_t size = nw::g3d::VisibilityAnimObj::CalcBufferSize(arg);
-    mpBuffer = new (heap, nw::g3d::VisibilityAnimObj::BUFFER_ALIGNMENT) u8[size];
+    mpBuffer = rio::MemUtil::alloc(size, nw::g3d::VisibilityAnimObj::BUFFER_ALIGNMENT);
     return mAnimObj.Init(arg, mpBuffer, size);
 }
 
 void VisibilityAnimation::updateInitArg_(nw::g3d::VisibilityAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res)
 {
-    for (s32 idx_anim = 0, num_anim = p_mdl_res->getResFile()->GetBoneVisAnimCount(); idx_anim < num_anim; idx_anim++)
-        p_arg->Reserve(p_mdl_res->getResFile()->GetBoneVisAnim(idx_anim));
+    RIO_ASSERT(p_arg != nullptr);
+    RIO_ASSERT(p_mdl_res != nullptr);
 
-    for (s32 idx_anim = 0, num_anim = p_mdl_res->getResFile()->GetMatVisAnimCount(); idx_anim < num_anim; idx_anim++)
-        p_arg->Reserve(p_mdl_res->getResFile()->GetMatVisAnim(idx_anim));
+    const nw::g3d::res::ResFile* p_res_file = p_mdl_res->getResFile();
+    RIO_ASSERT(p_res_file != nullptr);
+
+    for (s32 idx_anim = 0, num_anim = p_res_file->GetBoneVisAnimCount(); idx_anim < num_anim; idx_anim++)
+        p_arg->Reserve(p_res_file->GetBoneVisAnim(idx_anim));
+
+    for (s32 idx_anim = 0, num_anim = p_res_file->GetMatVisAnimCount(); idx_anim < num_anim; idx_anim++)
+        p_arg->Reserve(p_res_file->GetMatVisAnim(idx_anim));
 }
 
 void VisibilityAnimation::bindModel(const ModelNW* p_model, s32 index)
@@ -57,7 +74,7 @@ void VisibilityAnimation::bindModel(const ModelNW* p_model, s32 index)
 
 void VisibilityAnimation::unbindModel()
 {
-    mpModel = NULL;
+    mpModel = nullptr;
     mIndex = -1;
 }
 
@@ -70,13 +87,20 @@ void VisibilityAnimation::bindAnimObj_()
     }
 }
 
-void VisibilityAnimation::playBoneVisAnim(const ModelResource* p_mdl_res, const sead::SafeString& name)
+void VisibilityAnimation::playBoneVisAnim(const ModelResource* p_mdl_res, const char* name)
 {
-    s32 idx_anim = p_mdl_res->getResFile()->GetBoneVisAnimIndex(name.cstr());
+    RIO_ASSERT(p_mdl_res != nullptr);
+    RIO_ASSERT(name != nullptr);
+
+    nw::g3d::res::ResFile* p_res_file = p_mdl_res->getResFile();
+    RIO_ASSERT(p_res_file != nullptr);
+
+    RIO_ASSERT(p_res_file->GetBoneVisAnimCount() > 0);
+    s32 idx_anim = p_res_file->GetBoneVisAnimIndex(name);
     if (idx_anim < 0)
         return;
 
-    nw::g3d::res::ResVisibilityAnim* p_res = p_mdl_res->getResFile()->GetBoneVisAnim(idx_anim);
+    nw::g3d::res::ResVisibilityAnim* p_res = p_res_file->GetBoneVisAnim(idx_anim);
     mAnimObj.SetResource(p_res);
 
     mpRes = p_res;
@@ -91,13 +115,20 @@ void VisibilityAnimation::playBoneVisAnim(const ModelResource* p_mdl_res, const 
         bindModel(mpModel, mIndex);
 }
 
-void VisibilityAnimation::playMatVisAnim(const ModelResource* p_mdl_res, const sead::SafeString& name)
+void VisibilityAnimation::playMatVisAnim(const ModelResource* p_mdl_res, const char* name)
 {
-    s32 idx_anim = p_mdl_res->getResFile()->GetMatVisAnimIndex(name.cstr());
+    RIO_ASSERT(p_mdl_res != nullptr);
+    RIO_ASSERT(name != nullptr);
+
+    nw::g3d::res::ResFile* p_res_file = p_mdl_res->getResFile();
+    RIO_ASSERT(p_res_file != nullptr);
+
+    RIO_ASSERT(p_res_file->GetMatVisAnimCount() > 0);
+    s32 idx_anim = p_res_file->GetMatVisAnimIndex(name);
     if (idx_anim < 0)
         return;
 
-    nw::g3d::res::ResVisibilityAnim* p_res = p_mdl_res->getResFile()->GetMatVisAnim(idx_anim);
+    nw::g3d::res::ResVisibilityAnim* p_res = p_res_file->GetMatVisAnim(idx_anim);
     mAnimObj.SetResource(p_res);
 
     mpRes = p_res;

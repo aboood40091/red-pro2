@@ -2,24 +2,22 @@
 
 #include <graphics/ModelShaderArchive.h>
 
-#include <container/seadBuffer.h>
-#include <heap/seadDisposer.h>
-#include <prim/seadSafeString.h>
-#include <resource/seadArchiveRes.h>
+#include <container/Buffer.h>
+#include <resource/SharcArchiveRes.h>
 
 #include <nw/g3d/res/g3d_ResFile.h>
 
-class ModelResource : public sead::IDisposer
+class ModelResource
 {
 public:
     ModelResource();
-    virtual ~ModelResource();
+    ~ModelResource();
 
     void destroy();
 
     void load(
-        sead::ArchiveRes* archive, const sead::SafeString& filename,
-        const nw::g3d::res::ResFile* tex_res_file, sead::Heap* heap
+        SharcArchiveRes* archive, const char* filename,
+        const nw::g3d::res::ResFile* tex_res_file = nullptr
     );
 
     agl::ShaderProgramArchive* getModelShaderProgramArchive(s32 idx_model) const;
@@ -31,7 +29,7 @@ public:
 
 private:
     nw::g3d::res::ResFile* mResFile;
-    sead::Buffer<ModelShaderArchive> mModelShaderArchive;
+    Buffer<ModelShaderArchive> mModelShaderArchive;
     u32 _1c;
 };
-static_assert(sizeof(ModelResource) == 0x20, "ModelResource size mismatch");
+//static_assert(sizeof(ModelResource) == 0x20, "ModelResource size mismatch");

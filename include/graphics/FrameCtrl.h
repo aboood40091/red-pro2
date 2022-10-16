@@ -1,6 +1,6 @@
 #pragma once
 
-#include <prim/seadBitFlag.h>
+#include <misc/rio_BitFlag.h>
 
 class FrameCtrl
 {
@@ -67,5 +67,5 @@ protected:
     f32 mFrameMax;
     f32 mFrame;
     f32 mRate;
-    sead::BitFlag32 mFlag;
+    rio::BitFlag32 mFlag;
 };

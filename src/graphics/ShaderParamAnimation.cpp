@@ -1,4 +1,3 @@
-#define override
 #include <graphics/ModelNW.h>
 #include <graphics/ModelResource.h>
 #include <graphics/ShaderParamAnimation.h>
@@ -6,15 +5,27 @@
 ShaderParamAnimation::ShaderParamAnimation()
     : Animation()
     , mAnimObj()
-    , mpRes(NULL)
-    , mpModel(NULL)
+    , mpRes(nullptr)
+    , mpModel(nullptr)
     , mIndex(-1)
-    , mpBuffer(NULL)
+    , mpBuffer(nullptr)
 {
 }
 
-bool ShaderParamAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
+ShaderParamAnimation::~ShaderParamAnimation()
 {
+    if (mpBuffer)
+    {
+        rio::MemUtil::free(mpBuffer);
+        mpBuffer = nullptr;
+    }
+}
+
+bool ShaderParamAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array)
+{
+    RIO_ASSERT(p_model != nullptr);
+    RIO_ASSERT(p_mdl_res != nullptr);
+
     nw::g3d::ShaderParamAnimObj::InitArg arg;
     arg.SetMaxMatCount(p_model->getModelEx().GetResource()->GetMaterialCount());
     arg.SetMaxMatAnimCount(0);
@@ -24,22 +35,28 @@ bool ShaderParamAnimation::init(const ModelNW* p_model, const ModelResource* p_m
     updateInitArg_(&arg, p_mdl_res);
     if (p_anim_mdl_res_array)
     {
-        for (sead::PtrArray<ModelResource>::constIterator itr = p_anim_mdl_res_array->constBegin(), itr_end = p_anim_mdl_res_array->constEnd(); itr != itr_end; ++itr)
+        for (PtrArray<ModelResource>::constIterator itr = p_anim_mdl_res_array->constBegin(), itr_end = p_anim_mdl_res_array->constEnd(); itr != itr_end; ++itr)
             updateInitArg_(&arg, &(*itr));
     }
 
     size_t size = nw::g3d::ShaderParamAnimObj::CalcBufferSize(arg);
-    mpBuffer = new (heap, nw::g3d::ShaderParamAnimObj::BUFFER_ALIGNMENT) u8[size];
+    mpBuffer = rio::MemUtil::alloc(size, nw::g3d::ShaderParamAnimObj::BUFFER_ALIGNMENT);
     return mAnimObj.Init(arg, mpBuffer, size);
 }
 
 void ShaderParamAnimation::updateInitArg_(nw::g3d::ShaderParamAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res)
 {
-    for (s32 idx_anim = 0, num_anim = p_mdl_res->getResFile()->GetColorAnimCount(); idx_anim < num_anim; idx_anim++)
-        p_arg->Reserve(p_mdl_res->getResFile()->GetColorAnim(idx_anim));
+    RIO_ASSERT(p_arg != nullptr);
+    RIO_ASSERT(p_mdl_res != nullptr);
 
-    for (s32 idx_anim = 0, num_anim = p_mdl_res->getResFile()->GetTexSrtAnimCount(); idx_anim < num_anim; idx_anim++)
-        p_arg->Reserve(p_mdl_res->getResFile()->GetTexSrtAnim(idx_anim));
+    const nw::g3d::res::ResFile* p_res_file = p_mdl_res->getResFile();
+    RIO_ASSERT(p_res_file != nullptr);
+
+    for (s32 idx_anim = 0, num_anim = p_res_file->GetColorAnimCount(); idx_anim < num_anim; idx_anim++)
+        p_arg->Reserve(p_res_file->GetColorAnim(idx_anim));
+
+    for (s32 idx_anim = 0, num_anim = p_res_file->GetTexSrtAnimCount(); idx_anim < num_anim; idx_anim++)
+        p_arg->Reserve(p_res_file->GetTexSrtAnim(idx_anim));
 }
 
 void ShaderParamAnimation::bindModel(const ModelNW* p_model, s32 index)
@@ -56,7 +73,7 @@ void ShaderParamAnimation::bindModel(const ModelNW* p_model, s32 index)
 
 void ShaderParamAnimation::unbindModel()
 {
-    mpModel = NULL;
+    mpModel = nullptr;
     mIndex = -1;
 }
 
@@ -66,13 +83,20 @@ void ShaderParamAnimation::bindAnimObj_()
         mAnimObj.Bind(mpModel->getModelEx().GetResource());
 }
 
-void ShaderParamAnimation::playColorAnim(const ModelResource* p_mdl_res, const sead::SafeString& name)
+void ShaderParamAnimation::playColorAnim(const ModelResource* p_mdl_res, const char* name)
 {
-    s32 idx_anim = p_mdl_res->getResFile()->GetColorAnimIndex(name.cstr());
+    RIO_ASSERT(p_mdl_res != nullptr);
+    RIO_ASSERT(name != nullptr);
+
+    nw::g3d::res::ResFile* p_res_file = p_mdl_res->getResFile();
+    RIO_ASSERT(p_res_file != nullptr);
+
+    RIO_ASSERT(p_res_file->GetColorAnimCount() > 0);
+    s32 idx_anim = p_res_file->GetColorAnimIndex(name);
     if (idx_anim < 0)
         return;
 
-    nw::g3d::res::ResShaderParamAnim* p_res = p_mdl_res->getResFile()->GetColorAnim(idx_anim);
+    nw::g3d::res::ResShaderParamAnim* p_res = p_res_file->GetColorAnim(idx_anim);
     mAnimObj.SetResource(p_res);
 
     mpRes = p_res;
@@ -87,13 +111,20 @@ void ShaderParamAnimation::playColorAnim(const ModelResource* p_mdl_res, const s
         bindModel(mpModel, mIndex);
 }
 
-void ShaderParamAnimation::playTexSrtAnim(const ModelResource* p_mdl_res, const sead::SafeString& name)
+void ShaderParamAnimation::playTexSrtAnim(const ModelResource* p_mdl_res, const char* name)
 {
-    s32 idx_anim = p_mdl_res->getResFile()->GetTexSrtAnimIndex(name.cstr());
+    RIO_ASSERT(p_mdl_res != nullptr);
+    RIO_ASSERT(name != nullptr);
+
+    nw::g3d::res::ResFile* p_res_file = p_mdl_res->getResFile();
+    RIO_ASSERT(p_res_file != nullptr);
+
+    RIO_ASSERT(p_res_file->GetTexSrtAnimCount() > 0);
+    s32 idx_anim = p_res_file->GetTexSrtAnimIndex(name);
     if (idx_anim < 0)
         return;
 
-    nw::g3d::res::ResShaderParamAnim* p_res = p_mdl_res->getResFile()->GetTexSrtAnim(idx_anim);
+    nw::g3d::res::ResShaderParamAnim* p_res = p_res_file->GetTexSrtAnim(idx_anim);
     mAnimObj.SetResource(p_res);
 
     mpRes = p_res;

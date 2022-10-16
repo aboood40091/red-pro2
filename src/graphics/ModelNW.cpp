@@ -1,12 +1,10 @@
 #include <graphics/CullViewFrustum.h>
-#include <graphics/LightMapMgr.h>
 #include <graphics/ModelNW.h>
-#include <graphics/ModelNWShadowUtil.h>
 #include <graphics/RenderMgr.h>
 #include <graphics/ShaderHolder.h>
 
-#include <gfx/seadGraphics.h>
-#include <util/aglPrimitiveTexture.h>
+//#include <gfx/seadGraphics.h>
+//#include <util/aglPrimitiveTexture.h>
 
 ModelNW::ModelNW()
     : Model()
@@ -17,37 +15,123 @@ ModelNW::ModelNW()
     , mpShuAnim()
     , mpVisAnim()
     , mpShaAnim()
-    , mpBuffer(NULL)
-    , mpBlockBuffer(NULL)
+    , mpBuffer(nullptr)
+    , mpBlockBuffer(nullptr)
     , mBlockBufferSize(0)
-    , mpSklAnimBlenderBuffer(NULL)
+    , mpSklAnimBlenderBuffer(nullptr)
     , mSklAnimBlendWeight()
     , mOpaShapeInfo()
     , mXluShapeInfo()
     , mShaderAssign()
     , mpMaterial()
     , mShape()
-    , mMtxRT(sead::Matrix34f::ident)
-    , mScale(sead::Vector3f::ones)
+    , mMtxRT(rio::Matrix34f::ident)
+    , mScale{1.0f, 1.0f, 1.0f}
     , _128(0)
     , mRenderFlag(3)
     , mBoundingEnableFlag(0)
-    , mViewShapeShadowFlagBuffer()
-    , mBounding(sead::Vector3f::zero, 1.0f)
-    , mpSubBounding(NULL)
+    , mBounding({ 0.0f, 0.0f, 0.0f }, 1.0f )
+    , mpSubBounding(nullptr)
     , mShapeFlag(1)
     , mBoundingFlagArray() // TODO
     , mSubBoundingFlagArray() // ^^
-    , mViewDepthShadowEnableFlag()
     , mDisplayListDirty(false)
+    , mShapeRenderInfo(nullptr)
 {
 }
 
 ModelNW::~ModelNW()
 {
+    if (mShapeRenderInfo)
+    {
+        delete[] mShapeRenderInfo;
+        mShapeRenderInfo = nullptr;
+    }
+
+    if (mShaderAssign.isBufferReady())
+        mShaderAssign.freeBuffer();
+
+    if (mXluShapeInfo.isBufferReady())
+        mXluShapeInfo.freeBuffer();
+
+    if (mOpaShapeInfo.isBufferReady())
+        mOpaShapeInfo.freeBuffer();
+
+    if (mShape.isBufferReady())
+    {
+        for (Buffer<Shape>::iterator it = mShape.begin(), it_end = mShape.end(); it != it_end; ++it)
+        {
+            s32 num_vtx_buffer = it->vtx_buffer.size();
+            if (num_vtx_buffer > 0)
+            {
+                for (s32 idx_buffer = 0; idx_buffer < num_vtx_buffer; idx_buffer++)
+                {
+                    nw::g3d::fnd::GfxBuffer& new_buffer = it->vtx_buffer[idx_buffer];
+                    void* p_data = new_buffer.GetData();
+                    new_buffer.Cleanup();
+
+                    rio::MemUtil::free(p_data);
+                }
+
+                it->vtx_buffer.freeBuffer();
+            }
+        }
+
+        mShape.freeBuffer();
+    }
+
+    if (mpMaterial.isBufferReady())
+    {
+        for (Buffer<MaterialNW*>::iterator it = mpMaterial.begin(), it_end = mpMaterial.end(); it != it_end; ++it)
+            delete *it;
+
+        mpMaterial.freeBuffer();
+    }
+
+    if (mpShaAnim.isBufferReady())
+        mpShaAnim.freeBuffer();
+
+    if (mpVisAnim.isBufferReady())
+        mpVisAnim.freeBuffer();
+
+    if (mpShuAnim.isBufferReady())
+        mpShuAnim.freeBuffer();
+
+    if (mpTexAnim.isBufferReady())
+        mpTexAnim.freeBuffer();
+
+    if (mpSklAnim.isBufferReady())
+        mpSklAnim.freeBuffer();
+
+    if (mSklAnimBlendWeight.isBufferReady())
+        mSklAnimBlendWeight.freeBuffer();
+
+    if (mpSklAnimBlenderBuffer)
+    {
+        rio::MemUtil::free(mpSklAnimBlenderBuffer);
+        mpSklAnimBlenderBuffer = nullptr;
+    }
+
+    if (mpBlockBuffer)
+    {
+        rio::MemUtil::free(mpBlockBuffer);
+        mpBlockBuffer = nullptr;
+    }
+
+    if (mpBuffer)
+    {
+        rio::MemUtil::free(mpBuffer);
+        mpBuffer = nullptr;
+    }
+
+    if (mpSubBounding)
+    {
+        delete mpSubBounding;
+        mpSubBounding = nullptr;
+    }
 }
 
-void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode, sead::Heap* heap)
+void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode)
 {
     switch (bounding_mode)
     {
@@ -72,7 +156,7 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
             1 << 2 |
             1 << 5
         );
-        mpSubBounding = new (heap) sead::BoundBox3f();
+        mpSubBounding = new BoundBox3f();
         break;
     }
 
@@ -85,20 +169,20 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
         model_arg.DisableBounding();
 
     size_t buffer_size = nw::g3d::ModelObj::CalcBufferSize(model_arg);
-    mpBuffer = new (heap, nw::g3d::ModelObj::BUFFER_ALIGNMENT) u8[buffer_size];
+    mpBuffer = static_cast<u8*>(rio::MemUtil::alloc(buffer_size, nw::g3d::ModelObj::BUFFER_ALIGNMENT));
 
     mModelEx.Init(model_arg, mpBuffer, buffer_size);
 
-    mModelEx.createEx(heap);
+    mModelEx.createEx();
 
     mBlockBufferSize = mModelEx.CalcBlockBufferSize();
-    mpBlockBuffer = new (heap, nw::g3d::ModelObj::BLOCK_BUFFER_ALIGNMENT) u8[mBlockBufferSize];
+    mpBlockBuffer = static_cast<u8*>(rio::MemUtil::alloc(mBlockBufferSize, nw::g3d::ModelObj::BLOCK_BUFFER_ALIGNMENT));
 
-    sead::Graphics::instance()->lockDrawContext();
+  //sead::Graphics::instance()->lockDrawContext();
     {
         mModelEx.SetupBlockBuffer(mpBlockBuffer, mBlockBufferSize);
     }
-    sead::Graphics::instance()->unlockDrawContext();
+  //sead::Graphics::instance()->unlockDrawContext();
 
     if (num_skl_anim != 0)
     {
@@ -106,47 +190,47 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
         blender_arg.SetMaxBoneCount(res_model->GetSkeleton()->GetBoneCount());
 
         size_t buffer_size = nw::g3d::SkeletalAnimBlender::CalcBufferSize(blender_arg);
-        mpSklAnimBlenderBuffer = new (heap, nw::g3d::SkeletalAnimBlender::BUFFER_ALIGNMENT) u8[buffer_size];
+        mpSklAnimBlenderBuffer = static_cast<u8*>(rio::MemUtil::alloc(buffer_size, nw::g3d::SkeletalAnimBlender::BUFFER_ALIGNMENT));
 
         mSklAnimBlender.Init(blender_arg, mpSklAnimBlenderBuffer, buffer_size);
 
-        mSklAnimBlendWeight.allocBuffer(num_skl_anim, heap);
+        mSklAnimBlendWeight.allocBuffer(num_skl_anim);
         mSklAnimBlendWeight.fill(1.0f);
 
-        mpSklAnim.allocBuffer(num_skl_anim, heap);
-        mpSklAnim.fill(NULL);
+        mpSklAnim.allocBuffer(num_skl_anim);
+        mpSklAnim.fill(nullptr);
     }
 
     if (num_tex_anim != 0)
     {
-        mpTexAnim.allocBuffer(num_tex_anim, heap);
-        mpTexAnim.fill(NULL);
+        mpTexAnim.allocBuffer(num_tex_anim);
+        mpTexAnim.fill(nullptr);
     }
 
     if (num_shu_anim != 0)
     {
-        mpShuAnim.allocBuffer(num_shu_anim, heap);
-        mpShuAnim.fill(NULL);
+        mpShuAnim.allocBuffer(num_shu_anim);
+        mpShuAnim.fill(nullptr);
     }
 
     if (num_vis_anim != 0)
     {
-        mpVisAnim.allocBuffer(num_vis_anim, heap);
-        mpVisAnim.fill(NULL);
+        mpVisAnim.allocBuffer(num_vis_anim);
+        mpVisAnim.fill(nullptr);
     }
 
     if (num_sha_anim != 0)
     {
-        mpShaAnim.allocBuffer(num_sha_anim, heap);
-        mpShaAnim.fill(NULL);
+        mpShaAnim.allocBuffer(num_sha_anim);
+        mpShaAnim.fill(nullptr);
     }
 
-    sead::Graphics::instance()->lockDrawContext();
+  //sead::Graphics::instance()->lockDrawContext();
     {
         for (s32 idx_material = 0; idx_material < mModelEx.GetMaterialCount(); idx_material++)
         {
             agl::g3d::MaterialEx& material = mModelEx.getMaterialEx(idx_material);
-            sead::SafeString shader_archive_name;
+            const char* shader_archive_name = nullptr;
 
             bool name_set = false;
 
@@ -162,14 +246,14 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
             }
 
             if (!name_set)
-                shader_archive_name = sead::SafeString::cEmptyString;
+                shader_archive_name = nullptr;
 
             bool is_local = false;
 
             if (shader_archive)
             {
-                if (shader_archive_name.isEmpty() ||
-                    shader_archive_name.comparen("nw4f", 4) != 0)
+                if ((!shader_archive_name || shader_archive_name[0] == '\0') ||
+                    std::strncmp(shader_archive_name, "nw4f", 4) != 0)
                 {
                     is_local = true;
                 }
@@ -179,12 +263,12 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
 
             if (is_local)
             {
-                material.bindShaderResAssign(shader_archive->searchShaderProgram(p_res_material->GetName()), NULL, NULL);
+                material.bindShaderResAssign(shader_archive->searchShaderProgram(p_res_material->GetName()), nullptr, nullptr);
             }
             else
             {
                 const nw::g3d::res::ResShaderAssign* res_shader_assign = p_res_material->GetShaderAssign(); // ??
-                if (!shader_archive_name.isEmpty())
+                if (shader_archive_name && shader_archive_name[0] != '\0')
                 {
                     const agl::ShaderProgramArchive* g_shader_program_archive = ShaderHolder::instance()->getShaderArchive(res_shader_assign->GetShaderArchiveName());
                     if (g_shader_program_archive)
@@ -214,17 +298,17 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
             }
         }
     }
-    sead::Graphics::instance()->unlockDrawContext();
+  //sead::Graphics::instance()->unlockDrawContext();
 
-    sead::Graphics::instance()->lockDrawContext();
+  //sead::Graphics::instance()->lockDrawContext();
     {
-        mpMaterial.allocBuffer(mModelEx.GetMaterialCount(), heap);
-        for (sead::Buffer<MaterialNW*>::iterator it = mpMaterial.begin(), it_end = mpMaterial.end(); it != it_end; ++it)
-            *it = new (heap) MaterialNW(mModelEx.GetMaterial(it.getIndex()));
+        mpMaterial.allocBuffer(mModelEx.GetMaterialCount());
+        for (Buffer<MaterialNW*>::iterator it = mpMaterial.begin(), it_end = mpMaterial.end(); it != it_end; ++it)
+            *it = new MaterialNW(mModelEx.GetMaterial(it.getIndex()));
 
-        mShape.allocBuffer(mModelEx.GetShapeCount(), heap);
-        const agl::UniformBlock* base_uniform_block = NULL;
-        for (sead::Buffer<Shape>::iterator it = mShape.begin(), it_end = mShape.end(); it != it_end; ++it)
+        mShape.allocBuffer(mModelEx.GetShapeCount());
+        const agl::UniformBlock* base_uniform_block = nullptr;
+        for (Buffer<Shape>::iterator it = mShape.begin(), it_end = mShape.end(); it != it_end; ++it)
         {
             s32 idx_shape = it.getIndex();
             const nw::g3d::ShapeObj* shape_obj = mModelEx.GetShape(idx_shape);
@@ -233,7 +317,7 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
 
             if (idx_shape == 0)
             {
-                it->uniform_block.startDeclare(2, heap);
+                it->uniform_block.startDeclare(2);
                 it->uniform_block.declare(agl::UniformBlock::cType_vec4, 3); // vec4 cShpMtx[ 3 ]
                 it->uniform_block.declare(agl::UniformBlock::cType_int,  1); // int  cWeightNum
 
@@ -244,7 +328,7 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
                 it->uniform_block.declare(*base_uniform_block);
             }
 
-            it->uniform_block.create(heap);
+            it->uniform_block.create();
 
             s32 weight_num = shape_obj->GetVtxSkinCount();
 
@@ -255,14 +339,14 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
             if (num_sha_anim > 0 && shape_obj->GetKeyShapeCount() > 0)
             {
                 s32 num_vtx_buffer = shape_obj->GetVertexBufferCount();
-                it->vtx_buffer.allocBuffer(num_vtx_buffer, heap);
+                it->vtx_buffer.allocBuffer(num_vtx_buffer);
 
                 for (s32 idx_buffer = 0; idx_buffer < num_vtx_buffer; idx_buffer++)
                 {
                     const nw::g3d::fnd::GfxBuffer& buffer = shape_obj->GetVertexBuffer(idx_buffer);
 
-                    void* p_data = new (heap) u8[buffer.GetSize()];
-                    sead::MemUtil::copy(p_data, buffer.GetData(), buffer.GetSize());
+                    void* p_data = new u8[buffer.GetSize()];
+                    rio::MemUtil::copy(p_data, buffer.GetData(), buffer.GetSize());
 
                     nw::g3d::fnd::GfxBuffer& new_buffer = it->vtx_buffer[idx_buffer];
                     new_buffer.SetData(p_data, buffer.GetSize());
@@ -279,25 +363,23 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
         }
 
         if (mBoundingEnableFlag.isOn(1 << 0))
-        {
-            createViewShapeShadowFlagBuffer_(num_view, heap);
             calcBounding_();
-        }
     }
-    sead::Graphics::instance()->unlockDrawContext();
+  //sead::Graphics::instance()->unlockDrawContext();
 
-    LightMapMgr::instance()->setModelLightMap(this, false);
+  //LightMapMgr::instance()->setModelLightMap(this, false);
     mDisplayListDirty = false;
 
-    mOpaShapeInfo.allocBuffer(mModelEx.GetShapeCount(), heap);
-    mXluShapeInfo.allocBuffer(mModelEx.GetShapeCount(), heap);
-    mShaderAssign.allocBuffer(mModelEx.GetShapeCount(), heap);
+    mOpaShapeInfo.allocBuffer(mModelEx.GetShapeCount());
+    mXluShapeInfo.allocBuffer(mModelEx.GetShapeCount());
+    mShaderAssign.allocBuffer(mModelEx.GetShapeCount());
 
-    ShapeRenderInfo* render_info_array = new (heap) ShapeRenderInfo[mModelEx.GetShapeCount()];
+    ShapeRenderInfo* render_info_array = new ShapeRenderInfo[mModelEx.GetShapeCount()];
+    mShapeRenderInfo = render_info_array;
 
     mShapeFlag.makeAllZero();
 
-    sead::Graphics::instance()->lockDrawContext();
+  //sead::Graphics::instance()->lockDrawContext();
     {
         for (s32 idx_shape = 0; idx_shape < mModelEx.GetShapeCount(); idx_shape++)
         {
@@ -313,17 +395,19 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
 
             mShaderAssign[idx_shape].initialize(shader_assign.getShaderProgram());
 
+#if RIO_IS_CAFE
             render_info.attrib_dl.beginDisplayListTemporary(0x400);
             {
                 shader_assign.getAttribute().activateVertexBuffer();
             }
-            render_info.attrib_dl.endDisplayListTemporary(heap);
+            render_info.attrib_dl.endDisplayListTemporary();
 
             render_info.mat_dl.beginDisplayListTemporary(0x400);
             {
                 activateMaterial(shader_assign, material_obj, mShape[idx_shape].light_map);
             }
-            render_info.mat_dl.endDisplayListTemporary(heap);
+            render_info.mat_dl.endDisplayListTemporary();
+#endif // RIO_IS_CAFE
 
             initializeShapeRenderInfo_(render_info, material_obj, shape_obj);
 
@@ -338,20 +422,10 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
             }
         }
     }
-    sead::Graphics::instance()->unlockDrawContext();
+  //sead::Graphics::instance()->unlockDrawContext();
 
     mOpaShapeInfo.sort(&sortShapeRenderInfoCmp);
     mXluShapeInfo.sort(&sortShapeRenderInfoCmp);
-}
-
-void ModelNW::createViewShapeShadowFlagBuffer_(s32 num_view, sead::Heap* heap)
-{
-    mViewShapeShadowFlagBuffer.allocBuffer(num_view, heap);
-    for (s32 i = 0; i < num_view; i++)
-    {
-        ModelNWShadowUtil::allocBuffer(mViewShapeShadowFlagBuffer[i], mModelEx.GetShapeCount(), heap);
-        mViewShapeShadowFlagBuffer[i].fill(sead::BitFlag32(0));
-    }
 }
 
 s32 ModelNW::sortShapeRenderInfoCmp(const ShapeRenderInfo* a, const ShapeRenderInfo* b)
@@ -366,9 +440,9 @@ void ModelNW::initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw:
     render_info.flag.makeAllZero();
 
     s32 idx_shadow_cast = p_material->GetResource()->GetRenderInfoIndex("shadow_cast");
-    if (idx_shadow_cast >= 0 && !sead::SafeString(p_material->GetResource()->GetRenderInfo(idx_shadow_cast)->GetString(0)).isEqual("yes"))
+    if (idx_shadow_cast >= 0 && std::strcmp(p_material->GetResource()->GetRenderInfo(idx_shadow_cast)->GetString(0), "yes") != 0)
     {
-        if (sead::SafeString(p_material->GetResource()->GetRenderInfo(idx_shadow_cast)->GetString(0)).isEqual("shadow-only"))
+        if (std::strcmp(p_material->GetResource()->GetRenderInfo(idx_shadow_cast)->GetString(0), "shadow-only") == 0)
         {
             mShapeFlag.set(1 << 2);
             render_info.flag.set(1 << 2);
@@ -384,8 +458,8 @@ void ModelNW::initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw:
     s32 idx_polygon_offset = p_material->GetResource()->GetRenderInfoIndex("polygon_offset");
     if (idx_polygon_offset >= 0)
     {
-        sead::SafeString str_polygon_offset = p_material->GetResource()->GetRenderInfo(idx_polygon_offset)->GetString(0);
-        if (str_polygon_offset.comparen("yes", 3) == 0)
+        const char* const str_polygon_offset = p_material->GetResource()->GetRenderInfo(idx_polygon_offset)->GetString(0);
+        if (std::strncmp(str_polygon_offset, "yes", 3) == 0)
         {
             char c = str_polygon_offset[3];
 
@@ -408,12 +482,12 @@ void ModelNW::initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw:
     s32 idx_reflection = p_material->GetResource()->GetRenderInfoIndex("reflection");
     if (idx_reflection >= 0)
     {
-        if (sead::SafeString(p_material->GetResource()->GetRenderInfo(idx_reflection)->GetString(0)).isEqual("yes"))
+        if (std::strcmp(p_material->GetResource()->GetRenderInfo(idx_reflection)->GetString(0), "yes") == 0)
         {
             render_info.flag.set(1 << 1);
             mShapeFlag.set(1 << 1);
         }
-        else if (sead::SafeString(p_material->GetResource()->GetRenderInfo(idx_reflection)->GetString(0)).isEqual("reflection-only"))
+        else if (std::strcmp(p_material->GetResource()->GetRenderInfo(idx_reflection)->GetString(0), "reflection-only") == 0)
         {
             render_info.flag.set(1 << 1);
             mShapeFlag.set(1 << 1);
@@ -441,7 +515,8 @@ void ModelNW::activateMaterial(const agl::g3d::ModelShaderAssign& shader_assign,
     shader_assign.activateMaterialUniformBlock(p_material);
     shader_assign.activateTextureSampler(p_material);
 
-    for (s32 i = 0; i < LightMapMgr::cLightMapNum; i++)
+    /*
+    for (s32 i = 0; i < cLightMapNum; i++)
     {
         s32 idx_lghtmap = light_map.idx_lghtmap[i];
         if (idx_lghtmap != -1)
@@ -458,6 +533,7 @@ void ModelNW::activateMaterial(const agl::g3d::ModelShaderAssign& shader_assign,
             }
         }
     }
+    */
 }
 
 void ModelNW::calcBounding_()
@@ -473,12 +549,12 @@ void ModelNW::calcBounding_()
         const nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
         if (p_bounding)
         {
-            mBounding.setCenter(reinterpret_cast<const sead::Vector3f&>(p_bounding->center));
+            mBounding.setCenter(reinterpret_cast<const rio::Vector3f&>(p_bounding->center));
             mBounding.setRadius(p_bounding->radius);
         }
 
         // ???
-        sead::MemUtil::fill(mSubBoundingFlagArray, u8(-1), sizeof(u32) * 9);
+        rio::MemUtil::set(mSubBoundingFlagArray, u8(-1), sizeof(u32) * 9);
         // ??????
         mSubBoundingFlagArray[9] = 0xFFFFFFFF;
 
@@ -512,7 +588,7 @@ void ModelNW::calcBounding_()
 
         if (enable && p_bounding)
         {
-            mBounding.setCenter(reinterpret_cast<sead::Vector3f&>(p_bounding->center));
+            mBounding.setCenter(reinterpret_cast<rio::Vector3f&>(p_bounding->center));
             mBounding.setRadius(p_bounding->radius);
         }
 
@@ -538,8 +614,8 @@ void ModelNW::calcBounding_()
         if (has_sub_bounding)
         {
             nw::g3d::AABB aabb;
-            aabb.min.Set(sead::Mathf::maxNumber(), sead::Mathf::maxNumber(), sead::Mathf::maxNumber());
-            aabb.max.Set(sead::Mathf::minNumber(), sead::Mathf::minNumber(), sead::Mathf::minNumber());
+            aabb.min.Set(rio::Mathf::max(), rio::Mathf::max(), rio::Mathf::max());
+            aabb.max.Set(rio::Mathf::min(), rio::Mathf::min(), rio::Mathf::min());
 
             const nw::g3d::SkeletonObj* p_skeleton = mModelEx.GetSkeleton();
 
@@ -553,11 +629,11 @@ void ModelNW::calcBounding_()
                 aabb.Merge(aabb, *p_shape->GetSubBoundingArray());
             }
 
-            sead::MemUtil::fillZero(p_sub_flag_array, sizeof(u32) * 10);
+            rio::MemUtil::set(p_sub_flag_array, 0, sizeof(u32) * 10);
 
             mpSubBounding->setUndef();
-            mpSubBounding->setMax(reinterpret_cast<const sead::Vector3f&>(aabb.max));
-            mpSubBounding->setMin(reinterpret_cast<const sead::Vector3f&>(aabb.min));
+            mpSubBounding->setMax(reinterpret_cast<const rio::Vector3f&>(aabb.max));
+            mpSubBounding->setMin(reinterpret_cast<const rio::Vector3f&>(aabb.min));
         }
     }
 }
@@ -574,6 +650,7 @@ void ModelNW::applyBlendWeight_(s32 shape_index)
     const u8* v_data_array[64];
 
     s32 num_key_shape = p_shape->GetKeyShapeCount();
+    RIO_ASSERT(num_key_shape <= 64);
 
     for (s32 idx_key_shape = 0; idx_key_shape < num_key_shape; idx_key_shape++)
         blend_weight_array[idx_key_shape] = p_shape->GetBlendWeight(idx_key_shape);
@@ -604,12 +681,12 @@ void ModelNW::applyBlendWeight_(s32 shape_index)
 
         while (elem_num > 0)
         {
-            sead::Vector3f* p_dst = (sead::Vector3f*)(p_data + offset);
+            rio::Vector3f* p_dst = (rio::Vector3f*)(p_data + offset);
             p_dst->set(0.0f, 0.0f, 0.0f);
 
             for (s32 idx_key_shape = 0; idx_key_shape < num_key_shape; idx_key_shape++)
             {
-                const sead::Vector3f* p_src = (const sead::Vector3f*)(v_data_array[idx_key_shape] + offset);
+                const rio::Vector3f* p_src = (const rio::Vector3f*)(v_data_array[idx_key_shape] + offset);
                 f32 blend_weight = blend_weight_array[idx_key_shape];
 
                 p_dst->x = p_src->x * blend_weight + p_dst->x;
@@ -622,7 +699,7 @@ void ModelNW::applyBlendWeight_(s32 shape_index)
         }
     }
 
-    for (sead::Buffer<nw::g3d::fnd::GfxBuffer>::constIterator it = shape.vtx_buffer.constBegin(), it_end = shape.vtx_buffer.constEnd(); it != it_end; ++it)
+    for (Buffer<nw::g3d::fnd::GfxBuffer>::constIterator it = shape.vtx_buffer.constBegin(), it_end = shape.vtx_buffer.constEnd(); it != it_end; ++it)
         it->DCFlush();
 }
 
@@ -643,20 +720,20 @@ void ModelNW::calc()
     }
 }
 
-void ModelNW::calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelNW::calcGPU(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
 {
     mModelEx.CalcView(view_index, reinterpret_cast<const nw::g3d::math::Mtx34&>(view_mtx));
 }
 
 void ModelNW::drawOpa_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const
 {
-    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mOpaShapeInfo.constBegin(), it_end = mOpaShapeInfo.constEnd(); it != it_end; ++it)
+    for (PtrArray<ShapeRenderInfo>::constIterator it = mOpaShapeInfo.constBegin(), it_end = mOpaShapeInfo.constEnd(); it != it_end; ++it)
         drawShape_(draw_info, *it, p_render_mgr);
 }
 
 void ModelNW::drawXlu_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const
 {
-    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mXluShapeInfo.constBegin(), it_end = mXluShapeInfo.constEnd(); it != it_end; ++it)
+    for (PtrArray<ShapeRenderInfo>::constIterator it = mXluShapeInfo.constBegin(), it_end = mXluShapeInfo.constEnd(); it != it_end; ++it)
         drawShape_(draw_info, *it, p_render_mgr);
 }
 
@@ -716,20 +793,28 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
 
         if (draw_info.p_shader_assign->sdw_location.isValid())
         {
+            /*
             const agl::TextureSampler& tex_sampler = p_render_mgr->getShadowMap()
                                                         ? *p_render_mgr->getShadowMap()
                                                         : agl::utl::PrimitiveTexture::instance()->getTextureSampler(9);
 
-            tex_sampler.activate(draw_info.p_shader_assign->sdw_location, 15);
+            tex_sampler.bindFS(draw_info.p_shader_assign->sdw_location, 15);
+            */
+            RIO_ASSERT(false);
+            while (true) {}
         }
 
         if (draw_info.p_shader_assign->rfl_location.isValid())
         {
+            /*
             const agl::TextureSampler& tex_sampler = p_render_mgr->getReflectionMap()
                                                         ? *p_render_mgr->getReflectionMap()
                                                         : agl::utl::PrimitiveTexture::instance()->getTextureSampler(2);
 
-            tex_sampler.activate(draw_info.p_shader_assign->rfl_location, 14);
+            tex_sampler.bindFS(draw_info.p_shader_assign->rfl_location, 14);
+            */
+            RIO_ASSERT(false);
+            while (true) {}
         }
     }
 
@@ -767,6 +852,8 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
             {
                 p_material->GetResRenderState()->Load();
 
+                // TODO
+                /*
                 if (render_info.polygon_offset >= 0)
                 {
                     nw::g3d::fnd::GfxPolygonCtrl polygon_ctrl = p_material->GetResRenderState()->GetPolygonCtrl();
@@ -779,6 +866,7 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
                         p_render_mgr->getViewInfo(draw_info.view_index).layer->setPolygonOffset(draw_info.polygon_offset);
                     }
                 }
+                */
             }
             else
             {
@@ -794,6 +882,13 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
             }
         }
     }
+
+#if RIO_IS_WIN
+    const rio::Shader& shader_rio = draw_info.p_shader_program->getShaderRIO();
+
+    shader_rio.setUniform(u32(nw::g3d::fnd::s_AlphaFunc - GL_NEVER), u32(-1), shader_rio.getFragmentUniformLocation("PS_PUSH.alphaFunc"));
+    shader_rio.setUniform(nw::g3d::fnd::s_AlphaRefValue,             u32(-1), shader_rio.getFragmentUniformLocation("PS_PUSH.alphaRef"));
+#endif // RIO_IS_WIN
 
     if (!render_info.attrib_dl.isEmpty())
         render_info.attrib_dl.call();
@@ -824,10 +919,12 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
     }
 }
 
-void ModelNW::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelNW::drawOpa(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
 {
     if (mShapeFlag.isOff(1 << 0))
         return;
+
+    RIO_ASSERT(p_render_mgr != nullptr);
 
     const nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
     const CullViewFrustum* p_cull = p_render_mgr->getViewInfo(view_index).p_cull;
@@ -839,8 +936,8 @@ void ModelNW::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sea
     draw_info.view_index = view_index;
     draw_info.p_view_mtx = &view_mtx;
     draw_info.p_proj_mtx = &proj_mtx;
-    draw_info.p_shader_program = NULL;
-    draw_info.p_shader_assign = NULL;
+    draw_info.p_shader_program = nullptr;
+    draw_info.p_shader_assign = nullptr;
     draw_info.material_index = -1;
     draw_info.draw_shape = true;
     draw_info.draw_reflection = false;
@@ -857,10 +954,12 @@ void ModelNW::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sea
     agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
 }
 
-void ModelNW::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelNW::drawXlu(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
 {
     if (mShapeFlag.isOff(1 << 0))
         return;
+
+    RIO_ASSERT(p_render_mgr != nullptr);
 
     const nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
     const CullViewFrustum* p_cull = p_render_mgr->getViewInfo(view_index).p_cull;
@@ -872,8 +971,8 @@ void ModelNW::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sea
     draw_info.view_index = view_index;
     draw_info.p_view_mtx = &view_mtx;
     draw_info.p_proj_mtx = &proj_mtx;
-    draw_info.p_shader_program = NULL;
-    draw_info.p_shader_assign = NULL;
+    draw_info.p_shader_program = nullptr;
+    draw_info.p_shader_assign = nullptr;
     draw_info.material_index = -1;
     draw_info.draw_shape = true;
     draw_info.draw_reflection = false;
@@ -890,108 +989,16 @@ void ModelNW::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sea
     agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
 }
 
-void ModelNW::drawShadowOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelNW::drawShadowOpa(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
 {
-    if (mShapeFlag.isOff(1 << 2) || mViewDepthShadowEnableFlag.isOff(1 << view_index))
-        return;
-
-    const CullViewFrustum* p_cull = p_render_mgr->getViewInfo(view_index).p_cull;
-
-    bool bounding_enable = mBoundingEnableFlag.isOn(1 << 0);
-    mBoundingEnableFlag.reset(1 << 0);
-
-    DrawInfo draw_info;
-    draw_info.view_index = view_index;
-    draw_info.p_view_mtx = &view_mtx;
-    draw_info.p_proj_mtx = &proj_mtx;
-    draw_info.p_shader_program = NULL;
-    draw_info.p_shader_assign = NULL;
-    draw_info.material_index = -1;
-    draw_info.draw_shape = false;
-    draw_info.draw_reflection = false;
-    draw_info.shader_mode = agl::cShaderMode_Invalid;
-    draw_info.polygon_offset = -1;
-    draw_info.p_cull = p_cull;
-
-    sead::Buffer<sead::BitFlag32>& shape_shadow_flag_buffer = mViewShapeShadowFlagBuffer[view_index];
-
-    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mOpaShapeInfo.constBegin(), it_end = mOpaShapeInfo.constEnd(); it != it_end; ++it)
-    {
-        const ShapeRenderInfo& render_info = *it;
-        s32 idx_shape = render_info.idx_shape;
-        const nw::g3d::ShapeObj* p_shape;
-
-        bool has_shadow = true;
-        if (render_info.flag.isOff(1 << 2))
-            has_shadow = false;
-
-        else
-        {
-            p_shape = mModelEx.GetShape(idx_shape);
-            s32 idx_material = p_shape->GetMaterialIndex();
-            s32 idx_bone = p_shape->GetBoneIndex();
-
-            if (!mModelEx.IsMatVisible(idx_material) ||
-                !mModelEx.IsBoneVisible(idx_bone) ||
-                !mModelEx.getMaterialEx(idx_material).get_20())
-            {
-                has_shadow = false;
-            }
-        }
-
-        if (!has_shadow || shape_shadow_flag_buffer[idx_shape].isOff(1 << 0))
-        {
-            continue;
-        }
-        else
-        {
-            drawShape_(draw_info, render_info, p_render_mgr);
-        }
-    }
-
-    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mXluShapeInfo.constBegin(), it_end = mXluShapeInfo.constEnd(); it != it_end; ++it)
-    {
-        const ShapeRenderInfo& render_info = *it;
-        s32 idx_shape = render_info.idx_shape;
-        const nw::g3d::ShapeObj* p_shape;
-
-        bool has_shadow = true;
-        if (render_info.flag.isOff(1 << 2))
-            has_shadow = false;
-
-        else
-        {
-            p_shape = mModelEx.GetShape(idx_shape);
-            s32 idx_material = p_shape->GetMaterialIndex();
-            s32 idx_bone = p_shape->GetBoneIndex();
-
-            if (!mModelEx.IsMatVisible(idx_material) ||
-                !mModelEx.IsBoneVisible(idx_bone) ||
-                !mModelEx.getMaterialEx(idx_material).get_20())
-            {
-                has_shadow = false;
-            }
-        }
-
-        if (!has_shadow || shape_shadow_flag_buffer[idx_shape].isOff(1 << 0))
-        {
-            continue;
-        }
-        else
-        {
-            drawShape_(draw_info, render_info, p_render_mgr);
-        }
-    }
-
-    mBoundingEnableFlag.change(1 << 0, bounding_enable);
-
-    agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
 }
 
-void ModelNW::drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelNW::drawReflectionOpa(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
 {
     if (mShapeFlag.isOff(1 << 1))
         return;
+
+    RIO_ASSERT(p_render_mgr != nullptr);
 
     const nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
     const CullViewFrustum* p_cull = p_render_mgr->getViewInfo(view_index).p_cull;
@@ -1003,8 +1010,8 @@ void ModelNW::drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx,
     draw_info.view_index = view_index;
     draw_info.p_view_mtx = &view_mtx;
     draw_info.p_proj_mtx = &proj_mtx;
-    draw_info.p_shader_program = NULL;
-    draw_info.p_shader_assign = NULL;
+    draw_info.p_shader_program = nullptr;
+    draw_info.p_shader_assign = nullptr;
     draw_info.material_index = -1;
     draw_info.draw_shape = true;
     draw_info.draw_reflection = true;
@@ -1021,10 +1028,12 @@ void ModelNW::drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx,
     agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
 }
 
-void ModelNW::drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelNW::drawReflectionXlu(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
 {
     if (mShapeFlag.isOff(1 << 1))
         return;
+
+    RIO_ASSERT(p_render_mgr != nullptr);
 
     const nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
     const CullViewFrustum* p_cull = p_render_mgr->getViewInfo(view_index).p_cull;
@@ -1036,8 +1045,8 @@ void ModelNW::drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx,
     draw_info.view_index = view_index;
     draw_info.p_view_mtx = &view_mtx;
     draw_info.p_proj_mtx = &proj_mtx;
-    draw_info.p_shader_program = NULL;
-    draw_info.p_shader_assign = NULL;
+    draw_info.p_shader_program = nullptr;
+    draw_info.p_shader_assign = nullptr;
     draw_info.material_index = -1;
     draw_info.draw_shape = true;
     draw_info.draw_reflection = true;
@@ -1088,19 +1097,19 @@ void ModelNW::updateAnimations()
 {
     if (mpSklAnim.isBufferReady())
     {
-        SkeletalAnimation* p_blend_start_anim = NULL;
+        SkeletalAnimation* p_blend_start_anim = nullptr;
         bool blend = false;
 
-        sead::Buffer<SkeletalAnimation*>::constIterator it_end = mpSklAnim.constEnd();
+        Buffer<SkeletalAnimation*>::constIterator it_end = mpSklAnim.constEnd();
 
-        for (sead::Buffer<SkeletalAnimation*>::constIterator it = mpSklAnim.constBegin(); it != it_end; ++it)
+        for (Buffer<SkeletalAnimation*>::constIterator it = mpSklAnim.constBegin(); it != it_end; ++it)
         {
             SkeletalAnimation* p_anim = *it;
             if (p_anim && p_anim->isValid())
             {
-                if (sead::Mathf::abs(mSklAnimBlendWeight[it.getIndex()]) > 0.001f)
+                if (rio::Mathf::abs(mSklAnimBlendWeight[it.getIndex()]) > 0.001f)
                 {
-                    if (p_blend_start_anim == NULL)
+                    if (p_blend_start_anim == nullptr)
                     {
                         p_blend_start_anim = p_anim;
                     }
@@ -1114,13 +1123,13 @@ void ModelNW::updateAnimations()
         }
 
         if (mBoundingEnableFlag.isOn(1 << 3))
-            sead::MemUtil::fillZero(mBoundingFlagArray, sizeof(mBoundingFlagArray));
+            rio::MemUtil::set(mBoundingFlagArray, 0, sizeof(mBoundingFlagArray));
 
         if (blend)
         {
             mSklAnimBlender.ClearResult();
 
-            for (sead::Buffer<SkeletalAnimation*>::constIterator it = mpSklAnim.constBegin(); it != it_end; ++it)
+            for (Buffer<SkeletalAnimation*>::constIterator it = mpSklAnim.constBegin(); it != it_end; ++it)
             {
                 SkeletalAnimation* p_anim = *it;
                 if (p_anim && p_anim->isValid())
@@ -1135,7 +1144,7 @@ void ModelNW::updateAnimations()
 
             mSklAnimBlender.ApplyTo(mModelEx.GetSkeleton());
         }
-        else if (p_blend_start_anim != NULL)
+        else if (p_blend_start_anim != nullptr)
         {
             p_blend_start_anim->calc();
             p_blend_start_anim->getAnimObj().ApplyTo(mModelEx.GetSkeleton());
@@ -1202,8 +1211,13 @@ void ModelNW::updateAnimations()
 
 void ModelNW::updateModel()
 {
-    sead::Matrix34f world_mtx = getMtxRT();
-    world_mtx.scaleBases(getScale().x, getScale().y, getScale().z);
+    rio::Matrix34f world_mtx = getMtxRT();
+
+    const rio::Vector3f& s = getScale();
+
+    reinterpret_cast<rio::Vector3f&>(world_mtx.v[0]) *= s;
+    reinterpret_cast<rio::Vector3f&>(world_mtx.v[1]) *= s;
+    reinterpret_cast<rio::Vector3f&>(world_mtx.v[2]) *= s;
 
     mModelEx.CalcWorld(reinterpret_cast<const nw::g3d::math::Mtx34&>(world_mtx));
 
@@ -1211,36 +1225,36 @@ void ModelNW::updateModel()
         calcBounding_();
 }
 
-void ModelNW::setBoneLocalMatrix(s32 index, const sead::Matrix34f& rt, const sead::Vector3f& scale)
+void ModelNW::setBoneLocalMatrix(s32 index, const rio::Matrix34f& rt, const rio::Vector3f& scale)
 {
     nw::g3d::LocalMtx& local_mtx = mModelEx.GetSkeleton()->GetLocalMtxArray()[index];
-    reinterpret_cast<sead::Matrix34f&>(local_mtx.mtxRT) = rt;
-    reinterpret_cast<sead::Vector3f&>(local_mtx.scale) = scale;
+    reinterpret_cast<rio::Matrix34f&>(local_mtx.mtxRT) = rt;
+    reinterpret_cast<rio::Vector3f&>(local_mtx.scale) = scale;
     local_mtx.EndEdit();
 }
 
-void ModelNW::getBoneLocalMatrix(s32 index, sead::Matrix34f* rt, sead::Vector3f* scale) const
+void ModelNW::getBoneLocalMatrix(s32 index, rio::Matrix34f* rt, rio::Vector3f* scale) const
 {
     const nw::g3d::LocalMtx& local_mtx = mModelEx.GetSkeleton()->GetLocalMtxArray()[index];
-    if (rt)    *rt    = reinterpret_cast<const sead::Matrix34f&>(local_mtx.mtxRT);
-    if (scale) *scale = reinterpret_cast<const sead::Vector3f&>(local_mtx.scale);
+    if (rt)    *rt    = reinterpret_cast<const rio::Matrix34f&>(local_mtx.mtxRT);
+    if (scale) *scale = reinterpret_cast<const rio::Vector3f&>(local_mtx.scale);
 }
 
-void ModelNW::setBoneWorldMatrix(s32 index, const sead::Matrix34f& mtx)
+void ModelNW::setBoneWorldMatrix(s32 index, const rio::Matrix34f& mtx)
 {
     nw::g3d::math::Mtx34& world_mtx = mModelEx.GetSkeleton()->GetWorldMtxArray()[index];
-    reinterpret_cast<sead::Matrix34f&>(world_mtx) = mtx;
+    reinterpret_cast<rio::Matrix34f&>(world_mtx) = mtx;
 }
 
-void ModelNW::getBoneWorldMatrix(s32 index, sead::Matrix34f* mtx) const
+void ModelNW::getBoneWorldMatrix(s32 index, rio::Matrix34f* mtx) const
 {
     const nw::g3d::math::Mtx34& world_mtx = mModelEx.GetSkeleton()->GetWorldMtxArray()[index];
-    *mtx = reinterpret_cast<const sead::Matrix34f&>(world_mtx);
+    *mtx = reinterpret_cast<const rio::Matrix34f&>(world_mtx);
 }
 
-s32 ModelNW::searchBoneIndex(const sead::SafeString& name) const
+s32 ModelNW::searchBoneIndex(const std::string& name) const
 {
-    return mModelEx.GetSkeleton()->GetResource()->GetBoneIndex(name.cstr());
+    return mModelEx.GetSkeleton()->GetResource()->GetBoneIndex(name.c_str());
 }
 
 const char* ModelNW::getBoneName(s32 index) const
@@ -1295,9 +1309,9 @@ u32 ModelNW::getMaterialNum() const
     return mModelEx.GetMaterialCount();
 }
 
-s32 ModelNW::searchMaterialIndex(const sead::SafeString& name) const
+s32 ModelNW::searchMaterialIndex(const std::string& name) const
 {
-    return mModelEx.GetMaterialIndex(name.cstr());
+    return mModelEx.GetMaterialIndex(name.c_str());
 }
 
 const char* ModelNW::getMaterialName(s32 index) const
@@ -1323,110 +1337,6 @@ void ModelNW::setBoneVisible(s32 index, bool visible)
 bool ModelNW::isBoneVisible(s32 index) const
 {
     return mModelEx.IsBoneVisible(index);
-}
-
-void ModelNW::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjBaseLayer* p_shadow_layer, RenderMgr* p_render_mgr)
-{
-    if (!isBoundingEnable())
-        return;
-
-    s32 view_index = p_shadow_layer->getViewIndex();
-    sead::Buffer<sead::BitFlag32>& shape_shadow_flag_buffer = mViewShapeShadowFlagBuffer[view_index];
-
-    u32 view_mask = sead::BitFlag32::makeMask(view_index);
-    mViewDepthShadowEnableFlag.reset(view_mask);
-
-    DCZeroRange(shape_shadow_flag_buffer.getBufferPtr(), sizeof(sead::BitFlag32) * shape_shadow_flag_buffer.size());
-
-    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mOpaShapeInfo.constBegin(), it_end = mOpaShapeInfo.constEnd(); it != it_end; ++it)
-    {
-        const ShapeRenderInfo& render_info = *it;
-        s32 idx_shape = render_info.idx_shape;
-        const nw::g3d::ShapeObj* p_shape;
-
-        bool has_shadow = true;
-        if (render_info.flag.isOff(1 << 2))
-            has_shadow = false;
-
-        else
-        {
-            p_shape = mModelEx.GetShape(idx_shape);
-            s32 idx_material = p_shape->GetMaterialIndex();
-            s32 idx_bone = p_shape->GetBoneIndex();
-
-            if (!mModelEx.IsMatVisible(idx_material) ||
-                !mModelEx.IsBoneVisible(idx_bone) ||
-                !mModelEx.getMaterialEx(idx_material).get_20())
-            {
-                has_shadow = false;
-            }
-        }
-
-        if (!has_shadow)
-        {
-            shape_shadow_flag_buffer[idx_shape].makeAllZero();
-        }
-        else if (!mBoundingEnableFlag.isOn(1 << 1))
-        {
-            const nw::g3d::Sphere* p_bounding = p_shape->GetBounding();
-            if (p_bounding)
-            {
-                sead::Sphere3f bounding;
-                bounding.setCenter(reinterpret_cast<const sead::Vector3f&>(p_bounding->center));
-                bounding.setRadius(p_bounding->radius);
-
-                sead::BitFlag32* p_shadow_flag = &shape_shadow_flag_buffer[idx_shape];
-                *p_shadow_flag = p_depth_shadow->checkAndUpdate(bounding);
-                if (!p_shadow_flag->isZero())
-                    mViewDepthShadowEnableFlag.set(view_mask);
-            }
-        }
-    }
-
-    for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mXluShapeInfo.constBegin(), it_end = mXluShapeInfo.constEnd(); it != it_end; ++it)
-    {
-        const ShapeRenderInfo& render_info = *it;
-        s32 idx_shape = render_info.idx_shape;
-        const nw::g3d::ShapeObj* p_shape;
-
-        bool has_shadow = true;
-        if (render_info.flag.isOff(1 << 2))
-            has_shadow = false;
-
-        else
-        {
-            p_shape = mModelEx.GetShape(idx_shape);
-            s32 idx_material = p_shape->GetMaterialIndex();
-            s32 idx_bone = p_shape->GetBoneIndex();
-
-            if (!mModelEx.IsMatVisible(idx_material) ||
-                !mModelEx.IsBoneVisible(idx_bone) ||
-                !mModelEx.getMaterialEx(idx_material).get_20())
-            {
-                has_shadow = false;
-            }
-        }
-
-        if (!has_shadow)
-        {
-            shape_shadow_flag_buffer[idx_shape].makeAllZero();
-        }
-        else // if (!mBoundingEnableFlag.isOn(1 << 1))
-        {
-            const nw::g3d::Sphere* p_bounding = p_shape->GetBounding();
-            if (p_bounding)
-            {
-                sead::Sphere3f bounding;
-                bounding.setCenter(reinterpret_cast<const sead::Vector3f&>(p_bounding->center));
-                bounding.setRadius(p_bounding->radius);
-
-                sead::BitFlag32* p_shadow_flag = &shape_shadow_flag_buffer[idx_shape];
-                *p_shadow_flag = p_depth_shadow->checkAndUpdate(bounding);
-                if (!p_shadow_flag->isZero())
-                    mViewDepthShadowEnableFlag.set(view_mask);
-            }
-        }
-    }
 }
 
 void ModelNW::setDisplayListDirty()

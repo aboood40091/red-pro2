@@ -1,6 +1,6 @@
 #pragma once
 
-#include <math/seadVector.h>
+#include <math/rio_Vector.h>
 
 #include <nw/g3d/g3d_ShapeObj.h>
 
@@ -9,12 +9,12 @@ class CullViewFrustum
     struct Sub
     {
         Sub()
-            : _0(sead::Vector3f::ex)
+            : _0{1.0f, 0.0f, 0.0f}
             , _c(0.0f)
         {
         }
 
-        sead::Vector3f _0;
+        rio::Vector3f _0;
         f32 _c;
     };
 

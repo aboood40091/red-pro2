@@ -1,14 +1,8 @@
 #pragma once
 
 #include <common/aglUniformBlock.h>
-#include <container/seadBuffer.h>
-#include <math/seadMatrix.h>
-
-namespace agl { namespace env {
-
-class EnvObjSet;
-
-} }
+#include <container/Buffer.h>
+#include <math/rio_Matrix.h>
 
 class ModelEnvView
 {
@@ -38,21 +32,19 @@ public:
 
     static const Member cMember[cMemberNum];
 
-    static const s32 cLightObjMax = 8;
-    static const s32 cChannelMax = 2;
-    static const s32 cFogMax = 8;
+    static constexpr s32 cLightObjMax = 8;
+    static constexpr s32 cChannelMax = 2;
+    static constexpr s32 cFogMax = 8;
 
 public:
-    ModelEnvView();
-    ~ModelEnvView() {}
+    ModelEnvView(u32 num_view);
+    ~ModelEnvView();
 
-    void setUniformData(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx,
-                        const sead::Matrix44f*, const agl::env::EnvObjSet*, void*);
+    void setUniformData(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx);
 
-    s32 getViewNum() const { return mViewNum; }
+    s32 getViewNum() const { return mUniformBlock.size(); }
     const agl::UniformBlock& getUniformBlock(s32 view_index) const { return mUniformBlock[view_index]; }
 
 private:
-    s32 mViewNum;
-    sead::Buffer<agl::UniformBlock> mUniformBlock;
+    Buffer<agl::UniformBlock> mUniformBlock;
 };

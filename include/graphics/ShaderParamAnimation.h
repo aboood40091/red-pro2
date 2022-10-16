@@ -2,9 +2,7 @@
 
 #include <graphics/Animation.h>
 
-#include <container/seadPtrArray.h>
-#include <heap/seadHeap.h>
-#include <prim/seadSafeString.h>
+#include <container/PtrArray.h>
 
 #include <nw/g3d/g3d_ShaderParamAnimObj.h>
 
@@ -15,8 +13,9 @@ class ShaderParamAnimation : public Animation
 {
 public:
     ShaderParamAnimation();
+    ~ShaderParamAnimation();
 
-    bool init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap);
+    bool init(const ModelNW* p_model, const ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array);
 
     bool isValid() const { return mpRes && mpModel; }
 
@@ -27,8 +26,8 @@ private:
     void bindAnimObj_();
 
 public:
-    void playColorAnim(const ModelResource* p_mdl_res, const sead::SafeString& name);
-    void playTexSrtAnim(const ModelResource* p_mdl_res, const sead::SafeString& name);
+    void playColorAnim(const ModelResource* p_mdl_res, const char* name);
+    void playTexSrtAnim(const ModelResource* p_mdl_res, const char* name);
 
     void calc() override;
 

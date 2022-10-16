@@ -1,4 +1,3 @@
-#define override
 #include <graphics/ModelNW.h>
 #include <graphics/ModelResource.h>
 #include <graphics/ShapeAnimation.h>
@@ -6,15 +5,27 @@
 ShapeAnimation::ShapeAnimation()
     : Animation()
     , mAnimObj()
-    , mpRes(NULL)
-    , mpModel(NULL)
+    , mpRes(nullptr)
+    , mpModel(nullptr)
     , mIndex(-1)
-    , mpBuffer(NULL)
+    , mpBuffer(nullptr)
 {
 }
 
-bool ShapeAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
+ShapeAnimation::~ShapeAnimation()
 {
+    if (mpBuffer)
+    {
+        rio::MemUtil::free(mpBuffer);
+        mpBuffer = nullptr;
+    }
+}
+
+bool ShapeAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array)
+{
+    RIO_ASSERT(p_model != nullptr);
+    RIO_ASSERT(p_mdl_res != nullptr);
+
     nw::g3d::ShapeAnimObj::InitArg arg;
     arg.SetMaxShapeCount(p_model->getModelEx().GetResource()->GetShapeCount());
     arg.SetMaxVertexShapeAnimCount(0);
@@ -24,19 +35,25 @@ bool ShapeAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res
     updateInitArg_(&arg, p_mdl_res);
     if (p_anim_mdl_res_array)
     {
-        for (sead::PtrArray<ModelResource>::constIterator itr = p_anim_mdl_res_array->constBegin(), itr_end = p_anim_mdl_res_array->constEnd(); itr != itr_end; ++itr)
+        for (PtrArray<ModelResource>::constIterator itr = p_anim_mdl_res_array->constBegin(), itr_end = p_anim_mdl_res_array->constEnd(); itr != itr_end; ++itr)
             updateInitArg_(&arg, &(*itr));
     }
 
     size_t size = nw::g3d::ShapeAnimObj::CalcBufferSize(arg);
-    mpBuffer = new (heap, nw::g3d::ShapeAnimObj::BUFFER_ALIGNMENT) u8[size];
+    mpBuffer = rio::MemUtil::alloc(size, nw::g3d::ShapeAnimObj::BUFFER_ALIGNMENT);
     return mAnimObj.Init(arg, mpBuffer, size);
 }
 
 void ShapeAnimation::updateInitArg_(nw::g3d::ShapeAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res)
 {
-    for (s32 idx_anim = 0, num_anim = p_mdl_res->getResFile()->GetShapeAnimCount(); idx_anim < num_anim; idx_anim++)
-        p_arg->Reserve(p_mdl_res->getResFile()->GetShapeAnim(idx_anim));
+    RIO_ASSERT(p_arg != nullptr);
+    RIO_ASSERT(p_mdl_res != nullptr);
+
+    const nw::g3d::res::ResFile* p_res_file = p_mdl_res->getResFile();
+    RIO_ASSERT(p_res_file != nullptr);
+
+    for (s32 idx_anim = 0, num_anim = p_res_file->GetShapeAnimCount(); idx_anim < num_anim; idx_anim++)
+        p_arg->Reserve(p_res_file->GetShapeAnim(idx_anim));
 }
 
 void ShapeAnimation::bindModel(const ModelNW* p_model, s32 index)
@@ -53,7 +70,7 @@ void ShapeAnimation::bindModel(const ModelNW* p_model, s32 index)
 
 void ShapeAnimation::unbindModel()
 {
-    mpModel = NULL;
+    mpModel = nullptr;
     mIndex = -1;
 }
 
@@ -66,13 +83,20 @@ void ShapeAnimation::bindAnimObj_()
     }
 }
 
-void ShapeAnimation::play(const ModelResource* p_mdl_res, const sead::SafeString& name)
+void ShapeAnimation::play(const ModelResource* p_mdl_res, const char* name)
 {
-    s32 idx_anim = p_mdl_res->getResFile()->GetShapeAnimIndex(name.cstr());
+    RIO_ASSERT(p_mdl_res != nullptr);
+    RIO_ASSERT(name != nullptr);
+
+    nw::g3d::res::ResFile* p_res_file = p_mdl_res->getResFile();
+    RIO_ASSERT(p_res_file != nullptr);
+
+    RIO_ASSERT(p_res_file->GetShapeAnimCount() > 0);
+    s32 idx_anim = p_res_file->GetShapeAnimIndex(name);
     if (idx_anim < 0)
         return;
 
-    nw::g3d::res::ResShapeAnim* p_res = p_mdl_res->getResFile()->GetShapeAnim(idx_anim);
+    nw::g3d::res::ResShapeAnim* p_res = p_res_file->GetShapeAnim(idx_anim);
     mAnimObj.SetResource(p_res);
 
     mpRes = p_res;
