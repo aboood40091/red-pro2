@@ -4,7 +4,8 @@
 #include <graphics/ShaderParamAnimation.h>
 
 ShaderParamAnimation::ShaderParamAnimation()
-    : mAnimObj()
+    : Animation()
+    , mAnimObj()
     , mpRes(NULL)
     , mpModel(NULL)
     , mIndex(-1)

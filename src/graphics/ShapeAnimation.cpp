@@ -4,7 +4,8 @@
 #include <graphics/ShapeAnimation.h>
 
 ShapeAnimation::ShapeAnimation()
-    : mAnimObj()
+    : Animation()
+    , mAnimObj()
     , mpRes(NULL)
     , mpModel(NULL)
     , mIndex(-1)

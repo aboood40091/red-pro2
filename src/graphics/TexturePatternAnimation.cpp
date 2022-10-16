@@ -9,6 +9,7 @@ TexturePatternAnimation::TexturePatternAnimation()
     , mpRes(NULL)
     , mpModel(NULL)
     , mIndex(-1)
+  //, mpBuffer(NULL)
 {
 }
 

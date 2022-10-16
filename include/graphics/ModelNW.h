@@ -359,4 +359,4 @@ private:
     sead::BitFlag32 mViewDepthShadowEnableFlag;
     bool mDisplayListDirty;
 };
-static_assert(sizeof(ModelNW) == 0x1AC, "ModelNW size mismatch"); // Incomplete
+static_assert(sizeof(ModelNW) == 0x1AC, "ModelNW size mismatch");

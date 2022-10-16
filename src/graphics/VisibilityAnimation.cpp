@@ -4,7 +4,8 @@
 #include <graphics/VisibilityAnimation.h>
 
 VisibilityAnimation::VisibilityAnimation()
-    : mAnimObj()
+    : Animation()
+    , mAnimObj()
     , mpRes(NULL)
     , mpModel(NULL)
     , mIndex(-1)
