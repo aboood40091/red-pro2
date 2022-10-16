@@ -27,7 +27,8 @@ private:
     void bindAnimObj_();
 
 public:
-    void play(const ModelResource* p_mdl_res, const sead::SafeString& name);
+    void playBoneVisAnim(const ModelResource* p_mdl_res, const sead::SafeString& name);
+    void playMatVisAnim(const ModelResource* p_mdl_res, const sead::SafeString& name);
 
     void calc() override;
 
@@ -38,6 +39,9 @@ public:
 
     const ModelNW* getModel() const { return mpModel; }
     s32 getIndex() const { return mIndex; }
+
+private:
+    static void updateInitArg_(nw::g3d::VisibilityAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res);
 
 private:
     nw::g3d::VisibilityAnimObj mAnimObj;

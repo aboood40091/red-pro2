@@ -1,6 +1,8 @@
 #define override
 #include <graphics/MaterialNW.h>
 
+#include <prim/seadSafeString.h>
+
 namespace {
 
 const sead::SafeString sTexMtxStr[8] = {

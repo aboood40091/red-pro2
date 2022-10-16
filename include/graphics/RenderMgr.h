@@ -29,10 +29,19 @@ public:
     static_assert(sizeof(ViewInfo) == 0x80, "RenderMgr::ViewInfo size mismatch");
 
 public:
+    RenderMgr(const sead::SafeString& name);
+    ~RenderMgr();
+
+    void update(s32 view_index);
+
+    ModelEnvView& getModelEnvView() { return mModelEnvView; }
     const ModelEnvView& getModelEnvView() const { return mModelEnvView; }
 
     agl::TextureSampler* getShadowMap() const { return mShadowMap; }
     agl::TextureSampler* getReflectionMap() const { return mReflectionMap; }
+
+    void setShadowMap(agl::TextureSampler* p_sampler) { mShadowMap = p_sampler; }
+    void setReflectionMap(agl::TextureSampler* p_sampler) { mReflectionMap = p_sampler; }
 
     ViewInfo& getViewInfo(s32 view_index) { return mViewInfo[view_index]; }
     const ViewInfo& getViewInfo(s32 view_index) const { return mViewInfo[view_index]; }

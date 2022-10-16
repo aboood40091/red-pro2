@@ -1,9 +1,7 @@
 #pragma once
 
 #include <gfx/seadColor.h>
-#include <math/seadMatrix.h>
 #include <math/seadVector.h>
-#include <prim/seadSafeString.h>
 
 class Material
 {

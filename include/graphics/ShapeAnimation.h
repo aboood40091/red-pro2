@@ -40,6 +40,9 @@ public:
     s32 getIndex() const { return mIndex; }
 
 private:
+    static void updateInitArg_(nw::g3d::ShapeAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res);
+
+private:
     nw::g3d::ShapeAnimObj mAnimObj;
     nw::g3d::res::ResShapeAnim* mpRes;
     const ModelNW* mpModel;

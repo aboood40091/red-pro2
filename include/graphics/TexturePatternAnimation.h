@@ -29,6 +29,8 @@ private:
 public:
     void play(const ModelResource* p_mdl_res, const sead::SafeString& name);
 
+    bool forceBind(const sead::SafeString& name, const nw::g3d::res::ResTexture* p_texture);
+
     void calc() override;
 
     nw::g3d::TexPatternAnimObj& getAnimObj() { return mAnimObj; }
@@ -38,6 +40,9 @@ public:
 
     const ModelNW* getModel() const { return mpModel; }
     s32 getIndex() const { return mIndex; }
+
+private:
+    static void updateInitArg_(nw::g3d::TexPatternAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res);
 
 private:
     nw::g3d::TexPatternAnimObj mAnimObj;

@@ -24,6 +24,11 @@ public:
 
     agl::ShaderProgramArchive* getModelShaderProgramArchive(s32 idx_model) const;
 
+    nw::g3d::res::ResFile* getResFile() const
+    {
+        return mResFile;
+    }
+
 private:
     nw::g3d::res::ResFile* mResFile;
     sead::Buffer<ModelShaderArchive> mModelShaderArchive;

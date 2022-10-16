@@ -10,9 +10,17 @@
 
 #include <shadow/aglDepthShadow.h>
 
+class ModelNW;
+class ModelResource;
+
 class Model : public RenderObj, public sead::IDisposer
 {
     SEAD_RTTI_OVERRIDE(Model, RenderObj)
+
+public:
+    // Why are these here... ?
+    static ModelNW* createNW(const ModelResource& res, const sead::SafeString& name, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode, sead::Heap* heap);
+    static ModelNW* createNW(const ModelResource& res, const sead::SafeString& name, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode, sead::Heap* heap);
 
 public:
     Model();

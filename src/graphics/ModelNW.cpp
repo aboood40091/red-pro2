@@ -33,7 +33,7 @@ ModelNW::ModelNW()
     , mRenderFlag(3)
     , mBoundingEnableFlag(0)
     , mViewShapeShadowFlagBuffer()
-    , mBounding(sead::Vector3f::zero, 1.0f )
+    , mBounding(sead::Vector3f::zero, 1.0f)
     , mpSubBounding(NULL)
     , mShapeFlag(1)
     , mBoundingFlagArray() // TODO
@@ -430,7 +430,7 @@ void ModelNW::initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw:
     s32 idx_priority = p_material->GetResource()->GetRenderInfoIndex("priority");
     if (idx_priority >= 0)
     {
-        const s32* p_priority = p_material->GetResource()->GetRenderInfo(idx_reflection)->GetInt();
+        const s32* p_priority = p_material->GetResource()->GetRenderInfo(idx_priority)->GetInt();
         if (p_priority)
             render_info.priority = *p_priority * 0x10000 + p_shape->GetMaterialIndex();
     }
@@ -465,8 +465,8 @@ void ModelNW::calcBounding_()
     if (mBoundingEnableFlag.isOn(1 << 4))
         mBoundingEnableFlag.reset(1 << 2);
 
-    if (mBoundingEnableFlag.isOn(1 << 1) ||
-        mBoundingEnableFlag.isOn(1 << 2) && mBoundingEnableFlag.isOff(1 << 3))
+    if ( mBoundingEnableFlag.isOn(1 << 1) ||
+        (mBoundingEnableFlag.isOn(1 << 2) && mBoundingEnableFlag.isOff(1 << 3)) )
     {
         mModelEx.CalcBounding();
 
@@ -690,9 +690,9 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
             return;
     }
 
-    s32 bounding_interset = 1;
+    s32 bounding_intersect = 1;
     if (mBoundingEnableFlag.isOn(1 << 0) && draw_info.p_cull)
-        if (bounding_interset = draw_info.p_cull->getViewVolume().TestIntersectionEx(*p_shape->GetBounding()), bounding_interset < 0)
+        if (bounding_intersect = draw_info.p_cull->getViewVolume().TestIntersectionEx(*p_shape->GetBounding()), bounding_intersect < 0)
             return;
 
     const agl::ShaderProgram* p_shader_program = shader_assign.getShaderProgram();
@@ -804,7 +804,7 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
     const CullViewFrustum* p_cull = draw_info.p_cull;
     const nw::g3d::res::ResMesh* p_res_mesh = p_shape->GetResMesh();
 
-    if (bounding_interset == 0 && mBoundingEnableFlag.isOn(1 << 0) && p_cull && p_res_mesh->GetSubMeshCount() > 1)
+    if (bounding_intersect == 0 && mBoundingEnableFlag.isOn(1 << 0) && p_cull && p_res_mesh->GetSubMeshCount() > 1)
     {
         if (getSubBoundingFlag_(idx_shape))
         {

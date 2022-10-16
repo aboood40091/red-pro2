@@ -29,6 +29,11 @@ private:
 public:
     void play(const ModelResource* p_mdl_res, const sead::SafeString& name);
 
+    void unbindTarget(s32 idx_target);
+
+    void disableBindFlag();
+    void enableBindFlag(s32 idx_bone);
+
     void calc() override;
 
     nw::g3d::SkeletalAnimObj& getAnimObj() { return mAnimObj; }
@@ -38,6 +43,9 @@ public:
 
     const ModelNW* getModel() const { return mpModel; }
     s32 getIndex() const { return mIndex; }
+
+private:
+    static void updateInitArg_(nw::g3d::SkeletalAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res);
 
 private:
     nw::g3d::SkeletalAnimObj mAnimObj;

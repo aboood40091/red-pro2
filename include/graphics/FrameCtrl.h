@@ -24,6 +24,9 @@ public:
     f32 getFrameEnd() const { return mFrameEnd; }
     void setFrameEnd(f32 frame) { mFrameEnd = frame; }
 
+    f32 getFrameMin() const { return mFrameMin; }
+    void setFrameMin(f32 frame) { mFrameMin = frame; }
+
     f32 getFrameMax() const { return mFrameMax; }
     void setFrameMax(f32 frame) { mFrameMax = frame; }
 
@@ -35,8 +38,8 @@ public:
 
     void set(PlayMode mode, f32 rate, f32 frame)
     {
-        setPlayMode(mode);
         setRate(rate);
+        setPlayMode(mode);
         setFrame(frame);
     }
 
@@ -52,12 +55,15 @@ protected:
     {
         cFlag_Repeat = 1 << 0,
         cFlag_Unk1   = 1 << 1,
+        cFlag_Unk2   = 1 << 2,
+        cFlag_Unk3   = 1 << 3,
+        cFlag_Unk4   = 1 << 4,
         cFlag_IsStop = 1 << 5
     };
 
     f32 mFrameStart;
     f32 mFrameEnd;
-    f32 _8;
+    f32 mFrameMin;
     f32 mFrameMax;
     f32 mFrame;
     f32 mRate;

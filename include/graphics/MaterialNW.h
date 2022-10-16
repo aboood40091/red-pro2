@@ -1,10 +1,14 @@
 #pragma once
 
+#include <math/seadMatrix.h>
+
 #include <graphics/Material.h>
 
 #include <nw/g3d/g3d_MaterialObj.h>
 
-class MaterialNW : public Material
+#define final
+
+class MaterialNW final : public Material
 {
 public:
     MaterialNW(nw::g3d::MaterialObj* material)

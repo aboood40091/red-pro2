@@ -8,6 +8,8 @@ public:
     Animation();
     virtual void calc() = 0;
 
+    void update();
+
     FrameCtrl& getFrameCtrl() { return mFrameCtrl; }
     const FrameCtrl& getFrameCtrl() const { return mFrameCtrl; }
 
