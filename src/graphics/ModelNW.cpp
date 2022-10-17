@@ -1,5 +1,4 @@
 #include <graphics/CullViewFrustum.h>
-#include <graphics/LightMapMgr.h>
 #include <graphics/ModelNW.h>
 #include <graphics/ModelNWShadowUtil.h>
 #include <graphics/RenderMgr.h>

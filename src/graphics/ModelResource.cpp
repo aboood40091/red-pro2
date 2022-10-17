@@ -1,6 +1,6 @@
 #include <graphics/ModelResource.h>
 #include <graphics/ShaderHolder.h>
-#include <root/ResMgr.h>
+#include <system/ResMgr.h>
 
 #include <g3d/aglShaderUtilG3D.h>
 #include <gfx/seadGraphics.h>

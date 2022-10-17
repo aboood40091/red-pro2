@@ -4,6 +4,13 @@
 
 #include <nw/g3d/g3d_ShapeObj.h>
 
+namespace sead {
+
+class Camera;
+class PerspectiveProjection;
+
+}
+
 class CullViewFrustum
 {
     struct Sub
@@ -21,6 +28,8 @@ class CullViewFrustum
 public:
     nw::g3d::ViewVolume& getViewVolume() { return mViewVolume; }
     const nw::g3d::ViewVolume& getViewVolume() const { return mViewVolume; }
+
+    void update(const sead::Camera& camera, const sead::PerspectiveProjection& projection);
 
 private:
     Sub _0[4];

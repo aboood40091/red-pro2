@@ -1,4 +1,4 @@
-#include <root/ResMgr.h>
+#include <system/ResMgr.h>
 
 ResMgr* ResMgr::sInstance = NULL;
 
