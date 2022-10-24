@@ -1,10 +1,14 @@
 #include <game/DistantViewMgr.h>
+#define override
 #include <game/DistantViewMgrCameraParam.h>
 #include <game/PtclMgr.h>
 #include <game/course/AreaTask.h>
 #include <game/course/Quake.h>
 #include <graphics/BasicModel.h>
 #include <graphics/Model.h>
+#include <graphics/ShaderParamAnimation.h>
+#include <graphics/SkeletalAnimation.h>
+#include <graphics/TexturePatternAnimation.h>
 #include <scroll/BgScrollMgr.h>
 
 #include <common/aglRenderBuffer.h>
@@ -137,4 +141,22 @@ void DistantViewMgr::applyDepthOfField_(const agl::lyr::RenderInfo& render_info)
     p_render_buffer->getDepthTarget()->expandHiZBuffer();
 
     mDof.draw(0, *p_render_buffer, mProjection.getNear(), mProjection.getFar());
+}
+
+void DistantViewMgr::resetAnim()
+{
+    SkeletalAnimation* const p_skl_anim = mpBasicModel->getSklAnim(0);
+    if (p_skl_anim)
+        p_skl_anim->getFrameCtrl().reset();
+
+    TexturePatternAnimation* const p_tex_anim = mpBasicModel->getTexAnim(0);
+    if (p_tex_anim)
+        p_tex_anim->getFrameCtrl().reset();
+
+    for (s32 i = 0; i < 2; i++)
+    {
+        ShaderParamAnimation* const p_shu_anim = mpBasicModel->getShuAnim(i);
+        if (p_shu_anim)
+            p_shu_anim->getFrameCtrl().reset();
+    }
 }

@@ -11,9 +11,6 @@
 #include <postfx/aglDepthOfField.h>
 
 #include <graphics/CullViewFrustum.h>
-#define override
-#include <graphics/ShaderParamAnimation.h>
-#include <graphics/SkeletalAnimation.h>
 
 class BasicModel;
 
@@ -21,6 +18,10 @@ class BasicModel;
 class DistantViewEffectMgr;
 class DistantViewFFLMgr;
 class DistantViewMgrCameraParam;
+
+class ShaderParamAnimation;
+class SkeletalAnimation;
+class TexturePatternAnimation;
 
 class DistantViewMgr
 {
@@ -51,9 +52,10 @@ public:
 
     void resetAnim();
 
-    SkeletalAnimation& getSklAnim() const;
-    ShaderParamAnimation& getTexSrtAnim() const; // Deleted
-    ShaderParamAnimation& getColorAnim() const;
+    SkeletalAnimation* getSklAnim() const;
+    TexturePatternAnimation* getTexAnim() const; // Deleted
+    ShaderParamAnimation* getTexSrtAnim() const; // Deleted
+    ShaderParamAnimation* getColorAnim() const;
 
     void pushBackDrawMethod();
 
