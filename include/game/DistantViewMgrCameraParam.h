@@ -1,6 +1,10 @@
 #pragma once
 
 #include <container/seadTList.h>
+#include <heap/seadDisposer.h>
+#include <math/seadMatrix.h>
+#include <math/seadVector.h>
+#include <prim/seadSafeString.h>
 
 namespace sead {
 
@@ -69,7 +73,7 @@ public:
     f32 getMagnifCameraPosY() const { return mMagnifCameraPosY.getValue(); }
     const sead::Vector2f& getIndirectScrollSpd() const { return mIndirectScrollSpd.getValue(); }
 
-    void getModelMtx(sead::Matrix34f* mdl_mtx) const;
+    void getModelMtx(sead::Matrix34f* p_model_mtx) const;
 
 private:
     ParamList mParamList;

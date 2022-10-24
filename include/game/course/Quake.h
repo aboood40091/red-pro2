@@ -1,6 +1,7 @@
 #pragma once
 
 #include <heap/seadDisposer.h>
+#include <math/seadVector.h>
 
 class Quake
 {

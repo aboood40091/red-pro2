@@ -46,7 +46,7 @@ DistantViewMgr::DistantViewMgr()
 
 void DistantViewMgr::calcView_()
 {
-    mProjection.setOffset(mpCameraParam->getProjOffset().x, mpCameraParam->getProjOffset().y);
+    mProjection.setOffset(mpCameraParam->getProjOffset());
 
     f32 fovy_tan = sead::Mathf::tan(sead::Mathf::deg2rad(mFovyDeg * 0.5f));
 
@@ -75,11 +75,11 @@ void DistantViewMgr::calcView_()
 
     if (proj_base_offs.x != 0.0f || proj_base_offs.y != 0.0f)
     {
-        f32 proj_offset_x = mProjection.offset().x + proj_base_offs.x / 1280;
-        f32 proj_offset_y = mProjection.offset().y + proj_base_offs.y / 720;
+        f32 proj_offset_x = mProjection.getOffset().x + proj_base_offs.x / 1280;
+        f32 proj_offset_y = mProjection.getOffset().y + proj_base_offs.y / 720;
 
-        proj_base_offs.set(proj_offset_x, proj_offset_y); // ???
-        mProjection.setOffset(proj_offset_x, proj_offset_y);
+        proj_base_offs.set(proj_offset_x, proj_offset_y);
+        mProjection.setOffset(proj_base_offs);
     }
 
     if (mIsFlickerEnable)
@@ -87,29 +87,27 @@ void DistantViewMgr::calcView_()
         f32 flicker_proj_offs_x = (mFlickerOffset.x * 0.5f) / 1280;
         f32 flicker_proj_offs_y = (mFlickerOffset.y * 0.5f) / 720;
 
-        sead::Vector2f proj_offset = mProjection.offset();
+        sead::Vector2f proj_offset = mProjection.getOffset();
 
         if ((++mFlickerCounter & 1) == 0)
         {
-            f32 proj_offset_x = proj_offset.x + flicker_proj_offs_x;
-            f32 proj_offset_y = proj_offset.y + flicker_proj_offs_y;
-
-            mProjection.setOffset(proj_offset_x, proj_offset_y);
+            proj_offset.x += flicker_proj_offs_x;
+            proj_offset.y += flicker_proj_offs_y;
         }
         else
         {
-            f32 proj_offset_x = proj_offset.x - flicker_proj_offs_x;
-            f32 proj_offset_y = proj_offset.y - flicker_proj_offs_y;
-
-            mProjection.setOffset(proj_offset_x, proj_offset_y);
+            proj_offset.x -= flicker_proj_offs_x;
+            proj_offset.y -= flicker_proj_offs_y;
         }
+
+        mProjection.setOffset(proj_offset);
     }
 
     sead::Vector3f at = mCameraPos + mCameraAtOffset;
 
     mCamera.getAt().set(at.x, at.y, at.z - 1.0f);
     mCamera.getPos().set(mCameraPos);
-    mCamera.updateMatrix();
+    mCamera.updateViewMatrix();
 
     mCull.update(mCamera, mProjection);
 }
