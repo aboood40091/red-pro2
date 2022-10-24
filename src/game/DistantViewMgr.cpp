@@ -2,6 +2,7 @@
 #define override
 #include <game/DistantViewMgrCameraParam.h>
 #include <game/PtclMgr.h>
+#include <game/course/AreaLayerMgr.h>
 #include <game/course/AreaTask.h>
 #include <game/course/Quake.h>
 #include <graphics/BasicModel.h>
@@ -13,6 +14,7 @@
 
 #include <common/aglRenderBuffer.h>
 #include <common/aglRenderTarget.h>
+#include <layer/aglRenderer.h>
 #include <layer/aglRenderInfo.h>
 
 SEAD_SINGLETON_DISPOSER_IMPL(DistantViewMgr)
@@ -41,7 +43,7 @@ DistantViewMgr::DistantViewMgr()
     , mDofIndScroll(0.0f, 0.0f)
     , mEffDrawMethod()
     , mDofDrawMethod()
-    , mIsKoopalingShipFlying(false)
+    , mIsDrawParticle(false)
     , mIsFlickerEnable(true)
     , mFlickerCounter(0)
     , mFlickerOffset(0.375f, 0.375f)
@@ -179,4 +181,16 @@ ShaderParamAnimation* DistantViewMgr::getShuTexSrtAnim() const
 ShaderParamAnimation* DistantViewMgr::getShuColorAnim() const
 {
     return mpBasicModel->getShuAnim(1);
+}
+
+void DistantViewMgr::pushBackDrawMethod()
+{
+    if (mIsDrawParticle)
+    {
+        mEffDrawMethod.bind(this, &DistantViewMgr::drawParticle_, "DistantViewMgr");
+        agl::lyr::Renderer::instance()->getLayer(AreaLayerMgr::cLayer_DistantView)->pushBackDrawMethod(RenderObjLayer::cRenderStep_Particle, &mEffDrawMethod);
+    }
+
+    mDofDrawMethod.bind(this, &DistantViewMgr::applyDepthOfField_, "DistantViewMgr");
+    agl::lyr::Renderer::instance()->getLayer(AreaLayerMgr::cLayer_DistantView)->pushBackDrawMethod(RenderObjLayer::cRenderStep_PostFx, &mDofDrawMethod);
 }

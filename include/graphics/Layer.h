@@ -14,8 +14,8 @@ public:
     Layer();
     virtual ~Layer();
 
-    void preDrawImpl(const agl::lyr::RenderInfo& render_info) const override;
-    void postDrawImpl(const agl::lyr::RenderInfo& render_info) const override;
+    void preDraw(const agl::lyr::RenderInfo& render_info) const override;
+    void postDraw(const agl::lyr::RenderInfo& render_info) const override;
 
     // ...
 

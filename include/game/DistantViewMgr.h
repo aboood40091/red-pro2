@@ -94,7 +94,7 @@ private:
     sead::Vector2f mDofIndScroll;
     agl::lyr::DrawMethod mEffDrawMethod;
     agl::lyr::DrawMethod mDofDrawMethod;
-    bool mIsKoopalingShipFlying;
+    bool mIsDrawParticle;
     u8 _1455; // Unused
     bool mIsFlickerEnable;
     u8 mFlickerCounter;

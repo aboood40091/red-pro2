@@ -1,0 +1,44 @@
+#pragma once
+
+#include <basis/seadTypes.h>
+
+class LayerMgr
+{
+public:
+    enum Layer
+    {
+        cLayer_Gather = 0,
+        cLayer_Capture,
+        cLayer_ReflectionLightMap,
+        cLayer_Reflection_User,
+        cLayer_LightMap,
+        cLayer_User_0,
+        cLayer_User_1,
+        cLayer_User_2,
+        cLayer_User_3,
+        cLayer_User_4,
+        cLayer_User_5,
+        cLayer_User_6,
+        cLayer_User_7,
+        cLayer_User_8,
+        cLayer_System,
+        cLayer_Unk_0,
+        cLayer_Unk_1,
+        cLayer_Fader,
+        cLayer_DRCMode,
+        cLayer_DebugDraw,
+        cLayer_ReflectionLightMap_DRC,
+        cLayer_Reflection_User_DRC,
+        cLayer_LightMap_DRC,
+        cLayer_DRC_User_0,
+        cLayer_DRC_User_1,
+        cLayer_DRC_User_2,
+        cLayer_DRC_User_3,
+        cLayer_DRC_User_4,
+        cLayer_System_DRC,
+        cLayer_Fader_DRC,
+        cLayer_DebugDraw_DRC,
+        cLayer_Max
+    };
+    static_assert(cLayer_Max == 31);
+};

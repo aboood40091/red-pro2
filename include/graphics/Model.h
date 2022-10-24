@@ -3,7 +3,7 @@
 #include <graphics/Animation.h>
 #include <graphics/Material.h>
 #include <graphics/RenderObj.h>
-#include <graphics/RenderObjBaseLayer.h>
+#include <graphics/RenderObjLayer.h>
 
 #include <heap/seadDisposer.h>
 #include <math/seadSphere.h>
