@@ -54,8 +54,8 @@ public:
 
     SkeletalAnimation* getSklAnim() const;
     TexturePatternAnimation* getTexAnim() const; // Deleted
-    ShaderParamAnimation* getTexSrtAnim() const; // Deleted
-    ShaderParamAnimation* getColorAnim() const;
+    ShaderParamAnimation* getShuTexSrtAnim() const; // Deleted
+    ShaderParamAnimation* getShuColorAnim() const;
 
     void pushBackDrawMethod();
 

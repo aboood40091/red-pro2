@@ -160,3 +160,23 @@ void DistantViewMgr::resetAnim()
             p_shu_anim->getFrameCtrl().reset();
     }
 }
+
+SkeletalAnimation* DistantViewMgr::getSklAnim() const
+{
+    return mpBasicModel->getSklAnim(0);
+}
+
+TexturePatternAnimation* DistantViewMgr::getTexAnim() const
+{
+    return mpBasicModel->getTexAnim(0);
+}
+
+ShaderParamAnimation* DistantViewMgr::getShuTexSrtAnim() const
+{
+    return mpBasicModel->getShuAnim(0);
+}
+
+ShaderParamAnimation* DistantViewMgr::getShuColorAnim() const
+{
+    return mpBasicModel->getShuAnim(1);
+}
