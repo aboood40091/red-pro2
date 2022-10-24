@@ -22,8 +22,8 @@ public:
         cLayer_User_7,
         cLayer_User_8,
         cLayer_System,
-        cLayer_Unk_0,
-        cLayer_Unk_1,
+        cLayer_15,                      // Unknown
+        cLayer_16,                      // Unknown
         cLayer_Fader,
         cLayer_DRCMode,
         cLayer_DebugDraw,
@@ -38,7 +38,7 @@ public:
         cLayer_System_DRC,
         cLayer_Fader_DRC,
         cLayer_DebugDraw_DRC,
-        cLayer_Max
+        cLayer_Num
     };
-    static_assert(cLayer_Max == 31);
+    static_assert(cLayer_Num == 31);
 };
