@@ -2,7 +2,7 @@
 
 #include <basis/seadTypes.h>
 
-class Model;
+class ModelNW;
 class ModelResource;
 class ShaderParamAnimation;
 class ShapeAnimation;
@@ -13,7 +13,9 @@ class VisibilityAnimation;
 class BasicModel
 {
 public:
-    Model* getModel() const { return mpModel; }
+    BasicModel(ModelNW* p_model, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim);
+
+    ModelNW* getModel() const { return mpModel; }
     ModelResource* getModelResource() const { return mpModelResource; }
 
     SkeletalAnimation*          getSklAnim(s32 index) const { return mpSklAnim[index]; }
@@ -22,8 +24,13 @@ public:
     VisibilityAnimation*        getVisAnim(s32 index) const { return mpVisAnim[index]; }
     ShapeAnimation*             getShaAnim(s32 index) const { return mpShaAnim[index]; }
 
+    void init(const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array = NULL, sead::Heap* heap = NULL);
+
+    void updateAnimations();
+    void updateModel();
+
 private:
-    Model*                                  mpModel;
+    ModelNW*                                mpModel;
     ModelResource*                          mpModelResource;
     sead::Buffer<SkeletalAnimation*>        mpSklAnim;
     sead::Buffer<TexturePatternAnimation*>  mpTexAnim;

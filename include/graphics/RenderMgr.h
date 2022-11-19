@@ -12,14 +12,14 @@
 
 class CullViewFrustum;
 class RenderObj;
-class RenderObjBaseLayer;
+class RenderObjLayerBase;
 
 class RenderMgr : public sead::IDisposer, public sead::INamable
 {
 public:
     struct ViewInfo
     {
-        RenderObjBaseLayer* layer;
+        RenderObjLayerBase* layer;
         sead::Matrix34f view_mtx;
         sead::Matrix44f proj_mtx;
         sead::Matrix44f* _74;
@@ -33,6 +33,8 @@ public:
     ~RenderMgr();
 
     void update(s32 view_index);
+
+    void loadEnvRes(const void* p_file);
 
     ModelEnvView& getModelEnvView() { return mModelEnvView; }
     const ModelEnvView& getModelEnvView() const { return mModelEnvView; }

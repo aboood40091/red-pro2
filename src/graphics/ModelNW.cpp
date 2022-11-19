@@ -46,25 +46,25 @@ ModelNW::~ModelNW()
 {
 }
 
-void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode, sead::Heap* heap)
+void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode, sead::Heap* heap)
 {
     switch (bounding_mode)
     {
-    case 0:
+    case cBoundingMode_Disable:
         mBoundingEnableFlag.reset(
             1 << 0 |
             1 << 1 |
             1 << 2
         );
         break;
-    case 1:
+    case cBoundingMode_Enable:
         mBoundingEnableFlag.set(
             1 << 0 |
             1 << 1 |
             1 << 2
         );
         break;
-    case 2:
+    case cBoundingMode_EnableSubBounding:
         mBoundingEnableFlag.set(
             1 << 0 |
             1 << 1 |
@@ -78,7 +78,7 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     nw::g3d::ModelObj::InitArg model_arg(res_model);
     model_arg.ViewCount(num_view);
 
-    if (bounding_mode != 0)
+    if (bounding_mode != cBoundingMode_Disable)
         model_arg.EnableBounding();
     else
         model_arg.DisableBounding();
@@ -1324,7 +1324,7 @@ bool ModelNW::isBoneVisible(s32 index) const
     return mModelEx.IsBoneVisible(index);
 }
 
-void ModelNW::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjBaseLayer* p_shadow_layer, RenderMgr* p_render_mgr)
+void ModelNW::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjLayerBase* p_shadow_layer, RenderMgr* p_render_mgr)
 {
     if (!isBoundingEnable())
         return;

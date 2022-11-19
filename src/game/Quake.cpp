@@ -1,3 +1,3 @@
-#include <game/course/Quake.h>
+#include <game/Quake.h>
 
 Quake* Quake::sInstance = NULL;

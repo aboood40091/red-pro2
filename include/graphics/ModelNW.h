@@ -228,7 +228,7 @@ public:
         return mBounding;
     }
 
-    void calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjBaseLayer* p_shadow_layer, RenderMgr* p_render_mgr) override;
+    void calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjLayerBase* p_shadow_layer, RenderMgr* p_render_mgr) override;
 
     sead::SafeString getName() const override
     {
@@ -277,7 +277,7 @@ public:
     }
 
 public:
-    void initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode, sead::Heap* heap);
+    void initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode, sead::Heap* heap);
 
     agl::g3d::ModelEx& getModelEx() { return mModelEx; }
     const agl::g3d::ModelEx& getModelEx() const { return mModelEx; }

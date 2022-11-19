@@ -11,7 +11,9 @@ class ResMgr
 public:
     ResMgr();
 
-    void* getFileFromArchiveRes(sead::ArchiveRes* archive, const sead::SafeString& filename, u32* length=NULL);
+    bool loadArchiveRes(const sead::SafeString& key, const sead::SafeString& archive_path, sead::Heap* heap, bool decompress);
+    void* getFileFromArchiveRes(const sead::SafeString& key, const sead::SafeString& filename, u32* length = NULL);
+    void* getFileFromArchiveRes(sead::ArchiveRes* archive, const sead::SafeString& filename, u32* length = NULL);
 
 private:
     static void* getFileFromArchiveResImpl_(sead::ArchiveRes* archive, const sead::SafeString& filename, u32* length);

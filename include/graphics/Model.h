@@ -18,9 +18,16 @@ class Model : public RenderObj, public sead::IDisposer
     SEAD_RTTI_OVERRIDE(Model, RenderObj)
 
 public:
+    enum BoundingMode
+    {
+        cBoundingMode_Disable,
+        cBoundingMode_Enable,
+        cBoundingMode_EnableSubBounding
+    };
+
     // Why are these here... ?
-    static ModelNW* createNW(const ModelResource& res, const sead::SafeString& name, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode, sead::Heap* heap);
-    static ModelNW* createNW(const ModelResource& res, const sead::SafeString& name, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode, sead::Heap* heap);
+    static ModelNW* createNW(const ModelResource& res, const sead::SafeString& name, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode, sead::Heap* heap);
+    static ModelNW* createNW(const ModelResource& res, const sead::SafeString& name, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode, sead::Heap* heap);
 
 public:
     Model();
@@ -52,7 +59,7 @@ public:
     virtual void setBoundingEnable(bool enable) = 0;
     virtual bool isBoundingEnable() const = 0;
     virtual const sead::Sphere3f& getBounding() const = 0;
-    virtual void calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjBaseLayer* p_shadow_layer, RenderMgr* p_render_mgr) = 0;
+    virtual void calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjLayerBase* p_shadow_layer, RenderMgr* p_render_mgr) = 0;
     virtual sead::SafeString getName() const = 0;
     virtual void setSklAnimBlendWeight(s32 index, f32 weight) = 0;
     virtual f32 getSklAnimBlendWeight(s32 index) const = 0;
@@ -66,6 +73,12 @@ public:
     virtual Animation* const* getShuAnims() const = 0;
     virtual Animation* const* getVisAnims() const = 0;
     virtual Animation* const* getShaAnims() const = 0;
+
+    s32 getOpaBufferIdx() const { return mOpaBufferIdx; }
+    s32 getXluBufferIdx() const { return mXluBufferIdx; }
+
+    void setOpaBufferIdx(s32 index) { mOpaBufferIdx = index; }
+    void setXluBufferIdx(s32 index) { mXluBufferIdx = index; }
 
 protected:
     s32 mOpaBufferIdx;

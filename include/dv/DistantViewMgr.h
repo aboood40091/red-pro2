@@ -34,6 +34,8 @@ private:
         {
         }
 
+        void initialize(const void* p_file);
+
         u8 data;
     };
 
@@ -48,7 +50,7 @@ private:
     void applyDepthOfField_(const agl::lyr::RenderInfo& render_info);
 
 public:
-    void loadDV(u8 course_file, u8 area, const sead::BoundBox2f& area_bound);
+    void initialize(u8 course_file, u8 area, const sead::BoundBox2f& area_bound);
 
     void resetAnim();
 

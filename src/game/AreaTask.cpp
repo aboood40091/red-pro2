@@ -1,3 +1,3 @@
-#include <game/course/AreaTask.h>
+#include <game/AreaTask.h>
 
 AreaTask* AreaTask::sInstance = NULL;

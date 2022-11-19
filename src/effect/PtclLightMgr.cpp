@@ -1,4 +1,4 @@
-#include <game/PtclLightMgr.h>
+#include <effect/PtclLightMgr.h>
 
 PtclLightMgr::PtclLightMgr()
     : sead::IDisposer()

@@ -44,6 +44,8 @@ public:
     ScrollEffectMgr& getScrollEffectMgr() { return mScrollEffectMgr; }
     const ScrollEffectMgr& getScrollEffectMgr() const { return mScrollEffectMgr; }
 
+    f32 getBgCenterYPos() const;
+
 private:
     f32 mZoom;
     f32 _14;

@@ -4,18 +4,23 @@
 
 class RenderMgr;
 
-class RenderObjBaseLayer : public Layer
+class RenderObjLayerBase : public Layer
 {
-    SEAD_RTTI_OVERRIDE(RenderObjBaseLayer, Layer)
+    SEAD_RTTI_OVERRIDE(RenderObjLayerBase, Layer)
 
 public:
-    RenderObjBaseLayer();
-    virtual ~RenderObjBaseLayer();
+    RenderObjLayerBase();
+    virtual ~RenderObjLayerBase();
 
     s32 getViewIndex() const { return mViewIndex; }
 
     virtual void setPolygonOffset(s32 polygon_offset) const
     {
+    }
+
+    RenderMgr* getRenderMgr() const
+    {
+        return mpRenderMgr;
     }
 
     void setRenderMgr(RenderMgr* p_render_mgr);
@@ -27,9 +32,9 @@ protected:
     s32 mViewIndex;
     void* _428;
 };
-static_assert(sizeof(RenderObjBaseLayer) == 0x42C, "RenderObjBaseLayer size mismatch");
+static_assert(sizeof(RenderObjLayerBase) == 0x42C, "RenderObjLayerBase size mismatch");
 
-class RenderObjLayer : public RenderObjBaseLayer
+class RenderObjLayer : public RenderObjLayerBase
 {
 public:
     enum RenderStep

@@ -1,5 +1,5 @@
-#include <game/PtclLightMgr.h>
-#include <game/PtclMgr.h>
+#include <effect/PtclLightMgr.h>
+#include <effect/PtclMgr.h>
 
 #include <gfx/seadCamera.h>
 #include <gfx/seadProjection.h>

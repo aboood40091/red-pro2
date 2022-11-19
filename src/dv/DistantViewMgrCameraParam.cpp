@@ -1,5 +1,5 @@
 #define override
-#include <game/DistantViewMgrCameraParam.h>
+#include <dv/DistantViewMgrCameraParam.h>
 
 void DistantViewMgrCameraParam::getModelMtx(sead::Matrix34f* p_model_mtx) const
 {
