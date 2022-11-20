@@ -84,7 +84,7 @@ void DistantViewMgr::calcView_()
     if (mpCameraParam->getTypeDirY() == 1)
         mCameraBasePos.y += mpCameraParam->getMagnifCameraPosY() * (BgScrollMgr::instance()->getScreenBottom() - mAreaMinY);
 
-    mCameraPos.set(mCameraBasePos + mCameraPosOffset);
+    mCameraPos.setAdd(mCameraBasePos, mCameraPosOffset);
 
     sead::Vector2f proj_base_offs(0.0f, 0.0f);
     if (Quake::instance())
@@ -180,7 +180,7 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
     }
     else
     {
-        mBgPos.set(area_bound.getSizeX(), BgScrollMgr::instance()->getBgCenterYPos(), 0.0f);
+        mBgPos.set(area_bound.getCenter().x, BgScrollMgr::instance()->getBgCenterYPos(), 0.0f);
     }
 
     sead::FixedSafeString<32> dv_fname("dv_");

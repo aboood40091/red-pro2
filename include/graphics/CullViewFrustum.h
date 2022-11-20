@@ -26,6 +26,8 @@ class CullViewFrustum
     };
 
 public:
+    CullViewFrustum();
+
     nw::g3d::ViewVolume& getViewVolume() { return mViewVolume; }
     const nw::g3d::ViewVolume& getViewVolume() const { return mViewVolume; }
 

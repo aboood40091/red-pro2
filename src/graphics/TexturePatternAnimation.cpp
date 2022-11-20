@@ -68,7 +68,9 @@ void TexturePatternAnimation::bindAnimObj_()
 
 void TexturePatternAnimation::play(const ModelResource* p_mdl_res, const sead::SafeString& name)
 {
-    s32 idx_anim = p_mdl_res->getResFile()->GetTexPatternAnimIndex(name.cstr());
+    sead::SafeString anim_name(name.cstr());
+
+    s32 idx_anim = p_mdl_res->getResFile()->GetTexPatternAnimIndex(anim_name.cstr());
   //if (idx_anim < 0)
   //    return;
 

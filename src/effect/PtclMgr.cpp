@@ -2,6 +2,7 @@
 #include <effect/PtclMgr.h>
 
 #include <gfx/seadCamera.h>
+#include <gfx/seadGraphics.h>
 #include <gfx/seadProjection.h>
 #include <layer/aglRenderInfo.h>
 #include <ptcl/seadPtclSystem.h>
@@ -14,9 +15,9 @@ u32 PtclMgr::userDataToType_(u16 user_data)
             return 14;
 
         if (user_data & 0x0400)
-            return 15;
+            return 13;
 
-        return 13;
+        return 15;
     }
 
     if (user_data & 0x0800)
@@ -25,9 +26,9 @@ u32 PtclMgr::userDataToType_(u16 user_data)
     if (user_data & 0x0100)
     {
         if (user_data & 0x0400)
-            return 11;
+            return 10;
 
-        return 10;
+        return 11;
     }
 
     if (user_data & 0x0400)
@@ -58,9 +59,9 @@ u32 PtclMgr::userDataToType_(u16 user_data)
         return 2;
 
     if (user_data & 0x1000)
-        return 9;
+        return 8;
 
-    return 8;
+    return 9;
 }
 
 SEAD_SINGLETON_DISPOSER_IMPL(PtclMgr)
@@ -113,7 +114,16 @@ void PtclMgr::draw(const agl::lyr::RenderInfo& render_info, u32 type, const sead
     sead::Vector3f cam_pos;
     p_camera->getWorldPosByMatrix(&cam_pos);
 
-    mpPtclSystem->beginRender(p_projection->getDeviceProjectionMatrix(), p_camera->getViewMatrix(), cam_pos, near, far);
+    GX2SetShaderMode(GX2_SHADER_MODE_UNIFORM_BLOCK);
+    GX2Invalidate(GX2_INVALIDATE_SHADER, 0, 0xffffffff);
+
+    mpPtclSystem->BeginRender(
+        reinterpret_cast<const nw::math::MTX44&>(p_projection->getDeviceProjectionMatrix()),
+        reinterpret_cast<const nw::math::MTX34&>(p_camera->getViewMatrix()),
+        reinterpret_cast<const nw::math::VEC3&>(cam_pos),
+        near,
+        far
+    );
 
     if (p_emitters)
     {
@@ -138,5 +148,8 @@ void PtclMgr::draw(const agl::lyr::RenderInfo& render_info, u32 type, const sead
         }
     }
 
-    mpPtclSystem->endRender();
+    mpPtclSystem->EndRender();
+
+    GX2SetShaderMode(GX2_SHADER_MODE_UNIFORM_REGISTER);
+    sead::Graphics::instance()->setBlendEnableImpl(true);
 }
