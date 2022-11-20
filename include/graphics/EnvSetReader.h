@@ -14,5 +14,5 @@ public:
     static void read(const sead::SafeString& path, sead::Heap* heap = NULL);
 
 private:
-    static void read(sead::ReadStream& stream, sead::Heap* heap);
+    static void read_(sead::ReadStream& stream, sead::Heap* heap);
 };

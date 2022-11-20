@@ -18,7 +18,7 @@ public:
 private:
     u8 _c9;
     bool mIsPrepareDone;
-    bool misDrawMethodReady;
+    bool mIsDrawMethodReady;
     u32 mControllerWrapper[4][0x194 / sizeof(u32)]; // ControllerWrapper[4]
     sead::BoundBox2f mBound;
     u32 mLoopFlag;

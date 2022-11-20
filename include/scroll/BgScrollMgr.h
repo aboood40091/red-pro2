@@ -49,11 +49,11 @@ public:
 private:
     f32 mZoom;
     f32 _14;
-    sead::BoundBox2f _0x18;
-    sead::BoundBox2f _0x28;
-    sead::BoundBox2f _0x38;
-    sead::BoundBox2f _0x48;
-    sead::BoundBox2f _0x58;
+    sead::BoundBox2f _18;
+    sead::BoundBox2f _28;
+    sead::BoundBox2f _38;
+    sead::BoundBox2f _48;
+    sead::BoundBox2f _58;
     f32 mScreenWidth;       // In world space
     f32 mScreenHeight;      // ^^^
     f32 mScreenLeft;        // ^^^
@@ -62,8 +62,8 @@ private:
     f32 mScreenTop;         // ^^^
     f32 mScreenCenterY;     // ^^^
     f32 mScreenBottom;      // ^^^
-    sead::BoundBox2f _0x88;
-    sead::BoundBox2f _0x98;
+    sead::BoundBox2f _88;
+    sead::BoundBox2f _98;
     void* mBoundMgr;
     void* mScrollLimitMgr;
     void* mZoomAreaMgr;

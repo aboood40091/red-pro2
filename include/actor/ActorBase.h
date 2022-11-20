@@ -69,7 +69,7 @@ protected:
     sead::Heap* mpHeap;
     u32 mID;
     Profile* mpProfile;
-    u8 mLifecycle;                      // 0: Wait for create, 1: Active, 2: Delete
+    u8 mLifecycle;                          // 0: Wait for create, 1: Active, 2: Delete
     bool _d;
     bool mIsActive;
     bool mRequestDelete;
