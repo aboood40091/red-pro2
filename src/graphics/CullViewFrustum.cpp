@@ -4,6 +4,10 @@
 #include <gfx/seadProjection.h>
 #include <math/seadMatrix.h>
 
+CullViewFrustum::CullViewFrustum()
+{
+}
+
 void CullViewFrustum::update(const sead::Camera& camera, const sead::PerspectiveProjection& projection)
 {
     sead::Matrix34f inv_view_mtx;

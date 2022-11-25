@@ -2,7 +2,7 @@
 
 #include <framework/seadCalculateTask.h>
 #include <framework/seadTaskMgr.h>
-#include <light/aglLightMapMgr.h>
+#include <lighting/aglLightMapMgr.h>
 
 class ModelNW;
 

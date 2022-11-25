@@ -5,7 +5,7 @@
 #include <graphics/ShaderHolder.h>
 
 #include <gfx/seadGraphics.h>
-#include <util/aglPrimitiveTexture.h>
+#include <utility/aglPrimitiveTexture.h>
 
 ModelNW::ModelNW()
     : Model()

@@ -28,7 +28,7 @@
 #include <heap/seadFrameHeap.h>
 #include <layer/aglRenderer.h>
 #include <layer/aglRenderInfo.h>
-#include <util/aglResParameter.h>
+#include <utility/aglResParameter.h>
 
 SEAD_SINGLETON_DISPOSER_IMPL(DistantViewMgr)
 
@@ -152,8 +152,8 @@ void DistantViewMgr::applyDepthOfField_(const agl::lyr::RenderInfo& render_info)
     if (!p_render_buffer)
         return;
 
-    p_render_buffer->getColorTarget()->expandAuxBuffer();
-    p_render_buffer->getDepthTarget()->expandHiZBuffer();
+    p_render_buffer->getRenderTargetColor()->expandAuxBuffer();
+    p_render_buffer->getRenderTargetDepth()->expandHiZBuffer();
 
     mDof.draw(0, *p_render_buffer, mProjection.getNear(), mProjection.getFar());
 }
