@@ -1,5 +1,6 @@
 #pragma once
 
+#include <container/seadSafeArray.h>
 #include <heap/seadDisposer.h>
 #include <math/seadBoundBox.h>
 
@@ -111,7 +112,7 @@ public:
     CourseDataFile* getFile(s32 index);
     /*
     {
-        CourseDataFile* p_cd_file = index < 4 ? mFile[index] : mFile[0];
+        CourseDataFile* p_cd_file = mFile[index];
         if (!p_cd_file->getBlock(CourseDataFile::cBlock_AreaData))
             return nullptr;
 
@@ -120,5 +121,5 @@ public:
     */
 
 private:
-    CourseDataFile mFile[4]; // sead::SafeArray
+    sead::SafeArray<CourseDataFile, 4> mFile;
 };

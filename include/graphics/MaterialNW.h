@@ -1,5 +1,6 @@
 #pragma once
 
+#include <container/seadSafeArray.h>
 #include <math/seadMatrix.h>
 
 #include <graphics/Material.h>
@@ -25,11 +26,10 @@ public:
     void setTevKColor(s32 index, const sead::Color4f& color) override;
     void getTevKColor(s32 index, sead::Color4f& color) const override;
 
-    // TODO: sead::SafeArray
-    sead::Matrix34f& getTexSrtMtx(s32 index) { if (index < 8) { return mTexSrtMtx[index]; } else { return mTexSrtMtx[0]; } }
-    const sead::Matrix34f& getTexSrtMtx(s32 index) const { if (index < 8) { return mTexSrtMtx[index]; } else { return mTexSrtMtx[0]; } }
+    sead::Matrix34f& getTexSrtMtx(s32 index) { return mTexSrtMtx[index]; }
+    const sead::Matrix34f& getTexSrtMtx(s32 index) const { return mTexSrtMtx[index]; }
 
 private:
     nw::g3d::MaterialObj* mMaterialObj;
-    sead::Matrix34f mTexSrtMtx[8]; // sead::SafeArray<sead::Matrix34f, 8>
+    sead::SafeArray<sead::Matrix34f, 8> mTexSrtMtx;
 };
