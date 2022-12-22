@@ -11,7 +11,7 @@ class ReadStream;
 class EnvSetReader
 {
 public:
-    static void read(const sead::SafeString& path, sead::Heap* heap = NULL);
+    static void read(const sead::SafeString& path, sead::Heap* heap = nullptr);
 
 private:
     static void read_(sead::ReadStream& stream, sead::Heap* heap);

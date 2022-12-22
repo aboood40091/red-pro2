@@ -16,10 +16,10 @@ ModelNW::ModelNW()
     , mpShuAnim()
     , mpVisAnim()
     , mpShaAnim()
-    , mpBuffer(NULL)
-    , mpBlockBuffer(NULL)
+    , mpBuffer(nullptr)
+    , mpBlockBuffer(nullptr)
     , mBlockBufferSize(0)
-    , mpSklAnimBlenderBuffer(NULL)
+    , mpSklAnimBlenderBuffer(nullptr)
     , mSklAnimBlendWeight()
     , mOpaShapeInfo()
     , mXluShapeInfo()
@@ -33,7 +33,7 @@ ModelNW::ModelNW()
     , mBoundingEnableFlag(0)
     , mViewShapeShadowFlagBuffer()
     , mBounding(sead::Vector3f::zero, 1.0f)
-    , mpSubBounding(NULL)
+    , mpSubBounding(nullptr)
     , mShapeFlag(1)
     , mBoundingFlagArray() // TODO
     , mSubBoundingFlagArray() // ^^
@@ -113,31 +113,31 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
         mSklAnimBlendWeight.fill(1.0f);
 
         mpSklAnim.allocBuffer(num_skl_anim, heap);
-        mpSklAnim.fill(NULL);
+        mpSklAnim.fill(nullptr);
     }
 
     if (num_tex_anim != 0)
     {
         mpTexAnim.allocBuffer(num_tex_anim, heap);
-        mpTexAnim.fill(NULL);
+        mpTexAnim.fill(nullptr);
     }
 
     if (num_shu_anim != 0)
     {
         mpShuAnim.allocBuffer(num_shu_anim, heap);
-        mpShuAnim.fill(NULL);
+        mpShuAnim.fill(nullptr);
     }
 
     if (num_vis_anim != 0)
     {
         mpVisAnim.allocBuffer(num_vis_anim, heap);
-        mpVisAnim.fill(NULL);
+        mpVisAnim.fill(nullptr);
     }
 
     if (num_sha_anim != 0)
     {
         mpShaAnim.allocBuffer(num_sha_anim, heap);
-        mpShaAnim.fill(NULL);
+        mpShaAnim.fill(nullptr);
     }
 
     sead::Graphics::instance()->lockDrawContext();
@@ -178,7 +178,7 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
 
             if (is_local)
             {
-                material.bindShaderResAssign(shader_archive->searchShaderProgram(p_res_material->GetName()), NULL, NULL);
+                material.bindShaderResAssign(shader_archive->searchShaderProgram(p_res_material->GetName()), nullptr, nullptr);
             }
             else
             {
@@ -222,7 +222,7 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
             *it = new (heap) MaterialNW(mModelEx.GetMaterial(it.getIndex()));
 
         mShape.allocBuffer(mModelEx.GetShapeCount(), heap);
-        const agl::UniformBlock* base_uniform_block = NULL;
+        const agl::UniformBlock* base_uniform_block = nullptr;
         for (sead::Buffer<Shape>::iterator it = mShape.begin(), it_end = mShape.end(); it != it_end; ++it)
         {
             s32 idx_shape = it.getIndex();
@@ -838,8 +838,8 @@ void ModelNW::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sea
     draw_info.view_index = view_index;
     draw_info.p_view_mtx = &view_mtx;
     draw_info.p_proj_mtx = &proj_mtx;
-    draw_info.p_shader_program = NULL;
-    draw_info.p_shader_assign = NULL;
+    draw_info.p_shader_program = nullptr;
+    draw_info.p_shader_assign = nullptr;
     draw_info.material_index = -1;
     draw_info.draw_shape = true;
     draw_info.draw_reflection = false;
@@ -871,8 +871,8 @@ void ModelNW::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sea
     draw_info.view_index = view_index;
     draw_info.p_view_mtx = &view_mtx;
     draw_info.p_proj_mtx = &proj_mtx;
-    draw_info.p_shader_program = NULL;
-    draw_info.p_shader_assign = NULL;
+    draw_info.p_shader_program = nullptr;
+    draw_info.p_shader_assign = nullptr;
     draw_info.material_index = -1;
     draw_info.draw_shape = true;
     draw_info.draw_reflection = false;
@@ -903,8 +903,8 @@ void ModelNW::drawShadowOpa(s32 view_index, const sead::Matrix34f& view_mtx, con
     draw_info.view_index = view_index;
     draw_info.p_view_mtx = &view_mtx;
     draw_info.p_proj_mtx = &proj_mtx;
-    draw_info.p_shader_program = NULL;
-    draw_info.p_shader_assign = NULL;
+    draw_info.p_shader_program = nullptr;
+    draw_info.p_shader_assign = nullptr;
     draw_info.material_index = -1;
     draw_info.draw_shape = false;
     draw_info.draw_reflection = false;
@@ -1002,8 +1002,8 @@ void ModelNW::drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx,
     draw_info.view_index = view_index;
     draw_info.p_view_mtx = &view_mtx;
     draw_info.p_proj_mtx = &proj_mtx;
-    draw_info.p_shader_program = NULL;
-    draw_info.p_shader_assign = NULL;
+    draw_info.p_shader_program = nullptr;
+    draw_info.p_shader_assign = nullptr;
     draw_info.material_index = -1;
     draw_info.draw_shape = true;
     draw_info.draw_reflection = true;
@@ -1035,8 +1035,8 @@ void ModelNW::drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx,
     draw_info.view_index = view_index;
     draw_info.p_view_mtx = &view_mtx;
     draw_info.p_proj_mtx = &proj_mtx;
-    draw_info.p_shader_program = NULL;
-    draw_info.p_shader_assign = NULL;
+    draw_info.p_shader_program = nullptr;
+    draw_info.p_shader_assign = nullptr;
     draw_info.material_index = -1;
     draw_info.draw_shape = true;
     draw_info.draw_reflection = true;
@@ -1087,7 +1087,7 @@ void ModelNW::updateAnimations()
 {
     if (mpSklAnim.isBufferReady())
     {
-        SkeletalAnimation* p_blend_start_anim = NULL;
+        SkeletalAnimation* p_blend_start_anim = nullptr;
         bool blend = false;
 
         sead::Buffer<SkeletalAnimation*>::constIterator it_end = mpSklAnim.constEnd();
@@ -1099,7 +1099,7 @@ void ModelNW::updateAnimations()
             {
                 if (sead::Mathf::abs(mSklAnimBlendWeight[it.getIndex()]) > 0.001f)
                 {
-                    if (p_blend_start_anim == NULL)
+                    if (p_blend_start_anim == nullptr)
                     {
                         p_blend_start_anim = p_anim;
                     }
@@ -1134,7 +1134,7 @@ void ModelNW::updateAnimations()
 
             mSklAnimBlender.ApplyTo(mModelEx.GetSkeleton());
         }
-        else if (p_blend_start_anim != NULL)
+        else if (p_blend_start_anim != nullptr)
         {
             p_blend_start_anim->calc();
             p_blend_start_anim->getAnimObj().ApplyTo(mModelEx.GetSkeleton());

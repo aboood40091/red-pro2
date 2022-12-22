@@ -44,11 +44,11 @@ DistantViewMgr::DistantViewMgr()
     , mCamera()
     , mProjection(mNear, mFar, sead::Mathf::deg2rad(mFovyDeg), 16.f / 9.f)
     , mCull()
-    , mpBasicModel(NULL)
+    , mpBasicModel(nullptr)
     , mOpt()
-    , mpCameraParam(NULL)
-    , mpEffectMgr(NULL)
-    , mpFFLMgr(NULL)
+    , mpCameraParam(nullptr)
+    , mpEffectMgr(nullptr)
+    , mpFFLMgr(nullptr)
     , mBgPos(0.0f, 0.0f, 0.0f)
     , mAreaMinY(AreaTask::instance()->getBound().getMin().y)
     , mDof()
@@ -230,8 +230,8 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
     ModelResourceMgr::instance()->loadResFile(dv_fname, dv_fname);
 
     const ModelResource* p_mdl_res = ModelResourceMgr::instance()->getResource(dv_fname);
-    ModelNW* p_mdl = Model::createNW(*p_mdl_res, dv_fname, 1, 1, 1, 2, 0, 0, Model::cBoundingMode_Enable, NULL);
-    BasicModel* p_basic_mdl = new (NULL, 4) BasicModel(p_mdl, 1, 1, 2, 0, 0);
+    ModelNW* p_mdl = Model::createNW(*p_mdl_res, dv_fname, 1, 1, 1, 2, 0, 0, Model::cBoundingMode_Enable, nullptr);
+    BasicModel* p_basic_mdl = new (nullptr, 4) BasicModel(p_mdl, 1, 1, 2, 0, 0);
     p_basic_mdl->init(p_mdl_res);
     mpBasicModel = p_basic_mdl;
 

@@ -33,7 +33,7 @@ public:
     PtclMgr();
     ~PtclMgr();
 
-    void draw(const agl::lyr::RenderInfo& render_info, u32 type, const sead::PtrArray<nw::eft::EmitterInstance>* p_emitters = NULL);
+    void draw(const agl::lyr::RenderInfo& render_info, u32 type, const sead::PtrArray<nw::eft::EmitterInstance>* p_emitters = nullptr);
 
 private:
     static u32 userDataToType_(u16 user_data);

@@ -95,7 +95,7 @@ public:
     }
 
     const DistantViewData* getBg2Data(u8 index) const;
-    const AreaData* getAreaData(u8 index, sead::BoundBox2f* p_box = NULL) const;
+    const AreaData* getAreaData(u8 index, sead::BoundBox2f* p_box = nullptr) const;
 
 private:
     u32 mIndex;

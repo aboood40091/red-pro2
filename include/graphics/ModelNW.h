@@ -193,7 +193,7 @@ public:
     u32 getBoneNum() const override;
 
     void setBoneLocalMatrix(s32 index, const sead::Matrix34f& rt, const sead::Vector3f& scale) override;
-    void getBoneLocalMatrix(s32 index, sead::Matrix34f* rt = NULL, sead::Vector3f* scale = NULL) const override;
+    void getBoneLocalMatrix(s32 index, sead::Matrix34f* rt = nullptr, sead::Vector3f* scale = nullptr) const override;
 
     void setBoneWorldMatrix(s32 index, const sead::Matrix34f& mtx) override;
     void getBoneWorldMatrix(s32 index, sead::Matrix34f* mtx) const override;

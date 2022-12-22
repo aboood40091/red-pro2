@@ -6,10 +6,10 @@
 VisibilityAnimation::VisibilityAnimation()
     : Animation()
     , mAnimObj()
-    , mpRes(NULL)
-    , mpModel(NULL)
+    , mpRes(nullptr)
+    , mpModel(nullptr)
     , mIndex(-1)
-    , mpBuffer(NULL)
+    , mpBuffer(nullptr)
 {
 }
 
@@ -57,7 +57,7 @@ void VisibilityAnimation::bindModel(const ModelNW* p_model, s32 index)
 
 void VisibilityAnimation::unbindModel()
 {
-    mpModel = NULL;
+    mpModel = nullptr;
     mIndex = -1;
 }
 

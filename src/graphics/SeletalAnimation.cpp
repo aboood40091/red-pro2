@@ -6,10 +6,10 @@
 SkeletalAnimation::SkeletalAnimation()
     : Animation()
     , mAnimObj()
-    , mpBuffer(NULL)
-    , mpModel(NULL)
+    , mpBuffer(nullptr)
+    , mpModel(nullptr)
     , mIndex(-1)
-    , mpRes(NULL)
+    , mpRes(nullptr)
 {
 }
 
@@ -52,7 +52,7 @@ void SkeletalAnimation::bindModel(const ModelNW* p_model, s32 index)
 
 void SkeletalAnimation::unbindModel()
 {
-    mpModel = NULL;
+    mpModel = nullptr;
     mIndex = -1;
 }
 

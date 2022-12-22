@@ -7,7 +7,7 @@
 #include <math/seadMathCalcCommon.h>
 
 ModelResource::ModelResource()
-    : mResFile(NULL)
+    : mResFile(nullptr)
     , mModelShaderArchive()
     , _1c(0)
 {
@@ -26,7 +26,7 @@ void ModelResource::destroy()
             mModelShaderArchive[i].obj->destroy();
 
     mResFile->Cleanup();
-    mResFile = NULL;
+    mResFile = nullptr;
 }
 
 void ModelResource::load(
@@ -85,7 +85,7 @@ void ModelResource::load(
 
         if (!is_local)
         {
-            mModelShaderArchive[idx_model].obj = NULL;
+            mModelShaderArchive[idx_model].obj = nullptr;
             // They forgot to free "shader_program_archive"...
         }
         else
@@ -98,9 +98,9 @@ void ModelResource::load(
 
             mModelShaderArchive[idx_model].obj = shader_program_archive;
             mModelShaderArchive[idx_model].res_binary_archive = res_binary_shader_archive;
-            mModelShaderArchive[idx_model].res_archive = NULL;
+            mModelShaderArchive[idx_model].res_archive = nullptr;
 
-            shader_program_archive->createWithOption(res_binary_shader_archive, NULL, 0, heap);
+            shader_program_archive->createWithOption(res_binary_shader_archive, nullptr, 0, heap);
 
             sead::Graphics::instance()->lockDrawContext();
             {

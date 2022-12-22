@@ -1,6 +1,6 @@
 #include <system/ResMgr.h>
 
-ResMgr* ResMgr::sInstance = NULL;
+ResMgr* ResMgr::sInstance = nullptr;
 
 void* ResMgr::getFileFromArchiveRes(sead::ArchiveRes* archive, const sead::SafeString& filename, u32* length)
 {

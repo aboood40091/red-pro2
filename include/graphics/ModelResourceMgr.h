@@ -12,7 +12,7 @@ class ModelResourceMgr
 public:
     ModelResourceMgr();
 
-    bool loadResFile(const sead::SafeString& key, const sead::SafeString& archive_name, sead::Heap* heap = NULL);
+    bool loadResFile(const sead::SafeString& key, const sead::SafeString& archive_name, sead::Heap* heap = nullptr);
     ModelResource* getResource(const sead::SafeString& key) const;
 
 private:
