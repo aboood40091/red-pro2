@@ -25,6 +25,7 @@
 
 #include <common/aglRenderBuffer.h>
 #include <common/aglRenderTarget.h>
+#include <g3d/aglTextureDataInitializerG3D.h>
 #include <heap/seadFrameHeap.h>
 #include <layer/aglRenderer.h>
 #include <layer/aglRenderInfo.h>
@@ -261,7 +262,7 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
 
         sead::Graphics::instance()->lockDrawContext();
         {
-            // TODO: agl::g3d::TextureDataInitializerG3D::initialize(&mDofIndTexture, *p_dof_ind);
+            agl::g3d::TextureDataInitializerG3D::initialize(&mDofIndTexture, *p_dof_ind);
         }
         sead::Graphics::instance()->unlockDrawContext();
 
