@@ -119,6 +119,14 @@ public:
     };
     static_assert(sizeof(DrawInfo) == 0x28, "ModelNW::DrawInfo size mismatch");
 
+    enum SamplerSlot
+    {
+        cSamplerSlot_LightMap_0 = 12,
+        cSamplerSlot_ReflectionMap = cSamplerSlot_LightMap_0 + LightMapMgr::cLightMapNum,
+        cSamplerSlot_ShadowMap
+    };
+    static_assert(cSamplerSlot_ReflectionMap == 14);
+
 private:
     class BoundingFlagArray
     {

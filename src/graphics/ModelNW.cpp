@@ -453,7 +453,7 @@ void ModelNW::activateMaterial(const agl::g3d::ModelShaderAssign& shader_assign,
                 LightMapMgr::instance()->getLightMapMgr()
                     .getLightMap(idx_lghtmap)
                         .getTextureSampler()
-                            .activate(location, 12 + i);
+                            .activate(location, cSamplerSlot_LightMap_0 + i);
             }
         }
     }
@@ -703,18 +703,18 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
         {
             const agl::TextureSampler& tex_sampler = p_render_mgr->getShadowMap()
                                                         ? *p_render_mgr->getShadowMap()
-                                                        : agl::utl::PrimitiveTexture::instance()->getTextureSampler(9);
+                                                        : agl::utl::PrimitiveTexture::instance()->getTextureSampler(agl::utl::PrimitiveTexture::cSampler_DepthShadow);
 
-            tex_sampler.activate(draw_info.p_shader_assign->sdw_location, 15);
+            tex_sampler.activate(draw_info.p_shader_assign->sdw_location, cSamplerSlot_ShadowMap);
         }
 
         if (draw_info.p_shader_assign->rfl_location.isValid())
         {
             const agl::TextureSampler& tex_sampler = p_render_mgr->getReflectionMap()
                                                         ? *p_render_mgr->getReflectionMap()
-                                                        : agl::utl::PrimitiveTexture::instance()->getTextureSampler(2);
+                                                        : agl::utl::PrimitiveTexture::instance()->getTextureSampler(agl::utl::PrimitiveTexture::cSampler_Black2D);
 
-            tex_sampler.activate(draw_info.p_shader_assign->rfl_location, 14);
+            tex_sampler.activate(draw_info.p_shader_assign->rfl_location, cSamplerSlot_ReflectionMap);
         }
     }
 
