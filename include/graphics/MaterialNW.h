@@ -14,7 +14,6 @@ class MaterialNW final : public Material
 public:
     MaterialNW(nw::g3d::MaterialObj* material)
         : mMaterialObj(material)
-        , mTexSrtMtx()
     {
     }
 
