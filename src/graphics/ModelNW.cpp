@@ -35,8 +35,8 @@ ModelNW::ModelNW()
     , mBounding(sead::Vector3f::zero, 1.0f)
     , mpSubBounding(nullptr)
     , mShapeFlag(1)
-    , mBoundingFlagArray() // TODO
-    , mSubBoundingFlagArray() // ^^
+    , mBoundingFlagArray()
+    , mSubBoundingFlagArray()
     , mViewDepthShadowEnableFlag()
     , mDisplayListDirty(false)
 {
@@ -476,10 +476,7 @@ void ModelNW::calcBounding_()
             mBounding.setRadius(p_bounding->radius);
         }
 
-        // ???
-        sead::MemUtil::fill(mSubBoundingFlagArray, u8(-1), sizeof(u32) * 9);
-        // ??????
-        mSubBoundingFlagArray[9] = 0xFFFFFFFF;
+        mSubBoundingFlagArray.setAll();
 
         mBoundingEnableFlag.reset(
             1 << 1 |
@@ -496,12 +493,11 @@ void ModelNW::calcBounding_()
             nw::g3d::ShapeObj* p_shape = mModelEx.GetShape(idx_shape);
 
             if (p_shape->GetVtxSkinCount() != 0 ||
-                getBoundingFlag_(p_shape->GetBoneIndex()))
+                mBoundingFlagArray.get(p_shape->GetBoneIndex()))
             {
                 p_shape->CalcBounding(mModelEx.GetSkeleton());
 
-                if (idx_shape < 32*10)
-                    setSubBoundingFlag_(idx_shape);
+                mSubBoundingFlagArray.set(idx_shape, true);
 
                 p_bounding->Merge(*p_bounding, *p_shape->GetBounding());
 
@@ -522,19 +518,9 @@ void ModelNW::calcBounding_()
 
     if (mBoundingEnableFlag.isOn(1 << 5))
     {
-        u32* p_sub_flag_array = mSubBoundingFlagArray;
+        BoundingFlagArray* const p_sub_flag_array = &mSubBoundingFlagArray;
 
-        bool has_sub_bounding = false;
-        for (s32 i = 0; i < 10; i++)
-        {
-            if (p_sub_flag_array[i] != 0)
-            {
-                has_sub_bounding = true;
-                break;
-            }
-        }
-
-        if (has_sub_bounding)
+        if (p_sub_flag_array->any())
         {
             nw::g3d::AABB aabb;
             aabb.min.Set(sead::Mathf::maxNumber(), sead::Mathf::maxNumber(), sead::Mathf::maxNumber());
@@ -546,13 +532,13 @@ void ModelNW::calcBounding_()
             {
                 nw::g3d::ShapeObj* p_shape = mModelEx.GetShape(idx_shape);
 
-                if (getSubBoundingFlag_(idx_shape))
+                if (p_sub_flag_array->get(idx_shape))
                     p_shape->CalcSubBounding(p_skeleton);
 
                 aabb.Merge(aabb, *p_shape->GetSubBoundingArray());
             }
 
-            sead::MemUtil::fillZero(p_sub_flag_array, sizeof(u32) * 10);
+            p_sub_flag_array->resetAll();
 
             mpSubBounding->setUndef();
             mpSubBounding->setMax(reinterpret_cast<const sead::Vector3f&>(aabb.max));
@@ -805,12 +791,10 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
 
     if (bounding_intersect == 0 && mBoundingEnableFlag.isOn(1 << 0) && p_cull && p_res_mesh->GetSubMeshCount() > 1)
     {
-        if (getSubBoundingFlag_(idx_shape))
+        if (mSubBoundingFlagArray.get(idx_shape))
         {
             const_cast<nw::g3d::ShapeObj*>(p_shape)->CalcSubBounding(mModelEx.GetSkeleton());
-
-            if (idx_shape < 32*10)
-                const_cast<ModelNW*>(this)->resetSubBoundingFlag_(idx_shape);
+            const_cast<BoundingFlagArray*>(&mSubBoundingFlagArray)->set(idx_shape, false);
         }
 
         nw::g3d::CullingContext ctx;
@@ -1069,7 +1053,7 @@ bool ModelNW::hasXlu() const
 
 // ----------------------------------------------------------------------
 
-void ModelNW::setBoundingFlagArray_(u32 flag_array[], const SkeletalAnimation& anim)
+void ModelNW::setBoundingFlagArray_(BoundingFlagArray& flag_array, const SkeletalAnimation& anim)
 {
     const nw::g3d::AnimBindTable& bind_table = anim.getAnimObj().GetBindTable();
     for (s32 idx_anim = 0; idx_anim < bind_table.GetAnimCount(); idx_anim++)
@@ -1077,8 +1061,7 @@ void ModelNW::setBoundingFlagArray_(u32 flag_array[], const SkeletalAnimation& a
         if (bind_table.IsEnabled(idx_anim))
         {
             s32 index = bind_table.GetTargetIndex(idx_anim);
-            if (index < 32*10)
-                flag_array[index >> 5] |= 1 << (index & 0x1F);
+            flag_array.set(index, true);
         }
     }
 }
@@ -1113,7 +1096,7 @@ void ModelNW::updateAnimations()
         }
 
         if (mBoundingEnableFlag.isOn(1 << 3))
-            sead::MemUtil::fillZero(mBoundingFlagArray, sizeof(mBoundingFlagArray));
+            mBoundingFlagArray.resetAll();
 
         if (blend)
         {

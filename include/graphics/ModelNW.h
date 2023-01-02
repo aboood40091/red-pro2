@@ -8,6 +8,7 @@
 #include <common/aglUniformBlock.h>
 #include <container/seadBuffer.h>
 #include <container/seadPtrArray.h>
+#include <container/seadSafeArray.h>
 #include <g3d/aglModelEx.h>
 #include <math/seadBoundBox.h>
 
@@ -117,6 +118,57 @@ public:
         const CullViewFrustum* p_cull;
     };
     static_assert(sizeof(DrawInfo) == 0x28, "ModelNW::DrawInfo size mismatch");
+
+private:
+    class BoundingFlagArray
+    {
+    public:
+        BoundingFlagArray()
+        {
+            resetAll();
+        }
+
+        void set(s32 index, bool enable)
+        {
+            if (index >= 32*10)
+                return;
+
+            if (enable)
+                mBuffer[index >> 5] |= 1 << (index & 0x1f);
+            else
+                mBuffer[index >> 5] &= ~(1 << (index & 0x1f));
+        }
+
+        bool get(s32 index) const
+        {
+            return mBuffer[index >> 5] & 1 << (index & 0x1f);
+        }
+
+        bool any() const
+        {
+            for (s32 i = 0; i < 10; i++)
+                if (mBuffer[i] != 0)
+                    return true;
+
+            return false;
+        }
+
+        void setAll()
+        {
+            // ???
+            sead::MemUtil::fill(mBuffer, u8(-1), sizeof(sead::BitFlag32) * 9);
+            // ??????
+            mBuffer[9] = u32(-1);
+        }
+
+        void resetAll()
+        {
+            sead::MemUtil::fillZero(mBuffer, sizeof(mBuffer));
+        }
+    private:
+        u32 mBuffer[10];
+    };
+    static_assert(sizeof(BoundingFlagArray) == 0x28, "ModelNW::BoundingFlagArray size mismatch");
 
 public:
     // Calculates the drawing resources for skeleton matrices, shapes and materials
@@ -290,37 +342,12 @@ public:
     void setDisplayListDirty();
 
 private:
-    void setBoundingFlag_(s32 index)
-    {
-        mBoundingFlagArray[index >> 5] |= 1 << (index & 0x1F);
-    }
-
-    bool getBoundingFlag_(s32 index) const
-    {
-        return mBoundingFlagArray[index >> 5] & 1 << (index & 0x1F);
-    }
-
-    void setSubBoundingFlag_(s32 index)
-    {
-        mSubBoundingFlagArray[index >> 5] |= 1 << (index & 0x1F);
-    }
-
-    void resetSubBoundingFlag_(s32 index)
-    {
-        mSubBoundingFlagArray[index >> 5] &= ~(1 << (index & 0x1F));
-    }
-
-    bool getSubBoundingFlag_(s32 index) const
-    {
-        return mSubBoundingFlagArray[index >> 5] & 1 << (index & 0x1F);
-    }
-
     void createViewShapeShadowFlagBuffer_(s32 num_view, sead::Heap* heap);
     void initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw::g3d::MaterialObj* p_material, const nw::g3d::ShapeObj* p_shape);
     static s32 sortShapeRenderInfoCmp(const ShapeRenderInfo* a, const ShapeRenderInfo* b);
     void calcBounding_();
     void applyBlendWeight_(s32 shape_index);
-    static void setBoundingFlagArray_(u32 flag_array[], const SkeletalAnimation& anim);
+    static void setBoundingFlagArray_(BoundingFlagArray& flag_array, const SkeletalAnimation& anim);
 
     void drawOpa_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const;
     void drawXlu_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const;
@@ -354,8 +381,8 @@ private:
     sead::Sphere3f mBounding;
     sead::BoundBox3f* mpSubBounding;
     sead::BitFlag32 mShapeFlag; // & 4: a shape has shadow cast, & 2: a shape has reflection, & 1: a shape is visible
-    u32 mBoundingFlagArray[10];    // sead::UnsafeArray?
-    u32 mSubBoundingFlagArray[10]; // sead::UnsafeArray?
+    BoundingFlagArray mBoundingFlagArray;
+    BoundingFlagArray mSubBoundingFlagArray;
     sead::BitFlag32 mViewDepthShadowEnableFlag;
     bool mDisplayListDirty;
 };
