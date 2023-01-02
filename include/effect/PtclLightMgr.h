@@ -1,5 +1,6 @@
 #pragma once
 
+#include <container/seadSafeArray.h>
 #include <gfx/seadColor.h>
 #include <heap/seadDisposer.h>
 
@@ -19,6 +20,6 @@ public:
     void setEmitterColor(nw::eft::EmitterController* p_emitter_controller, u16 user_data);
 
 private:
-    sead::Color4f mLightColor[6]; // sead::UnsafeArray<sead::Color4f, 6>
+    sead::UnsafeArray<sead::Color4f, 6> mLightColor;
 };
 static_assert(sizeof(PtclLightMgr) == 0x70, "PtclLightMgr size mismatch");
