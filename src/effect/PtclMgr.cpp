@@ -151,5 +151,5 @@ void PtclMgr::draw(const agl::lyr::RenderInfo& render_info, u32 type, const sead
     mpPtclSystem->EndRender();
 
     GX2SetShaderMode(GX2_SHADER_MODE_UNIFORM_REGISTER);
-    sead::Graphics::instance()->setBlendEnableImpl(true);
+    sead::Graphics::instance()->setBlendEnable(true);
 }
