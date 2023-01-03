@@ -100,6 +100,9 @@ public:
     const AreaData* getAreaData(u8 index, sead::BoundBox2f* p_box = nullptr) const;
 
 private:
+    void getAreaBox_(sead::BoundBox2f* p_box, const AreaData& area_data, f32 delta = 0.0f) const;
+
+private:
     u32 mIndex;
     sead::SafeArray<const void*, cBlock_Num> mBlock;
     sead::SafeArray<u32, cBlock_Num> mBlockSize;

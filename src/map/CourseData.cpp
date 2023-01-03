@@ -12,6 +12,24 @@ const DistantViewData* CourseDataFile::getBg2Data(u8 index) const
     return nullptr;
 }
 
+const AreaData* CourseDataFile::getAreaData(u8 index, sead::BoundBox2f* p_box) const
+{
+    const AreaData* area_data = static_cast<const AreaData*>(mBlock[cBlock_AreaData]);
+
+    for (u32 i = 0; i < mBlockEntryNum[cBlock_AreaData]; i++)
+    {
+        if (area_data[i].id == index)
+        {
+            if (p_box != nullptr)
+                getAreaBox_(p_box, area_data[i]);
+
+            return &(area_data[i]);
+        }
+    }
+
+    return nullptr;
+}
+
 CourseData* CourseData::sInstance = nullptr;
 
 CourseDataFile* CourseData::getFile(s32 index)
