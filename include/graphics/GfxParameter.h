@@ -2,6 +2,7 @@
 
 #include <heap/seadDisposer.h>
 #include <resource/seadSharcArchiveRes.h>
+#include <utility/aglParameterIO.h>
 
 class GfxParameter
 {
