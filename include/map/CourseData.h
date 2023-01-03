@@ -61,6 +61,8 @@ struct AreaData
 };
 static_assert(sizeof(AreaData) == 0x1C);
 
+struct Sprite;
+
 class CourseDataFile
 {
     // Is the official name. Called "area" by the modding community.
@@ -99,8 +101,14 @@ public:
 
 private:
     u32 mIndex;
-    const void* mBlock[cBlock_Num];
+    sead::SafeArray<const void*, cBlock_Num> mBlock;
+    sead::SafeArray<u32, cBlock_Num> mBlockSize;
+    sead::SafeArray<u32, cBlock_Num> mBlockEntryNum;
+    sead::SafeArray<Sprite*, 64> _b8;
+    sead::SafeArray<u32, 64> _1b8;
+    sead::SafeArray<u32, 64> _2b8;
 };
+static_assert(sizeof(CourseDataFile) == 0x3B8, "CourseDataFile size mismatch");
 
 class CourseData
 {
@@ -108,18 +116,11 @@ class CourseData
 
 public:
     CourseData();
+    ~CourseData();
 
     CourseDataFile* getFile(s32 index);
-    /*
-    {
-        CourseDataFile* p_cd_file = mFile[index];
-        if (!p_cd_file->getBlock(CourseDataFile::cBlock_AreaData))
-            return nullptr;
-
-        return p_cd_file;
-    }
-    */
 
 private:
     sead::SafeArray<CourseDataFile, 4> mFile;
 };
+static_assert(sizeof(CourseData) == 0xEF0, "CourseData size mismatch");
