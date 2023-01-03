@@ -30,6 +30,23 @@ const AreaData* CourseDataFile::getAreaData(u8 index, sead::BoundBox2f* p_box) c
     return nullptr;
 }
 
+void CourseDataFile::getAreaBox_(sead::BoundBox2f* p_box, const AreaData& area_data, f32 delta) const
+{
+    s32 min_y = area_data.offset.y + area_data.size.y;
+
+    sead::Vector2f min(
+         f32(area_data.offset.x) - delta,
+        -f32(             min_y) - delta
+    );
+
+    sead::Vector2f max(
+        min.x + area_data.size.x + delta + delta,
+        min.y + area_data.size.y + delta + delta
+    );
+
+    p_box->set(min, max);
+}
+
 CourseData* CourseData::sInstance = nullptr;
 
 CourseDataFile* CourseData::getFile(s32 index)
