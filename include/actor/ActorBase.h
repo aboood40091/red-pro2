@@ -2,6 +2,7 @@
 
 #include <container/seadOffsetList.h>
 #include <heap/seadHeap.h>
+#include <math/seadVector.h>
 #include <prim/seadBitFlag.h>
 #include <prim/seadRuntimeTypeInfo.h>
 
@@ -11,17 +12,17 @@ struct ActorInitArg
 {
     u32 param_1;
     u32 param_2;
-    u32 parentId;
+    u32 parent_id;
     Profile* profile;
     sead::Vector3f position;
     u32 rotation;
     u8 layer;
-    u8 eventId1;
-    u8 eventId2;
+    u8 event_id_1;
+    u8 event_id_2;
     u8 _23;                     // Unused
-    u8 movementId;
-    u8 linkId;
-    u8 initStateFlag;
+    u8 movement_id;
+    u8 link_id;
+    u8 init_state_flag;
     u8 _27;                     // Unused
     u8* _28;
 };
@@ -64,6 +65,13 @@ public:
     {
         mRequestDelete = true;
     }
+
+    u32 getID() const
+    {
+        return mID & 0x3fffff;
+    }
+
+    u32 getProfileID() const;
 
 protected:
     sead::Heap* mpHeap;
