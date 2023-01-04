@@ -1,5 +1,5 @@
 #include <actor/ActorMgr.h>
-#include <actor/Profile.h>
+#include <actor/ProfileID.h>
 #include <dv/DistantViewMgr.h>
 #define override
 #include <dv/DistantViewMgrCameraParam.h>
@@ -169,7 +169,7 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
     const AreaData* p_area_data = p_cd_file->getAreaData(area);
     const DistantViewData* p_dv_data = p_cd_file->getBg2Data(p_area_data->bg2);
 
-    const ActorMgr::iterator itr_bg_center = ActorMgr::instance()->searchBaseByProfId(ProfileId::cBgCenter);
+    const ActorMgr::iterator itr_bg_center = ActorMgr::instance()->searchBaseByProfID(ProfileID::cBgCenter);
     if (itr_bg_center != ActorMgr::instance()->end())
     {
         BgCenter* p_bg_center = sead::DynamicCast<BgCenter>(*itr_bg_center);

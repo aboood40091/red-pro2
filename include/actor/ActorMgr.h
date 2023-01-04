@@ -17,20 +17,20 @@ public:
 public:
     ActorMgr();
 
-    iterator searchBaseByProfId(u32 id, iterator pp_start);
-    iterator searchBaseByProfId(u32 id)
+    iterator searchBaseByProfID(u32 id, iterator pp_start) const;
+    iterator searchBaseByProfID(u32 id) const
     {
-        return searchBaseByProfId(id, begin());
+        return searchBaseByProfID(id, begin());
     }
 
     iterator begin() const
     {
-        return &mActorObjBuffer.mActor.front();
+        return mActorObjBuffer.begin();
     }
 
     iterator end() const
     {
-        return mActorObjBuffer.mpActorLast;
+        return mActorObjBuffer.end();
     }
 
 private:
@@ -44,7 +44,7 @@ private:
     sead::FixedPtrArray<sead::Heap, 520> mActorDeleteHeap;
     sead::FixedPtrArray<ActorBase, 520> mActorFinalExecute;
     ActorObjBuffer mActorObjBuffer;
-    u32 mActorCreateId;
+    u32 mActorCreateID;
     u8 mActorCreateLifecycle;
     u8 _6a3d[3];
     bool mActorDrawDone;
