@@ -66,6 +66,11 @@ public:
         mRequestDelete = true;
     }
 
+    bool isDeleted() const
+    {
+        return mRequestDelete;
+    }
+
     u32 getID() const
     {
         return mID & 0x3fffff;
