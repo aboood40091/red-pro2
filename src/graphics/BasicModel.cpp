@@ -81,3 +81,9 @@ void BasicModel::init(ModelResource* p_mdl_res, const sead::PtrArray<ModelResour
         }
     }
 }
+
+void BasicModel::updateModel()
+{
+    mpModel->updateAnimations();
+    mpModel->updateModel();
+}
