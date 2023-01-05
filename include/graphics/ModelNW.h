@@ -311,6 +311,7 @@ public:
     void setVisAnim(s32 index, Animation* anim) override;
     void setShaAnim(s32 index, Animation* anim) override;
 
+private:
     Animation* const* getSklAnims() const override
     {
         return reinterpret_cast<Animation* const*>(mpSklAnim.getBufferPtr());
@@ -334,6 +335,32 @@ public:
     Animation* const* getShaAnims() const override
     {
         return reinterpret_cast<Animation* const*>(mpShaAnim.getBufferPtr());
+    }
+
+public:
+    SkeletalAnimation** getSklAnimBuffer()
+    {
+        return const_cast<SkeletalAnimation**>(reinterpret_cast<SkeletalAnimation* const*>(getSklAnims()));
+    }
+
+    TexturePatternAnimation** getTexAnimBuffer()
+    {
+        return const_cast<TexturePatternAnimation**>(reinterpret_cast<TexturePatternAnimation* const*>(getTexAnims()));
+    }
+
+    ShaderParamAnimation** getShuAnimBuffer()
+    {
+        return const_cast<ShaderParamAnimation**>(reinterpret_cast<ShaderParamAnimation* const*>(getShuAnims()));
+    }
+
+    VisibilityAnimation** getVisAnimBuffer()
+    {
+        return const_cast<VisibilityAnimation**>(reinterpret_cast<VisibilityAnimation* const*>(getVisAnims()));
+    }
+
+    ShapeAnimation** getShaAnimBuffer()
+    {
+        return const_cast<ShapeAnimation**>(reinterpret_cast<ShapeAnimation* const*>(getShaAnims()));
     }
 
 public:

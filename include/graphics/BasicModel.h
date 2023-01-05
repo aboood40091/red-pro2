@@ -1,6 +1,8 @@
 #pragma once
 
-#include <basis/seadTypes.h>
+#include <container/seadBuffer.h>
+#include <container/seadPtrArray.h>
+#include <heap/seadHeap.h>
 
 class ModelNW;
 class ModelResource;
@@ -13,7 +15,7 @@ class VisibilityAnimation;
 class BasicModel
 {
 public:
-    BasicModel(ModelNW* p_model, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim);
+    BasicModel(ModelNW* p_model, u32 skl_anim_num, u32 tex_anim_num, u32 shu_anim_num, u32 vis_anim_num, u32 sha_anim_num);
 
     ModelNW* getModel() const { return mpModel; }
     ModelResource* getModelResource() const { return mpModelResource; }
