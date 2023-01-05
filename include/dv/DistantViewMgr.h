@@ -30,9 +30,7 @@ class DistantViewMgr
 private:
     struct Options
     {
-        Options()
-        {
-        }
+        Options();
 
         void initialize(const void* p_file);
 
