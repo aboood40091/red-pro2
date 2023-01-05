@@ -4,9 +4,9 @@
 void DVCameraParam::getModelMtx(sead::Matrix34f* p_model_mtx) const
 {
     sead::Vector3f model_offset(
-        mModelOffsetX.getValue(),
-        mModelOffsetY.getValue(),
-        mModelOffsetZ.getValue()
+        *mModelOffsetX,
+        *mModelOffsetY,
+        *mModelOffsetZ
     );
     model_offset += *mpBgPos;
 

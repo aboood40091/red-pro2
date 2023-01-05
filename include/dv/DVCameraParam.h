@@ -12,11 +12,11 @@ class DVCameraParam : public sead::IDisposer
 public:
     DVCameraParam(DistantViewMgr* dv_mgr, const sead::Vector3f* p_bg_pos, const sead::SafeString& dv_name);
 
-    const sead::Vector2f& getProjOffset() const { return mProjOffset.getValue(); }
-    s32 getTypeDirY() const { return mTypeDirY.getValue(); }
-    f32 getMagnifProjOffsetY() const { return mMagnifProjOffsetY.getValue(); }
-    f32 getMagnifCameraPosY() const { return mMagnifCameraPosY.getValue(); }
-    const sead::Vector2f& getIndirectScrollSpd() const { return mIndirectScrollSpd.getValue(); }
+    const sead::Vector2f& getProjOffset() const { return *mProjOffset; }
+    s32 getTypeDirY() const { return *mTypeDirY; }
+    f32 getMagnifProjOffsetY() const { return *mMagnifProjOffsetY; }
+    f32 getMagnifCameraPosY() const { return *mMagnifCameraPosY; }
+    const sead::Vector2f& getIndirectScrollSpd() const { return *mIndirectScrollSpd; }
 
     void getModelMtx(sead::Matrix34f* p_model_mtx) const;
 
