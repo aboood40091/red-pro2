@@ -47,7 +47,9 @@ public:
         mValue = default_value;
     }
 
-    virtual ~Parameter();
+    virtual ~Parameter()
+    {
+    }
 
     void read(sead::ReadStream& stream) override;
 
@@ -63,15 +65,6 @@ public:
 private:
     T mValue;
 };
-
-template <>
-Parameter<u32>::~Parameter();
-
-template <>
-Parameter<f32>::~Parameter();
-
-template <>
-Parameter<sead::Vector2f>::~Parameter();
 
 template <>
 void Parameter<u32>::read(sead::ReadStream& stream);
