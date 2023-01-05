@@ -1,7 +1,7 @@
 #define override
-#include <dv/DistantViewMgrCameraParam.h>
+#include <dv/DVCameraParam.h>
 
-void DistantViewMgrCameraParam::getModelMtx(sead::Matrix34f* p_model_mtx) const
+void DVCameraParam::getModelMtx(sead::Matrix34f* p_model_mtx) const
 {
     sead::Vector3f model_offset(
         mModelOffsetX.getValue(),

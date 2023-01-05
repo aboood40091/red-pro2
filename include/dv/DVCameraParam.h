@@ -14,7 +14,7 @@ class ReadStream;
 
 class DistantViewMgr;
 
-class DistantViewMgrCameraParam : public sead::IDisposer
+class DVCameraParam : public sead::IDisposer
 {
 private:
     // These are actually in a different file
@@ -65,7 +65,7 @@ private:
     typedef Param<sead::Vector2f> ParamVec2f;
 
 public:
-    DistantViewMgrCameraParam(DistantViewMgr* dv_mgr, const sead::Vector3f* p_bg_pos, const sead::SafeString& dv_name);
+    DVCameraParam(DistantViewMgr* dv_mgr, const sead::Vector3f* p_bg_pos, const sead::SafeString& dv_name);
 
     const sead::Vector2f& getProjOffset() const { return mProjOffset.getValue(); }
     s32 getTypeDirY() const { return mTypeDirY.getValue(); }

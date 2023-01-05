@@ -2,7 +2,7 @@
 #include <actor/ProfileID.h>
 #include <dv/DistantViewMgr.h>
 #define override
-#include <dv/DistantViewMgrCameraParam.h>
+#include <dv/DVCameraParam.h>
 #include <effect/PtclMgr.h>
 #include <game/AreaLayerMgr.h>
 #include <game/AreaTask.h>
@@ -205,7 +205,7 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
     dv_subfile_fname.append(".opt");
     mOpt.initialize(ResMgr::instance()->getFileFromArchiveRes(dv_fname, dv_subfile_fname));
 
-    mpCameraParam = new DistantViewMgrCameraParam(this, &mBgPos, dv_fname);
+    mpCameraParam = new DVCameraParam(this, &mBgPos, dv_fname);
 
     dv_subfile_fname = dv_fname;
     dv_subfile_fname.append(".baglenv");

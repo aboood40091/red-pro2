@@ -17,7 +17,7 @@ class BasicModel;
 //class DistantViewCreditActorMgr;
 class DistantViewEffectMgr;
 class DistantViewFFLMgr;
-class DistantViewMgrCameraParam;
+class DVCameraParam;
 
 class ShaderParamAnimation;
 class SkeletalAnimation;
@@ -84,7 +84,7 @@ private:
     CullViewFrustum mCull;
     BasicModel* mpBasicModel;
     Options mOpt;
-    DistantViewMgrCameraParam* mpCameraParam;
+    DVCameraParam* mpCameraParam;
     DistantViewEffectMgr* mpEffectMgr;
     DistantViewFFLMgr* mpFFLMgr;
     sead::Vector3f mBgPos; // Position relative to the Bg / level camera
