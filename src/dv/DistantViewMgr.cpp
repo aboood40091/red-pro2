@@ -46,7 +46,7 @@ DistantViewMgr::DistantViewMgr()
     , mProjection(mNear, mFar, sead::Mathf::deg2rad(mFovyDeg), 16.f / 9.f)
     , mCull()
     , mpBasicModel(nullptr)
-    , mOpt()
+    , mEnvTagMgr()
     , mpCameraParam(nullptr)
     , mpEffectMgr(nullptr)
     , mpFFLMgr(nullptr)
@@ -203,7 +203,7 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
 
     sead::FixedSafeString<64> dv_subfile_fname(dv_fname);
     dv_subfile_fname.append(".opt");
-    mOpt.initialize(ResMgr::instance()->getFileFromArchiveRes(dv_fname, dv_subfile_fname));
+    mEnvTagMgr.initialize(ResMgr::instance()->getFileFromArchiveRes(dv_fname, dv_subfile_fname));
 
     mpCameraParam = new DVCameraParam(this, &mBgPos, dv_fname);
 

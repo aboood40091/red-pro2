@@ -11,6 +11,7 @@
 #include <postfx/aglDepthOfField.h>
 
 #include <graphics/CullViewFrustum.h>
+#include <dv/DVEnvTagMgr.h>
 
 class BasicModel;
 
@@ -26,16 +27,6 @@ class TexturePatternAnimation;
 class DistantViewMgr
 {
     SEAD_SINGLETON_DISPOSER(DistantViewMgr)
-
-private:
-    struct Options
-    {
-        Options();
-
-        void initialize(const void* p_file);
-
-        u8 data;
-    };
 
 public:
     DistantViewMgr();
@@ -83,7 +74,7 @@ private:
     sead::PerspectiveProjection mProjection;
     CullViewFrustum mCull;
     BasicModel* mpBasicModel;
-    Options mOpt;
+    DVEnvTagMgr mEnvTagMgr;
     DVCameraParam* mpCameraParam;
     DistantViewEffectMgr* mpEffectMgr;
     DistantViewFFLMgr* mpFFLMgr;
