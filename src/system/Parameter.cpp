@@ -17,3 +17,18 @@ ParameterBase::~ParameterBase()
 void ParameterBase::read(sead::ReadStream& stream)
 {
 }
+
+template <>
+Parameter<u32>::~Parameter()
+{
+}
+
+template <>
+Parameter<f32>::~Parameter()
+{
+}
+
+template <>
+Parameter<sead::Vector2f>::~Parameter()
+{
+}

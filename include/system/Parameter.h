@@ -64,6 +64,24 @@ private:
     T mValue;
 };
 
+template <>
+Parameter<u32>::~Parameter();
+
+template <>
+Parameter<f32>::~Parameter();
+
+template <>
+Parameter<sead::Vector2f>::~Parameter();
+
+template <>
+void Parameter<u32>::read(sead::ReadStream& stream);
+
+template <>
+void Parameter<f32>::read(sead::ReadStream& stream);
+
+template <>
+void Parameter<sead::Vector2f>::read(sead::ReadStream& stream);
+
 typedef Parameter<u32> ParamU32;
 typedef Parameter<f32> ParamF32;
 typedef Parameter<sead::Vector2f> ParamVec2;
