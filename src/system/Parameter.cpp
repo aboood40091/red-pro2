@@ -13,3 +13,7 @@ ParameterBase::~ParameterBase()
 {
     mListNode.erase();
 }
+
+void ParameterBase::read(sead::ReadStream& stream)
+{
+}
