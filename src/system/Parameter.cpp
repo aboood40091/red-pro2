@@ -8,3 +8,8 @@ ParameterBase::ParameterBase(ParameterListBase* p_list, const char* name)
     if (p_list != nullptr)
         p_list->pushBack(&mListNode);
 }
+
+ParameterBase::~ParameterBase()
+{
+    mListNode.erase();
+}
