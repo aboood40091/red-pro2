@@ -26,7 +26,7 @@ public:
     VisibilityAnimation*        getVisAnim(s32 index) const { return mpVisAnim[index]; }
     ShapeAnimation*             getShaAnim(s32 index) const { return mpShaAnim[index]; }
 
-    void init(const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array = nullptr, sead::Heap* heap = nullptr);
+    void init(ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array = nullptr, sead::Heap* heap = nullptr);
 
     void updateAnimations();
     void updateModel();
