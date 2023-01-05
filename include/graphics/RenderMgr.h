@@ -6,6 +6,7 @@
 #include <container/seadBuffer.h>
 #include <container/seadListImpl.h>
 #include <container/seadPtrArray.h>
+#include <environment/aglEnvObjMgr.h>
 #include <heap/seadDisposer.h>
 #include <math/seadMatrix.h>
 #include <prim/seadNamable.h>
@@ -54,7 +55,7 @@ private:
     sead::Buffer< sead::PtrArray<RenderObj> > mRenderObjOpa;
     sead::Buffer< sead::PtrArray<RenderObj> > mRenderObjXlu;
     sead::PtrArray<RenderObj> mRenderObjShadow;
-    u32 mEnvObjMgr[0x464 / sizeof(u32)]; // agl::env::EnvObjMgr
+    agl::env::EnvObjMgr mEnvObjMgr;
     ModelEnvView mModelEnvView;
     void* _4b4;
     bool mDrawShadow; // I think
