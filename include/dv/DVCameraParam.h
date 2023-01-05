@@ -22,13 +22,13 @@ public:
 
 private:
     DVCameraParamList mParamList;
-    ParamVec2f mProjOffset;
-    ParamS32 mTypeDirY;
+    ParamVec2 mProjOffset;
+    ParamU32 mTypeDirY;
     ParamF32 mMagnifProjOffsetY;
     ParamF32 mMagnifCameraPosY;
     ParamF32 mModelOffsetX;
     ParamF32 mModelOffsetY;
     ParamF32 mModelOffsetZ;
-    ParamVec2f mIndirectScrollSpd;
+    ParamVec2 mIndirectScrollSpd;
     const sead::Vector3f* mpBgPos;
 };

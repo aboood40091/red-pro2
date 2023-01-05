@@ -41,7 +41,12 @@ template <typename T>
 class Parameter : public ParameterBase
 {
 public:
-    Parameter(const T& default_value);
+    Parameter(const T& default_value, ParameterListBase* p_list, const char* name)
+        : ParameterBase(p_list, name)
+    {
+        mValue = default_value;
+    }
+
     virtual ~Parameter();
 
     void read(sead::ReadStream& stream) override;
@@ -59,6 +64,6 @@ private:
     T mValue;
 };
 
-typedef Parameter<s32> ParamS32;
+typedef Parameter<u32> ParamU32;
 typedef Parameter<f32> ParamF32;
-typedef Parameter<sead::Vector2f> ParamVec2f;
+typedef Parameter<sead::Vector2f> ParamVec2;
