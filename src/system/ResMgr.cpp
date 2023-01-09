@@ -86,6 +86,15 @@ sead::ArchiveRes* ResMgr::loadArchiveResImpl_(const sead::SafeString& archive_pa
     return sead::DynamicCast<sead::ArchiveRes>(resource);
 }
 
+sead::ArchiveRes* ResMgr::getArchiveRes(const sead::SafeString& key) const
+{
+    ResHolder** holder = mResHolderTreeMap.find(key);
+    if (!holder)
+        return nullptr;
+
+    return (*holder)->mpArchiveRes;
+}
+
 void* ResMgr::getFileFromArchiveRes(const sead::SafeString& key, const sead::SafeString& filename, u32* length) const
 {
     return getFileFromArchiveResImpl_(getArchiveRes(key), filename, length);
