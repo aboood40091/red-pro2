@@ -29,8 +29,34 @@ private:
     };
     static_assert(sizeof(ResHolder) == 0x40);
 
+    class CourseResPackHolder : public sead::IDisposer
+    {
+    public:
+        CourseResPackHolder(sead::ArchiveRes* archive);
+
+        virtual ~CourseResPackHolder()
+        {
+            ResMgr::instance()->mpCourseResPack = nullptr;
+        }
+
+    private:
+        sead::ArchiveRes* mpArchiveRes;
+
+        friend class ResMgr;
+    };
+    static_assert(sizeof(CourseResPackHolder) == 0x14);
+
 public:
     ResMgr();
+
+    bool loadCourseResPack(const sead::SafeString& level_name, sead::Heap* heap);
+
+    sead::ArchiveRes* getCourseResPack() const
+    {
+        return mpCourseResPack;
+    }
+
+    void* getFileFromCourseResPack(const sead::SafeString& filename, u32* length = nullptr) const;
 
     bool loadArchiveRes(const sead::SafeString& key, const sead::SafeString& archive_path, sead::Heap* heap, bool decompress);
 
@@ -39,7 +65,11 @@ public:
     void* getFileFromArchiveRes(const sead::SafeString& key, const sead::SafeString& filename, u32* length = nullptr) const;
     void* getFileFromArchiveRes(sead::ArchiveRes* archive, const sead::SafeString& filename, u32* length = nullptr) const;
 
+    void remove(const sead::SafeString& key);
+
 private:
+    sead::ArchiveRes* loadCourseResPackImpl_(const sead::SafeString& key, const sead::SafeString& archive_path, sead::Heap* heap, bool decompress);
+
     static sead::ArchiveRes* loadArchiveResImpl_(const sead::SafeString& archive_path, sead::Heap* heap, sead::Decompressor* decompressor);
     static sead::ArchiveRes* loadArchiveResImpl_(const sead::SafeString& archive_path, sead::Heap* heap);
 

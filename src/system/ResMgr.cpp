@@ -1,4 +1,5 @@
 #include <system/ChallengeResCacheMgr.h>
+#include <system/RDashMgr.h>
 #include <system/ResMgr.h>
 
 #include <filedevice/seadFileDeviceMgr.h>
@@ -6,6 +7,33 @@
 #include <resource/seadSharcArchiveRes.h>
 
 ResMgr* ResMgr::sInstance = nullptr;
+
+bool ResMgr::loadCourseResPack(const sead::SafeString& level_name, sead::Heap* heap)
+{
+    if (ChallengeResCacheMgr::instance() != nullptr)
+    {
+        if (mpCourseResPack != nullptr)
+            return true;
+
+        if (ChallengeResCacheMgr::instance()->isEnableCacheHeap())
+            heap = ChallengeResCacheMgr::instance()->getCacheHeap();
+    }
+
+    sead::FormatFixedSafeString<128> archive_path("");
+
+    if (RDashMgr::instance()->isNSLU())
+        archive_path.append("rdash://");
+
+    archive_path.appendWithFormat("course_res_pack/%s.szs", level_name.cstr());
+
+    mpCourseResPack = loadCourseResPackImpl_(level_name, archive_path, heap, true);
+    if (mpCourseResPack == nullptr)
+        return false;
+
+    new (heap) CourseResPackHolder(mpCourseResPack);
+
+    return true;
+}
 
 bool ResMgr::loadArchiveRes(const sead::SafeString& key, const sead::SafeString& archive_path, sead::Heap* heap, bool decompress)
 {
@@ -114,4 +142,9 @@ ResMgr::ResHolder::ResHolder(const sead::SafeString& key, sead::ArchiveRes* arch
     : mpArchiveRes(archive)
 {
     mKey = key;
+}
+
+ResMgr::CourseResPackHolder::CourseResPackHolder(sead::ArchiveRes* archive)
+    : mpArchiveRes(archive)
+{
 }
