@@ -18,6 +18,10 @@ public:
     void destroy();
 
     void load(
+        const sead::SafeString& filename, sead::Heap* heap
+    );
+
+    void load(
         sead::ArchiveRes* archive, const sead::SafeString& filename,
         const nw::g3d::res::ResFile* tex_res_file, sead::Heap* heap
     );

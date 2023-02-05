@@ -30,6 +30,13 @@ void ModelResource::destroy()
 }
 
 void ModelResource::load(
+    const sead::SafeString& filename, sead::Heap* heap
+)
+{
+    load(ResMgr::instance()->getArchiveRes(filename), filename, nullptr, heap);
+}
+
+void ModelResource::load(
     sead::ArchiveRes* archive, const sead::SafeString& filename,
     const nw::g3d::res::ResFile* tex_res_file, sead::Heap* heap
 )
