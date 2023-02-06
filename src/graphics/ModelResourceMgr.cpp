@@ -18,6 +18,15 @@ bool ModelResourceMgr::loadResFile(const sead::SafeString& key, const sead::Safe
     return true;
 }
 
+ModelResource* ModelResourceMgr::getResource(const sead::SafeString& key) const
+{
+    ModelResourceHolder** holder = mResHolderTreeMap.find(key);
+    if (!holder)
+        return nullptr;
+
+    return (*holder)->mpModelResource;
+}
+
 ModelResourceMgr::ModelResourceHolder::ModelResourceHolder(const sead::SafeString& key, ModelResource* p_mdl_res)
     : mpModelResource(p_mdl_res)
 {
