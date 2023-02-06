@@ -81,6 +81,24 @@ PtclMgr::PtclMgr()
 {
 }
 
+PtclMgr::~PtclMgr()
+{
+    cleanUp();
+    mpPtclSystem->clearResource(0);
+}
+
+void PtclMgr::cleanUp()
+{
+    for (u8 group = 0; group < 8; group++)
+        mpPtclSystem->KillEmitterGroup(group);
+
+    for (sead::TList<LevelEffect*>::iterator itr = mEffects.begin(); itr != mEffects.end(); )
+    {
+        sead::TListNode<LevelEffect*>& node = itr.getNode(); ++itr;
+        node.erase();
+    }
+}
+
 void PtclMgr::draw(const agl::lyr::RenderInfo& render_info, u32 type, const sead::PtrArray<nw::eft::EmitterInstance>* p_emitters)
 {
     if (mIsDrawDisable)

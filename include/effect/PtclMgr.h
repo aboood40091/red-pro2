@@ -33,6 +33,8 @@ public:
     PtclMgr();
     ~PtclMgr();
 
+    void cleanUp();
+
     void draw(const agl::lyr::RenderInfo& render_info, u32 type, const sead::PtrArray<nw::eft::EmitterInstance>* p_emitters = nullptr);
 
 private:
