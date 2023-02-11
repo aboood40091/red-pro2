@@ -29,14 +29,14 @@ private:
     };
     static_assert(sizeof(ResHolder) == 0x40);
 
-    class CourseResPackHolder : public sead::IDisposer
+    class CourseArchiveResHolder : public sead::IDisposer
     {
     public:
-        CourseResPackHolder(sead::ArchiveRes* archive);
+        CourseArchiveResHolder(sead::ArchiveRes* archive);
 
-        virtual ~CourseResPackHolder()
+        virtual ~CourseArchiveResHolder()
         {
-            ResMgr::instance()->mpCourseResPack = nullptr;
+            ResMgr::instance()->mpCourseArchiveRes = nullptr;
         }
 
     private:
@@ -44,21 +44,28 @@ private:
 
         friend class ResMgr;
     };
-    static_assert(sizeof(CourseResPackHolder) == 0x14);
+    static_assert(sizeof(CourseArchiveResHolder) == 0x14);
 
 public:
     ResMgr();
 
     bool loadCourseResPack(const sead::SafeString& level_name, sead::Heap* heap);
 
-    sead::ArchiveRes* getCourseResPack() const
+    sead::ArchiveRes* getCourseArchiveRes() const
     {
-        return mpCourseResPack;
+        return mpCourseArchiveRes;
     }
 
-    void* getFileFromCourseResPack(const sead::SafeString& filename, u32* length = nullptr) const;
+    bool isCourseArchiveResLoaded() const
+    {
+        return mpCourseArchiveRes != nullptr;
+    }
+
+    void* getFileFromCourseArchiveRes(const sead::SafeString& filename, u32* length = nullptr) const;
 
     bool loadArchiveRes(const sead::SafeString& key, const sead::SafeString& archive_path, sead::Heap* heap, bool decompress);
+
+    bool isArchiveResLoaded(const sead::SafeString& key) const;
 
     sead::ArchiveRes* getArchiveRes(const sead::SafeString& key) const;
 
@@ -68,7 +75,7 @@ public:
     void remove(const sead::SafeString& key);
 
 private:
-    sead::ArchiveRes* loadCourseResPackImpl_(const sead::SafeString& key, const sead::SafeString& archive_path, sead::Heap* heap, bool decompress);
+    sead::ArchiveRes* loadCourseResPackImpl_(const sead::SafeString& level_name, const sead::SafeString& archive_path, sead::Heap* heap, bool decompress);
 
     static sead::ArchiveRes* loadArchiveResImpl_(const sead::SafeString& archive_path, sead::Heap* heap, sead::Decompressor* decompressor);
     static sead::ArchiveRes* loadArchiveResImpl_(const sead::SafeString& archive_path, sead::Heap* heap);
@@ -76,7 +83,7 @@ private:
     static void* getFileFromArchiveResImpl_(sead::ArchiveRes* archive, const sead::SafeString& filename, u32* length);
 
 private:
-    sead::ArchiveRes* mpCourseResPack;
+    sead::ArchiveRes* mpCourseArchiveRes;
     sead::FixedStrTreeMap<32, ResHolder*, 256> mResHolderTreeMap;
     sead::SZSDecompressor* mpSZSDecompressor;
 };

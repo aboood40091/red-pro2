@@ -2,6 +2,7 @@
 #include <system/RDashMgr.h>
 #include <system/ResMgr.h>
 
+#include <filedevice/seadArchiveFileDevice.h>
 #include <filedevice/seadFileDeviceMgr.h>
 #include <resource/seadResourceMgr.h>
 #include <resource/seadSharcArchiveRes.h>
@@ -12,7 +13,7 @@ bool ResMgr::loadCourseResPack(const sead::SafeString& level_name, sead::Heap* h
 {
     if (ChallengeResCacheMgr::instance() != nullptr)
     {
-        if (mpCourseResPack != nullptr)
+        if (mpCourseArchiveRes != nullptr)
             return true;
 
         if (ChallengeResCacheMgr::instance()->isEnableCacheHeap())
@@ -26,13 +27,61 @@ bool ResMgr::loadCourseResPack(const sead::SafeString& level_name, sead::Heap* h
 
     archive_path.appendWithFormat("course_res_pack/%s.szs", level_name.cstr());
 
-    mpCourseResPack = loadCourseResPackImpl_(level_name, archive_path, heap, true);
-    if (mpCourseResPack == nullptr)
+    mpCourseArchiveRes = loadCourseResPackImpl_(level_name, archive_path, heap, true);
+    if (mpCourseArchiveRes == nullptr)
         return false;
 
-    new (heap) CourseResPackHolder(mpCourseResPack);
+    new (heap) CourseArchiveResHolder(mpCourseArchiveRes);
 
     return true;
+}
+
+sead::ArchiveRes* ResMgr::loadCourseResPackImpl_(const sead::SafeString& level_name, const sead::SafeString& archive_path, sead::Heap* heap, bool decompress)
+{
+    sead::ArchiveRes* archive;
+
+    if (decompress)
+        archive = loadArchiveResImpl_(archive_path, heap, mpSZSDecompressor);
+    else
+        archive = loadArchiveResImpl_(archive_path, heap);
+
+    sead::ArchiveFileDevice device(archive);
+    sead::DirectResourceFactory<sead::SharcArchiveRes> factory;
+    sead::DirectoryHandle handle;
+    sead::DirectoryEntry entry;
+    sead::ResourceMgr::LoadArg arg;
+
+    device.tryOpenDirectory(&handle, "");
+
+    while (true)
+    {
+        u32 read_num = 0;
+        device.tryReadDirectory(&read_num, &handle, &entry, 1);
+        if (read_num == 0)
+            break;
+
+        if (isArchiveResLoaded(entry.name))
+            continue;
+
+        arg.device = &device;
+        arg.path = entry.name;
+        arg.instance_heap = heap;
+        arg.instance_alignment = 0x2000;
+        arg.load_data_alignment = 0x2000;
+        arg.factory = &factory;
+
+        sead::Resource* resource = sead::ResourceMgr::instance()->tryLoadWithoutDecomp(arg);
+        sead::ArchiveRes* inner_arc = sead::DynamicCast<sead::ArchiveRes>(resource);
+
+        if (entry.name == level_name)
+            archive = inner_arc;
+
+        else
+            mResHolderTreeMap.insert(entry.name, new (heap) ResHolder(entry.name, inner_arc));
+    }
+
+    device.tryCloseDirectory(&handle);
+    return archive;
 }
 
 bool ResMgr::loadArchiveRes(const sead::SafeString& key, const sead::SafeString& archive_path, sead::Heap* heap, bool decompress)
@@ -149,7 +198,7 @@ ResMgr::ResHolder::ResHolder(const sead::SafeString& key, sead::ArchiveRes* arch
     mKey = key;
 }
 
-ResMgr::CourseResPackHolder::CourseResPackHolder(sead::ArchiveRes* archive)
+ResMgr::CourseArchiveResHolder::CourseArchiveResHolder(sead::ArchiveRes* archive)
     : mpArchiveRes(archive)
 {
 }
