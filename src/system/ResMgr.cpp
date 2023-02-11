@@ -135,7 +135,12 @@ void* ResMgr::getFileFromArchiveRes(sead::ArchiveRes* archive, const sead::SafeS
 
 void* ResMgr::getFileFromArchiveResImpl_(sead::ArchiveRes* archive, const sead::SafeString& filename, u32* length)
 {
-    return archive->getFile(filename, length);
+    sead::ArchiveRes::FileInfo file_info;
+    void* data = archive->getFile(filename, &file_info);
+    if (data && length)
+        *length = file_info.getLength();
+
+    return data;
 }
 
 ResMgr::ResHolder::ResHolder(const sead::SafeString& key, sead::ArchiveRes* archive)
