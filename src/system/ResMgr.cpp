@@ -163,6 +163,11 @@ sead::ArchiveRes* ResMgr::loadArchiveResImpl_(const sead::SafeString& archive_pa
     return sead::DynamicCast<sead::ArchiveRes>(resource);
 }
 
+bool ResMgr::isArchiveResLoaded(const sead::SafeString& key) const
+{
+    return mResHolderTreeMap.find(key) != nullptr;
+}
+
 sead::ArchiveRes* ResMgr::getArchiveRes(const sead::SafeString& key) const
 {
     ResHolder** holder = mResHolderTreeMap.find(key);
