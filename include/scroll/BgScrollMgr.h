@@ -25,6 +25,24 @@ public:
 };
 static_assert(sizeof(ScrollEffectMgr) == 0x54);
 
+class Zoom
+{
+public:
+    f32 getMultiplier(bool) const;
+};
+
+class TrackingMgr
+{
+public:
+    Zoom* getActiveZoom() const;
+    f32 zoomMultiplerClampMax(f32 multiplier) const;
+
+    f32 getCurrentZoomMultiplier(bool param_1 = false) const
+    {
+        return zoomMultiplerClampMax(getActiveZoom()->getMultiplier(param_1));
+    }
+};
+
 class BgScrollMgr
 {
     SEAD_SINGLETON_DISPOSER(BgScrollMgr)
@@ -68,7 +86,7 @@ private:
     void* mScrollLimitMgr;
     void* mZoomAreaMgr;
     void* mBoundVelMgr;
-    void* mTrackingMgr;
+    TrackingMgr* mTrackingMgr;
     void* _bc;
     void* _c0;
     void* mAutoScrollMgr;
