@@ -31,6 +31,37 @@ public:
     void updateAnimations();
     void updateModel();
 
+    static inline BasicModel* create(ModelResource* p_mdl_res, ModelNW* p_model, s32 skl_anim_num, s32 tex_anim_num, s32 shu_anim_num, s32 vis_anim_num, s32 sha_anim_num, sead::Heap* heap = nullptr, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array = nullptr)
+    {
+        BasicModel* p_bmdl = new (heap) BasicModel(p_model, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num);
+        p_bmdl->init(p_mdl_res, p_anim_mdl_res_array, heap);
+        return p_bmdl;
+    }
+
+    static inline BasicModel* create(ModelResource* p_mdl_res, const sead::SafeString& name, s32 skl_anim_num, s32 tex_anim_num, s32 shu_anim_num, s32 vis_anim_num, s32 sha_anim_num, Model::BoundingMode bounding_mode = Model::cBoundingMode_Disable, sead::Heap* heap = nullptr)
+    {
+        ModelNW* p_model = Model::createNW(*p_mdl_res, name, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num, bounding_mode, heap);
+        return create(p_mdl_res, p_model, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num, heap);
+    }
+
+    static inline BasicModel* create(ModelResource* p_mdl_res, const sead::SafeString& name, s32 view_num, s32 skl_anim_num, s32 tex_anim_num, s32 shu_anim_num, s32 vis_anim_num, s32 sha_anim_num, Model::BoundingMode bounding_mode, sead::Heap* heap = nullptr)
+    {
+        ModelNW* p_model = Model::createNW(*p_mdl_res, name, view_num, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num, bounding_mode, heap);
+        return create(p_mdl_res, p_model, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num, heap);
+    }
+
+    static inline BasicModel* create(const sead::SafeString& resource_key, const sead::SafeString& name, s32 skl_anim_num, s32 tex_anim_num, s32 shu_anim_num, s32 vis_anim_num, s32 sha_anim_num, BoundingMode bounding_mode = Model::cBoundingMode_Disable, sead::Heap* heap = nullptr)
+    {
+        ModelResource* p_mdl_res = ModelResourceMgr::instance()->getResource(resource_key);
+        return create(p_mdl_res, name, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num, bounding_mode, heap);
+    }
+
+    static inline BasicModel* create(const sead::SafeString& resource_key, const sead::SafeString& name, s32 view_num, s32 skl_anim_num, s32 tex_anim_num, s32 shu_anim_num, s32 vis_anim_num, s32 sha_anim_num, BoundingMode bounding_mode, sead::Heap* heap = nullptr)
+    {
+        ModelResource* p_mdl_res = ModelResourceMgr::instance()->getResource(resource_key);
+        return create(p_mdl_res, name, view_num, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num, bounding_mode, heap);
+    }
+
 private:
     ModelNW*                                mpModel;
     ModelResource*                          mpModelResource;
@@ -40,4 +71,4 @@ private:
     sead::Buffer<VisibilityAnimation*>      mpVisAnim;
     sead::Buffer<ShapeAnimation*>           mpShaAnim;
 };
-static_assert(sizeof(BasicModel) == 0x30, "BasicModel size mismatch");
+static_assert(sizeof(BasicModel) == 0x30);

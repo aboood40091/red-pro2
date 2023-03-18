@@ -7,8 +7,8 @@ class FrameCtrl
 public:
     enum PlayMode
     {
-        cMode_NoRepeat = 0,
-        cMode_Repeat   = 1
+        cMode_NoRepeat  = 0,
+        cMode_Repeat    = 1
     };
 
 public:
@@ -53,19 +53,20 @@ public:
 protected:
     enum Flag
     {
-        cFlag_Repeat = 1 << 0,
-        cFlag_Unk1   = 1 << 1,
-        cFlag_Unk2   = 1 << 2,
-        cFlag_Unk3   = 1 << 3,
-        cFlag_Unk4   = 1 << 4,
-        cFlag_IsStop = 1 << 5
+        cFlag_Repeat    = 1 << 0,
+        cFlag_Unk1      = 1 << 1,
+        cFlag_Unk2      = 1 << 2,
+        cFlag_Unk3      = 1 << 3,
+        cFlag_Unk4      = 1 << 4,
+        cFlag_IsStop    = 1 << 5
     };
 
-    f32 mFrameStart;
-    f32 mFrameEnd;
-    f32 mFrameMin;
-    f32 mFrameMax;
-    f32 mFrame;
-    f32 mRate;
+    f32             mFrameStart;
+    f32             mFrameEnd;
+    f32             mFrameMin;
+    f32             mFrameMax;
+    f32             mFrame;
+    f32             mRate;
     sead::BitFlag32 mFlag;
 };
+static_assert(sizeof(FrameCtrl) == 0x1C);

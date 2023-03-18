@@ -16,6 +16,6 @@ public:
     }
 
 private:
-    sead::Vector3f mPosition;
+    sead::Vector3f  mPosition;
 };
-static_assert(sizeof(BgCenter) == 0x5C, "BgCenter size mismatch");
+static_assert(sizeof(BgCenter) == 0x5C);

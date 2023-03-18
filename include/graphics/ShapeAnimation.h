@@ -43,10 +43,10 @@ private:
     static void updateInitArg_(nw::g3d::ShapeAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res);
 
 private:
-    nw::g3d::ShapeAnimObj mAnimObj;
+    nw::g3d::ShapeAnimObj       mAnimObj;
     nw::g3d::res::ResShapeAnim* mpRes;
-    const ModelNW* mpModel;
-    s32 mIndex;
-    void* mpBuffer;
+    const ModelNW*              mpModel;
+    s32                         mIndex;
+    void*                       mpBuffer;
 };
-static_assert(sizeof(ShapeAnimation) == 0x88, "ShapeAnimation size mismatch");
+static_assert(sizeof(ShapeAnimation) == 0x88);

@@ -33,9 +33,10 @@ public:
     const char* getName() const { return mName; }
 
 protected:
-    const char* mName;
+    const char*                     mName;
     sead::TListNode<ParameterBase*> mListNode;
 };
+static_assert(sizeof(ParameterBase) == 0x24);
 
 template <typename T>
 class Parameter : public ParameterBase
@@ -63,7 +64,7 @@ public:
     const T* operator->() const { return &mValue; }
 
 private:
-    T mValue;
+    T   mValue;
 };
 
 template <>
@@ -78,3 +79,7 @@ void Parameter<sead::Vector2f>::read(sead::ReadStream& stream);
 typedef Parameter<u32> ParamU32;
 typedef Parameter<f32> ParamF32;
 typedef Parameter<sead::Vector2f> ParamVec2;
+
+static_assert(sizeof(ParamU32)  == 0x28);
+static_assert(sizeof(ParamF32)  == 0x28);
+static_assert(sizeof(ParamVec2) == 0x2C);

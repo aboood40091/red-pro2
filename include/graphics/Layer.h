@@ -4,8 +4,6 @@
 
 // No idea what the actual name of this class is
 
-#define override
-
 class Layer : public agl::lyr::Layer
 {
     SEAD_RTTI_OVERRIDE(Layer, agl::lyr::Layer)
@@ -20,6 +18,6 @@ public:
     // ...
 
 protected:
-    u8 _41c;
+    u8  _41c;
 };
-static_assert(sizeof(Layer) == 0x420, "Layer size mismatch");
+static_assert(sizeof(Layer) == 0x420);

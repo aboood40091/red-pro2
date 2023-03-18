@@ -22,8 +22,8 @@ private:
         }
 
     private:
-        sead::FixedSafeString<32> mKey;
-        sead::ArchiveRes* mpArchiveRes;
+        sead::FixedSafeString<32>   mKey;
+        sead::ArchiveRes*           mpArchiveRes;
 
         friend class ResMgr;
     };
@@ -40,7 +40,7 @@ private:
         }
 
     private:
-        sead::ArchiveRes* mpArchiveRes;
+        sead::ArchiveRes*   mpArchiveRes;
 
         friend class ResMgr;
     };
@@ -49,20 +49,22 @@ private:
 public:
     ResMgr();
 
+public:
     bool loadCourseResPack(const sead::SafeString& level_name, sead::Heap* heap);
-
-    sead::ArchiveRes* getCourseArchiveRes() const
-    {
-        return mpCourseArchiveRes;
-    }
 
     bool isCourseArchiveResLoaded() const
     {
         return mpCourseArchiveRes != nullptr;
     }
 
+    sead::ArchiveRes* getCourseArchiveRes() const
+    {
+        return mpCourseArchiveRes;
+    }
+
     void* getFileFromCourseArchiveRes(const sead::SafeString& filename, u32* length = nullptr) const;
 
+public:
     bool loadArchiveRes(const sead::SafeString& key, const sead::SafeString& archive_path, sead::Heap* heap, bool decompress);
 
     bool isArchiveResLoaded(const sead::SafeString& key) const;
@@ -72,6 +74,7 @@ public:
     void* getFileFromArchiveRes(const sead::SafeString& key, const sead::SafeString& filename, u32* length = nullptr) const;
     void* getFileFromArchiveRes(sead::ArchiveRes* archive, const sead::SafeString& filename, u32* length = nullptr) const;
 
+public:
     void remove(const sead::SafeString& key);
 
 private:
@@ -83,8 +86,8 @@ private:
     static void* getFileFromArchiveResImpl_(sead::ArchiveRes* archive, const sead::SafeString& filename, u32* length);
 
 private:
-    sead::ArchiveRes* mpCourseArchiveRes;
-    sead::FixedStrTreeMap<32, ResHolder*, 256> mResHolderTreeMap;
-    sead::SZSDecompressor* mpSZSDecompressor;
+    sead::ArchiveRes*                           mpCourseArchiveRes;
+    sead::FixedStrTreeMap<32, ResHolder*, 256>  mResHolderTreeMap;
+    sead::SZSDecompressor*                      mpSZSDecompressor;
 };
-static_assert(sizeof(ResMgr) == 0x442C, "ResMgr size mismatch");
+static_assert(sizeof(ResMgr) == 0x442C);

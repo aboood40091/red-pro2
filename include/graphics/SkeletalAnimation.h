@@ -48,10 +48,10 @@ private:
     static void updateInitArg_(nw::g3d::SkeletalAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res);
 
 private:
-    nw::g3d::SkeletalAnimObj mAnimObj;
-    void* mpBuffer;
-    const ModelNW* mpModel;
-    s32 mIndex;
-    nw::g3d::res::ResSkeletalAnim* mpRes;
+    nw::g3d::SkeletalAnimObj        mAnimObj;
+    void*                           mpBuffer;
+    const ModelNW*                  mpModel;
+    s32                             mIndex;
+    nw::g3d::res::ResSkeletalAnim*  mpRes;
 };
-static_assert(sizeof(SkeletalAnimation) == 0x98, "SkeletalAnimation size mismatch");
+static_assert(sizeof(SkeletalAnimation) == 0x98);

@@ -44,10 +44,10 @@ private:
     static void updateInitArg_(nw::g3d::VisibilityAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res);
 
 private:
-    nw::g3d::VisibilityAnimObj mAnimObj;
-    nw::g3d::res::ResVisibilityAnim* mpRes;
-    const ModelNW* mpModel;
-    s32 mIndex;
-    void* mpBuffer;
+    nw::g3d::VisibilityAnimObj          mAnimObj;
+    nw::g3d::res::ResVisibilityAnim*    mpRes;
+    const ModelNW*                      mpModel;
+    s32                                 mIndex;
+    void*                               mpBuffer;
 };
-static_assert(sizeof(VisibilityAnimation) == 0x84, "VisibilityAnimation size mismatch");
+static_assert(sizeof(VisibilityAnimation) == 0x84);

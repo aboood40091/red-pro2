@@ -7,7 +7,6 @@
 
 #include <heap/seadDisposer.h>
 #include <math/seadSphere.h>
-
 #include <shadow/aglDepthShadow.h>
 
 class ModelNW;
@@ -84,4 +83,4 @@ protected:
     s32 mOpaBufferIdx;
     s32 mXluBufferIdx;
 };
-static_assert(sizeof(Model) == 0x28, "Model size mismatch");
+static_assert(sizeof(Model) == 0x28);

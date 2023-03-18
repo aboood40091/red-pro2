@@ -44,10 +44,10 @@ private:
     static void updateInitArg_(nw::g3d::ShaderParamAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res);
 
 private:
-    nw::g3d::ShaderParamAnimObj mAnimObj;
-    nw::g3d::res::ResShaderParamAnim* mpRes;
-    const ModelNW* mpModel;
-    s32 mIndex;
-    void* mpBuffer;
+    nw::g3d::ShaderParamAnimObj         mAnimObj;
+    nw::g3d::res::ResShaderParamAnim*   mpRes;
+    const ModelNW*                      mpModel;
+    s32                                 mIndex;
+    void*                               mpBuffer;
 };
-static_assert(sizeof(ShaderParamAnimation) == 0x88, "ShaderParamAnimation size mismatch");
+static_assert(sizeof(ShaderParamAnimation) == 0x88);

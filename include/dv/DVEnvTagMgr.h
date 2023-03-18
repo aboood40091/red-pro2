@@ -10,5 +10,6 @@ public:
     void initialize(const void* p_file);
 
 private:
-    u8 _0;
+    u8  _0;
 };
+static_assert(sizeof(DVEnvTagMgr) == 1);

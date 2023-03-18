@@ -13,8 +13,8 @@ public:
     const sead::Vector2f& getOffset() const { return mOffset; }
 
 private:
-    u32 _10[(0x4C - 0x10) / sizeof(u32)];
-    sead::Vector2f mOffset;
-    u32 _54;
+    u32             _10[(0x4C - 0x10) / sizeof(u32)];
+    sead::Vector2f  mOffset;
+    u32             _54;
 };
-static_assert(sizeof(Quake) == 0x58, "Quake size mismatch");
+static_assert(sizeof(Quake) == 0x58);

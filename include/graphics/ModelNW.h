@@ -1,7 +1,13 @@
 #pragma once
 
 #include <graphics/LightMapMgr.h>
+#include <graphics/MaterialNW.h>
 #include <graphics/Model.h>
+#include <graphics/ShaderParamAnimation.h>
+#include <graphics/ShapeAnimation.h>
+#include <graphics/SkeletalAnimation.h>
+#include <graphics/TexturePatternAnimation.h>
+#include <graphics/VisibilityAnimation.h>
 
 #include <common/aglDisplayList.h>
 #include <common/aglShaderProgramArchive.h>
@@ -14,16 +20,6 @@
 
 #include <nw/g3d/g3d_SkeletalAnimObj.h>
 #include <nw/g3d/g3d_ShapeObj.h>
-
-#define override
-
-#include <graphics/MaterialNW.h>
-
-#include <graphics/SkeletalAnimation.h>
-#include <graphics/TexturePatternAnimation.h>
-#include <graphics/ShaderParamAnimation.h>
-#include <graphics/VisibilityAnimation.h>
-#include <graphics/ShapeAnimation.h>
 
 class CullViewFrustum;
 
@@ -61,26 +57,26 @@ public:
             }
         }
 
-        const agl::ShaderProgram* p_shader_program;
-        agl::UniformBlockLocation env_location;
-        agl::UniformBlockLocation mtx_location;
-        agl::UniformBlockLocation shp_location;
-        agl::UniformBlockLocation mat_location;
-        agl::SamplerLocation sdw_location;
-        agl::SamplerLocation rfl_location;
+        const agl::ShaderProgram*   p_shader_program;
+        agl::UniformBlockLocation   env_location;
+        agl::UniformBlockLocation   mtx_location;
+        agl::UniformBlockLocation   shp_location;
+        agl::UniformBlockLocation   mat_location;
+        agl::SamplerLocation        sdw_location;
+        agl::SamplerLocation        rfl_location;
     };
-    static_assert(sizeof(ShaderAssign) == 0x64, "ModelNW::ShaderAssign size mismatch");
+    static_assert(sizeof(ShaderAssign) == 0x64);
 
     struct ShapeRenderInfo
     {
-        s32 idx_shape;
-        s32 priority;
-        sead::BitFlag32 flag;
-        s32 polygon_offset;
-        mutable agl::DisplayList attrib_dl;
-        mutable agl::DisplayList mat_dl;
+        s32                         idx_shape;
+        s32                         priority;
+        sead::BitFlag32             flag;
+        s32                         polygon_offset;
+        mutable agl::DisplayList    attrib_dl;
+        mutable agl::DisplayList    mat_dl;
     };
-    static_assert(sizeof(ShapeRenderInfo) == 0x30, "ModelNW::ShapeRenderInfo size mismatch");
+    static_assert(sizeof(ShapeRenderInfo) == 0x30);
 
     struct LightMap
     {
@@ -93,31 +89,31 @@ public:
         s32 idx_lghtmap[LightMapMgr::cLightMapNum];
         s32 idx_sampler[LightMapMgr::cLightMapNum];
     };
-    static_assert(sizeof(LightMap) == 0x10, "ModelNW::LightMap size mismatch");
+    static_assert(sizeof(LightMap) == 0x10);
 
     struct Shape
     {
-        agl::UniformBlock uniform_block; // Shp
-        LightMap light_map;
-        sead::Buffer<nw::g3d::fnd::GfxBuffer> vtx_buffer;
+        agl::UniformBlock                       uniform_block; // Shp
+        LightMap                                light_map;
+        sead::Buffer<nw::g3d::fnd::GfxBuffer>   vtx_buffer;
     };
-    static_assert(sizeof(Shape) == 0x2C, "ModelNW::Shape size mismatch");
+    static_assert(sizeof(Shape) == 0x2C);
 
     struct DrawInfo
     {
-        s32 view_index;
-        const sead::Matrix34f* p_view_mtx;
-        const sead::Matrix44f* p_proj_mtx;
-        const agl::ShaderProgram* p_shader_program;
-        ShaderAssign* p_shader_assign;
-        s32 material_index;
-        bool draw_shape;
-        bool draw_reflection;
-        agl::ShaderMode shader_mode;
-        s32 polygon_offset;
-        const CullViewFrustum* p_cull;
+        s32                         view_index;
+        const sead::Matrix34f*      p_view_mtx;
+        const sead::Matrix44f*      p_proj_mtx;
+        const agl::ShaderProgram*   p_shader_program;
+        ShaderAssign*               p_shader_assign;
+        s32                         material_index;
+        bool                        draw_shape;
+        bool                        draw_reflection;
+        agl::ShaderMode             shader_mode;
+        s32                         polygon_offset;
+        const CullViewFrustum*      p_cull;
     };
-    static_assert(sizeof(DrawInfo) == 0x28, "ModelNW::DrawInfo size mismatch");
+    static_assert(sizeof(DrawInfo) == 0x28);
 
     enum SamplerSlot
     {
@@ -173,10 +169,11 @@ private:
         {
             sead::MemUtil::fillZero(mBuffer, sizeof(mBuffer));
         }
+
     private:
-        u32 mBuffer[10];
+        sead::UnsafeArray<u32, 10>  mBuffer;
     };
-    static_assert(sizeof(BoundingFlagArray) == 0x28, "ModelNW::BoundingFlagArray size mismatch");
+    static_assert(sizeof(BoundingFlagArray) == 0x28);
 
 public:
     // Calculates the drawing resources for skeleton matrices, shapes and materials
@@ -390,35 +387,35 @@ private:
     void drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info, const RenderMgr* p_render_mgr) const;
 
 private:
-    agl::g3d::ModelEx mModelEx;
-    nw::g3d::SkeletalAnimBlender mSklAnimBlender;
-    sead::Buffer<SkeletalAnimation*> mpSklAnim;
-    sead::Buffer<TexturePatternAnimation*> mpTexAnim;
-    sead::Buffer<ShaderParamAnimation*> mpShuAnim;
-    sead::Buffer<VisibilityAnimation*> mpVisAnim;
-    sead::Buffer<ShapeAnimation*> mpShaAnim;
-    void* mpBuffer;
-    void* mpBlockBuffer;
-    size_t mBlockBufferSize;
-    void* mpSklAnimBlenderBuffer;
-    sead::Buffer<f32> mSklAnimBlendWeight;
-    sead::PtrArray<ShapeRenderInfo> mOpaShapeInfo;
-    sead::PtrArray<ShapeRenderInfo> mXluShapeInfo;
-    sead::Buffer<ShaderAssign> mShaderAssign;
-    sead::Buffer<MaterialNW*> mpMaterial;
-    sead::Buffer<Shape> mShape;
-    sead::Matrix34f mMtxRT;
-    sead::Vector3f mScale;
-    u8 _128;
-    sead::BitFlag32 mRenderFlag;
-    sead::BitFlag32 mBoundingEnableFlag;
-    sead::Buffer< sead::Buffer<sead::BitFlag32> > mViewShapeShadowFlagBuffer;
-    sead::Sphere3f mBounding;
-    sead::BoundBox3f* mpSubBounding;
-    sead::BitFlag32 mShapeFlag; // & 4: a shape has shadow cast, & 2: a shape has reflection, & 1: a shape is visible
-    BoundingFlagArray mBoundingFlagArray;
-    BoundingFlagArray mSubBoundingFlagArray;
-    sead::BitFlag32 mViewDepthShadowEnableFlag;
-    bool mDisplayListDirty;
+    agl::g3d::ModelEx                               mModelEx;
+    nw::g3d::SkeletalAnimBlender                    mSklAnimBlender;
+    sead::Buffer<SkeletalAnimation*>                mpSklAnim;
+    sead::Buffer<TexturePatternAnimation*>          mpTexAnim;
+    sead::Buffer<ShaderParamAnimation*>             mpShuAnim;
+    sead::Buffer<VisibilityAnimation*>              mpVisAnim;
+    sead::Buffer<ShapeAnimation*>                   mpShaAnim;
+    void*                                           mpBuffer;
+    void*                                           mpBlockBuffer;
+    size_t                                          mBlockBufferSize;
+    void*                                           mpSklAnimBlenderBuffer;
+    sead::Buffer<f32>                               mSklAnimBlendWeight;
+    sead::PtrArray<ShapeRenderInfo>                 mOpaShapeInfo;
+    sead::PtrArray<ShapeRenderInfo>                 mXluShapeInfo;
+    sead::Buffer<ShaderAssign>                      mShaderAssign;
+    sead::Buffer<MaterialNW*>                       mpMaterial;
+    sead::Buffer<Shape>                             mShape;
+    sead::Matrix34f                                 mMtxRT;
+    sead::Vector3f                                  mScale;
+    u8                                              _128;
+    sead::BitFlag32                                 mRenderFlag;
+    sead::BitFlag32                                 mBoundingEnableFlag;
+    sead::Buffer< sead::Buffer<sead::BitFlag32> >   mViewShapeShadowFlagBuffer;
+    sead::Sphere3f                                  mBounding;
+    sead::BoundBox3f*                               mpSubBounding;
+    sead::BitFlag32                                 mShapeFlag;                 // & 4: a shape has shadow cast, & 2: a shape has reflection, & 1: a shape is visible
+    BoundingFlagArray                               mBoundingFlagArray;
+    BoundingFlagArray                               mSubBoundingFlagArray;
+    sead::BitFlag32                                 mViewDepthShadowEnableFlag;
+    bool                                            mDisplayListDirty;
 };
-static_assert(sizeof(ModelNW) == 0x1AC, "ModelNW size mismatch");
+static_assert(sizeof(ModelNW) == 0x1AC);
