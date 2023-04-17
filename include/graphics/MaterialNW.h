@@ -1,15 +1,13 @@
 #pragma once
 
+#include <graphics/Material.h>
+
 #include <container/seadSafeArray.h>
 #include <math/seadMatrix.h>
 
-#include <graphics/Material.h>
-
 #include <nw/g3d/g3d_MaterialObj.h>
 
-#define final
-
-class MaterialNW final : public Material
+class MaterialNW : public Material
 {
 public:
     MaterialNW(nw::g3d::MaterialObj* material)
@@ -29,6 +27,7 @@ public:
     const sead::Matrix34f& getTexSrtMtx(s32 index) const { return mTexSrtMtx[index]; }
 
 private:
-    nw::g3d::MaterialObj* mMaterialObj;
+    nw::g3d::MaterialObj*               mMaterialObj;
     sead::SafeArray<sead::Matrix34f, 8> mTexSrtMtx;
 };
+static_assert(sizeof(MaterialNW) == 0x188);

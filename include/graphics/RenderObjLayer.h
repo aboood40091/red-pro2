@@ -28,11 +28,11 @@ public:
     // ...
 
 protected:
-    RenderMgr* mpRenderMgr;
-    s32 mViewIndex;
-    void* _428;
+    RenderMgr*  mpRenderMgr;
+    s32         mViewIndex;
+    void*       _428;
 };
-static_assert(sizeof(RenderObjLayerBase) == 0x42C, "RenderObjLayerBase size mismatch");
+static_assert(sizeof(RenderObjLayerBase) == 0x42C);
 
 class RenderObjLayer : public RenderObjLayerBase
 {
@@ -62,8 +62,8 @@ public:
 
 private:
     sead::Matrix44f _42c;
-    bool _46c;
-    f32 mPolygonOffsetFactor;
-    f32 mPolygonOffsetUnits;
+    bool            _46c;
+    f32             mPolygonOffsetFactor;
+    f32             mPolygonOffsetUnits;
 };
-static_assert(sizeof(RenderObjLayer) == 0x478, "RenderObjLayer size mismatch");
+static_assert(sizeof(RenderObjLayer) == 0x478);

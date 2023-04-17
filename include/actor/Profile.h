@@ -5,7 +5,7 @@
 #include <prim/seadSafeString.h>
 
 class ActorBase;
-class ActorInfo;
+class ActorCreateInfo;
 class ActorInitArg;
 class ModelResource;
 
@@ -17,7 +17,7 @@ public:
     static const u32 cNum = 913;
 
 public:
-    Profile(ClassInit p_class_init, u32 id, const sead::SafeString& name, const ActorInfo* p_actor_nfo, u32 flag);
+    Profile(ClassInit p_class_init, u32 id, const sead::SafeString& name, const ActorCreateInfo* p_create_info, u32 flag);
 
     ClassInit getClassInit() const
     {
@@ -29,9 +29,9 @@ public:
         return mID;
     }
 
-    const ActorInfo& getActorInfo() const
+    const ActorCreateInfo& getActorCreateInfo() const
     {
-        return *mpActorInfo;
+        return *mpActorCreateInfo;
     }
 
     bool isResLoaded() const
@@ -50,12 +50,13 @@ public:
 
     static Profile* get(u32 id);
 
-private:
-    ClassInit mpClassInit;
-    u32 mID;
-    const ActorInfo* mpActorInfo;
-    bool mIsResLoaded;
-    u32 mFlag;
+protected:
+    ClassInit               mpClassInit;
+    u32                     mID;
+    const ActorCreateInfo*  mpActorCreateInfo;
+    bool                    mIsResLoaded;
+    u32                     mFlag;
 
-    static sead::SafeArray<Profile*, cNum> sProfile;
+    static sead::SafeArray<Profile*, cNum>  sProfile;
 };
+static_assert(sizeof(Profile) == 0x14);

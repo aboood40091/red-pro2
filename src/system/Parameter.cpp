@@ -1,4 +1,3 @@
-#define override
 #include <system/Parameter.h>
 
 #include <stream/seadStream.h>

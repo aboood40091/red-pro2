@@ -16,3 +16,4 @@ public:
 private:
     void read_(sead::ReadStream& stream);
 };
+static_assert(sizeof(DVCameraParamList) == sizeof(ParameterListBase));

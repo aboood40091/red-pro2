@@ -13,7 +13,8 @@ public:
     bool isNSLU() const { return mIsNSLU; }
 
 private:
-    bool mIsDrivePresent;
-    bool mIsNSLU;
-    sead::CafeFSAFileDevice* mpFileDevice;
+    bool                        mIsDrivePresent;
+    bool                        mIsNSLU;
+    sead::CafeFSAFileDevice*    mpFileDevice;
 };
+static_assert(sizeof(RDashMgr) == 0x18);

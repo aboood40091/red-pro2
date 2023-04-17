@@ -1,5 +1,6 @@
 #pragma once
 
+#include <container/seadSafeArray.h>
 #include <math/seadVector.h>
 
 #include <nw/g3d/g3d_ShapeObj.h>
@@ -21,9 +22,10 @@ class CullViewFrustum
         {
         }
 
-        sead::Vector3f _0;
-        f32 _c;
+        sead::Vector3f  _0;
+        f32             _c;
     };
+    static_assert(sizeof(Sub) == 0x10);
 
 public:
     CullViewFrustum();
@@ -34,7 +36,7 @@ public:
     void update(const sead::Camera& camera, const sead::PerspectiveProjection& projection);
 
 private:
-    Sub _0[4];
-    nw::g3d::ViewVolume mViewVolume;
+    sead::UnsafeArray<Sub, 4>   _0;
+    nw::g3d::ViewVolume         mViewVolume;
 };
-static_assert(sizeof(CullViewFrustum) == 0xC0, "CullViewFrustum size mismatch");
+static_assert(sizeof(CullViewFrustum) == 0xC0);

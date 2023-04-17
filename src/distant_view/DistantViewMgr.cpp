@@ -1,8 +1,7 @@
 #include <actor/ActorMgr.h>
 #include <actor/ProfileID.h>
-#include <dv/DistantViewMgr.h>
-#define override
-#include <dv/DVCameraParam.h>
+#include <distant_view/DistantViewMgr.h>
+#include <distant_view/DVCameraParam.h>
 #include <effect/PtclMgr.h>
 #include <game/AreaLayerMgr.h>
 #include <game/AreaTask.h>

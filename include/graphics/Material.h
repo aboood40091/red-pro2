@@ -14,3 +14,4 @@ public:
     virtual void setTevKColor(s32 index, const sead::Color4f& color) = 0;
     virtual void getTevKColor(s32 index, sead::Color4f& color) const = 0;
 };
+static_assert(sizeof(Material) == 4);

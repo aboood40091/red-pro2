@@ -1,5 +1,8 @@
 #pragma once
 
+#include <distant_view/DVEnvTagMgr.h>
+#include <graphics/CullViewFrustum.h>
+
 #include <common/aglTextureData.h>
 #include <gfx/seadCamera.h>
 #include <gfx/seadProjection.h>
@@ -9,9 +12,6 @@
 #include <math/seadBoundBox.h>
 #include <math/seadVector.h>
 #include <postfx/aglDepthOfField.h>
-
-#include <graphics/CullViewFrustum.h>
-#include <dv/DVEnvTagMgr.h>
 
 class BasicModel;
 
@@ -62,33 +62,33 @@ public:
     void getBoneWorldMatrix(s32 index, sead::Matrix34f* mtx) const;
 
 private:
-    f32 mNear;
-    f32 mFar;
-    f32 mFovyDeg;
-    f32 mScale;
-    sead::Vector3f mCameraBasePos;
-    sead::Vector3f mCameraPosOffset;
-    sead::Vector3f mCameraPos;
-    sead::Vector3f mCameraAtOffset;
-    sead::LookAtCamera mCamera;
+    f32                         mNear;
+    f32                         mFar;
+    f32                         mFovyDeg;
+    f32                         mScale;
+    sead::Vector3f              mCameraBasePos;
+    sead::Vector3f              mCameraPosOffset;
+    sead::Vector3f              mCameraPos;
+    sead::Vector3f              mCameraAtOffset;
+    sead::LookAtCamera          mCamera;
     sead::PerspectiveProjection mProjection;
-    CullViewFrustum mCull;
-    BasicModel* mpBasicModel;
-    DVEnvTagMgr mEnvTagMgr;
-    DVCameraParam* mpCameraParam;
-    DistantViewEffectMgr* mpEffectMgr;
-    DistantViewFFLMgr* mpFFLMgr;
-    sead::Vector3f mBgPos; // Position relative to the Bg / level camera
-    f32 mAreaMinY;
-    agl::pfx::DepthOfField mDof;
-    agl::TextureData mDofIndTexture;
-    sead::Vector2f mDofIndScroll;
-    agl::lyr::DrawMethod mEffDrawMethod;
-    agl::lyr::DrawMethod mDofDrawMethod;
-    bool mIsDrawParticle;
-    u8 _1455; // Unused
-    bool mIsFlickerEnable;
-    u8 mFlickerCounter;
-    sead::Vector2f mFlickerOffset;
+    CullViewFrustum             mCull;
+    BasicModel*                 mpBasicModel;
+    DVEnvTagMgr                 mEnvTagMgr;
+    DVCameraParam*              mpCameraParam;
+    DistantViewEffectMgr*       mpEffectMgr;
+    DistantViewFFLMgr*          mpFFLMgr;
+    sead::Vector3f              mBgPos; // Position relative to the Bg / level camera
+    f32                         mAreaMinY;
+    agl::pfx::DepthOfField      mDof;
+    agl::TextureData            mDofIndTexture;
+    sead::Vector2f              mDofIndScroll;
+    agl::lyr::DrawMethod        mEffDrawMethod;
+    agl::lyr::DrawMethod        mDofDrawMethod;
+    bool                        mIsDrawParticle;
+    u8                          _1455; // Unused
+    bool                        mIsFlickerEnable;
+    u8                          mFlickerCounter;
+    sead::Vector2f              mFlickerOffset;
 };
-static_assert(sizeof(DistantViewMgr) == 0x1460, "DistantViewMgr size mismatch");
+static_assert(sizeof(DistantViewMgr) == 0x1460);

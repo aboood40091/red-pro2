@@ -65,33 +65,33 @@ public:
     f32 getBgCenterYPos() const;
 
 private:
-    f32 mZoom;
-    f32 _14;
-    sead::BoundBox2f _18;
-    sead::BoundBox2f _28;
-    sead::BoundBox2f _38;
-    sead::BoundBox2f _48;
-    sead::BoundBox2f _58;
-    f32 mScreenWidth;       // In world space
-    f32 mScreenHeight;      // ^^^
-    f32 mScreenLeft;        // ^^^
-    f32 mScreenCenterX;     // ^^^
-    f32 mScreenRight;       // ^^^
-    f32 mScreenTop;         // ^^^
-    f32 mScreenCenterY;     // ^^^
-    f32 mScreenBottom;      // ^^^
-    sead::BoundBox2f _88;
-    sead::BoundBox2f _98;
-    void* mBoundMgr;
-    void* mScrollLimitMgr;
-    void* mZoomAreaMgr;
-    void* mBoundVelMgr;
-    TrackingMgr* mTrackingMgr;
-    void* _bc;
-    void* _c0;
-    void* mAutoScrollMgr;
-    void* mConfigMgr;
-    u32 mScrollLimitInfo[0x2c / sizeof(u32)];
-    ScrollEffectMgr mScrollEffectMgr;
+    f32                 mZoom;
+    f32                 _14;
+    sead::BoundBox2f    _18;
+    sead::BoundBox2f    _28;
+    sead::BoundBox2f    _38;
+    sead::BoundBox2f    _48;
+    sead::BoundBox2f    _58;
+    f32                 mScreenWidth;       // In world space
+    f32                 mScreenHeight;      // ^^^
+    f32                 mScreenLeft;        // ^^^
+    f32                 mScreenCenterX;     // ^^^
+    f32                 mScreenRight;       // ^^^
+    f32                 mScreenTop;         // ^^^
+    f32                 mScreenCenterY;     // ^^^
+    f32                 mScreenBottom;      // ^^^
+    sead::BoundBox2f    _88;
+    sead::BoundBox2f    _98;
+    void*               mBoundMgr;
+    void*               mScrollLimitMgr;
+    void*               mZoomAreaMgr;
+    void*               mBoundVelMgr;
+    TrackingMgr*        mTrackingMgr;
+    void*               _bc;
+    void*               _c0;
+    void*               mAutoScrollMgr;
+    void*               mConfigMgr;
+    u32                 mScrollLimitInfo[0x2c / sizeof(u32)];
+    ScrollEffectMgr     mScrollEffectMgr;
 };
-static_assert(sizeof(BgScrollMgr) == 0x14C, "BgScrollMgr size mimatch");
+static_assert(sizeof(BgScrollMgr) == 0x14C);

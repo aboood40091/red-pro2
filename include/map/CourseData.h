@@ -21,7 +21,6 @@ struct DistantViewData
 };
 static_assert(sizeof(DistantViewData) == 0x1C);
 
-
 struct AreaData
 {
     // Is the official name. Called "zone" by the modding community.
@@ -61,14 +60,14 @@ struct AreaData
 };
 static_assert(sizeof(AreaData) == 0x1C);
 
-struct Sprite;
+struct MapActorData;
 
 class CourseDataFile
 {
     // Is the official name. Called "area" by the modding community.
 
 public:
-    enum BlockId
+    enum Block
     {
         cBlock_Environment      =   1 - 1,
         cBlock_Options          =   2 - 1,
@@ -77,8 +76,8 @@ public:
         cBlock_DistantViewData  =   5 - 1,
                                 //  6
         cBlock_NextGoto         =   7 - 1,
-        cBlock_Sprite           =   8 - 1,
-        cBlock_SpriteLoadRes    =   9 - 1,
+        cBlock_MapActor         =   8 - 1,
+        cBlock_MapActorLoadRes  =   9 - 1,
         cBlock_AreaData         =  10 - 1,
         cBlock_Location         =  11 - 1,
                                 // 12
@@ -91,7 +90,7 @@ public:
 public:
     CourseDataFile();
 
-    const void* getBlock(BlockId block)
+    const void* getBlock(Block block)
     {
         return mBlock[block];
     }
@@ -103,15 +102,15 @@ private:
     void getAreaBox_(sead::BoundBox2f* p_box, const AreaData& area_data, f32 delta = 0.0f) const;
 
 private:
-    u32 mIndex;
-    sead::SafeArray<const void*, cBlock_Num> mBlock;
-    sead::SafeArray<u32, cBlock_Num> mBlockSize;
-    sead::SafeArray<u32, cBlock_Num> mBlockEntryNum;
-    sead::SafeArray<Sprite*, 64> _b8;
-    sead::SafeArray<u32, 64> _1b8;
-    sead::SafeArray<u32, 64> _2b8;
+    u32                                         mIndex;
+    sead::SafeArray<const void*,    cBlock_Num> mBlock;
+    sead::SafeArray<u32,            cBlock_Num> mBlockSize;
+    sead::SafeArray<u32,            cBlock_Num> mBlockEntryNum;
+    sead::SafeArray<MapActorData*,  64>         _b8;
+    sead::SafeArray<u32,            64>         _1b8;
+    sead::SafeArray<u32,            64>         _2b8;
 };
-static_assert(sizeof(CourseDataFile) == 0x3B8, "CourseDataFile size mismatch");
+static_assert(sizeof(CourseDataFile) == 0x3B8);
 
 class CourseData
 {
@@ -126,4 +125,4 @@ public:
 private:
     sead::SafeArray<CourseDataFile, 4> mFile;
 };
-static_assert(sizeof(CourseData) == 0xEF0, "CourseData size mismatch");
+static_assert(sizeof(CourseData) == 0xEF0);

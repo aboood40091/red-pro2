@@ -23,9 +23,9 @@ public:
     void setModelLightMap(ModelNW* p_model, bool set_mdl_dl_dirty) const;
 
 private:
-    u32 _cc[(0x2070 - 0xCC) / sizeof(u32)];
-    agl::lght::LightMapMgr mLightMapMgr;
-    u32 _4ddc[(0x52C8 - 0x4DDC) / sizeof(u32)];
-    bool mIsInitialized;
+    u32                     _cc[(0x2070 - 0xCC) / sizeof(u32)];
+    agl::lght::LightMapMgr  mLightMapMgr;
+    u32                     _4ddc[(0x52C8 - 0x4DDC) / sizeof(u32)];
+    bool                    mIsInitialized;
 };
-static_assert(sizeof(LightMapMgr) == 0x52CC, "LightMapMgr size mismatch");
+static_assert(sizeof(LightMapMgr) == 0x52CC);

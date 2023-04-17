@@ -12,5 +12,5 @@ bool ActorComparatorProfID::isEqual(const ActorBase& actor) const
 
 bool ActorComparatorID::isEqual(const ActorBase& actor) const
 {
-    return actor.getID() == mID;
+    return actor.getID().getValue() == mID;
 }

@@ -16,12 +16,12 @@ public:
     const sead::BoundBox2f& getBound() const { return mBound; }
 
 private:
-    u8 _c9;
-    bool mIsPrepareDone;
-    bool mIsDrawMethodReady;
-    u32 mControllerWrapper[4][0x194 / sizeof(u32)]; // ControllerWrapper[4]
-    sead::BoundBox2f mBound;
-    u32 mLoopFlag;
-    u32 _730[(0xBE4 - 0x730) / sizeof(u32)];
+    u8                  _c9;
+    bool                mIsPrepareDone;
+    bool                mIsDrawMethodReady;
+    u32                 mControllerWrapper[4][0x194 / sizeof(u32)]; // ControllerWrapper[4]
+    sead::BoundBox2f    mBound;
+    u32                 mLoopType;
+    u32                 _730[(0xBE4 - 0x730) / sizeof(u32)];
 };
-static_assert(sizeof(AreaTask) == 0xBE4, "AreaTask size mismatch");
+static_assert(sizeof(AreaTask) == 0xBE4);

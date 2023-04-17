@@ -22,4 +22,4 @@ public:
 private:
     sead::UnsafeArray<sead::Color4f, 6> mLightColor;
 };
-static_assert(sizeof(PtclLightMgr) == 0x70, "PtclLightMgr size mismatch");
+static_assert(sizeof(PtclLightMgr) == 0x70);

@@ -1,5 +1,4 @@
-#define override
-#include <dv/DVCameraParam.h>
+#include <distant_view/DVCameraParam.h>
 #include <system/ResMgr.h>
 
 DVCameraParam::DVCameraParam(DistantViewMgr* dv_mgr, const sead::Vector3f* p_bg_pos, const sead::SafeString& dv_name)

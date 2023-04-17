@@ -23,8 +23,8 @@ private:
         }
 
     private:
-        sead::FixedSafeString<32> mKey;
-        ModelResource* mpModelResource;
+        sead::FixedSafeString<32>   mKey;
+        ModelResource*              mpModelResource;
 
         friend class ModelResourceMgr;
     };
@@ -39,7 +39,7 @@ public:
     void remove(const sead::SafeString& key);
 
 private:
-    sead::FixedStrTreeMap<32, ModelResourceHolder*, 256> mResHolderTreeMap;
-    u32 _4424;
+    sead::FixedStrTreeMap<32, ModelResourceHolder*, 256>    mResHolderTreeMap;
+    u32                                                     _4424;
 };
-static_assert(sizeof(ModelResourceMgr) == 0x4428, "ModelResourceMgr size mismatch");
+static_assert(sizeof(ModelResourceMgr) == 0x4428);

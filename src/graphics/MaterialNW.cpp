@@ -1,4 +1,3 @@
-#define override
 #include <graphics/MaterialNW.h>
 
 #include <prim/seadSafeString.h>
