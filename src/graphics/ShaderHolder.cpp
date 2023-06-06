@@ -1,12 +1,12 @@
 #include <graphics/ShaderHolder.h>
 
-ShaderHolder* ShaderHolder::sInstance = NULL;
+ShaderHolder* ShaderHolder::sInstance = nullptr;
 
 const agl::ShaderProgramArchive* ShaderHolder::getShaderArchive(const char* filename) const
 {
     // Don't think I'll decompile this
     RIO_ASSERT(false);
-    return NULL;
+    return nullptr;
 }
 
 const agl::ShaderProgramArchive* ShaderHolder::getNw4fShaderArchive() const

@@ -45,22 +45,22 @@ void MaterialNW::setTexSrtMtx(s32 index, const rio::Vector2f& scale, const u32& 
             f32 sin_r, cos_r;
             SinCosIdx(&sin_r, &cos_r, rotate);
 
-            getTexSrtMtx(index).m[0][0] =  scale.x * cos_r;
-            getTexSrtMtx(index).m[0][1] =  scale.x * sin_r;
-            getTexSrtMtx(index).m[0][2] =  0.0f;
-            getTexSrtMtx(index).m[0][3] =  translate.x;
+            mTexSrtMtx[index].m[0][0] =  scale.x * cos_r;
+            mTexSrtMtx[index].m[0][1] =  scale.x * sin_r;
+            mTexSrtMtx[index].m[0][2] =  0.0f;
+            mTexSrtMtx[index].m[0][3] =  translate.x;
 
-            getTexSrtMtx(index).m[1][0] = -scale.y * sin_r;
-            getTexSrtMtx(index).m[1][1] =  scale.y * cos_r;
-            getTexSrtMtx(index).m[1][2] =  0.0f;
-            getTexSrtMtx(index).m[1][3] =  translate.y;
+            mTexSrtMtx[index].m[1][0] = -scale.y * sin_r;
+            mTexSrtMtx[index].m[1][1] =  scale.y * cos_r;
+            mTexSrtMtx[index].m[1][2] =  0.0f;
+            mTexSrtMtx[index].m[1][3] =  translate.y;
 
-            getTexSrtMtx(index).m[2][0] =  0.0f;
-            getTexSrtMtx(index).m[2][1] =  0.0f;
-            getTexSrtMtx(index).m[2][2] =  0.0f;
-            getTexSrtMtx(index).m[2][3] =  1.0f;
+            mTexSrtMtx[index].m[2][0] =  0.0f;
+            mTexSrtMtx[index].m[2][1] =  0.0f;
+            mTexSrtMtx[index].m[2][2] =  0.0f;
+            mTexSrtMtx[index].m[2][3] =  1.0f;
 
-            srt.pEffectMtx = (nw::g3d::math::Mtx34*)(&getTexSrtMtx(index));
+            srt.pEffectMtx = (nw::g3d::math::Mtx34*)(&mTexSrtMtx[index]);
         }
     }
 }

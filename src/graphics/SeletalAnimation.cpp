@@ -100,7 +100,8 @@ void SkeletalAnimation::play(const ModelResource* p_mdl_res, const char* name)
     mFrameCtrl.setFrameEnd(p_res->GetFrameCount());
     mFrameCtrl.setFrameMax(p_res->GetFrameCount());
     mFrameCtrl.setRate(1.0f);
-    mFrameCtrl.set(FrameCtrl::cMode_Repeat, 1.0f, 0.0f);
+    mFrameCtrl.setPlayMode(FrameCtrl::cMode_Repeat);
+    mFrameCtrl.setFrame(0.0f);
     mFrameCtrl.reset();
 
     if (mpModel)

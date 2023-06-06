@@ -1,26 +1,25 @@
 #pragma once
 
 //#include <graphics/LightMapMgr.h>
+#include <graphics/MaterialNW.h>
 #include <graphics/Model.h>
+#include <graphics/ShaderParamAnimation.h>
+#include <graphics/ShapeAnimation.h>
+#include <graphics/SkeletalAnimation.h>
+#include <graphics/TexturePatternAnimation.h>
+#include <graphics/VisibilityAnimation.h>
 
 #include <common/aglDisplayList.h>
 #include <common/aglShaderProgramArchive.h>
 #include <common/aglUniformBlock.h>
 #include <container/Buffer.h>
 #include <container/PtrArray.h>
+#include <container/SafeArray.h>
 #include <g3d/aglModelEx.h>
 #include <math/BoundBox.h>
 
 #include <nw/g3d/g3d_SkeletalAnimObj.h>
 #include <nw/g3d/g3d_ShapeObj.h>
-
-#include <graphics/MaterialNW.h>
-
-#include <graphics/SkeletalAnimation.h>
-#include <graphics/TexturePatternAnimation.h>
-#include <graphics/ShaderParamAnimation.h>
-#include <graphics/VisibilityAnimation.h>
-#include <graphics/ShapeAnimation.h>
 
 #define cLightMapNum 2
 
@@ -58,26 +57,26 @@ public:
             }
         }
 
-        const agl::ShaderProgram* p_shader_program;
-        agl::UniformBlockLocation env_location;
-        agl::UniformBlockLocation mtx_location;
-        agl::UniformBlockLocation shp_location;
-        agl::UniformBlockLocation mat_location;
-        agl::SamplerLocation sdw_location;
-        agl::SamplerLocation rfl_location;
+        const agl::ShaderProgram*   p_shader_program;
+        agl::UniformBlockLocation   env_location;
+        agl::UniformBlockLocation   mtx_location;
+        agl::UniformBlockLocation   shp_location;
+        agl::UniformBlockLocation   mat_location;
+        agl::SamplerLocation        sdw_location;
+        agl::SamplerLocation        rfl_location;
     };
-    static_assert(sizeof(ShaderAssign) == 0x64, "ModelNW::ShaderAssign size mismatch");
+    static_assert(sizeof(ShaderAssign) == 0x64);
 
     struct ShapeRenderInfo
     {
-        s32 idx_shape;
-        s32 priority;
-        rio::BitFlag32 flag;
-        s32 polygon_offset;
-        mutable agl::DisplayList attrib_dl;
-        mutable agl::DisplayList mat_dl;
+        s32                         idx_shape;
+        s32                         priority;
+        rio::BitFlag32              flag;
+        s32                         polygon_offset;
+        mutable agl::DisplayList    attrib_dl;
+        mutable agl::DisplayList    mat_dl;
     };
-  //static_assert(sizeof(ShapeRenderInfo) == 0x30, "ModelNW::ShapeRenderInfo size mismatch");
+  //static_assert(sizeof(ShapeRenderInfo) == 0x30);
 
     struct LightMap
     {
@@ -90,33 +89,93 @@ public:
         s32 idx_lghtmap[cLightMapNum];
         s32 idx_sampler[cLightMapNum];
     };
-    static_assert(sizeof(LightMap) == 0x10, "ModelNW::LightMap size mismatch");
+    static_assert(sizeof(LightMap) == 0x10);
 
     struct Shape
     {
-        agl::UniformBlock uniform_block; // Shp
-        LightMap light_map;
+        agl::UniformBlock               uniform_block; // Shp
+        LightMap                        light_map;
         Buffer<nw::g3d::fnd::GfxBuffer> vtx_buffer;
     };
 #if !RIO_IS_WIN
-    static_assert(sizeof(Shape) == 0x2C, "ModelNW::Shape size mismatch");
+    static_assert(sizeof(Shape) == 0x2C);
 #endif
 
     struct DrawInfo
     {
-        s32 view_index;
-        const rio::Matrix34f* p_view_mtx;
-        const rio::Matrix44f* p_proj_mtx;
-        const agl::ShaderProgram* p_shader_program;
-        ShaderAssign* p_shader_assign;
-        s32 material_index;
-        bool draw_shape;
-        bool draw_reflection;
-        agl::ShaderMode shader_mode;
-        s32 polygon_offset;
-        const CullViewFrustum* p_cull;
+        s32                         view_index;
+        const rio::Matrix34f*       p_view_mtx;
+        const rio::Matrix44f*       p_proj_mtx;
+        const agl::ShaderProgram*   p_shader_program;
+        ShaderAssign*               p_shader_assign;
+        s32                         material_index;
+        bool                        draw_shape;
+        bool                        draw_reflection;
+        agl::ShaderMode             shader_mode;
+        s32                         polygon_offset;
+        const CullViewFrustum*      p_cull;
     };
-    static_assert(sizeof(DrawInfo) == 0x28, "ModelNW::DrawInfo size mismatch");
+    static_assert(sizeof(DrawInfo) == 0x28);
+
+    enum SamplerSlot
+    {
+        cSamplerSlot_LightMap_0 = 12,
+        cSamplerSlot_ReflectionMap = cSamplerSlot_LightMap_0 + cLightMapNum,
+        cSamplerSlot_ShadowMap
+    };
+    static_assert(cSamplerSlot_ReflectionMap == 14);
+
+private:
+    class BoundingFlagArray
+    {
+    public:
+        BoundingFlagArray()
+        {
+            resetAll();
+        }
+
+        void set(s32 index, bool enable)
+        {
+            if (index >= 32*10)
+                return;
+
+            if (enable)
+                mBuffer[index >> 5] |= 1 << (index & 0x1f);
+            else
+                mBuffer[index >> 5] &= ~(1 << (index & 0x1f));
+        }
+
+        bool get(s32 index) const
+        {
+            return mBuffer[index >> 5] & 1 << (index & 0x1f);
+        }
+
+        bool any() const
+        {
+            for (s32 i = 0; i < 10; i++)
+                if (mBuffer[i] != 0)
+                    return true;
+
+            return false;
+        }
+
+        void setAll()
+        {
+            // ???
+            rio::MemUtil::set(mBuffer.getBufferPtr(), u8(-1), sizeof(rio::BitFlag32) * 9);
+            // ??????
+            mBuffer[9] = u32(-1);
+        }
+
+        void resetAll()
+        {
+            rio::MemUtil::set(mBuffer.getBufferPtr(), 0, sizeof(mBuffer));
+        }
+
+    private:
+        UnsafeArray<u32, 10>  mBuffer;
+    };
+    static_assert(sizeof(BoundingFlagArray) == 0x28);
 
 public:
     // Calculates the drawing resources for skeleton matrices, shapes and materials
@@ -249,6 +308,7 @@ public:
     void setVisAnim(s32 index, Animation* anim) override;
     void setShaAnim(s32 index, Animation* anim) override;
 
+private:
     Animation* const* getSklAnims() const override
     {
         return reinterpret_cast<Animation* const*>(mpSklAnim.getBufferPtr());
@@ -275,7 +335,33 @@ public:
     }
 
 public:
-    void initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode);
+    SkeletalAnimation** getSklAnimBuffer()
+    {
+        return const_cast<SkeletalAnimation**>(reinterpret_cast<SkeletalAnimation* const*>(getSklAnims()));
+    }
+
+    TexturePatternAnimation** getTexAnimBuffer()
+    {
+        return const_cast<TexturePatternAnimation**>(reinterpret_cast<TexturePatternAnimation* const*>(getTexAnims()));
+    }
+
+    ShaderParamAnimation** getShuAnimBuffer()
+    {
+        return const_cast<ShaderParamAnimation**>(reinterpret_cast<ShaderParamAnimation* const*>(getShuAnims()));
+    }
+
+    VisibilityAnimation** getVisAnimBuffer()
+    {
+        return const_cast<VisibilityAnimation**>(reinterpret_cast<VisibilityAnimation* const*>(getVisAnims()));
+    }
+
+    ShapeAnimation** getShaAnimBuffer()
+    {
+        return const_cast<ShapeAnimation**>(reinterpret_cast<ShapeAnimation* const*>(getShaAnims()));
+    }
+
+public:
+    void initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode);
 
     agl::g3d::ModelEx& getModelEx() { return mModelEx; }
     const agl::g3d::ModelEx& getModelEx() const { return mModelEx; }
@@ -288,36 +374,11 @@ public:
     void setDisplayListDirty();
 
 private:
-    void setBoundingFlag_(s32 index)
-    {
-        mBoundingFlagArray[index >> 5] |= 1 << (index & 0x1F);
-    }
-
-    bool getBoundingFlag_(s32 index) const
-    {
-        return mBoundingFlagArray[index >> 5] & 1 << (index & 0x1F);
-    }
-
-    void setSubBoundingFlag_(s32 index)
-    {
-        mSubBoundingFlagArray[index >> 5] |= 1 << (index & 0x1F);
-    }
-
-    void resetSubBoundingFlag_(s32 index)
-    {
-        mSubBoundingFlagArray[index >> 5] &= ~(1 << (index & 0x1F));
-    }
-
-    bool getSubBoundingFlag_(s32 index) const
-    {
-        return mSubBoundingFlagArray[index >> 5] & 1 << (index & 0x1F);
-    }
-
     void initializeShapeRenderInfo_(ShapeRenderInfo& render_info, const nw::g3d::MaterialObj* p_material, const nw::g3d::ShapeObj* p_shape);
     static s32 sortShapeRenderInfoCmp(const ShapeRenderInfo* a, const ShapeRenderInfo* b);
     void calcBounding_();
     void applyBlendWeight_(s32 shape_index);
-    static void setBoundingFlagArray_(u32 flag_array[], const SkeletalAnimation& anim);
+    static void setBoundingFlagArray_(BoundingFlagArray& flag_array, const SkeletalAnimation& anim);
 
     void drawOpa_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const;
     void drawXlu_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const;
@@ -325,36 +386,36 @@ private:
     void drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info, const RenderMgr* p_render_mgr) const;
 
 private:
-    agl::g3d::ModelEx mModelEx;
-    nw::g3d::SkeletalAnimBlender mSklAnimBlender;
-    Buffer<SkeletalAnimation*> mpSklAnim;
-    Buffer<TexturePatternAnimation*> mpTexAnim;
-    Buffer<ShaderParamAnimation*> mpShuAnim;
-    Buffer<VisibilityAnimation*> mpVisAnim;
-    Buffer<ShapeAnimation*> mpShaAnim;
-    void* mpBuffer;
-    void* mpBlockBuffer;
-    size_t mBlockBufferSize;
-    void* mpSklAnimBlenderBuffer;
-    Buffer<f32> mSklAnimBlendWeight;
-    PtrArray<ShapeRenderInfo> mOpaShapeInfo;
-    PtrArray<ShapeRenderInfo> mXluShapeInfo;
-    Buffer<ShaderAssign> mShaderAssign;
-    Buffer<MaterialNW*> mpMaterial;
-    Buffer<Shape> mShape;
-    rio::Matrix34f mMtxRT;
-    rio::Vector3f mScale;
-    u8 _128;
-    rio::BitFlag32 mRenderFlag;
-    rio::BitFlag32 mBoundingEnableFlag;
-    Sphere3f mBounding;
-    BoundBox3f* mpSubBounding;
-    rio::BitFlag32 mShapeFlag; // & 4: a shape has shadow cast, & 2: a shape has reflection, & 1: a shape is visible
-    u32 mBoundingFlagArray[10];    // UnsafeArray?
-    u32 mSubBoundingFlagArray[10]; // UnsafeArray?
-    bool mDisplayListDirty;
+    agl::g3d::ModelEx                   mModelEx;
+    nw::g3d::SkeletalAnimBlender        mSklAnimBlender;
+    Buffer<SkeletalAnimation*>          mpSklAnim;
+    Buffer<TexturePatternAnimation*>    mpTexAnim;
+    Buffer<ShaderParamAnimation*>       mpShuAnim;
+    Buffer<VisibilityAnimation*>        mpVisAnim;
+    Buffer<ShapeAnimation*>             mpShaAnim;
+    void*                               mpBuffer;
+    void*                               mpBlockBuffer;
+    size_t                              mBlockBufferSize;
+    void*                               mpSklAnimBlenderBuffer;
+    Buffer<f32>                         mSklAnimBlendWeight;
+    PtrArray<ShapeRenderInfo>           mOpaShapeInfo;
+    PtrArray<ShapeRenderInfo>           mXluShapeInfo;
+    Buffer<ShaderAssign>                mShaderAssign;
+    Buffer<MaterialNW*>                 mpMaterial;
+    Buffer<Shape>                       mShape;
+    rio::Matrix34f                      mMtxRT;
+    rio::Vector3f                       mScale;
+    u8                                  _128;
+    rio::BitFlag32                      mRenderFlag;
+    rio::BitFlag32                      mBoundingEnableFlag;
+    Sphere3f                            mBounding;
+    BoundBox3f*                         mpSubBounding;
+    rio::BitFlag32                      mShapeFlag;             // & 4: a shape has shadow cast, & 2: a shape has reflection, & 1: a shape is visible
+    BoundingFlagArray                   mBoundingFlagArray;
+    BoundingFlagArray                   mSubBoundingFlagArray;
+    bool                                mDisplayListDirty;
 
     // Custom
-    ShapeRenderInfo* mShapeRenderInfo;
+    ShapeRenderInfo*    mShapeRenderInfo;
 };
-//static_assert(sizeof(ModelNW) == 0x1AC, "ModelNW size mismatch");
+//static_assert(sizeof(ModelNW) == 0x1AC);

@@ -14,9 +14,16 @@ class ModelResource;
 class Model : public RenderObj
 {
 public:
+    enum BoundingMode
+    {
+        cBoundingMode_Disable,
+        cBoundingMode_Enable,
+        cBoundingMode_EnableSubBounding
+    };
+
     // Why are these here... ?
-    static ModelNW* createNW(const ModelResource& res, const char* name, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode);
-    static ModelNW* createNW(const ModelResource& res, const char* name, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode);
+    static ModelNW* createNW(const ModelResource& res, const char* name, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode);
+    static ModelNW* createNW(const ModelResource& res, const char* name, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode);
 
 public:
     Model();
@@ -62,8 +69,14 @@ public:
     virtual Animation* const* getVisAnims() const = 0;
     virtual Animation* const* getShaAnims() const = 0;
 
+    s32 getOpaBufferIdx() const { return mOpaBufferIdx; }
+    s32 getXluBufferIdx() const { return mXluBufferIdx; }
+
+    void setOpaBufferIdx(s32 index) { mOpaBufferIdx = index; }
+    void setXluBufferIdx(s32 index) { mXluBufferIdx = index; }
+
 protected:
     s32 mOpaBufferIdx;
     s32 mXluBufferIdx;
 };
-//static_assert(sizeof(Model) == 0x28, "Model size mismatch");
+//static_assert(sizeof(Model) == 0x28);

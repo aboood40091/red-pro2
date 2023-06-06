@@ -28,8 +28,8 @@ public:
     }
 
 private:
-    nw::g3d::res::ResFile* mResFile;
-    Buffer<ModelShaderArchive> mModelShaderArchive;
-    u32 _1c;
+    nw::g3d::res::ResFile*      mResFile;
+    Buffer<ModelShaderArchive>  mModelShaderArchive;
+    u32                         _1c;
 };
-//static_assert(sizeof(ModelResource) == 0x20, "ModelResource size mismatch");
+//static_assert(sizeof(ModelResource) == 0x20);

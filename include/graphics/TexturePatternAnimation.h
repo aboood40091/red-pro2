@@ -44,12 +44,12 @@ private:
     static void updateInitArg_(nw::g3d::TexPatternAnimObj::InitArg* p_arg, const ModelResource* p_mdl_res);
 
 private:
-    nw::g3d::TexPatternAnimObj mAnimObj;
-    nw::g3d::res::ResTexPatternAnim* mpRes;
-    const ModelNW* mpModel;
-    s32 mIndex;
+    nw::g3d::TexPatternAnimObj          mAnimObj;
+    nw::g3d::res::ResTexPatternAnim*    mpRes;
+    const ModelNW*                      mpModel;
+    s32                                 mIndex;
 
     // Custom
-    void* mpBuffer;
+    void*   mpBuffer;
 };
-static_assert(sizeof(TexturePatternAnimation) == 0x84 + 4, "TexturePatternAnimation size mismatch");
+static_assert(sizeof(TexturePatternAnimation) == 0x84 + 4);

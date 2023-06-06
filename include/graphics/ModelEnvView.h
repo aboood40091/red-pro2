@@ -12,6 +12,7 @@ public:
         agl::UniformBlock::Type type;
         s32                     num;
     };
+    static_assert(sizeof(Member) == 8);
 
     enum MemberIndex
     {
@@ -46,5 +47,6 @@ public:
     const agl::UniformBlock& getUniformBlock(s32 view_index) const { return mUniformBlock[view_index]; }
 
 private:
-    Buffer<agl::UniformBlock> mUniformBlock;
+    Buffer<agl::UniformBlock>   mUniformBlock;
 };
+//static_assert(sizeof(ModelEnvView) == 0xC);

@@ -14,5 +14,6 @@ public:
     const FrameCtrl& getFrameCtrl() const { return mFrameCtrl; }
 
 protected:
-    FrameCtrl mFrameCtrl;
+    FrameCtrl   mFrameCtrl;
 };
+static_assert(sizeof(Animation) == 0x20);

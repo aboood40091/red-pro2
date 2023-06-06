@@ -12,6 +12,7 @@ public:
 
     virtual void calc() = 0;
 };
+static_assert(sizeof(RenderObjBase) == 4);
 
 class RenderMgr;
 
@@ -33,5 +34,6 @@ public:
     virtual bool hasShadow() const { return false; }
 
 protected:
-    rio::Vector3f mOrderPos; // I think. Precisely used for z ordering.
+    rio::Vector3f   mOrderPos; // I think. Precisely used for z ordering.
 };
+static_assert(sizeof(RenderObj) == 0x10);

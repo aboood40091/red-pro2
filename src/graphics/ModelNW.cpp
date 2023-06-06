@@ -4,7 +4,7 @@
 #include <graphics/ShaderHolder.h>
 
 //#include <gfx/seadGraphics.h>
-//#include <util/aglPrimitiveTexture.h>
+//#include <utility/aglPrimitiveTexture.h>
 
 ModelNW::ModelNW()
     : Model()
@@ -33,8 +33,8 @@ ModelNW::ModelNW()
     , mBounding({ 0.0f, 0.0f, 0.0f }, 1.0f )
     , mpSubBounding(nullptr)
     , mShapeFlag(1)
-    , mBoundingFlagArray() // TODO
-    , mSubBoundingFlagArray() // ^^
+    , mBoundingFlagArray()
+    , mSubBoundingFlagArray()
     , mDisplayListDirty(false)
     , mShapeRenderInfo(nullptr)
 {
@@ -131,25 +131,25 @@ ModelNW::~ModelNW()
     }
 }
 
-void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, u32 bounding_mode)
+void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderProgramArchive* shader_archive, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode)
 {
     switch (bounding_mode)
     {
-    case 0:
+    case cBoundingMode_Disable:
         mBoundingEnableFlag.reset(
             1 << 0 |
             1 << 1 |
             1 << 2
         );
         break;
-    case 1:
+    case cBoundingMode_Enable:
         mBoundingEnableFlag.set(
             1 << 0 |
             1 << 1 |
             1 << 2
         );
         break;
-    case 2:
+    case cBoundingMode_EnableSubBounding:
         mBoundingEnableFlag.set(
             1 << 0 |
             1 << 1 |
@@ -163,7 +163,7 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
     nw::g3d::ModelObj::InitArg model_arg(res_model);
     model_arg.ViewCount(num_view);
 
-    if (bounding_mode != 0)
+    if (bounding_mode != cBoundingMode_Disable)
         model_arg.EnableBounding();
     else
         model_arg.DisableBounding();
@@ -529,7 +529,7 @@ void ModelNW::activateMaterial(const agl::g3d::ModelShaderAssign& shader_assign,
                 LightMapMgr::instance()->getLightMapMgr()
                     .getLightMap(idx_lghtmap)
                         .getTextureSampler()
-                            .activate(location, 12 + i);
+                            .activate(location, cSamplerSlot_LightMap_0 + i);
             }
         }
     }
@@ -553,10 +553,7 @@ void ModelNW::calcBounding_()
             mBounding.setRadius(p_bounding->radius);
         }
 
-        // ???
-        rio::MemUtil::set(mSubBoundingFlagArray, u8(-1), sizeof(u32) * 9);
-        // ??????
-        mSubBoundingFlagArray[9] = 0xFFFFFFFF;
+        mSubBoundingFlagArray.setAll();
 
         mBoundingEnableFlag.reset(
             1 << 1 |
@@ -573,12 +570,11 @@ void ModelNW::calcBounding_()
             nw::g3d::ShapeObj* p_shape = mModelEx.GetShape(idx_shape);
 
             if (p_shape->GetVtxSkinCount() != 0 ||
-                getBoundingFlag_(p_shape->GetBoneIndex()))
+                mBoundingFlagArray.get(p_shape->GetBoneIndex()))
             {
                 p_shape->CalcBounding(mModelEx.GetSkeleton());
 
-                if (idx_shape < 32*10)
-                    setSubBoundingFlag_(idx_shape);
+                mSubBoundingFlagArray.set(idx_shape, true);
 
                 p_bounding->Merge(*p_bounding, *p_shape->GetBounding());
 
@@ -599,19 +595,9 @@ void ModelNW::calcBounding_()
 
     if (mBoundingEnableFlag.isOn(1 << 5))
     {
-        u32* p_sub_flag_array = mSubBoundingFlagArray;
+        BoundingFlagArray* const p_sub_flag_array = &mSubBoundingFlagArray;
 
-        bool has_sub_bounding = false;
-        for (s32 i = 0; i < 10; i++)
-        {
-            if (p_sub_flag_array[i] != 0)
-            {
-                has_sub_bounding = true;
-                break;
-            }
-        }
-
-        if (has_sub_bounding)
+        if (p_sub_flag_array->any())
         {
             nw::g3d::AABB aabb;
             aabb.min.Set(rio::Mathf::max(), rio::Mathf::max(), rio::Mathf::max());
@@ -623,13 +609,13 @@ void ModelNW::calcBounding_()
             {
                 nw::g3d::ShapeObj* p_shape = mModelEx.GetShape(idx_shape);
 
-                if (getSubBoundingFlag_(idx_shape))
+                if (p_sub_flag_array->get(idx_shape))
                     p_shape->CalcSubBounding(p_skeleton);
 
                 aabb.Merge(aabb, *p_shape->GetSubBoundingArray());
             }
 
-            rio::MemUtil::set(p_sub_flag_array, 0, sizeof(u32) * 10);
+            p_sub_flag_array->resetAll();
 
             mpSubBounding->setUndef();
             mpSubBounding->setMax(reinterpret_cast<const rio::Vector3f&>(aabb.max));
@@ -796,9 +782,9 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
             /*
             const agl::TextureSampler& tex_sampler = p_render_mgr->getShadowMap()
                                                         ? *p_render_mgr->getShadowMap()
-                                                        : agl::utl::PrimitiveTexture::instance()->getTextureSampler(9);
+                                                        : agl::utl::PrimitiveTexture::instance()->getTextureSampler(agl::utl::PrimitiveTexture::cSampler_DepthShadow);
 
-            tex_sampler.bindFS(draw_info.p_shader_assign->sdw_location, 15);
+            tex_sampler.bindFS(draw_info.p_shader_assign->sdw_location, cSamplerSlot_ShadowMap);
             */
             RIO_ASSERT(false);
             while (true) {}
@@ -809,9 +795,9 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
             /*
             const agl::TextureSampler& tex_sampler = p_render_mgr->getReflectionMap()
                                                         ? *p_render_mgr->getReflectionMap()
-                                                        : agl::utl::PrimitiveTexture::instance()->getTextureSampler(2);
+                                                        : agl::utl::PrimitiveTexture::instance()->getTextureSampler(agl::utl::PrimitiveTexture::cSampler_Black2D);
 
-            tex_sampler.bindFS(draw_info.p_shader_assign->rfl_location, 14);
+            tex_sampler.bindFS(draw_info.p_shader_assign->rfl_location, cSamplerSlot_ReflectionMap);
             */
             RIO_ASSERT(false);
             while (true) {}
@@ -901,12 +887,10 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
 
     if (bounding_intersect == 0 && mBoundingEnableFlag.isOn(1 << 0) && p_cull && p_res_mesh->GetSubMeshCount() > 1)
     {
-        if (getSubBoundingFlag_(idx_shape))
+        if (mSubBoundingFlagArray.get(idx_shape))
         {
             const_cast<nw::g3d::ShapeObj*>(p_shape)->CalcSubBounding(mModelEx.GetSkeleton());
-
-            if (idx_shape < 32*10)
-                const_cast<ModelNW*>(this)->resetSubBoundingFlag_(idx_shape);
+            const_cast<BoundingFlagArray*>(&mSubBoundingFlagArray)->set(idx_shape, false);
         }
 
         nw::g3d::CullingContext ctx;
@@ -1079,7 +1063,7 @@ bool ModelNW::hasXlu() const
 
 // ----------------------------------------------------------------------
 
-void ModelNW::setBoundingFlagArray_(u32 flag_array[], const SkeletalAnimation& anim)
+void ModelNW::setBoundingFlagArray_(BoundingFlagArray& flag_array, const SkeletalAnimation& anim)
 {
     const nw::g3d::AnimBindTable& bind_table = anim.getAnimObj().GetBindTable();
     for (s32 idx_anim = 0; idx_anim < bind_table.GetAnimCount(); idx_anim++)
@@ -1087,8 +1071,7 @@ void ModelNW::setBoundingFlagArray_(u32 flag_array[], const SkeletalAnimation& a
         if (bind_table.IsEnabled(idx_anim))
         {
             s32 index = bind_table.GetTargetIndex(idx_anim);
-            if (index < 32*10)
-                flag_array[index >> 5] |= 1 << (index & 0x1F);
+            flag_array.set(index, true);
         }
     }
 }
@@ -1123,7 +1106,7 @@ void ModelNW::updateAnimations()
         }
 
         if (mBoundingEnableFlag.isOn(1 << 3))
-            rio::MemUtil::set(mBoundingFlagArray, 0, sizeof(mBoundingFlagArray));
+            mBoundingFlagArray.resetAll();
 
         if (blend)
         {
