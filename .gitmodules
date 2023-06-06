@@ -1,0 +1,3 @@
+[submodule "lib/agl"]
+	path = lib/agl
+	url = https://github.com/aboood40091/agl-win.git
