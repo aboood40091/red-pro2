@@ -92,6 +92,15 @@ public:
     {
     }
 
+    void destroy()
+    {
+        mArchiveBlockHeader = nullptr;
+        mFATBlockHeader = nullptr;
+        mFNTBlock = nullptr;
+        mFATEntrys = gsl::span<const FATEntry>();
+        mDataBlock = nullptr;
+    }
+
     bool prepareArchive(const void* archive);
 
     std::vector<Entry> readEntry(u32 first = 0, u32 num = u32(-1)) const;
