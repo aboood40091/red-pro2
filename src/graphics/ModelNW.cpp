@@ -869,6 +869,13 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
         }
     }
 
+#if RIO_IS_WIN
+    const rio::Shader& shader_rio = draw_info.p_shader_program->getShaderRIO();
+
+    shader_rio.setUniform(u32(nw::g3d::fnd::s_AlphaFunc - GL_NEVER), u32(-1), shader_rio.getFragmentUniformLocation("PS_PUSH.alphaFunc"));
+    shader_rio.setUniform(nw::g3d::fnd::s_AlphaRefValue,             u32(-1), shader_rio.getFragmentUniformLocation("PS_PUSH.alphaRef"));
+#endif // RIO_IS_WIN
+
     if (!render_info.attrib_dl.isEmpty())
         render_info.attrib_dl.call();
 
