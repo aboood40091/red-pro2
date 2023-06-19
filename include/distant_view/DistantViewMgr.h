@@ -5,7 +5,9 @@
 #include <graphics/ModelResource.h>
 #include <graphics/RenderMgr.h>
 
-//#include <common/aglTextureData.h>
+#include <common/aglRenderBuffer.h>
+#include <common/aglRenderTarget.h>
+#include <common/aglTextureData.h>
 #include <gfx/rio_Camera.h>
 #include <gfx/rio_Projection.h>
 //#include <layer/aglDrawMethod.h>
@@ -13,7 +15,7 @@
 #include <math/BoundBox.h>
 #include <math/rio_Matrix.h>
 #include <math/rio_Vector.h>
-//#include <postfx/aglDepthOfField.h>
+#include <postfx/aglDepthOfField.h>
 #include <resource/SharcArchiveRes.h>
 
 class BasicModel;
@@ -48,10 +50,11 @@ private:
     void calcModelMtx_();
 
     void drawParticle_(/* const agl::lyr::RenderInfo& render_info */);
-    void applyDepthOfField_(/* const agl::lyr::RenderInfo& render_info */);
 
 public:
-    void initialize(const std::string& dv_fname /* , u8 course_file, u8 area, const sead::BoundBox2f& area_bound */);
+    void applyDepthOfField();
+
+    void initialize(const std::string& dv_fname = "dv_Nohara" /* , u8 course_file, u8 area, const sead::BoundBox2f& area_bound */);
 
     void resetAnim();
 
@@ -97,8 +100,8 @@ private:
   //DistantViewFFLMgr*          mpFFLMgr;
     rio::Vector3f               mBgPos; // Position relative to the Bg / level camera
   //f32                         mAreaMinY;
-  //agl::pfx::DepthOfField      mDof;
-  //agl::TextureData            mDofIndTexture;
+    agl::pfx::DepthOfField      mDof;
+    agl::TextureData            mDofIndTexture;
     rio::Vector2f               mDofIndScroll;
   //agl::lyr::DrawMethod        mEffDrawMethod;
   //agl::lyr::DrawMethod        mDofDrawMethod;
@@ -109,10 +112,17 @@ private:
     rio::Vector2f               mFlickerOffset;
 
     // Custom
+    u8*                     mpArchive;
+    ModelResource           mModelRes;
+    RenderMgr               mRenderMgr;
+
+    agl::RenderBuffer       mRenderBuffer;
+    agl::RenderTargetColor  mColorTarget;
+    agl::RenderTargetDepth  mDepthTarget;
+    agl::TextureData        mColorTextureData;
+    agl::TextureData        mDepthTextureData;
+
 public:
-    u8*             mpArchive;
-    SharcArchiveRes mArchiveRes;
-    ModelResource   mModelRes;
-    RenderMgr       mRenderMgr;
+    SharcArchiveRes         mArchiveRes;
 };
 //static_assert(sizeof(DistantViewMgr) == 0x1460);

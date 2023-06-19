@@ -21,11 +21,9 @@
 
 #include <common/aglRenderBuffer.h>
 #include <common/aglRenderTarget.h>
-#include <g3d/aglTextureDataInitializerG3D.h>
 #include <heap/seadFrameHeap.h>
 #include <layer/aglRenderer.h>
 #include <layer/aglRenderInfo.h>
-#include <utility/aglResParameter.h>
 */
 
 #include <distant_view/DistantViewMgr.h>
@@ -33,9 +31,14 @@
 #include <graphics/BasicModel.h>
 #include <graphics/ModelNW.h>
 
+#include <common/aglTextureFormatInfo.h>
 #include <filedevice/rio_FileDeviceMgr.h>
+#include <g3d/aglTextureDataInitializerG3D.h>
+#include <gfx/rio_Graphics.h>
+#include <gfx/rio_Window.h>
 #include <misc/rio_MemUtil.h>
 #include <resource/SZSDecompressor.h>
+#include <utility/aglResParameter.h>
 
 DistantViewMgr* DistantViewMgr::sInstance = nullptr;
 
@@ -76,8 +79,8 @@ DistantViewMgr::DistantViewMgr()
   //, mpFFLMgr(nullptr)
     , mBgPos{0.0f, 0.0f, 0.0f}
   //, mAreaMinY(AreaTask::instance()->getBound().getMin().y)
-  //, mDof()
-  //, mDofIndTexture()
+    , mDof()
+    , mDofIndTexture()
     , mDofIndScroll{0.0f, 0.0f}
   //, mEffDrawMethod()
   //, mDofDrawMethod()
@@ -87,7 +90,94 @@ DistantViewMgr::DistantViewMgr()
     , mFlickerOffset{0.375f, 0.375f}
     // Custom
     , mpArchive(nullptr)
+    , mRenderBuffer(
+        rio::Vector2i{ s32(rio::Window::instance()->getWidth()), s32(rio::Window::instance()->getHeight()) }
+    )
+    /*
+    agl::RenderTargetColor  mColorTarget;
+    agl::RenderTargetDept   mDepthTarget;
+    agl::TextureData        mColorTextureData;
+    agl::TextureData        mDepthTextureData;
+    */
 {
+    mRenderBuffer.setRenderTargetColor(&mColorTarget);
+    mRenderBuffer.setRenderTargetDepth(&mDepthTarget);
+
+    const rio::NativeWindow& native_window = rio::Window::instance()->getNativeWindow();
+
+    [[maybe_unused]] const u32 width = rio::Window::instance()->getWidth();
+    [[maybe_unused]] const u32 height = rio::Window::instance()->getHeight();
+
+#if RIO_IS_CAFE
+
+    mColorTextureData.initializeFromSurface(native_window.getColorBuffer().surface);
+
+#elif RIO_IS_WIN
+
+    mColorTextureData.initialize(
+        agl::TextureFormatInfo::convFormatGX2ToAGL(
+            static_cast<GX2SurfaceFormat>(native_window.getColorBufferTextureFormat()),
+            true,
+            false
+        ),
+        width,
+        height,
+        1
+    );
+
+    mColorTextureData.setHandle(std::make_shared<agl::TextureHandle>(native_window.getColorBufferTextureHandle()));
+
+#endif
+
+    mColorTarget.applyTextureData(mColorTextureData);
+
+#if RIO_IS_CAFE
+
+    GX2Surface& depth_surface = const_cast<GX2Surface&>(rio::Window::instance()->getWindowDepthBufferTexture()->surface);
+    if (depth_surface.use & GX2_SURFACE_USE_DEPTH_BUFFER)
+    {
+        mDepthTextureData.initializeFromSurface(depth_surface);
+    }
+    else
+    {
+        depth_surface.use = GX2SurfaceUse(depth_surface.use | GX2_SURFACE_USE_DEPTH_BUFFER);
+        mDepthTextureData.initializeFromSurface(depth_surface);
+        depth_surface.use = GX2SurfaceUse(depth_surface.use & ~GX2_SURFACE_USE_DEPTH_BUFFER);
+    }
+
+#elif RIO_IS_WIN
+
+    mDepthTextureData.initialize(
+        agl::TextureFormatInfo::convFormatGX2ToAGL(
+            static_cast<GX2SurfaceFormat>(native_window.getDepthBufferTextureFormat()),
+            false,
+            true
+        ),
+        width,
+        height,
+        1
+    );
+
+    mDepthTextureData.setHandle(std::make_shared<agl::TextureHandle>(rio::Window::instance()->getWindowDepthBufferTexture()));
+
+#endif
+
+    mDepthTarget.applyTextureData(mDepthTextureData);
+
+#if RIO_IS_WIN
+    mRenderBuffer.bind();
+
+    // Check Frame Buffer completeness
+    GLenum framebuffer_status;
+    RIO_GL_CALL(framebuffer_status = glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    if (framebuffer_status != GL_FRAMEBUFFER_COMPLETE)
+    {
+        RIO_LOG("Frame Buffer incomplete! Status 0x%08X\n", framebuffer_status);
+        RIO_ASSERT(false);
+    }
+#endif // RIO_IS_WIN
+
+    rio::Window::instance()->makeContextCurrent();
 }
 
 DistantViewMgr::~DistantViewMgr()
@@ -179,27 +269,20 @@ void DistantViewMgr::drawParticle_(const agl::lyr::RenderInfo& render_info)
 {
     PtclMgr::instance()->draw(render_info, 0);
 }
-
-void DistantViewMgr::applyDepthOfField_(const agl::lyr::RenderInfo& render_info)
-{
-    const agl::RenderBuffer* p_render_buffer = static_cast<const agl::RenderBuffer*>(render_info.getFrameBuffer());
-    if (!p_render_buffer)
-        return;
-
-    p_render_buffer->getRenderTargetColor()->expandAuxBuffer();
-    p_render_buffer->getRenderTargetDepth()->expandHiZBuffer();
-
-    mDof.draw(0, *p_render_buffer, mProjection.getNear(), mProjection.getFar());
-}
 */
+
+void DistantViewMgr::applyDepthOfField()
+{
+    rio::Window::instance()->updateDepthBufferTexture();
+
+    mDof.draw(0, mRenderBuffer, mProjection.getNear(), mProjection.getFar());
+}
 
 void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file, u8 area, const sead::BoundBox2f& area_bound */)
 {
-    /*
     mDof.initialize();
-    GfxParameter::instance()->setDelegateForParameter(&mDof);
+  //GfxParameter::instance()->setDelegateForParameter(&mDof);
     mDof.setEnable(false);
-    */
 
     /*
     const CourseDataFile* p_cd_file = CourseData::instance()->getFile(course_file);
@@ -221,6 +304,8 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
         mBgPos.set(area_bound.getCenter().x, BgScrollMgr::instance()->getBgCenterYPos(), 0.0f);
     }
     */
+
+    mBgPos.set(0.0f, 0.0f, 0.0f);
 
     /*
     sead::FixedSafeString<32> dv_fname("dv_");
@@ -249,8 +334,7 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
     }
 
     rio::FileDevice::LoadArg arg;
-    arg.path = "content://";
-    arg.path += dv_fname;
+    arg.path = dv_fname;
     arg.path += ".szs";
     arg.alignment = 0x2000;
 
@@ -265,7 +349,7 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
     mEnvTagMgr.initialize(ResMgr::instance()->getFileFromArchiveRes(dv_fname, dv_subfile_fname));
     */
 
-  //mEnvTagMgr.initialize(mArchiveRes.getFile(dv_fname + ".opt"));
+  //mEnvTagMgr.initialize(mArchiveRes.getFile((dv_fname + ".opt").c_str()));
 
     mpCameraParam = new DVCameraParam(this, &mBgPos, dv_fname);
 
@@ -277,10 +361,7 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
         sead::DynamicCast<RenderObjLayerBase>(agl::lyr::Renderer::instance()->getLayer(AreaLayerMgr::cLayer_DistantView))->getRenderMgr()->loadEnvRes(p_env_file);
     */
 
-    /*
-    dv_subfile_fname = dv_fname;
-    dv_subfile_fname.append(".bagldof");
-    const void* p_dof_file = ResMgr::instance()->getFileFromArchiveRes(dv_fname, dv_subfile_fname);
+    const void* p_dof_file = mArchiveRes.getFile((dv_fname + ".bagldof").c_str());
     if (p_dof_file)
     {
         agl::utl::ResParameterArchive res_param_arc(p_dof_file);
@@ -290,7 +371,6 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
     {
         mDof.setEnable(false);
     }
-    */
 
     /*
     EnvSetReader::read(sead::FormatFixedSafeString<128>("distant_view/%s.envset", dv_fname.cstr()));
@@ -326,7 +406,8 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
     s32 idx_dof_ind = mModelRes.getResFile()->GetTextureIndex("dof_indirect");
     if (idx_dof_ind >= 0)
     {
-        /*
+        RIO_LOG("Has indirect\n");
+
         nw::g3d::res::ResTexture* p_dof_ind = mModelRes.getResFile()->GetTexture(idx_dof_ind);
 
       //sead::Graphics::instance()->lockDrawContext();
@@ -338,7 +419,6 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
         mDof.setIndirectTextureData(&mDofIndTexture);
         mDof.setIndirectTextureTrans(mDofIndScroll);
         mDof.setIndirectEnable(true);
-        */
     }
 
     calcView_();
@@ -418,9 +498,7 @@ void DistantViewMgr::update()
     mDofIndScroll.x = std::fmod(mDofIndScroll.x + 1.0f, 1.0f);
     mDofIndScroll.y = std::fmod(mDofIndScroll.y + 1.0f, 1.0f);
 
-    /*
     mDof.setIndirectTextureTrans(mDofIndScroll);
-    */
 }
 
 void DistantViewMgr::calcMdl()
