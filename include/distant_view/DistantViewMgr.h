@@ -1,6 +1,5 @@
 #pragma once
 
-//#include <distant_view/DVEnvTagMgr.h>
 #include <graphics/CullViewFrustum.h>
 #include <graphics/ModelResource.h>
 #include <graphics/RenderMgr.h>
@@ -10,8 +9,6 @@
 #include <common/aglTextureData.h>
 #include <gfx/rio_Camera.h>
 #include <gfx/rio_Projection.h>
-//#include <layer/aglDrawMethod.h>
-//#include <layer/aglLayer.h>
 #include <math/BoundBox.h>
 #include <math/rio_Matrix.h>
 #include <math/rio_Vector.h>
@@ -20,9 +17,6 @@
 
 class BasicModel;
 
-//class DistantViewCreditActorMgr;
-class DistantViewEffectMgr;
-//class DistantViewFFLMgr;
 class DVCameraParam;
 
 class ShaderParamAnimation;
@@ -49,12 +43,10 @@ private:
     void calcView_();
     void calcModelMtx_();
 
-    void drawParticle_(/* const agl::lyr::RenderInfo& render_info */);
-
 public:
     void applyDepthOfField();
 
-    void initialize(const std::string& dv_fname = "dv_Nohara" /* , u8 course_file, u8 area, const sead::BoundBox2f& area_bound */);
+    void initialize(const std::string& dv_fname = "dv_Nohara");
 
     void resetAnim();
 
@@ -63,17 +55,12 @@ public:
     ShaderParamAnimation* getShuTexSrtAnim() const; // Deleted
     ShaderParamAnimation* getShuColorAnim() const;
 
-  //void pushBackDrawMethod();
-
     void update();
 
-  //void draw(agl::lyr::Layer* p_layer) const;
     void calcMdl();
     void calcGPU();
     void drawOpa();
     void drawXlu();
-
-  //void performMiiCheer(bool);
 
     void worldPosToScreenPos(rio::Vector3f* out_screen_pos, const rio::Vector3f& in_world_pos) const;
     void worldPosToBgScrollPos(rio::Vector3f* out_pos, const rio::Vector3f& in_world_pos) const;
@@ -94,18 +81,12 @@ private:
     rio::PerspectiveProjection  mProjection;
     CullViewFrustum             mCull;
     BasicModel*                 mpBasicModel;
-  //DVEnvTagMgr                 mEnvTagMgr;
     DVCameraParam*              mpCameraParam;
-    DistantViewEffectMgr*       mpEffectMgr;
-  //DistantViewFFLMgr*          mpFFLMgr;
     rio::Vector3f               mBgPos; // Position relative to the Bg / level camera
   //f32                         mAreaMinY;
     agl::pfx::DepthOfField      mDof;
     agl::TextureData            mDofIndTexture;
     rio::Vector2f               mDofIndScroll;
-  //agl::lyr::DrawMethod        mEffDrawMethod;
-  //agl::lyr::DrawMethod        mDofDrawMethod;
-    bool                        mIsDrawParticle;
     u8                          _1455; // Unused
     bool                        mIsFlickerEnable;
     u8                          mFlickerCounter;

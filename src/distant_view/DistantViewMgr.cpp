@@ -1,31 +1,3 @@
-/*
-#include <actor/ActorMgr.h>
-#include <actor/ProfileID.h>
-#include <effect/PtclMgr.h>
-#include <game/AreaLayerMgr.h>
-#include <game/AreaTask.h>
-#include <game/Quake.h>
-#include <graphics/EnvSetReader.h>
-#include <graphics/GfxParameter.h>
-#include <graphics/ModelResource.h>
-#include <graphics/ModelResourceMgr.h>
-#include <graphics/RenderMgr.h>
-#include <graphics/RenderObjLayer.h>
-#include <graphics/ShaderParamAnimation.h>
-#include <graphics/SkeletalAnimation.h>
-#include <graphics/TexturePatternAnimation.h>
-#include <map/CourseData.h>
-#include <scroll/BgScrollMgr.h>
-#include <system/ResMgr.h>
-#include <tag/BgCenter.h>
-
-#include <common/aglRenderBuffer.h>
-#include <common/aglRenderTarget.h>
-#include <heap/seadFrameHeap.h>
-#include <layer/aglRenderer.h>
-#include <layer/aglRenderInfo.h>
-*/
-
 #include <distant_view/DistantViewMgr.h>
 #include <distant_view/DVCameraParam.h>
 #include <graphics/BasicModel.h>
@@ -73,18 +45,12 @@ DistantViewMgr::DistantViewMgr()
     , mProjection(mNear, mFar, rio::Mathf::deg2rad(mFovyDeg), 16.f / 9.f)
     , mCull()
     , mpBasicModel(nullptr)
-  //, mEnvTagMgr()
     , mpCameraParam(nullptr)
-    , mpEffectMgr(nullptr)
-  //, mpFFLMgr(nullptr)
     , mBgPos{0.0f, 0.0f, 0.0f}
   //, mAreaMinY(AreaTask::instance()->getBound().getMin().y)
     , mDof()
     , mDofIndTexture()
     , mDofIndScroll{0.0f, 0.0f}
-  //, mEffDrawMethod()
-  //, mDofDrawMethod()
-    , mIsDrawParticle(false)
     , mIsFlickerEnable(true)
     , mFlickerCounter(0)
     , mFlickerOffset{0.375f, 0.375f}
@@ -93,12 +59,6 @@ DistantViewMgr::DistantViewMgr()
     , mRenderBuffer(
         rio::Vector2i{ s32(rio::Window::instance()->getWidth()), s32(rio::Window::instance()->getHeight()) }
     )
-    /*
-    agl::RenderTargetColor  mColorTarget;
-    agl::RenderTargetDept   mDepthTarget;
-    agl::TextureData        mColorTextureData;
-    agl::TextureData        mDepthTextureData;
-    */
 {
     mRenderBuffer.setRenderTargetColor(&mColorTarget);
     mRenderBuffer.setRenderTargetDepth(&mDepthTarget);
@@ -207,13 +167,12 @@ void DistantViewMgr::calcView_()
 
     mCameraPos.setAdd(mCameraBasePos, mCameraPosOffset);
 
-    rio::Vector2f proj_base_offs { 0.0f, 0.0f };
     /*
+    rio::Vector2f proj_base_offs { 0.0f, 0.0f };
     if (Quake::instance())
         proj_base_offs = Quake::instance()->getOffset();
-    */
     if (mpCameraParam->getTypeDirY() == 0)
-        proj_base_offs.y += mpCameraParam->getMagnifProjOffsetY() * /* (BgScrollMgr::instance()->getScreenBottom() - mAreaMinY) */ 0;
+        proj_base_offs.y += mpCameraParam->getMagnifProjOffsetY() * (BgScrollMgr::instance()->getScreenBottom() - mAreaMinY);
 
     if (proj_base_offs.x != 0.0f || proj_base_offs.y != 0.0f)
     {
@@ -223,6 +182,7 @@ void DistantViewMgr::calcView_()
         proj_base_offs.set(proj_offset_x, proj_offset_y);
         mProjection.setOffset(proj_base_offs);
     }
+    */
 
     if (mIsFlickerEnable)
     {
@@ -249,7 +209,6 @@ void DistantViewMgr::calcView_()
 
     mCamera.at().set(at.x, at.y, at.z - 1.0f);
     mCamera.pos() = mCameraPos;
-  //mCamera.updateViewMatrix();
 
     mCull.update(mCamera, mProjection);
 }
@@ -264,13 +223,6 @@ void DistantViewMgr::calcModelMtx_()
     p_model->setMtxRT(model_mtx);
 }
 
-/*
-void DistantViewMgr::drawParticle_(const agl::lyr::RenderInfo& render_info)
-{
-    PtclMgr::instance()->draw(render_info, 0);
-}
-*/
-
 void DistantViewMgr::applyDepthOfField()
 {
     rio::Window::instance()->updateDepthBufferTexture();
@@ -281,50 +233,9 @@ void DistantViewMgr::applyDepthOfField()
 void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file, u8 area, const sead::BoundBox2f& area_bound */)
 {
     mDof.initialize();
-  //GfxParameter::instance()->setDelegateForParameter(&mDof);
     mDof.setEnable(false);
 
-    /*
-    const CourseDataFile* p_cd_file = CourseData::instance()->getFile(course_file);
-    const AreaData* p_area_data = p_cd_file->getAreaData(area);
-    const DistantViewData* p_dv_data = p_cd_file->getBg2Data(p_area_data->bg2);
-
-    const ActorMgr::iterator itr_bg_center = ActorMgr::instance()->searchBaseByProfID(ProfileID::cBgCenter);
-    if (itr_bg_center != ActorMgr::instance()->end())
-    {
-        BgCenter* p_bg_center = sead::DynamicCast<BgCenter>(*itr_bg_center);
-        if (p_bg_center)
-        {
-            mBgPos = p_bg_center->getPosition();
-            p_bg_center->requestDelete();
-        }
-    }
-    else
-    {
-        mBgPos.set(area_bound.getCenter().x, BgScrollMgr::instance()->getBgCenterYPos(), 0.0f);
-    }
-    */
-
     mBgPos.set(0.0f, 0.0f, 0.0f);
-
-    /*
-    sead::FixedSafeString<32> dv_fname("dv_");
-
-    if (!p_dv_data)
-        dv_fname.append("Nohara");
-
-    else
-        dv_fname.append(p_dv_data->name);
-
-    sead::FixedSafeString<256> dv_path("distant_view/");
-    dv_path.append(dv_fname);
-    dv_path.append(".szs");
-    {
-        sead::Heap* heap = sead::FrameHeap::tryCreate(0, "DistantViewRes");
-        ResMgr::instance()->loadArchiveRes(dv_fname, dv_path, heap, true);
-        heap->adjust();
-    }
-    */
 
     if (mpArchive)
     {
@@ -343,23 +254,9 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
 
     mArchiveRes.prepareArchive(mpArchive);
 
-    /*
-    sead::FixedSafeString<64> dv_subfile_fname(dv_fname);
-    dv_subfile_fname.append(".opt");
-    mEnvTagMgr.initialize(ResMgr::instance()->getFileFromArchiveRes(dv_fname, dv_subfile_fname));
-    */
-
   //mEnvTagMgr.initialize(mArchiveRes.getFile((dv_fname + ".opt").c_str()));
 
     mpCameraParam = new DVCameraParam(this, &mBgPos, dv_fname);
-
-    /*
-    dv_subfile_fname = dv_fname;
-    dv_subfile_fname.append(".baglenv");
-    const void* p_env_file = ResMgr::instance()->getFileFromArchiveRes(dv_fname, dv_subfile_fname);
-    if (p_env_file)
-        sead::DynamicCast<RenderObjLayerBase>(agl::lyr::Renderer::instance()->getLayer(AreaLayerMgr::cLayer_DistantView))->getRenderMgr()->loadEnvRes(p_env_file);
-    */
 
     const void* p_dof_file = mArchiveRes.getFile((dv_fname + ".bagldof").c_str());
     if (p_dof_file)
@@ -372,10 +269,6 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
         mDof.setEnable(false);
     }
 
-    /*
-    EnvSetReader::read(sead::FormatFixedSafeString<128>("distant_view/%s.envset", dv_fname.cstr()));
-    */
-
     const char* const dv_fname_c = dv_fname.c_str();
 
     mModelRes.load(&mArchiveRes, dv_fname_c);
@@ -387,9 +280,6 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
 
     mpBasicModel->getModel()->setOpaBufferIdx(0);
     mpBasicModel->getModel()->setXluBufferIdx(0);
-
-    // TODO: mpEffectMgr = new DistantViewEffectMgr(sead::HeapMgr::instance()->getCurrentHeap(), mpBasicModel->getModel(), this);
-    // TODO: mpFFLMgr = ...
 
     if (mModelRes.getResFile()->GetSkeletalAnimCount() > 0)
         mpBasicModel->getSklAnim(0)->play(&mModelRes, dv_fname_c);
@@ -406,8 +296,6 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
     s32 idx_dof_ind = mModelRes.getResFile()->GetTextureIndex("dof_indirect");
     if (idx_dof_ind >= 0)
     {
-        RIO_LOG("Has indirect\n");
-
         nw::g3d::res::ResTexture* p_dof_ind = mModelRes.getResFile()->GetTexture(idx_dof_ind);
 
       //sead::Graphics::instance()->lockDrawContext();
@@ -425,13 +313,6 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
     calcModelMtx_();
 
     mpBasicModel->updateModel();
-
-    // TODO: mpEffectMgr
-    mIsDrawParticle = true;
-
-    // TODO: mpFFLMgr calc view
-
-    // TODO: DistantViewEndMgr::processModel(mpBasicModel->getModel());
 }
 
 void DistantViewMgr::resetAnim()
@@ -471,20 +352,6 @@ ShaderParamAnimation* DistantViewMgr::getShuColorAnim() const
 {
     return mpBasicModel->getShuAnim(1);
 }
-
-/*
-void DistantViewMgr::pushBackDrawMethod()
-{
-    if (mIsDrawParticle)
-    {
-        mEffDrawMethod.bind(this, &DistantViewMgr::drawParticle_, "DistantViewMgr");
-        agl::lyr::Renderer::instance()->getLayer(AreaLayerMgr::cLayer_DistantView)->pushBackDrawMethod(RenderObjLayer::cRenderStep_Particle, &mEffDrawMethod);
-    }
-
-    mDofDrawMethod.bind(this, &DistantViewMgr::applyDepthOfField_, "DistantViewMgr");
-    agl::lyr::Renderer::instance()->getLayer(AreaLayerMgr::cLayer_DistantView)->pushBackDrawMethod(RenderObjLayer::cRenderStep_PostFx, &mDofDrawMethod);
-}
-*/
 
 void DistantViewMgr::update()
 {
@@ -527,17 +394,6 @@ void DistantViewMgr::drawOpa()
     const rio::Camera* p_camera = &mCamera;
     const rio::Projection* p_proj = &mProjection;
 
-    /*
-    rio::PrimitiveRenderer::instance()->setCamera(*p_camera);
-    rio::PrimitiveRenderer::instance()->setProjection(*p_proj);
-
-    rio::PrimitiveRenderer::instance()->begin();
-    {
-        rio::PrimitiveRenderer::instance()->drawCircle32({}, 16.f, rio::Color4f::cRed);
-    }
-    rio::PrimitiveRenderer::instance()->end();
-    */
-
     rio::Matrix34f view_mtx;
     p_camera->getMatrix(&view_mtx);
 
@@ -550,17 +406,6 @@ void DistantViewMgr::drawXlu()
 {
     const rio::Camera* p_camera = &mCamera;
     const rio::Projection* p_proj = &mProjection;
-
-    /*
-    rio::PrimitiveRenderer::instance()->setCamera(*p_camera);
-    rio::PrimitiveRenderer::instance()->setProjection(*p_proj);
-
-    rio::PrimitiveRenderer::instance()->begin();
-    {
-        rio::PrimitiveRenderer::instance()->drawCircle32({ 0.0f, 16.0f, 0.0f }, 16.f, rio::Color4f::cGreen);
-    }
-    rio::PrimitiveRenderer::instance()->end();
-    */
 
     rio::Matrix34f view_mtx;
     p_camera->getMatrix(&view_mtx);
