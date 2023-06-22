@@ -838,8 +838,6 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
             {
                 p_material->GetResRenderState()->Load();
 
-                // TODO
-                /*
                 if (render_info.polygon_offset >= 0)
                 {
                     nw::g3d::fnd::GfxPolygonCtrl polygon_ctrl = p_material->GetResRenderState()->GetPolygonCtrl();
@@ -849,10 +847,21 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
                     if (draw_info.polygon_offset != render_info.polygon_offset)
                     {
                         draw_info.polygon_offset = render_info.polygon_offset;
-                        p_render_mgr->getViewInfo(draw_info.view_index).layer->setPolygonOffset(draw_info.polygon_offset);
+                      //p_render_mgr->getViewInfo(draw_info.view_index).layer->setPolygonOffset(draw_info.polygon_offset);
+                        {
+                            s32 polygon_offset = draw_info.polygon_offset == 0 ? 1 : draw_info.polygon_offset;
+
+                            f32 units = -1.5f * polygon_offset;
+                            f32 factor = -1.0f;
+
+#if RIO_IS_CAFE
+                            GX2SetPolygonOffset(units, factor, units, factor, 0.0f);
+#elif RIO_IS_WIN
+                            RIO_GL_CALL(glPolygonOffset(factor, units));
+#endif // RIO_IS_WIN
+                        }
                     }
                 }
-                */
             }
             else
             {
