@@ -4,7 +4,7 @@
 #include <graphics/ShaderHolder.h>
 
 //#include <gfx/seadGraphics.h>
-//#include <utility/aglPrimitiveTexture.h>
+#include <utility/aglPrimitiveTexture.h>
 
 ModelNW::ModelNW()
     : Model()
@@ -779,28 +779,20 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
 
         if (draw_info.p_shader_assign->sdw_location.isValid())
         {
-            /*
             const agl::TextureSampler& tex_sampler = p_render_mgr->getShadowMap()
                                                         ? *p_render_mgr->getShadowMap()
                                                         : agl::utl::PrimitiveTexture::instance()->getTextureSampler(agl::utl::PrimitiveTexture::cSampler_DepthShadow);
 
-            tex_sampler.bindFS(draw_info.p_shader_assign->sdw_location, cSamplerSlot_ShadowMap);
-            */
-            RIO_ASSERT(false);
-            while (true) {}
+            tex_sampler.activate(draw_info.p_shader_assign->sdw_location, cSamplerSlot_ShadowMap);
         }
 
         if (draw_info.p_shader_assign->rfl_location.isValid())
         {
-            /*
             const agl::TextureSampler& tex_sampler = p_render_mgr->getReflectionMap()
                                                         ? *p_render_mgr->getReflectionMap()
                                                         : agl::utl::PrimitiveTexture::instance()->getTextureSampler(agl::utl::PrimitiveTexture::cSampler_Black2D);
 
-            tex_sampler.bindFS(draw_info.p_shader_assign->rfl_location, cSamplerSlot_ReflectionMap);
-            */
-            RIO_ASSERT(false);
-            while (true) {}
+            tex_sampler.activate(draw_info.p_shader_assign->rfl_location, cSamplerSlot_ReflectionMap);
         }
     }
 
@@ -858,7 +850,7 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
                             GX2SetPolygonOffset(units, factor, units, factor, 0.0f);
 #elif RIO_IS_WIN
                             RIO_GL_CALL(glPolygonOffset(factor, units));
-#endif // RIO_IS_WIN
+#endif
                         }
                     }
                 }
