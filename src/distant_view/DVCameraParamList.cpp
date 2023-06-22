@@ -25,7 +25,6 @@ void DVCameraParamList::read_(ReadStream& stream)
         ParameterBase* parameter = getParam(param_name);
         if (parameter != nullptr)
         {
-            RIO_LOG("Found parameter: %s\n", parameter->getName());
             stream.skip(4);
             parameter->read(stream);
         }
