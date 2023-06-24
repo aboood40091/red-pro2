@@ -242,7 +242,7 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
                 !(shader_archive_name && shader_archive_name[0] != '\0' &&
                   std::strncmp(shader_archive_name, "nw4f", 4) == 0))
             {
-                material.bindShaderResAssign(shader_archive->searchShaderProgram(p_res_material->GetName()), nullptr, nullptr);
+                material.bindShaderResAssign(shader_archive->searchShaderProgram(p_res_material->GetName()));
             }
             else
             {
@@ -254,19 +254,15 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
                         const agl::ShaderProgram* const g_shader_program = g_shader_program_archive->searchShaderProgram(res_shader_assign->GetShadingModelName());
                         if (g_shader_program)
                         {
-                            static const char* const sModelOptionSymbolIDs[] = {
-                                "NUM_SKINNING_VTX"
-                            };
-                            static const char* const sModelOptionSymbolValues[][5] = {
-                                {
-                                    "0",
-                                    "1",
-                                    "2",
-                                    "3",
-                                    "4"
-                                }
-                            };
-                            material.bindShaderResAssign(g_shader_program, sModelOptionSymbolIDs[0], const_cast<const char**>(sModelOptionSymbolValues[0]));
+                            static const std::string cModelOptionSymbolID = "NUM_SKINNING_VTX";
+                            static const std::vector<std::string> cModelOptionSymbolValues({
+                                "0",
+                                "1",
+                                "2",
+                                "3",
+                                "4"
+                            });
+                            material.bindShaderResAssign(g_shader_program, &cModelOptionSymbolID, &cModelOptionSymbolValues);
                             continue;
                         }
                     }
