@@ -230,56 +230,34 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
         for (s32 idx_material = 0; idx_material < mModelEx.GetMaterialCount(); idx_material++)
         {
             agl::g3d::MaterialEx& material = mModelEx.getMaterialEx(idx_material);
+            const nw::g3d::res::ResMaterial* const p_res_material = material.getMaterialObj()->GetResource();
+
             const char* shader_archive_name = nullptr;
 
-            bool name_set = false;
-
-            const nw::g3d::res::ResShaderAssign* res_shader_assign = material.getMaterialObj()->GetResource()->GetShaderAssign();
+            const nw::g3d::res::ResShaderAssign* const res_shader_assign = p_res_material->GetShaderAssign();
             if (res_shader_assign)
-            {
-                const char* p_name = res_shader_assign->GetShaderArchiveName();
-                if (p_name)
-                {
-                    shader_archive_name = p_name;
-                    name_set = true;
-                }
-            }
+                shader_archive_name = res_shader_assign->GetShaderArchiveName();
 
-            if (!name_set)
-                shader_archive_name = nullptr;
-
-            bool is_local = false;
-
-            if (shader_archive)
-            {
-                if ((!shader_archive_name || shader_archive_name[0] == '\0') ||
-                    std::strncmp(shader_archive_name, "nw4f", 4) != 0)
-                {
-                    is_local = true;
-                }
-            }
-
-            const nw::g3d::res::ResMaterial* p_res_material = material.getMaterialObj()->GetResource();
-
-            if (is_local)
+            if (shader_archive &&
+                !(shader_archive_name && shader_archive_name[0] != '\0' &&
+                  std::strncmp(shader_archive_name, "nw4f", 4) == 0))
             {
                 material.bindShaderResAssign(shader_archive->searchShaderProgram(p_res_material->GetName()), nullptr, nullptr);
             }
             else
             {
-                const nw::g3d::res::ResShaderAssign* res_shader_assign = p_res_material->GetShaderAssign(); // ??
                 if (shader_archive_name && shader_archive_name[0] != '\0')
                 {
-                    const agl::ShaderProgramArchive* g_shader_program_archive = ShaderHolder::instance()->getShaderArchive(res_shader_assign->GetShaderArchiveName());
+                    const agl::ShaderProgramArchive* const g_shader_program_archive = ShaderHolder::instance()->getShaderArchive(res_shader_assign->GetShaderArchiveName());
                     if (g_shader_program_archive)
                     {
-                        const agl::ShaderProgram* g_shader_program = g_shader_program_archive->searchShaderProgram(res_shader_assign->GetShadingModelName());
+                        const agl::ShaderProgram* const g_shader_program = g_shader_program_archive->searchShaderProgram(res_shader_assign->GetShadingModelName());
                         if (g_shader_program)
                         {
-                            static const char* sModelOptionSymbolIDs[] = {
+                            static const char* const sModelOptionSymbolIDs[] = {
                                 "NUM_SKINNING_VTX"
                             };
-                            static const char* sModelOptionSymbolValues[][5] = {
+                            static const char* const sModelOptionSymbolValues[][5] = {
                                 {
                                     "0",
                                     "1",
@@ -288,7 +266,7 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
                                     "4"
                                 }
                             };
-                            material.bindShaderResAssign(g_shader_program, sModelOptionSymbolIDs[0], sModelOptionSymbolValues[0]);
+                            material.bindShaderResAssign(g_shader_program, sModelOptionSymbolIDs[0], const_cast<const char**>(sModelOptionSymbolValues[0]));
                             continue;
                         }
                     }
