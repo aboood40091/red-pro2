@@ -255,14 +255,14 @@ void ModelNW::initialize(nw::g3d::res::ResModel* res_model, const agl::ShaderPro
                         if (g_shader_program)
                         {
                             static const std::string cModelOptionSymbolID = "NUM_SKINNING_VTX";
-                            static const std::vector<std::string> cModelOptionSymbolValues({
+                            static const std::string cModelOptionSymbolValues[] = {
                                 "0",
                                 "1",
                                 "2",
                                 "3",
                                 "4"
-                            });
-                            material.bindShaderResAssign(g_shader_program, &cModelOptionSymbolID, &cModelOptionSymbolValues);
+                            };
+                            material.bindShaderResAssign(g_shader_program, &cModelOptionSymbolID, cModelOptionSymbolValues);
                             continue;
                         }
                     }
