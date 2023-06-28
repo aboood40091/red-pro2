@@ -523,7 +523,7 @@ void ModelNW::calcBounding_()
         const nw::g3d::Sphere* p_bounding = mModelEx.GetBounding();
         if (p_bounding)
         {
-            mBounding.setCenter(reinterpret_cast<const rio::Vector3f&>(p_bounding->center));
+            mBounding.setCenter(*reinterpret_cast<const rio::Vector3f*>(p_bounding->center.a));
             mBounding.setRadius(p_bounding->radius);
         }
 
@@ -558,7 +558,7 @@ void ModelNW::calcBounding_()
 
         if (enable && p_bounding)
         {
-            mBounding.setCenter(reinterpret_cast<rio::Vector3f&>(p_bounding->center));
+            mBounding.setCenter(*reinterpret_cast<rio::Vector3f*>(p_bounding->center.a));
             mBounding.setRadius(p_bounding->radius);
         }
 
@@ -592,8 +592,8 @@ void ModelNW::calcBounding_()
             p_sub_flag_array->resetAll();
 
             mpSubBounding->setUndef();
-            mpSubBounding->setMax(reinterpret_cast<const rio::Vector3f&>(aabb.max));
-            mpSubBounding->setMin(reinterpret_cast<const rio::Vector3f&>(aabb.min));
+            mpSubBounding->setMax(*reinterpret_cast<const rio::Vector3f*>(aabb.max.a));
+            mpSubBounding->setMin(*reinterpret_cast<const rio::Vector3f*>(aabb.min.a));
         }
     }
 }
@@ -1174,11 +1174,11 @@ void ModelNW::updateModel()
 
     const rio::Vector3f& s = getScale();
 
-    reinterpret_cast<rio::Vector3f&>(world_mtx.v[0]) *= s;
-    reinterpret_cast<rio::Vector3f&>(world_mtx.v[1]) *= s;
-    reinterpret_cast<rio::Vector3f&>(world_mtx.v[2]) *= s;
+    *reinterpret_cast<rio::Vector3f*>(&world_mtx.v[0].x) *= s;
+    *reinterpret_cast<rio::Vector3f*>(&world_mtx.v[1].x) *= s;
+    *reinterpret_cast<rio::Vector3f*>(&world_mtx.v[2].x) *= s;
 
-    mModelEx.CalcWorld(reinterpret_cast<const nw::g3d::math::Mtx34&>(world_mtx));
+    mModelEx.CalcWorld(*nw::g3d::math::Mtx34::Cast(world_mtx.a));
 
     if (mBoundingEnableFlag.isOn(1 << 0))
         calcBounding_();
@@ -1187,16 +1187,16 @@ void ModelNW::updateModel()
 void ModelNW::setBoneLocalMatrix(s32 index, const rio::Matrix34f& rt, const rio::Vector3f& scale)
 {
     nw::g3d::LocalMtx& local_mtx = mModelEx.GetSkeleton()->GetLocalMtxArray()[index];
-    reinterpret_cast<rio::Matrix34f&>(local_mtx.mtxRT) = rt;
-    reinterpret_cast<rio::Vector3f&>(local_mtx.scale) = scale;
+    *reinterpret_cast<rio::Matrix34f*>(local_mtx.mtxRT.a) = rt;
+    *reinterpret_cast<rio::Vector3f*>(local_mtx.scale.a) = scale;
     local_mtx.EndEdit();
 }
 
 void ModelNW::getBoneLocalMatrix(s32 index, rio::Matrix34f* rt, rio::Vector3f* scale) const
 {
     const nw::g3d::LocalMtx& local_mtx = mModelEx.GetSkeleton()->GetLocalMtxArray()[index];
-    if (rt)    *rt    = reinterpret_cast<const rio::Matrix34f&>(local_mtx.mtxRT);
-    if (scale) *scale = reinterpret_cast<const rio::Vector3f&>(local_mtx.scale);
+    if (rt)    *rt    = *reinterpret_cast<const rio::Matrix34f*>(local_mtx.mtxRT.a);
+    if (scale) *scale = *reinterpret_cast<const rio::Vector3f*>(local_mtx.scale.a);
 }
 
 void ModelNW::setBoneWorldMatrix(s32 index, const rio::Matrix34f& mtx)

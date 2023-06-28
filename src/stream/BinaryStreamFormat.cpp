@@ -1,6 +1,8 @@
 #include <stream/BinaryStreamFormat.h>
 #include <stream/StreamSrc.h>
 
+#include <bit>
+
 namespace {
 
 static inline u16 EndianToHost16(bool is_be, u16 value)
@@ -119,7 +121,7 @@ f32 BinaryStreamFormat::readF32(StreamSrc* src, bool is_be)
     [[maybe_unused]] u32 rb = src->read(&ret, sizeof(u32));
     RIO_ASSERT(rb == sizeof( u32 ));
     ret = EndianToHost32(is_be, ret);
-    return *(f32*)&ret;
+    return std::bit_cast<f32>(ret);
 }
 
 void BinaryStreamFormat::readBit(StreamSrc* src, void* data, u32 bitnum)
@@ -149,7 +151,7 @@ void BinaryStreamFormat::readString(StreamSrc* src, std::string* dst, u32 size)
         size = dst->capacity();
         RIO_LOG("Warning: not enough buffer length. drop %u char(s).\n", remain_size);
     }
-    dst->resize(size); dst->c_str(); // Forces null termination
+    dst->resize(size); static_cast<void>(dst->c_str()); // Forces null termination
     [[maybe_unused]] u32 rb = src->read(dst->data(), size);
     RIO_ASSERT(rb == size);
     if (size + 1 < dst->capacity())
@@ -231,7 +233,7 @@ void BinaryStreamFormat::writeS64(StreamSrc* src, bool is_be, s64 value)
 
 void BinaryStreamFormat::writeF32(StreamSrc* src, bool is_be, f32 value)
 {
-    u32 u_value = EndianToHost32(is_be, *(u32*)&value);
+    u32 u_value = EndianToHost32(is_be, std::bit_cast<u32>(value));
     [[maybe_unused]] u32 wb = src->write(&u_value, sizeof(u32));
     RIO_ASSERT(wb == sizeof( u32 ));
 }

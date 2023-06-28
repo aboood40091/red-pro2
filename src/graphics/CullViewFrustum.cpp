@@ -37,7 +37,7 @@ void CullViewFrustum::update(const rio::Camera& camera, const rio::PerspectivePr
         projection.getTop(), projection.getBottom(),
         projection.getLeft(), projection.getRight(),
         projection.getNear(), projection.getFar(),
-        reinterpret_cast<const nw::g3d::math::Mtx34&>(inv_view_mtx)
+        *nw::g3d::math::Mtx34::Cast(inv_view_mtx.a)
     );
 
     rio::Matrix34f billboard_mtx;
