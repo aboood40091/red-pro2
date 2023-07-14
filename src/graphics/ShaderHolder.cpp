@@ -67,7 +67,7 @@ void ShaderHolder::initialize(sead::Heap* heap)
     // mii_custom_shader
     {
         agl::ShaderProgramArchive* p_archive = createShaderArchive_("mii_custom_shader", heap);
-        Mii::Shader::initialize(p_archive, heap);
+        Mii::Shader::initializeShader(p_archive, heap);
         pushBackShaderArchive_("mii_custom_shader", p_archive, heap);
     }
     // mii_icon_faceline_shader

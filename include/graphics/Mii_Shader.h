@@ -8,7 +8,7 @@ namespace Mii {
 class Shader
 {
 public:
-    static void initialize(agl::ShaderProgramArchive* p_archive, sead::Heap* heap);
+    static void initializeShader(agl::ShaderProgramArchive* p_archive, sead::Heap* heap);
 };
 
 }
