@@ -5,7 +5,7 @@
 #include <graphics/ShaderHolder.h>
 #include <graphics/TexQuadMgr.h>
 #include <map/BgRenderer.h>
-#include <map/LightMask.h>
+#include <map/LightMaskRenderer.h>
 #include <system/ResMgr.h>
 
 #include <gfx/seadGraphics.h>
@@ -35,7 +35,7 @@ void ShaderHolder::initialize(sead::Heap* heap)
     // light_mask_shader
     {
         agl::ShaderProgramArchive* p_archive = createShaderArchive_("light_mask_shader", heap);
-        LightMask::initializeShader(p_archive, heap);
+        LightMaskRenderer::initializeShader(p_archive, heap);
         pushBackShaderArchive_("light_mask_shader", p_archive, heap);
     }
     // nw4f_cs_shader
