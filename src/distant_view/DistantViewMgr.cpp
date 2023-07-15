@@ -142,6 +142,29 @@ DistantViewMgr::DistantViewMgr()
 
 DistantViewMgr::~DistantViewMgr()
 {
+    if (mpBasicModel)
+    {
+        delete mpBasicModel;
+        mpBasicModel = nullptr;
+    }
+
+    if (mpCameraParam)
+    {
+        delete mpCameraParam;
+        mpCameraParam = nullptr;
+    }
+
+    // TODO: This causes a crash later on
+    /*
+    RIO_GL_CALL(glFinish());
+
+    if (mpArchive)
+    {
+        mArchiveRes.destroy();
+        rio::MemUtil::free(mpArchive);
+        mpArchive = nullptr;
+    }
+    */
 }
 
 void DistantViewMgr::calcView_()
