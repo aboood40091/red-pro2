@@ -81,27 +81,22 @@ void ShaderHolder::initialize(const std::string& arc_path)
     }*/
     // nw4f_cs_shader
     {
-        RIO_LOG("Create and push back shader archive: nw4f_cs_shader\n");
         createAndPushBackShaderArchive_("nw4f_cs_shader");
     }
     // nw4f_cs_water_shader
     {
-        RIO_LOG("Create and push back shader archive: nw4f_cs_water_shader\n");
         createAndPushBackShaderArchive_("nw4f_cs_water_shader");
     }
     // nw4f_dv_shader
     {
-        RIO_LOG("Create and push back shader archive: nw4f_dv_shader\n");
         createAndPushBackShaderArchive_("nw4f_dv_shader");
     }
     // nw4f_koopa_shader
     {
-        RIO_LOG("Create and push back shader archive: nw4f_koopa_shader\n");
         createAndPushBackShaderArchive_("nw4f_koopa_shader");
     }
     // nw4f_shader
     {
-        RIO_LOG("Create and push back shader archive: nw4f_shader\n");
         createAndPushBackShaderArchive_("nw4f_shader");
     }
     /* quad_cloud_shader
