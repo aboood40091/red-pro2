@@ -46,7 +46,24 @@ private:
 public:
     void applyDepthOfField();
 
-    void initialize(const std::string& dv_fname = "dv_Nohara");
+    void initialize(const std::string& dv_name = "Nohara", const std::string& dv_path = "");
+    void destroy();
+
+    rio::Vector3f& cameraPosOffset() { return mCameraPosOffset; }
+    const rio::Vector3f& cameraPosOffset() const { return mCameraPosOffset; }
+
+    rio::Vector3f& cameraAtOffset() { return mCameraAtOffset; }
+    const rio::Vector3f& cameraAtOffset() const { return mCameraAtOffset; }
+
+    void setFlickerEnable(bool enable)
+    {
+        mIsFlickerEnable = enable;
+    }
+
+    bool isFlickerEnable() const
+    {
+        return mIsFlickerEnable;
+    }
 
     void resetAnim();
 
@@ -85,7 +102,7 @@ private:
     rio::Vector3f               mBgPos; // Position relative to the Bg / level camera
   //f32                         mAreaMinY;
     agl::pfx::DepthOfField      mDof;
-    agl::TextureData            mDofIndTexture;
+    agl::TextureData*           mpDofIndTexture;
     rio::Vector2f               mDofIndScroll;
     u8                          _1455; // Unused
     bool                        mIsFlickerEnable;
@@ -94,6 +111,7 @@ private:
 
     // Custom
     u8*                     mpArchive;
+    SharcArchiveRes         mArchiveRes;
     ModelResource           mModelRes;
     RenderMgr               mRenderMgr;
 
@@ -103,7 +121,6 @@ private:
     agl::TextureData        mColorTextureData;
     agl::TextureData        mDepthTextureData;
 
-public:
-    SharcArchiveRes         mArchiveRes;
+    friend class DVCameraParam;
 };
 //static_assert(sizeof(DistantViewMgr) == 0x1460);

@@ -12,6 +12,10 @@
 #include <resource/SZSDecompressor.h>
 #include <utility/aglResParameter.h>
 
+#if RIO_IS_CAFE
+#include <gx2/event.h>
+#endif // RIO_IS_CAFE
+
 DistantViewMgr* DistantViewMgr::sInstance = nullptr;
 
 bool DistantViewMgr::createSingleton()
@@ -49,7 +53,7 @@ DistantViewMgr::DistantViewMgr()
     , mBgPos{0.0f, 0.0f, 0.0f}
   //, mAreaMinY(AreaTask::instance()->getBound().getMin().y)
     , mDof()
-    , mDofIndTexture()
+    , mpDofIndTexture(nullptr)
     , mDofIndScroll{0.0f, 0.0f}
     , mIsFlickerEnable(true)
     , mFlickerCounter(0)
@@ -138,15 +142,44 @@ DistantViewMgr::DistantViewMgr()
 #endif // RIO_IS_WIN
 
     rio::Window::instance()->makeContextCurrent();
+
+    mDof.initialize();
 }
 
 DistantViewMgr::~DistantViewMgr()
 {
+    destroy();
+}
+
+void DistantViewMgr::destroy()
+{
+#if RIO_IS_CAFE
+    GX2DrawDone();
+#elif RIO_IS_WIN
+    RIO_GL_CALL(glFinish());
+#endif
+
+    if (mpDofIndTexture)
+    {
+        delete mpDofIndTexture;
+        mpDofIndTexture = nullptr;
+    }
+
     if (mpBasicModel)
     {
+        ModelNW* p_mdl = mpBasicModel->getModel();
+        if (p_mdl)
+        {
+            delete p_mdl;
+            p_mdl = nullptr;
+        }
+
         delete mpBasicModel;
         mpBasicModel = nullptr;
     }
+
+    if (mModelRes.getResFile())
+        mModelRes.destroy();
 
     if (mpCameraParam)
     {
@@ -154,17 +187,12 @@ DistantViewMgr::~DistantViewMgr()
         mpCameraParam = nullptr;
     }
 
-    // TODO: This causes a crash later on
-    /*
-    RIO_GL_CALL(glFinish());
-
     if (mpArchive)
     {
         mArchiveRes.destroy();
         rio::MemUtil::free(mpArchive);
         mpArchive = nullptr;
     }
-    */
 }
 
 void DistantViewMgr::calcView_()
@@ -253,22 +281,19 @@ void DistantViewMgr::applyDepthOfField()
     mDof.draw(0, mRenderBuffer, mProjection.getNear(), mProjection.getFar());
 }
 
-void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file, u8 area, const sead::BoundBox2f& area_bound */)
+void DistantViewMgr::initialize(const std::string& dv_name, const std::string& dv_path /* , u8 course_file, u8 area, const sead::BoundBox2f& area_bound */)
 {
-    mDof.initialize();
+    destroy();
+
+    const std::string& dv_fname = "dv_" + dv_name;
+    const std::string& dv_fpath = dv_path.empty() ? dv_fname : dv_path + "/" + dv_fname;
+
     mDof.setEnable(false);
 
     mBgPos.set(0.0f, 0.0f, 0.0f);
 
-    if (mpArchive)
-    {
-        mArchiveRes.destroy();
-        rio::MemUtil::free(mpArchive);
-        mpArchive = nullptr;
-    }
-
     rio::FileDevice::LoadArg arg;
-    arg.path = dv_fname;
+    arg.path = dv_fpath;
     arg.path += ".szs";
     arg.alignment = 0x2000;
 
@@ -321,13 +346,15 @@ void DistantViewMgr::initialize(const std::string& dv_fname /* , u8 course_file,
     {
         nw::g3d::res::ResTexture* p_dof_ind = mModelRes.getResFile()->GetTexture(idx_dof_ind);
 
+        mpDofIndTexture = new agl::TextureData();
+
       //sead::Graphics::instance()->lockDrawContext();
         {
-            agl::g3d::TextureDataInitializerG3D::initialize(&mDofIndTexture, *p_dof_ind);
+            agl::g3d::TextureDataInitializerG3D::initialize(mpDofIndTexture, *p_dof_ind);
         }
       //sead::Graphics::instance()->unlockDrawContext();
 
-        mDof.setIndirectTextureData(&mDofIndTexture);
+        mDof.setIndirectTextureData(mpDofIndTexture);
         mDof.setIndirectTextureTrans(mDofIndScroll);
         mDof.setIndirectEnable(true);
     }
