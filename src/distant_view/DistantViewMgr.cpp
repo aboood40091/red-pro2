@@ -161,6 +161,8 @@ void DistantViewMgr::destroy()
 
     if (mpDofIndTexture)
     {
+        mDof.setIndirectTextureData(nullptr);
+
         delete mpDofIndTexture;
         mpDofIndTexture = nullptr;
     }
