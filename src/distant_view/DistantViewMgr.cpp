@@ -159,6 +159,8 @@ void DistantViewMgr::destroy()
     RIO_GL_CALL(glFinish());
 #endif
 
+    mDofIndScroll.set(0.0f, 0.0f);
+
     if (mpDofIndTexture)
     {
         mDof.setIndirectTextureData(nullptr);
