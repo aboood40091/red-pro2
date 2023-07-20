@@ -40,14 +40,30 @@ private:
     DistantViewMgr& operator=(const DistantViewMgr&);
 
 private:
-    void calcView_();
+    void calcView_(const rio::BaseVec2f& bg_screen_center, f32 bg_offset_area_bottom_to_screen_bottom, f32 bg_zoom);
     void calcModelMtx_();
 
 public:
     void applyDepthOfField();
 
-    void initialize(const std::string& dv_name = "Nohara", const std::string& dv_path = "");
+    void initialize(
+        const std::string& dv_name = "Nohara", const std::string& dv_path = "",
+        const rio::BaseVec2f& bg_pos = { 0.0f, 0.0f },
+        const rio::BaseVec2f& bg_screen_center = { 0.0f, 0.0f },
+        f32 bg_offset_area_bottom_to_screen_bottom = 0.0f,
+        f32 bg_zoom = 1.0f
+    );
     void destroy();
+
+    void setScale(f32 scale)
+    {
+        mScale = scale;
+    }
+
+    f32 getScale() const
+    {
+        return mScale;
+    }
 
     rio::Vector3f& cameraPosOffset() { return mCameraPosOffset; }
     const rio::Vector3f& cameraPosOffset() const { return mCameraPosOffset; }
@@ -72,7 +88,11 @@ public:
     ShaderParamAnimation* getShuTexSrtAnim() const; // Deleted
     ShaderParamAnimation* getShuColorAnim() const;
 
-    void update();
+    void update(
+        const rio::BaseVec2f& bg_screen_center = { 0.0f, 0.0f },
+        f32 bg_offset_area_bottom_to_screen_bottom = 0.0f,
+        f32 bg_zoom = 1.0f
+    );
 
     void calcMdl();
     void calcGPU();

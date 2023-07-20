@@ -199,16 +199,16 @@ void DistantViewMgr::destroy()
     }
 }
 
-void DistantViewMgr::calcView_()
+void DistantViewMgr::calcView_(const rio::BaseVec2f& bg_screen_center, f32 bg_offset_area_bottom_to_screen_bottom, f32 bg_zoom)
 {
     mProjection.setOffset(mpCameraParam->getProjOffset());
 
     f32 fovy_tan = std::tan(rio::Mathf::deg2rad(mFovyDeg * 0.5f));
 
-    f32 screen_center_x = /* BgScrollMgr::instance()->getScreenCenterX() */ 0.0f;
-    f32 screen_center_y = /* BgScrollMgr::instance()->getScreenCenterY() - BgScrollMgr::instance()->getScrollEffectMgr()._3c._8 */ 0.0f;
+    f32 screen_center_x = /* BgScrollMgr::instance()->getScreenCenterX() */ bg_screen_center.x;
+    f32 screen_center_y = /* BgScrollMgr::instance()->getScreenCenterY() - BgScrollMgr::instance()->getScrollEffectMgr()._3c._8 */ bg_screen_center.y;
 
-    f32 base_z = (112.0f / fovy_tan) * /* BgScrollMgr::instance()->getZoom() */ 1 * mScale;
+    f32 base_z = (112.0f / fovy_tan) * /* BgScrollMgr::instance()->getZoom() */ bg_zoom * mScale;
 
     fovy_tan = std::tan(rio::Mathf::deg2rad(mFovyDeg * 0.5f)); // ???????????? ok
     fovy_tan = base_z * fovy_tan * 2;
@@ -218,16 +218,17 @@ void DistantViewMgr::calcView_()
     mCameraBasePos.x = screen_center_x - fovy_tan * mpCameraParam->getProjOffset().x;
     mCameraBasePos.y = screen_center_y - fovy_tan * mpCameraParam->getProjOffset().y;
     if (mpCameraParam->getTypeDirY() == 1)
-        mCameraBasePos.y += mpCameraParam->getMagnifCameraPosY() * /* (BgScrollMgr::instance()->getScreenBottom() - mAreaMinY) */ 0;
+        mCameraBasePos.y += mpCameraParam->getMagnifCameraPosY() * /* (BgScrollMgr::instance()->getScreenBottom() - mAreaMinY) */ bg_offset_area_bottom_to_screen_bottom;
 
     mCameraPos.setAdd(mCameraBasePos, mCameraPosOffset);
 
-    /*
     rio::Vector2f proj_base_offs { 0.0f, 0.0f };
+    /*
     if (Quake::instance())
         proj_base_offs = Quake::instance()->getOffset();
+    */
     if (mpCameraParam->getTypeDirY() == 0)
-        proj_base_offs.y += mpCameraParam->getMagnifProjOffsetY() * (BgScrollMgr::instance()->getScreenBottom() - mAreaMinY);
+        proj_base_offs.y += mpCameraParam->getMagnifProjOffsetY() * /* (BgScrollMgr::instance()->getScreenBottom() - mAreaMinY) */ bg_offset_area_bottom_to_screen_bottom;
 
     if (proj_base_offs.x != 0.0f || proj_base_offs.y != 0.0f)
     {
@@ -237,7 +238,6 @@ void DistantViewMgr::calcView_()
         proj_base_offs.set(proj_offset_x, proj_offset_y);
         mProjection.setOffset(proj_base_offs);
     }
-    */
 
     if (mIsFlickerEnable)
     {
@@ -285,7 +285,7 @@ void DistantViewMgr::applyDepthOfField()
     mDof.draw(0, mRenderBuffer, mProjection.getNear(), mProjection.getFar());
 }
 
-void DistantViewMgr::initialize(const std::string& dv_name, const std::string& dv_path /* , u8 course_file, u8 area, const sead::BoundBox2f& area_bound */)
+void DistantViewMgr::initialize(const std::string& dv_name, const std::string& dv_path, const rio::BaseVec2f& bg_pos, const rio::BaseVec2f& bg_screen_center, f32 bg_offset_area_bottom_to_screen_bottom, f32 bg_zoom)
 {
     destroy();
 
@@ -294,7 +294,7 @@ void DistantViewMgr::initialize(const std::string& dv_name, const std::string& d
 
     mDof.setEnable(false);
 
-    mBgPos.set(0.0f, 0.0f, 0.0f);
+    mBgPos.set(bg_pos.x, bg_pos.y, 0.0f);
 
     rio::FileDevice::LoadArg arg;
     arg.path = dv_fpath;
@@ -363,7 +363,7 @@ void DistantViewMgr::initialize(const std::string& dv_name, const std::string& d
         mDof.setIndirectEnable(true);
     }
 
-    calcView_();
+    calcView_(bg_screen_center, bg_offset_area_bottom_to_screen_bottom, bg_zoom);
     calcModelMtx_();
 
     mpBasicModel->updateModel();
@@ -407,9 +407,9 @@ ShaderParamAnimation* DistantViewMgr::getShuColorAnim() const
     return mpBasicModel->getShuAnim(1);
 }
 
-void DistantViewMgr::update()
+void DistantViewMgr::update(const rio::BaseVec2f& bg_screen_center, f32 bg_offset_area_bottom_to_screen_bottom, f32 bg_zoom)
 {
-    calcView_();
+    calcView_(bg_screen_center, bg_offset_area_bottom_to_screen_bottom, bg_zoom);
 
     mpBasicModel->updateAnimations();
     mpBasicModel->updateModel();
