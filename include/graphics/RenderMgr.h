@@ -38,6 +38,8 @@ public:
 
     void loadEnvRes(const void* p_file);
 
+    void pushBackRenderObj(RenderObj* obj, s32 opa_buffer_idx, s32 xlu_buffer_idx);
+
     ModelEnvView& getModelEnvView() { return mModelEnvView; }
     const ModelEnvView& getModelEnvView() const { return mModelEnvView; }
 

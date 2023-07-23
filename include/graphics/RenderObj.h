@@ -38,6 +38,9 @@ public:
     virtual void drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) { }
     virtual bool hasShadow() const { return false; }
 
+    sead::Vector3f& getOrderPos() { return mOrderPos; }
+    const sead::Vector3f& getOrderPos() const { return mOrderPos; }
+
 protected:
     sead::Vector3f  mOrderPos; // I think. Precisely used for z ordering.
 };
