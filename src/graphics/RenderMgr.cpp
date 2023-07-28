@@ -217,7 +217,11 @@ void RenderMgr::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, 
 {
     for (sead::PtrArray<RenderObj>::iterator itr = mRenderObjShadow.begin(), itr_end = mRenderObjShadow.end(); itr != itr_end; ++itr)
     {
-        Model* p_model = sead::DynamicCast<Model>(&(*itr));
-        p_model->calcViewShapeShadowFlags(p_depth_shadow, p_shadow_layer, this);
+        if (itr->hasShadow())
+        {
+            Model* p_model = sead::DynamicCast<Model>(&(*itr));
+            if (p_model)
+                p_model->calcViewShapeShadowFlags(p_depth_shadow, p_shadow_layer, this);
+        }
     }
 }
