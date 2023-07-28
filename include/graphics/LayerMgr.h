@@ -1,9 +1,13 @@
 #pragma once
 
-#include <basis/seadTypes.h>
+#include <framework/seadTaskMgr.h>
 
-class LayerMgr
+class RenderMgr;
+
+class LayerMgr : public sead::TaskBase
 {
+    SEAD_TASK_SINGLETON_DISPOSER(LayerMgr)
+
 public:
     enum Layer
     {
@@ -41,4 +45,12 @@ public:
         cLayer_Num
     };
     static_assert(cLayer_Num == 31);
+
+public:
+    LayerMgr(const sead::TaskConstructArg& arg);
+
+    // TODO
+    // virtual ...
+
+    void removeRenderMgr(RenderMgr* p_render_mgr);
 };

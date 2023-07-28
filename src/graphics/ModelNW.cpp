@@ -761,7 +761,7 @@ void ModelNW::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info
                     if (draw_info.polygon_offset != render_info.polygon_offset)
                     {
                         draw_info.polygon_offset = render_info.polygon_offset;
-                        p_render_mgr->getViewInfo(draw_info.view_index).layer->setPolygonOffset(draw_info.polygon_offset);
+                        p_render_mgr->getViewInfo(draw_info.view_index).p_layer->setPolygonOffset(draw_info.polygon_offset);
                     }
                 }
             }
