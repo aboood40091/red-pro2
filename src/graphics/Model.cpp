@@ -4,8 +4,6 @@
 
 Model::Model()
     : RenderObj()
-    , mOpaBufferIdx(-2)
-    , mXluBufferIdx(-2)
 {
 }
 

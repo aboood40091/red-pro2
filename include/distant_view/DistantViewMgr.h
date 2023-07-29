@@ -2,7 +2,6 @@
 
 #include <graphics/CullViewFrustum.h>
 #include <graphics/ModelResource.h>
-#include <graphics/RenderMgr.h>
 
 #include <common/aglRenderBuffer.h>
 #include <common/aglRenderTarget.h>
@@ -18,6 +17,8 @@
 class BasicModel;
 
 class DVCameraParam;
+
+class RenderObjLayer;
 
 class ShaderParamAnimation;
 class SkeletalAnimation;
@@ -89,15 +90,13 @@ public:
     ShaderParamAnimation* getShuColorAnim() const;
 
     void update(
+        RenderObjLayer* p_layer,
         const rio::BaseVec2f& bg_screen_center = { 0.0f, 0.0f },
         f32 bg_offset_area_bottom_to_screen_bottom = 0.0f,
         f32 bg_zoom = 1.0f
     );
 
-    void calcMdl();
-    void calcGPU();
-    void drawOpa();
-    void drawXlu();
+    void draw(RenderObjLayer* p_layer);
 
     void worldPosToScreenPos(rio::Vector3f* out_screen_pos, const rio::Vector3f& in_world_pos) const;
     void worldPosToBgScrollPos(rio::Vector3f* out_pos, const rio::Vector3f& in_world_pos) const;
@@ -133,7 +132,6 @@ private:
     u8*                     mpArchive;
     SharcArchiveRes         mArchiveRes;
     ModelResource           mModelRes;
-    RenderMgr               mRenderMgr;
 
     agl::RenderBuffer       mRenderBuffer;
     agl::RenderTargetColor  mColorTarget;

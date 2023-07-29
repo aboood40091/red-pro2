@@ -1,8 +1,10 @@
 #pragma once
 
 #include <common/aglUniformBlock.h>
-#include <container/Buffer.h>
+//#include <container/Buffer.h>
 #include <math/rio_Matrix.h>
+
+#include <vector>
 
 class ModelEnvView
 {
@@ -38,8 +40,10 @@ public:
     static constexpr s32 cFogMax = 8;
 
 public:
-    ModelEnvView(u32 num_view);
-    ~ModelEnvView();
+    ModelEnvView() {}
+    ~ModelEnvView() {}
+
+    void addView();
 
     void setUniformData(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx);
 
@@ -47,6 +51,6 @@ public:
     const agl::UniformBlock& getUniformBlock(s32 view_index) const { return mUniformBlock[view_index]; }
 
 private:
-    Buffer<agl::UniformBlock>   mUniformBlock;
+    std::vector<agl::UniformBlock>  mUniformBlock;
 };
 //static_assert(sizeof(ModelEnvView) == 0xC);

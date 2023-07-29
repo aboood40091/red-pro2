@@ -68,15 +68,5 @@ public:
     virtual Animation* const* getShuAnims() const = 0;
     virtual Animation* const* getVisAnims() const = 0;
     virtual Animation* const* getShaAnims() const = 0;
-
-    s32 getOpaBufferIdx() const { return mOpaBufferIdx; }
-    s32 getXluBufferIdx() const { return mXluBufferIdx; }
-
-    void setOpaBufferIdx(s32 index) { mOpaBufferIdx = index; }
-    void setXluBufferIdx(s32 index) { mXluBufferIdx = index; }
-
-protected:
-    s32 mOpaBufferIdx;
-    s32 mXluBufferIdx;
 };
 //static_assert(sizeof(Model) == 0x28);

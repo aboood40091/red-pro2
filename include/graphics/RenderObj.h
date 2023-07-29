@@ -33,6 +33,9 @@ public:
     virtual void drawReflectionXlu(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx, RenderMgr* p_render_mgr) { }
     virtual bool hasShadow() const { return false; }
 
+    rio::Vector3f& getOrderPos() { return mOrderPos; }
+    const rio::Vector3f& getOrderPos() const { return mOrderPos; }
+
 protected:
     rio::Vector3f   mOrderPos; // I think. Precisely used for z ordering.
 };

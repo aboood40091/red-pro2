@@ -2,6 +2,8 @@
 #include <distant_view/DVCameraParam.h>
 #include <graphics/BasicModel.h>
 #include <graphics/ModelNW.h>
+#include <graphics/Renderer.h>
+#include <graphics/RenderObjLayer.h>
 
 #include <common/aglTextureFormatInfo.h>
 #include <filedevice/rio_FileDeviceMgr.h>
@@ -330,9 +332,6 @@ void DistantViewMgr::initialize(const std::string& dv_name, const std::string& d
     p_basic_mdl->init(&mModelRes);
     mpBasicModel = p_basic_mdl;
 
-    mpBasicModel->getModel()->setOpaBufferIdx(0);
-    mpBasicModel->getModel()->setXluBufferIdx(0);
-
     if (mModelRes.getResFile()->GetSkeletalAnimCount() > 0)
         mpBasicModel->getSklAnim(0)->play(&mModelRes, dv_fname_c);
 
@@ -407,7 +406,7 @@ ShaderParamAnimation* DistantViewMgr::getShuColorAnim() const
     return mpBasicModel->getShuAnim(1);
 }
 
-void DistantViewMgr::update(const rio::BaseVec2f& bg_screen_center, f32 bg_offset_area_bottom_to_screen_bottom, f32 bg_zoom)
+void DistantViewMgr::update(RenderObjLayer* p_layer, const rio::BaseVec2f& bg_screen_center, f32 bg_offset_area_bottom_to_screen_bottom, f32 bg_zoom)
 {
     calcView_(bg_screen_center, bg_offset_area_bottom_to_screen_bottom, bg_zoom);
 
@@ -420,51 +419,19 @@ void DistantViewMgr::update(const rio::BaseVec2f& bg_screen_center, f32 bg_offse
     mDofIndScroll.y = std::fmod(mDofIndScroll.y + 1.0f, 1.0f);
 
     mDof.setIndirectTextureTrans(mDofIndScroll);
+
+    RIO_ASSERT(p_layer != nullptr);
+
+    p_layer->setCamera(&mCamera);
+    p_layer->setProjection(&mProjection);
+    p_layer->setCullViewFrustum(&mCull);
 }
 
-void DistantViewMgr::calcMdl()
+void DistantViewMgr::draw(RenderObjLayer* p_layer)
 {
-    mpBasicModel->getModel()->calc();
-}
-
-void DistantViewMgr::calcGPU()
-{
-    const rio::Camera* p_camera = &mCamera;
-    const rio::Projection* p_proj = &mProjection;
-
-    rio::Matrix34f view_mtx;
-    p_camera->getMatrix(&view_mtx);
-
-    const rio::Matrix44f& proj_mtx = static_cast<const rio::Matrix44f&>(p_proj->getMatrix());
-
-    mRenderMgr.getViewInfo(0).p_cull = &mCull;
-    mRenderMgr.update(0, view_mtx, proj_mtx);
-
-    mpBasicModel->getModel()->calcGPU(0, view_mtx, proj_mtx, &mRenderMgr);
-}
-
-void DistantViewMgr::drawOpa()
-{
-    const rio::Camera* p_camera = &mCamera;
-    const rio::Projection* p_proj = &mProjection;
-
-    rio::Matrix34f view_mtx;
-    p_camera->getMatrix(&view_mtx);
-
-    const rio::Matrix44f& proj_mtx = static_cast<const rio::Matrix44f&>(p_proj->getMatrix());
-
-    mpBasicModel->getModel()->drawOpa(0, view_mtx, proj_mtx, &mRenderMgr);
-}
-
-void DistantViewMgr::drawXlu()
-{
-    const rio::Camera* p_camera = &mCamera;
-    const rio::Projection* p_proj = &mProjection;
-
-    rio::Matrix34f view_mtx;
-    p_camera->getMatrix(&view_mtx);
-
-    const rio::Matrix44f& proj_mtx = static_cast<const rio::Matrix44f&>(p_proj->getMatrix());
-
-    mpBasicModel->getModel()->drawXlu(0, view_mtx, proj_mtx, &mRenderMgr);
+    Renderer::instance()->setLayer(p_layer);
+    {
+        Renderer::instance()->drawModel(*mpBasicModel);
+    }
+    Renderer::instance()->resetLayer();
 }

@@ -16,29 +16,21 @@ const ModelEnvView::Member ModelEnvView::cMember[] = {
     { agl::UniformBlock::cType_vec4,    4 },            // vec4     ??? [ 4 ];
 };
 
-ModelEnvView::ModelEnvView(u32 view_num)
+void ModelEnvView::addView()
 {
-    mUniformBlock.allocBuffer(view_num);
-    for (Buffer<agl::UniformBlock>::iterator itr = mUniformBlock.begin(), itr_end = mUniformBlock.end(); itr != itr_end; ++itr)
+    agl::UniformBlock& uniform_block = mUniformBlock.emplace_back();
+    if (getViewNum() == 1)
     {
-        if (itr.getIndex() == 0)
-        {
-            itr->startDeclare(cMemberNum);
-            for (s32 i = 0; i < cMemberNum; i++)
-                itr->declare(cMember[i].type, cMember[i].num);
-        }
-        else
-        {
-            itr->declare(*mUniformBlock.getBufferPtr());
-        }
-
-        itr->create();
+        uniform_block.startDeclare(cMemberNum);
+        for (s32 i = 0; i < cMemberNum; i++)
+            uniform_block.declare(cMember[i].type, cMember[i].num);
     }
-}
+    else
+    {
+        uniform_block.declare(mUniformBlock[0]);
+    }
 
-ModelEnvView::~ModelEnvView()
-{
-    mUniformBlock.freeBuffer();
+    uniform_block.create();
 }
 
 void ModelEnvView::setUniformData(s32 view_index, const rio::Matrix34f& view_mtx, const rio::Matrix44f& proj_mtx)
