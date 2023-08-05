@@ -147,9 +147,9 @@ void Renderer::drawModel(Model* p_model)
     mpLayer->getRenderMgr()->pushBackRenderObj(p_model, opa_buffer_idx, xlu_buffer_idx);
 }
 
-void Renderer::drawModel(const BasicModel& model)
+void Renderer::drawModel(const BasicModel* p_model)
 {
-    drawModel(model.getModel());
+    drawModel(p_model->getModel());
 }
 
 // TODO
