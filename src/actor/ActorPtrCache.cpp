@@ -1,7 +1,8 @@
-#include <actor/ActorObjBuffer.h>
+#include <actor/ActorBase.h>
+#include <actor/ActorFindFunc.h>
+#include <actor/ActorPtrCache.h>
 
-ActorObjBuffer::iterator
-ActorObjBuffer::searchBaseByComparator(const ActorComparator& cmp, iterator pp_start) const
+ActorPtrCache::iterator ActorPtrCache::find(ActorFindFunc* p_func, iterator pp_start) const
 {
     iterator itr_actor = end();
 
@@ -10,7 +11,7 @@ ActorObjBuffer::searchBaseByComparator(const ActorComparator& cmp, iterator pp_s
         for (itr_actor = pp_start; itr_actor != end(); ++itr_actor)
         {
             ActorBase* const p_actor = *itr_actor;
-            if (p_actor != nullptr && !p_actor->isDeleted() && cmp.isEqual(*p_actor))
+            if (p_actor != nullptr && !p_actor->isDeleted() && (*p_func)(*p_actor))
                 break;
         }
     }

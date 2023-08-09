@@ -1,4 +1,5 @@
 #include <actor/ActorMgr.h>
+#include <actor/ActorFindFunc.h>
 #include <actor/Profile.h>
 #include <actor/ProfileID.h>
 #include <item/ItemBase.h>
@@ -13,9 +14,9 @@ SEAD_SINGLETON_DISPOSER_IMPL(ActorMgr)
 ActorMgr::ActorMgr()
     : mpPlayerHeap(nullptr)
     , mpActorHeap(nullptr)
-    , mActorObjBuffer(sead::HeapMgr::instance()->getCurrentHeap(), 520)
+    , mActorPtrCache(sead::HeapMgr::instance()->getCurrentHeap(), 520)
     , mActorCreateID(0)
-    , mActorCreateLifecycle(0)
+    , mActorCreateImmediately(false)
     , mActorDrawDone(false)
 {
     mCreateManage.initOffset(offsetof(ActorBase, mExecuteNode));
@@ -26,7 +27,7 @@ ActorMgr::ActorMgr()
 
 ActorMgr::~ActorMgr()
 {
-    moveCreateToDelete_();
+    moveActorOnCreateListToDestoryList_();
 
     for (ActorBase::List::robustIterator itr = mExecuteManage.robustBegin(), itr_end = mExecuteManage.robustEnd(); itr != itr_end; ++itr)
     {
@@ -39,12 +40,12 @@ ActorMgr::~ActorMgr()
     doDeleteActors_(true);
 }
 
-ActorBase* ActorMgr::create_(const ActorInitArg& arg, u8 lifecycle)
+ActorBase* ActorMgr::doConstructActor_(const ActorCreateParam& param, bool create_immediately)
 {
     ActorBase* p_actor = nullptr;
     sead::Heap* heap = nullptr;
 
-    u32 prof_id = arg.p_profile->getID();
+    u32 prof_id = param.p_profile->getID();
 
     if (prof_id == ProfileID::cPlayerObject ||
         prof_id == ProfileID::cTottenPlayer ||
@@ -60,13 +61,13 @@ ActorBase* ActorMgr::create_(const ActorInitArg& arg, u8 lifecycle)
 
     if (heap != nullptr)
     {
-        mActorCreateID = mActorObjBuffer.size() << 22 | mActorObjBuffer.currentID();
-        mActorCreateLifecycle = lifecycle;
+        mActorCreateID = mActorPtrCache.size() << 22 | mActorPtrCache.currentCreateIndex();
+        mActorCreateImmediately = create_immediately;
 
         sead::CurrentHeapSetter chs(heap);
 
-        p_actor = (*arg.p_profile->getClassInit())(arg);
-        mActorObjBuffer.pushBackBase(p_actor);
+        p_actor = (*param.p_profile->getActorFactory())(param);
+        mActorPtrCache.pushActor(p_actor);
     }
 
     return p_actor;
@@ -120,7 +121,7 @@ void ActorMgr::doDelete_(ActorBase* p_actor)
         delete_(&(*itr));
 }
 
-void ActorMgr::addToExecuteAndDraw_(ActorBase* p_actor)
+void ActorMgr::pushExecuteAndDrawList_(ActorBase* p_actor)
 {
     s32 prof_id = p_actor->getProfileID();
 
@@ -164,7 +165,7 @@ bool ActorMgr::deleteNotRequested_(ActorBase* p_actor)
     return !p_actor->isDeleted();
 }
 
-void ActorMgr::moveCreateToDelete_()
+void ActorMgr::moveActorOnCreateListToDestoryList_()
 {
     for (ActorBase::List::robustIterator itr = mCreateManage.robustBegin(), itr_end = mCreateManage.robustEnd(); itr != itr_end; ++itr)
     {
@@ -233,7 +234,7 @@ void ActorMgr::doDeleteActors_(bool destroy)
         }
 
         mDeleteManage.erase(p_actor);
-        mActorObjBuffer.eraseBase(p_actor);
+        mActorPtrCache.popActor(p_actor);
 
         sead::Heap* heap = p_actor->getHeap();
 
@@ -301,9 +302,9 @@ void RequestDeleteNotPlayerYoshiItem(ActorBase* p_actor, u32)
 
 void ActorMgr::destroy()
 {
-    mActorObjBuffer.foreachBase(RequestDeleteNotPlayerYoshiItem, 0);
+    mActorPtrCache.forEach(RequestDeleteNotPlayerYoshiItem, 0);
 
-    moveCreateToDelete_();
+    moveActorOnCreateListToDestoryList_();
 
     for (ActorBase::List::robustIterator itr = mExecuteManage.robustBegin(), itr_end = mExecuteManage.robustEnd(); itr != itr_end; ++itr)
         if (itr->mRequestDelete)
@@ -312,14 +313,14 @@ void ActorMgr::destroy()
     doDeleteActors_(true);
 }
 
-void ActorMgr::createNextFrame(const ActorInitArg& arg)
+void ActorMgr::createLater(const ActorCreateParam& param)
 {
-    mDeferredActorCreate.pushBack(arg);
+    mDeferredActorCreate.pushBack(param);
 }
 
-ActorBase* ActorMgr::create(const ActorInitArg& arg, CreateOption option)
+ActorBase* ActorMgr::createImmediately(const ActorCreateParam& param, CreateOption option)
 {
-    ActorBase* p_actor = create_(arg, 1);
+    ActorBase* p_actor = doConstructActor_(param, true);
     if (p_actor != nullptr)
     {
         ActorBase::MainState create_state = doCreate_(p_actor);
@@ -329,7 +330,7 @@ ActorBase* ActorMgr::create(const ActorInitArg& arg, CreateOption option)
             if (option == cCreateOption_ActiveNextFrame)
                 mCreateManage.pushBack(p_actor);
             else if (option == cCreateOption_ActiveNow)
-                addToExecuteAndDraw_(p_actor);
+                pushExecuteAndDrawList_(p_actor);
             return p_actor;
         case ActorBase::cState_Cancelled:
         case ActorBase::cState_Error:
@@ -342,18 +343,16 @@ ActorBase* ActorMgr::create(const ActorInitArg& arg, CreateOption option)
     return nullptr;
 }
 
-ActorMgr::iterator
-ActorMgr::searchBaseByProfID(u32 id, iterator pp_start) const
+ActorMgr::iterator ActorMgr::find(s32 prof_id, iterator pp_start) const
 {
-    ActorComparatorProfID cmp(id);
-    return mActorObjBuffer.searchBaseByComparator(cmp, pp_start);
+    ActorProfileFindFunc func(prof_id);
+    return mActorPtrCache.find(&func, pp_start);
 }
 
-u32
-ActorMgr::countBaseByProfID(u32 id) const
+u32 ActorMgr::count(s32 prof_id) const
 {
-    ActorComparatorProfID cmp(id);
-    return mActorObjBuffer.countBaseByComparator(cmp);
+    ActorProfileFindFunc func(prof_id);
+    return mActorPtrCache.count(&func);
 }
 
 void ActorMgr::calcCreateDelete_()
@@ -362,9 +361,9 @@ void ActorMgr::calcCreateDelete_()
 
   //bool continue_loop = true;
 
-    for (sead::RingBuffer<ActorInitArg>::iterator itr = mDeferredActorCreate.begin(), itr_end = mDeferredActorCreate.end(); /* continue_loop && */ itr != itr_end; ++itr)
+    for (sead::RingBuffer<ActorCreateParam>::iterator itr = mDeferredActorCreate.begin(), itr_end = mDeferredActorCreate.end(); /* continue_loop && */ itr != itr_end; ++itr)
     {
-        ActorBase* p_actor = create_(*itr, 0);
+        ActorBase* p_actor = doConstructActor_(*itr, false);
         if (p_actor != nullptr)
             mCreateManage.pushBack(p_actor);
     }
@@ -380,7 +379,7 @@ void ActorMgr::calcCreateDelete_()
         {
         case ActorBase::cState_Success:
             mCreateManage.erase(p_actor);
-            addToExecuteAndDraw_(p_actor);
+            pushExecuteAndDrawList_(p_actor);
             break;
         case ActorBase::cState_Error:
             p_actor->requestDelete();
