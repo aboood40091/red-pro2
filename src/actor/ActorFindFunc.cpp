@@ -6,7 +6,7 @@ bool ActorProfileFindFunc::operator()(const ActorBase& actor)
     return actor.getProfileID() == mProfID;
 }
 
-bool ActorNearestFindFunc::operator()(const ActorBase& actor)
+bool ActorCreateIndexFindFunc::operator()(const ActorBase& actor)
 {
-    return actor.getActorUniqueID().getActorID() == mID;
+    return actor.getActorUniqueID().getCreateIndex() == mCreateIndex;
 }
