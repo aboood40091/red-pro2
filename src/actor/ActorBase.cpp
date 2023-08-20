@@ -5,23 +5,6 @@
 
 #include <heap/seadHeapMgr.h>
 
-/*
-
-
-    switch (state)
-    {
-    case cState_Cancelled:
-        break;
-    case cState_Error:
-        break;
-    case cState_Success:
-        break;
-    case cState_Waiting:
-        break;
-    }
-
-*/
-
 s32 ActorBase::getProfileID() const
 {
     return mpProfile->getID();
