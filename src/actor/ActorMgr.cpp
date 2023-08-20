@@ -327,9 +327,9 @@ ActorBase* ActorMgr::createImmediately(const ActorCreateParam& param, CreateOpti
         switch (create_state)
         {
         case ActorBase::cState_Success:
-            if (option == cCreateOption_ActiveNextFrame)
+            if (option == cCreateOption_ActiveLater)
                 mCreateManage.pushBack(p_actor);
-            else if (option == cCreateOption_ActiveNow)
+            else if (option == cCreateOption_ActiveImmediately)
                 pushExecuteAndDrawList_(p_actor);
             return p_actor;
         case ActorBase::cState_Cancelled:
