@@ -1,6 +1,6 @@
-#include <effect/PtclLightMgr.h>
+#include <effect/PtclEmitterColorMgr.h>
 
-PtclLightMgr::PtclLightMgr()
+PtclEmitterColorMgr::PtclEmitterColorMgr()
     : sead::IDisposer()
 {
     for (s32 i = 0; i < 6; i++)

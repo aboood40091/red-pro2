@@ -1,4 +1,5 @@
-#include <effect/PtclLightMgr.h>
+#include <effect/PtclEmitterColorMgr.h>
+#include <effect/PtclEmitterUserDataUtil.h>
 #include <effect/PtclMgr.h>
 
 #include <gfx/seadCamera.h>
@@ -7,69 +8,12 @@
 #include <layer/aglRenderInfo.h>
 #include <ptcl/seadPtclSystem.h>
 
-u32 PtclMgr::userDataToType_(u16 user_data)
-{
-    if (user_data & 0x0200)
-    {
-        if (user_data & 0x0800)
-            return 14;
-
-        if (user_data & 0x0400)
-            return 13;
-
-        return 15;
-    }
-
-    if (user_data & 0x0800)
-        return 16;
-
-    if (user_data & 0x0100)
-    {
-        if (user_data & 0x0400)
-            return 10;
-
-        return 11;
-    }
-
-    if (user_data & 0x0400)
-        return 12;
-
-    if (user_data & 1)
-        return 0;
-
-    if (user_data & 0x0080)
-        return 7;
-
-    if (user_data & 0x0040)
-        return 6;
-
-    if (user_data & 0x0020)
-        return 5;
-
-    if (user_data & 0x0010)
-        return 4;
-
-    if (user_data & 0x0008)
-        return 3;
-
-    if (user_data & 0x0002)
-        return 1;
-
-    if (user_data & 0x0004)
-        return 2;
-
-    if (user_data & 0x1000)
-        return 8;
-
-    return 9;
-}
-
 SEAD_SINGLETON_DISPOSER_IMPL(PtclMgr)
 
 PtclMgr::PtclMgr()
     : mpPtclSystem(nullptr)
     , mpPtclParallelTbl(nullptr)
-    , mpLightMgr(new PtclLightMgr())
+    , mpEmitterColorMgr(new PtclEmitterColorMgr())
     , mpUserShaderParamTbl(nullptr)
     , mEffects()
     , mpEmitter1()
@@ -158,7 +102,7 @@ void PtclMgr::draw(const agl::lyr::RenderInfo& render_info, u32 type, const sead
             nw::eft::EmitterInstance* p_emitter = mpPtclSystem->GetEmitterHead(i);
             while (p_emitter)
             {
-                if (userDataToType_(p_emitter->GetSimpleEmitterData()->userData >> 16) == type)
+                if (PtclEmitterUserDataUtil::getEmitterUserType(p_emitter->GetSimpleEmitterData()->userData >> 16) == type)
                     mpPtclSystem->RenderEmitter(p_emitter);
 
                 p_emitter = p_emitter->next;
