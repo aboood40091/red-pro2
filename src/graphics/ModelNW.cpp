@@ -1066,7 +1066,7 @@ void ModelNW::setBoundingFlagArray_(BoundingFlagArray& flag_array, const Skeleta
     }
 }
 
-void ModelNW::updateAnimations()
+void ModelNW::calcAnm()
 {
     if (mpSklAnim.isBufferReady())
     {
@@ -1182,7 +1182,7 @@ void ModelNW::updateAnimations()
     mBoundingEnableFlag.set(1 << 2);
 }
 
-void ModelNW::updateModel()
+void ModelNW::calcMdl()
 {
     sead::Matrix34f world_mtx = getMtxRT();
     world_mtx.scaleBases(getScale().x, getScale().y, getScale().z);

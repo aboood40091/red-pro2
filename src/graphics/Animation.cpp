@@ -4,7 +4,7 @@ Animation::Animation()
 {
 }
 
-void Animation::update()
+void Animation::playFrameCtrl()
 {
     mFrameCtrl.play();
 }

@@ -273,7 +273,7 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
     calcView_();
     calcModelMtx_();
 
-    mpBasicModel->updateModel();
+    mpBasicModel->calcMdl();
 
     // TODO: mpEffectMgr
     mIsDrawParticle = true;

@@ -13,15 +13,15 @@ void BlendModel::init(ModelResource* p_mdl_res, const sead::PtrArray<ModelResour
     BasicModel::init(p_mdl_res, p_anim_mdl_res_array, heap);
 }
 
-void BlendModel::updateAnimations()
+void BlendModel::playAnmFrameCtrl()
 {
-    BasicModel::updateAnimations();
+    BasicModel::playAnmFrameCtrl();
 }
 
-void BlendModel::updateModel()
+void BlendModel::calcMdl()
 {
     calcBlend();
-    BasicModel::updateModel();
+    BasicModel::calcMdl();
 }
 
 void BlendModel::calcBlend()
@@ -36,16 +36,16 @@ void BlendModel::calcBlend()
     }
 }
 
-void BlendModel::setAnimation(
+void BlendModel::setAnm(
     ModelResource* p_mdl_res,
     const sead::SafeString& name,
     f32 blend_duration
 )
 {
-    setAnimation_(p_mdl_res, name, blend_duration);
+    setAnm_(p_mdl_res, name, blend_duration);
 }
 
-void BlendModel::setAnimation(
+void BlendModel::setAnm(
     const sead::SafeString& name,
     f32 blend_duration,
     FrameCtrl::PlayMode mode,
@@ -53,20 +53,20 @@ void BlendModel::setAnimation(
     f32 frame
 )
 {
-    setAnimation_(getModelResource(), name, blend_duration, mode, rate, frame);
+    setAnm_(getModelResource(), name, blend_duration, mode, rate, frame);
 }
 
-void BlendModel::setAnimation(
+void BlendModel::setAnm(
     const sead::SafeString& name,
     FrameCtrl::PlayMode mode,
     f32 rate,
     f32 frame
 )
 {
-    setAnimation_(getModelResource(), name, 0.0f, mode, rate, frame);
+    setAnm_(getModelResource(), name, 0.0f, mode, rate, frame);
 }
 
-void BlendModel::setAnimation_(
+void BlendModel::setAnm_(
     ModelResource* p_mdl_res,
     const sead::SafeString& name,
     f32 blend_duration,

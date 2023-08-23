@@ -82,13 +82,13 @@ void BasicModel::init(ModelResource* p_mdl_res, const sead::PtrArray<ModelResour
     }
 }
 
-void BasicModel::updateAnimations()
+void BasicModel::playAnmFrameCtrl()
 {
     if (mpSklAnim.isBufferReady())
     {
         for (sead::Buffer<SkeletalAnimation*>::iterator itr_anim = mpSklAnim.begin(), itr_anim_end = mpSklAnim.end(); itr_anim != itr_anim_end; ++itr_anim)
         {
-            (*itr_anim)->update();
+            (*itr_anim)->playFrameCtrl();
         }
     }
 
@@ -96,7 +96,7 @@ void BasicModel::updateAnimations()
     {
         for (sead::Buffer<TexturePatternAnimation*>::iterator itr_anim = mpTexAnim.begin(), itr_anim_end = mpTexAnim.end(); itr_anim != itr_anim_end; ++itr_anim)
         {
-            (*itr_anim)->update();
+            (*itr_anim)->playFrameCtrl();
         }
     }
 
@@ -104,7 +104,7 @@ void BasicModel::updateAnimations()
     {
         for (sead::Buffer<ShaderParamAnimation*>::iterator itr_anim = mpShuAnim.begin(), itr_anim_end = mpShuAnim.end(); itr_anim != itr_anim_end; ++itr_anim)
         {
-            (*itr_anim)->update();
+            (*itr_anim)->playFrameCtrl();
         }
     }
 
@@ -112,7 +112,7 @@ void BasicModel::updateAnimations()
     {
         for (sead::Buffer<VisibilityAnimation*>::iterator itr_anim = mpVisAnim.begin(), itr_anim_end = mpVisAnim.end(); itr_anim != itr_anim_end; ++itr_anim)
         {
-            (*itr_anim)->update();
+            (*itr_anim)->playFrameCtrl();
         }
     }
 
@@ -120,13 +120,13 @@ void BasicModel::updateAnimations()
     {
         for (sead::Buffer<ShapeAnimation*>::iterator itr_anim = mpShaAnim.begin(), itr_anim_end = mpShaAnim.end(); itr_anim != itr_anim_end; ++itr_anim)
         {
-            (*itr_anim)->update();
+            (*itr_anim)->playFrameCtrl();
         }
     }
 }
 
-void BasicModel::updateModel()
+void BasicModel::calcMdl()
 {
-    mpModel->updateAnimations();
-    mpModel->updateModel();
+    mpModel->calcAnm();
+    mpModel->calcMdl();
 }
