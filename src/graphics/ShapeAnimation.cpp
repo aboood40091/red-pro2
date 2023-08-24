@@ -1,4 +1,4 @@
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 #include <graphics/ModelResource.h>
 #include <graphics/ShapeAnimation.h>
 
@@ -12,7 +12,7 @@ ShapeAnimation::ShapeAnimation()
 {
 }
 
-bool ShapeAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
+bool ShapeAnimation::init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
 {
     nw::g3d::ShapeAnimObj::InitArg arg;
     arg.SetMaxShapeCount(p_model->getModelEx().GetResource()->GetShapeCount());
@@ -38,7 +38,7 @@ void ShapeAnimation::updateInitArg_(nw::g3d::ShapeAnimObj::InitArg* p_arg, const
         p_arg->Reserve(p_mdl_res->getResFile()->GetShapeAnim(idx_anim));
 }
 
-void ShapeAnimation::bindModel(const ModelNW* p_model, s32 index)
+void ShapeAnimation::bindModel(const ModelG3d* p_model, s32 index)
 {
     if (mpModel)
         unbindModel();

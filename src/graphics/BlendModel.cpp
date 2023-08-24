@@ -1,7 +1,7 @@
 #include <graphics/BlendModel.h>
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 
-BlendModel::BlendModel(ModelNW* p_model, u32 skl_anim_num, u32 tex_anim_num, u32 shu_anim_num, u32 vis_anim_num, u32 sha_anim_num)
+BlendModel::BlendModel(ModelG3d* p_model, u32 skl_anim_num, u32 tex_anim_num, u32 shu_anim_num, u32 vis_anim_num, u32 sha_anim_num)
     : BasicModel(p_model, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num)
     , mCurAnmIdx(0)
 {
@@ -30,7 +30,7 @@ void BlendModel::calcBlend()
     {
         mCalcRatio.calc();
 
-        ModelNW* p_model = getModel();
+        ModelG3d* p_model = getModel();
         p_model->setSklAnimBlendWeight(mCurAnmIdx,      mCalcRatio.ratioB());   // Target animation
         p_model->setSklAnimBlendWeight(mCurAnmIdx ^ 1,  mCalcRatio.ratioA());   // Source animation
     }
@@ -81,7 +81,7 @@ void BlendModel::setAnm_(
     {
         mCalcRatio.reset();
 
-        ModelNW* p_model = getModel();
+        ModelG3d* p_model = getModel();
         p_model->setSklAnimBlendWeight(mCurAnmIdx,      1.0f);  // Target animation
         p_model->setSklAnimBlendWeight(mCurAnmIdx ^ 1,  0.0f);  // Source animation
     }
@@ -91,7 +91,7 @@ void BlendModel::setAnm_(
 
         mCalcRatio.set(blend_duration);
 
-        ModelNW* p_model = getModel();
+        ModelG3d* p_model = getModel();
         p_model->setSklAnimBlendWeight(mCurAnmIdx,      0.0f);  // Target animation
         p_model->setSklAnimBlendWeight(mCurAnmIdx ^ 1,  1.0f);  // Source animation
     }

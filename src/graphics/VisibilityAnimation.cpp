@@ -1,4 +1,4 @@
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 #include <graphics/ModelResource.h>
 #include <graphics/VisibilityAnimation.h>
 
@@ -12,7 +12,7 @@ VisibilityAnimation::VisibilityAnimation()
 {
 }
 
-bool VisibilityAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
+bool VisibilityAnimation::init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
 {
     nw::g3d::VisibilityAnimObj::InitArg arg;
     arg.SetMaxBoneCount(p_model->getModelEx().GetResource()->GetSkeleton()->GetBoneCount());
@@ -42,7 +42,7 @@ void VisibilityAnimation::updateInitArg_(nw::g3d::VisibilityAnimObj::InitArg* p_
         p_arg->Reserve(p_mdl_res->getResFile()->GetMatVisAnim(idx_anim));
 }
 
-void VisibilityAnimation::bindModel(const ModelNW* p_model, s32 index)
+void VisibilityAnimation::bindModel(const ModelG3d* p_model, s32 index)
 {
     if (mpModel)
         unbindModel();

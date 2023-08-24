@@ -1,4 +1,4 @@
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 #include <graphics/ModelResource.h>
 #include <graphics/SkeletalAnimation.h>
 
@@ -12,7 +12,7 @@ SkeletalAnimation::SkeletalAnimation()
 {
 }
 
-bool SkeletalAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
+bool SkeletalAnimation::init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
 {
     nw::g3d::SkeletalAnimObj::InitArg arg;
     arg.SetMaxBoneCount(p_model->getModelEx().GetResource()->GetSkeleton()->GetBoneCount());
@@ -37,7 +37,7 @@ void SkeletalAnimation::updateInitArg_(nw::g3d::SkeletalAnimObj::InitArg* p_arg,
         p_arg->Reserve(p_mdl_res->getResFile()->GetSkeletalAnim(idx_anim));
 }
 
-void SkeletalAnimation::bindModel(const ModelNW* p_model, s32 index)
+void SkeletalAnimation::bindModel(const ModelG3d* p_model, s32 index)
 {
     if (mpModel)
         unbindModel();

@@ -1,9 +1,9 @@
 #include <graphics/LightMapMgr.h>
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 
 SEAD_TASK_SINGLETON_DISPOSER_IMPL(LightMapMgr)
 
-void LightMapMgr::setModelLightMap(ModelNW* p_model, bool set_mdl_dl_dirty) const
+void LightMapMgr::setModelLightMap(ModelG3d* p_model, bool set_mdl_dl_dirty) const
 {
     if (!mIsInitialized)
         return;
@@ -12,7 +12,7 @@ void LightMapMgr::setModelLightMap(ModelNW* p_model, bool set_mdl_dl_dirty) cons
 
     for (s32 idx_shape = 0, num_shape = model.GetShapeCount(); idx_shape < num_shape; idx_shape++)
     {
-        ModelNW::LightMap& light_map = p_model->getShape(idx_shape).light_map;
+        ModelG3d::LightMap& light_map = p_model->getShape(idx_shape).light_map;
         light_map.clear();
 
         agl::g3d::ModelShaderAssign& shader_assign = model.getShaderAssign(idx_shape);

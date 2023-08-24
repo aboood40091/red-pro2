@@ -1,6 +1,6 @@
 #include <game/AreaLayerMgr.h>
 #include <graphics/BasicModel.h>
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 #include <graphics/Renderer.h>
 #include <graphics/RenderMgr.h>
 #include <graphics/RenderObjLayer.h>

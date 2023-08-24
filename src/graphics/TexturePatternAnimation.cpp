@@ -1,4 +1,4 @@
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 #include <graphics/ModelResource.h>
 #include <graphics/TexturePatternAnimation.h>
 
@@ -12,7 +12,7 @@ TexturePatternAnimation::TexturePatternAnimation()
 {
 }
 
-bool TexturePatternAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
+bool TexturePatternAnimation::init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
 {
     nw::g3d::TexPatternAnimObj::InitArg arg;
     arg.SetMaxMatCount(p_model->getModelEx().GetResource()->GetMaterialCount());
@@ -38,7 +38,7 @@ void TexturePatternAnimation::updateInitArg_(nw::g3d::TexPatternAnimObj::InitArg
         p_arg->Reserve(p_mdl_res->getResFile()->GetTexPatternAnim(idx_anim));
 }
 
-void TexturePatternAnimation::bindModel(const ModelNW* p_model, s32 index)
+void TexturePatternAnimation::bindModel(const ModelG3d* p_model, s32 index)
 {
     if (mpModel)
         unbindModel();

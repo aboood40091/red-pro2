@@ -1,4 +1,4 @@
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 #include <graphics/ModelResource.h>
 #include <graphics/ShaderParamAnimation.h>
 
@@ -12,7 +12,7 @@ ShaderParamAnimation::ShaderParamAnimation()
 {
 }
 
-bool ShaderParamAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
+bool ShaderParamAnimation::init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
 {
     nw::g3d::ShaderParamAnimObj::InitArg arg;
     arg.SetMaxMatCount(p_model->getModelEx().GetResource()->GetMaterialCount());
@@ -41,7 +41,7 @@ void ShaderParamAnimation::updateInitArg_(nw::g3d::ShaderParamAnimObj::InitArg* 
         p_arg->Reserve(p_mdl_res->getResFile()->GetTexSrtAnim(idx_anim));
 }
 
-void ShaderParamAnimation::bindModel(const ModelNW* p_model, s32 index)
+void ShaderParamAnimation::bindModel(const ModelG3d* p_model, s32 index)
 {
     if (mpModel)
         unbindModel();

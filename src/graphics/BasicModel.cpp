@@ -1,7 +1,7 @@
 #include <graphics/BasicModel.h>
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 
-BasicModel::BasicModel(ModelNW* p_model, u32 skl_anim_num, u32 tex_anim_num, u32 shu_anim_num, u32 vis_anim_num, u32 sha_anim_num)
+BasicModel::BasicModel(ModelG3d* p_model, u32 skl_anim_num, u32 tex_anim_num, u32 shu_anim_num, u32 vis_anim_num, u32 sha_anim_num)
     : mpModel(p_model)
     , mpModelResource(nullptr)
 {

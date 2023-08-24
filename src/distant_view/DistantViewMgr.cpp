@@ -9,7 +9,7 @@
 #include <graphics/BasicModel.h>
 #include <graphics/EnvSetReader.h>
 #include <graphics/GfxParameter.h>
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 #include <graphics/ModelResource.h>
 #include <graphics/ModelResourceMgr.h>
 #include <graphics/RenderMgr.h>
@@ -133,7 +133,7 @@ void DistantViewMgr::calcView_()
 
 void DistantViewMgr::calcModelMtx_()
 {
-    ModelNW* p_model = mpBasicModel->getModel();
+    ModelG3d* p_model = mpBasicModel->getModel();
 
     sead::Matrix34f model_mtx;
     mpCameraParam->getModelMtx(&model_mtx);
@@ -230,7 +230,7 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
     ModelResourceMgr::instance()->loadResFile(dv_fname, dv_fname);
 
     ModelResource* p_mdl_res = ModelResourceMgr::instance()->getResource(dv_fname);
-    ModelNW* p_mdl = Model::createNW(*p_mdl_res, dv_fname, 1, 1, 1, 2, 0, 0, Model::cBoundingMode_Enable, nullptr);
+    ModelG3d* p_mdl = Model::createG3d(*p_mdl_res, dv_fname, 1, 1, 1, 2, 0, 0, Model::cBoundingMode_Enable, nullptr);
     BasicModel* p_basic_mdl = new (nullptr, 4) BasicModel(p_mdl, 1, 1, 2, 0, 0);
     p_basic_mdl->init(p_mdl_res);
     mpBasicModel = p_basic_mdl;
