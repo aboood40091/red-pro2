@@ -1,7 +1,7 @@
 #include <actor/ActorBase.h>
 #include <actor/ActorMgr.h>
 #include <actor/Profile.h>
-#include <execute_control/ExecuteControlMgr.h>
+#include <event/EventMgr.h>
 
 #include <heap/seadHeapMgr.h>
 
@@ -91,11 +91,11 @@ void ActorBase::postCreate_(MainState state)
 
 s32 ActorBase::preExecute_()
 {
-    ExecuteControlMgr* exec_control_mgr = ExecuteControlMgr::instance();
-    if (exec_control_mgr == nullptr || exec_control_mgr->getCurrentControl() == nullptr)
+    EventMgr* event_mgr = EventMgr::instance();
+    if (event_mgr == nullptr || event_mgr->getCurrentEvent() == nullptr)
         return 1;
 
-    return static_cast<s32>(exec_control_mgr->isActorPauseOff(this));
+    return static_cast<s32>(event_mgr->isJoin(this));
 }
 
 s32 ActorBase::execute_()
