@@ -1,4 +1,5 @@
 #include <graphics/MaterialG3d.h>
+#include <utility/Angle.h>
 
 #include <prim/seadSafeString.h>
 
@@ -30,7 +31,7 @@ const sead::SafeString sTevKColorStr[4] = {
 
 }
 
-void MaterialG3d::setTexSrtMtx(s32 index, const sead::Vector2f& scale, const u32& rotate, const sead::Vector2f& translate)
+void MaterialG3d::setTexSrtMtx(s32 index, const sead::Vector2f& scale, const Angle& rotate, const sead::Vector2f& translate)
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTexMtxStr[index].cstr());
     if (param_index >= 0)
@@ -62,7 +63,7 @@ void MaterialG3d::setTexSrtMtx(s32 index, const sead::Vector2f& scale, const u32
     }
 }
 
-void MaterialG3d::setTexSrt(s32 index, const sead::Vector2f& scale, const u32& rotate, const sead::Vector2f& translate)
+void MaterialG3d::setTexSrt(s32 index, const sead::Vector2f& scale, const Angle& rotate, const sead::Vector2f& translate)
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTexMtxStr[index].cstr());
     if (param_index >= 0)
@@ -79,7 +80,7 @@ void MaterialG3d::setTexSrt(s32 index, const sead::Vector2f& scale, const u32& r
     }
 }
 
-void MaterialG3d::getTexSrt(s32 index, sead::Vector2f* p_scale, u32* p_rotate, sead::Vector2f* p_translate) const
+void MaterialG3d::getTexSrt(s32 index, sead::Vector2f* p_scale, Angle* p_rotate, sead::Vector2f* p_translate) const
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTexMtxStr[index].cstr());
     if (param_index < 0 || mMaterialObj->GetResShaderParam(param_index)->GetOffset() < 0)

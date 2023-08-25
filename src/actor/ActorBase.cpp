@@ -44,7 +44,7 @@ ActorBase::ActorBase(const ActorCreateParam& param)
     }
     else
     {
-        if (param.parent_id > 0)
+        if (param.parent_id.isValid())
             mRequestDelete = true;
     }
 }

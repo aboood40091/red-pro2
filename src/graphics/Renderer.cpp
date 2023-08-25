@@ -7,6 +7,7 @@
 #include <map/BgRenderer.h>
 #include <map/LayerID.h>
 #include <map/UnitID.h>
+#include <utility/Angle.h>
 
 #include <layer/aglRenderer.h>
 
