@@ -15,7 +15,6 @@ ActorMgr::ActorMgr()
     : mpPlayerHeap(nullptr)
     , mpActorHeap(nullptr)
     , mActorPtrCache(sead::HeapMgr::instance()->getCurrentHeap(), 520)
-    , mActorCreateID(0)
     , mActorCreateImmediately(false)
     , mActorDrawDone(false)
 {
@@ -61,7 +60,7 @@ ActorBase* ActorMgr::doConstructActor_(const ActorCreateParam& param, bool creat
 
     if (heap != nullptr)
     {
-        mActorCreateID = mActorPtrCache.size() << 22 | mActorPtrCache.currentCreateIndex();
+        mActorCreateID.setValue(mActorPtrCache.getEmptyHeadIndex(), mActorPtrCache.getNextCreateIndex());
         mActorCreateImmediately = create_immediately;
 
         sead::CurrentHeapSetter chs(heap);
