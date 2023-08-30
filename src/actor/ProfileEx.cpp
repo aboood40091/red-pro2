@@ -1,0 +1,7075 @@
+#include <actor/Profile.h>
+
+s16 Profile::getDrawPriority(s32 id)
+{
+    if (static_cast<u32>(id) >= cProfileID_Max)
+        return -1;
+
+    return cDrawPriority[id];
+}
+
+Profile::ResType Profile::getResType(s32 id)
+{
+    if (static_cast<u32>(id) >= cProfileID_Max)
+        return cResType_Boot;
+
+    return ResType(cResType[id]);
+}
+
+u8 Profile::getResNum(s32 id)
+{
+    if (static_cast<u32>(id) >= cProfileID_Max)
+        return 0;
+
+    return cResNum[id];
+}
+
+const sead::SafeString* Profile::getResList(s32 id)
+{
+    if (static_cast<u32>(id) >= cProfileID_Max)
+        return nullptr;
+
+    return cResList[id];
+}
+
+// --------------------------------------- DrawPriority --------------------------------------- //
+
+const s16 Profile::cDrawPriority[cProfileID_Max] = {
+     17 - 0x3ff,    // ProfileID::c000
+     18 - 0x3ff,    // ProfileID::c001
+     19 - 0x3ff,    // ProfileID::c002
+     20 - 0x3ff,    // ProfileID::c003
+     21 - 0x3ff,    // ProfileID::c004
+     22 - 0x3ff,    // ProfileID::c005
+     23 - 0x3ff,    // ProfileID::c006
+     24 - 0x3ff,    // ProfileID::c007
+     25 - 0x3ff,    // ProfileID::c008
+     26 - 0x3ff,    // ProfileID::c009
+     71 - 0x3ff,    // ProfileID::c00A
+     27 - 0x3ff,    // ProfileID::c00B
+     28 - 0x3ff,    // ProfileID::c00C
+     29 - 0x3ff,    // ProfileID::c00D
+     51 - 0x3ff,    // ProfileID::c00E
+     52 - 0x3ff,    // ProfileID::c00F
+     53 - 0x3ff,    // ProfileID::c010
+     65 - 0x3ff,    // ProfileID::c011
+     66 - 0x3ff,    // ProfileID::c012
+     92 - 0x3ff,    // ProfileID::c013
+     72 - 0x3ff,    // ProfileID::c014
+     75 - 0x3ff,    // ProfileID::c015
+     76 - 0x3ff,    // ProfileID::c016
+     77 - 0x3ff,    // ProfileID::c017
+     78 - 0x3ff,    // ProfileID::c018
+     79 - 0x3ff,    // ProfileID::c019
+     80 - 0x3ff,    // ProfileID::c01A
+     81 - 0x3ff,    // ProfileID::c01B
+     82 - 0x3ff,    // ProfileID::c01C
+     86 - 0x3ff,    // ProfileID::c01D
+     87 - 0x3ff,    // ProfileID::c01E
+     88 - 0x3ff,    // ProfileID::c01F
+     91 - 0x3ff,    // ProfileID::c020
+     95 - 0x3ff,    // ProfileID::c021
+    727,            // ProfileID::c022
+    728,            // ProfileID::c023
+    105 - 0x3ff,    // ProfileID::c024
+    689,            // ProfileID::c025
+     41 - 0x3ff,    // ProfileID::c026
+     30 - 0x3ff,    // ProfileID::c027
+     31 - 0x3ff,    // ProfileID::c028
+     32 - 0x3ff,    // ProfileID::c029
+     33 - 0x3ff,    // ProfileID::c02A
+    308,            // ProfileID::c02B
+    309,            // ProfileID::c02C
+     49 - 0x3ff,    // ProfileID::c02D
+     50 - 0x3ff,    // ProfileID::c02E
+     67 - 0x3ff,    // ProfileID::c02F
+     68 - 0x3ff,    // ProfileID::c030
+     73 - 0x3ff,    // ProfileID::c031
+    416,            // ProfileID::c032
+    218,            // ProfileID::c033
+    533,            // ProfileID::c034
+    613,            // ProfileID::c035
+    267,            // ProfileID::c036
+    268,            // ProfileID::c037
+    269,            // ProfileID::c038
+    270,            // ProfileID::c039
+    271,            // ProfileID::c03A
+    272,            // ProfileID::c03B
+    273,            // ProfileID::c03C
+    274,            // ProfileID::c03D
+    275,            // ProfileID::c03E
+    276,            // ProfileID::c03F
+    277,            // ProfileID::c040
+    278,            // ProfileID::c041
+    279,            // ProfileID::c042
+    280,            // ProfileID::c043
+    281,            // ProfileID::c044
+    282,            // ProfileID::c045
+    283,            // ProfileID::c046
+    284,            // ProfileID::c047
+    285,            // ProfileID::c048
+    286,            // ProfileID::c049
+    287,            // ProfileID::c04A
+    288,            // ProfileID::c04B
+    289,            // ProfileID::c04C
+    215,            // ProfileID::c04D
+    216,            // ProfileID::c04E
+    217,            // ProfileID::c04F
+    224,            // ProfileID::c050
+    226,            // ProfileID::c051
+    435,            // ProfileID::c052
+    436,            // ProfileID::c053
+    697,            // ProfileID::c054
+    698,            // ProfileID::c055
+    699,            // ProfileID::c056
+    700,            // ProfileID::c057
+    701,            // ProfileID::c058
+    702,            // ProfileID::c059
+    703,            // ProfileID::c05A
+    704,            // ProfileID::c05B
+     80,            // ProfileID::c05C
+     81,            // ProfileID::c05D
+     82,            // ProfileID::c05E
+     72,            // ProfileID::c05F
+     73,            // ProfileID::c060
+     74,            // ProfileID::c061
+     78,            // ProfileID::c062
+     79,            // ProfileID::c063
+     83,            // ProfileID::c064
+    440,            // ProfileID::c065
+    441,            // ProfileID::c066
+    442,            // ProfileID::c067
+    443,            // ProfileID::c068
+    444,            // ProfileID::c069
+    445,            // ProfileID::c06A
+    446,            // ProfileID::c06B
+    447,            // ProfileID::c06C
+    448,            // ProfileID::c06D
+    449,            // ProfileID::c06E
+    450,            // ProfileID::c06F
+    451,            // ProfileID::c070
+    452,            // ProfileID::c071
+    453,            // ProfileID::c072
+    454,            // ProfileID::c073
+    455,            // ProfileID::c074
+    457,            // ProfileID::c075
+    328,            // ProfileID::c076
+    329,            // ProfileID::c077
+    330,            // ProfileID::c078
+    496,            // ProfileID::c079
+    497,            // ProfileID::c07A
+    498,            // ProfileID::c07B
+    499,            // ProfileID::c07C
+    500,            // ProfileID::c07D
+    501,            // ProfileID::c07E
+    502,            // ProfileID::c07F
+    503,            // ProfileID::c080
+    528,            // ProfileID::c081
+     56,            // ProfileID::c082
+     57,            // ProfileID::c083
+     58,            // ProfileID::c084
+     59,            // ProfileID::c085
+     63,            // ProfileID::c086
+     64,            // ProfileID::c087
+     65,            // ProfileID::c088
+     66,            // ProfileID::c089
+     67,            // ProfileID::c08A
+     68,            // ProfileID::c08B
+     69,            // ProfileID::c08C
+     70,            // ProfileID::c08D
+     71,            // ProfileID::c08E
+     76,            // ProfileID::c08F
+     77,            // ProfileID::c090
+     84,            // ProfileID::c091
+     85,            // ProfileID::c092
+    529,            // ProfileID::c093
+    530,            // ProfileID::c094
+    531,            // ProfileID::c095
+    532,            // ProfileID::c096
+    266,            // ProfileID::c097
+    546,            // ProfileID::c098
+    547,            // ProfileID::c099
+    548,            // ProfileID::c09A
+    549,            // ProfileID::c09B
+    550,            // ProfileID::c09C
+    551,            // ProfileID::c09D
+    552,            // ProfileID::c09E
+    553,            // ProfileID::c09F
+    560,            // ProfileID::c0A0
+    554,            // ProfileID::c0A1
+    555,            // ProfileID::c0A2
+    556,            // ProfileID::c0A3
+    557,            // ProfileID::c0A4
+    558,            // ProfileID::c0A5
+    559,            // ProfileID::c0A6
+    561,            // ProfileID::c0A7
+    562,            // ProfileID::c0A8
+    563,            // ProfileID::c0A9
+    564,            // ProfileID::c0AA
+    565,            // ProfileID::c0AB
+    566,            // ProfileID::c0AC
+    219,            // ProfileID::c0AD
+    220,            // ProfileID::c0AE
+    221,            // ProfileID::c0AF
+    222,            // ProfileID::c0B0
+    223,            // ProfileID::c0B1
+    514,            // ProfileID::c0B2
+    517,            // ProfileID::c0B3
+    520,            // ProfileID::c0B4
+    521,            // ProfileID::c0B5
+    522,            // ProfileID::c0B6
+    523,            // ProfileID::c0B7
+    524,            // ProfileID::c0B8
+    525,            // ProfileID::c0B9
+    526,            // ProfileID::c0BA
+    569,            // ProfileID::c0BB
+    527,            // ProfileID::c0BC
+    568,            // ProfileID::c0BD
+    567,            // ProfileID::c0BE
+    336,            // ProfileID::c0BF
+    337,            // ProfileID::c0C0
+    338,            // ProfileID::c0C1
+    482,            // ProfileID::c0C2
+    483,            // ProfileID::c0C3
+    484,            // ProfileID::c0C4
+    437,            // ProfileID::c0C5
+    438,            // ProfileID::c0C6
+    488,            // ProfileID::c0C7
+    485,            // ProfileID::c0C8
+    617,            // ProfileID::c0C9
+    618,            // ProfileID::c0CA
+    534,            // ProfileID::c0CB
+    535,            // ProfileID::c0CC
+    620,            // ProfileID::c0CD
+    621,            // ProfileID::c0CE
+    622,            // ProfileID::c0CF
+    615,            // ProfileID::c0D0
+    616,            // ProfileID::c0D1
+    614,            // ProfileID::cFloorHoleDokan
+    571,            // ProfileID::c0D3
+    573,            // ProfileID::c0D4
+    574,            // ProfileID::c0D5
+    572,            // ProfileID::c0D6
+    575,            // ProfileID::c0D7
+    576,            // ProfileID::c0D8
+    577,            // ProfileID::c0D9
+    578,            // ProfileID::c0DA
+    579,            // ProfileID::c0DB
+    581,            // ProfileID::c0DC
+    582,            // ProfileID::c0DD
+    610,            // ProfileID::c0DE
+    611,            // ProfileID::c0DF
+    132,            // ProfileID::c0E0
+    133,            // ProfileID::c0E1
+    134,            // ProfileID::c0E2
+    135,            // ProfileID::c0E3
+    380,            // ProfileID::c0E4
+    489,            // ProfileID::c0E5
+    538,            // ProfileID::c0E6
+    536,            // ProfileID::c0E7
+    537,            // ProfileID::c0E8
+    587,            // ProfileID::c0E9
+    539,            // ProfileID::c0EA
+    136,            // ProfileID::c0EB
+    612,            // ProfileID::c0EC
+    645,            // ProfileID::c0ED
+    479,            // ProfileID::c0EE
+    480,            // ProfileID::c0EF
+    481,            // ProfileID::c0F0
+    651,            // ProfileID::c0F1
+    652,            // ProfileID::c0F2
+    639,            // ProfileID::c0F3
+    640,            // ProfileID::c0F4
+    381,            // ProfileID::c0F5
+    382,            // ProfileID::c0F6
+    383,            // ProfileID::c0F7
+    384,            // ProfileID::c0F8
+    385,            // ProfileID::c0F9
+    583,            // ProfileID::c0FA
+    584,            // ProfileID::c0FB
+    705,            // ProfileID::c0FC
+    706,            // ProfileID::c0FD
+    707,            // ProfileID::c0FE
+    708,            // ProfileID::c0FF
+    515,            // ProfileID::c100
+    516,            // ProfileID::c101
+     75,            // ProfileID::c102
+    580,            // ProfileID::c103
+    593,            // ProfileID::c104
+    712,            // ProfileID::c105
+    673,            // ProfileID::c106
+    619,            // ProfileID::c107
+    685,            // ProfileID::c108
+    205,            // ProfileID::c109
+    721,            // ProfileID::c10A
+    722,            // ProfileID::c10B
+    723,            // ProfileID::c10C
+    199,            // ProfileID::c10D
+    200,            // ProfileID::c10E
+    201,            // ProfileID::c10F
+    202,            // ProfileID::c110
+    180,            // ProfileID::c111
+    187,            // ProfileID::c112
+    291,            // ProfileID::c113
+    292,            // ProfileID::c114
+    293,            // ProfileID::c115
+    294,            // ProfileID::c116
+    490,            // ProfileID::c117
+    724,            // ProfileID::c118
+    683,            // ProfileID::c119
+    684,            // ProfileID::c11A
+     47,            // ProfileID::c11B
+    111 - 0x3ff,    // ProfileID::c11C
+    608,            // ProfileID::c11D
+    609,            // ProfileID::c11E
+    229,            // ProfileID::c11F
+      1 - 0x3ff,    // ProfileID::c120
+    352,            // ProfileID::c121
+    353,            // ProfileID::c122
+    354,            // ProfileID::c123
+    355,            // ProfileID::c124
+    356,            // ProfileID::c125
+    357,            // ProfileID::c126
+    358,            // ProfileID::c127
+    359,            // ProfileID::c128
+    360,            // ProfileID::c129
+    361,            // ProfileID::c12A
+    362,            // ProfileID::c12B
+    363,            // ProfileID::c12C
+    364,            // ProfileID::c12D
+    365,            // ProfileID::c12E
+    366,            // ProfileID::c12F
+    367,            // ProfileID::c130
+    368,            // ProfileID::c131
+    369,            // ProfileID::c132
+    370,            // ProfileID::c133
+    371,            // ProfileID::c134
+    374,            // ProfileID::c135
+    375,            // ProfileID::c136
+    376,            // ProfileID::c137
+    377,            // ProfileID::c138
+    386,            // ProfileID::c139
+    378,            // ProfileID::c13A
+    379,            // ProfileID::c13B
+    387,            // ProfileID::c13C
+    388,            // ProfileID::c13D
+    389,            // ProfileID::c13E
+    372,            // ProfileID::c13F
+    373,            // ProfileID::c140
+    390,            // ProfileID::c141
+    391,            // ProfileID::c142
+    392,            // ProfileID::c143
+    647,            // ProfileID::c144
+    648,            // ProfileID::c145
+    649,            // ProfileID::c146
+    650,            // ProfileID::c147
+    680,            // ProfileID::c148
+    681,            // ProfileID::c149
+    682,            // ProfileID::c14A
+    393,            // ProfileID::c14B
+    115 - 0x3ff,    // ProfileID::c14C
+     48,            // ProfileID::c14D
+     49,            // ProfileID::c14E
+     50,            // ProfileID::c14F
+     51,            // ProfileID::c150
+     52,            // ProfileID::c151
+     53,            // ProfileID::c152
+     54,            // ProfileID::c153
+     55,            // ProfileID::c154
+     60,            // ProfileID::c155
+     61,            // ProfileID::c156
+     62,            // ProfileID::c157
+    466,            // ProfileID::c158
+    467,            // ProfileID::c159
+    468,            // ProfileID::c15A
+    469,            // ProfileID::c15B
+    470,            // ProfileID::c15C
+    471,            // ProfileID::c15D
+    598,            // ProfileID::c15E
+    173,            // ProfileID::c15F
+    171,            // ProfileID::c160
+    636,            // ProfileID::c161
+    585,            // ProfileID::c162
+    605,            // ProfileID::c163
+    606,            // ProfileID::c164
+    607,            // ProfileID::c165
+    492,            // ProfileID::c166
+     74 - 0x3ff,    // ProfileID::c167
+    637,            // ProfileID::c168
+    638,            // ProfileID::c169
+    104,            // ProfileID::c16A
+    518,            // ProfileID::c16B
+    519,            // ProfileID::c16C
+    228,            // ProfileID::c16D
+    594,            // ProfileID::c16E
+    595,            // ProfileID::c16F
+    195,            // ProfileID::c170
+    179,            // ProfileID::c171
+    198,            // ProfileID::c172
+    694,            // ProfileID::c173
+    688,            // ProfileID::c174
+    212,            // ProfileID::c175
+    209,            // ProfileID::c176
+    128,            // ProfileID::c177
+    129,            // ProfileID::c178
+    130,            // ProfileID::c179
+    131,            // ProfileID::c17A
+    725,            // ProfileID::c17B
+    225,            // ProfileID::c17C
+     92,            // ProfileID::c17D
+     93,            // ProfileID::c17E
+    120,            // ProfileID::c17F
+    121,            // ProfileID::c180
+    122,            // ProfileID::c181
+    123,            // ProfileID::c182
+    248,            // ProfileID::c183
+    249,            // ProfileID::c184
+    250,            // ProfileID::c185
+    251,            // ProfileID::c186
+    253,            // ProfileID::c187
+    290,            // ProfileID::c188
+     34 - 0x3ff,    // ProfileID::c189
+     35 - 0x3ff,    // ProfileID::c18A
+    394,            // ProfileID::c18B
+    395,            // ProfileID::c18C
+    396,            // ProfileID::c18D
+    397,            // ProfileID::c18E
+    398,            // ProfileID::c18F
+    399,            // ProfileID::c190
+    400,            // ProfileID::c191
+    401,            // ProfileID::c192
+    402,            // ProfileID::c193
+    403,            // ProfileID::c194
+    404,            // ProfileID::c195
+    405,            // ProfileID::c196
+    406,            // ProfileID::c197
+    407,            // ProfileID::c198
+    408,            // ProfileID::c199
+    409,            // ProfileID::c19A
+    410,            // ProfileID::c19B
+    411,            // ProfileID::c19C
+    412,            // ProfileID::c19D
+    413,            // ProfileID::c19E
+    415,            // ProfileID::c19F
+    414,            // ProfileID::c1A0
+    417,            // ProfileID::c1A1
+    418,            // ProfileID::c1A2
+    419,            // ProfileID::c1A3
+    420,            // ProfileID::c1A4
+    421,            // ProfileID::c1A5
+    422,            // ProfileID::c1A6
+    423,            // ProfileID::c1A7
+    424,            // ProfileID::c1A8
+    425,            // ProfileID::c1A9
+    318,            // ProfileID::c1AA
+    319,            // ProfileID::c1AB
+    320,            // ProfileID::c1AC
+    321,            // ProfileID::c1AD
+    322,            // ProfileID::c1AE
+    323,            // ProfileID::c1AF
+    324,            // ProfileID::c1B0
+    325,            // ProfileID::c1B1
+    326,            // ProfileID::c1B2
+    327,            // ProfileID::c1B3
+    332,            // ProfileID::c1B4
+    331,            // ProfileID::c1B5
+    713,            // ProfileID::c1B6
+    117 - 0x3ff,    // ProfileID::c1B7
+    112 - 0x3ff,    // ProfileID::c1B8
+      0,            // ProfileID::c1B9
+      3,            // ProfileID::cYoshi
+      2,            // ProfileID::cTottenPlayer
+      1,            // ProfileID::cPlayerObject
+      4,            // ProfileID::c1BD
+    230,            // ProfileID::c1BE
+    231,            // ProfileID::c1BF
+    234,            // ProfileID::c1C0
+    235,            // ProfileID::c1C1
+    236,            // ProfileID::c1C2
+    233,            // ProfileID::c1C3
+    232,            // ProfileID::c1C4
+    709,            // ProfileID::c1C5
+     83 - 0x3ff,    // ProfileID::c1C6
+    237,            // ProfileID::c1C7
+    238,            // ProfileID::c1C8
+    239,            // ProfileID::c1C9
+    240,            // ProfileID::c1CA
+    241,            // ProfileID::c1CB
+    242,            // ProfileID::c1CC
+    243,            // ProfileID::c1CD
+    244,            // ProfileID::c1CE
+    245,            // ProfileID::c1CF
+    246,            // ProfileID::c1D0
+    247,            // ProfileID::c1D1
+    679,            // ProfileID::c1D2
+      5,            // ProfileID::c1D3
+      6,            // ProfileID::c1D4
+      7,            // ProfileID::c1D5
+      8,            // ProfileID::c1D6
+      9,            // ProfileID::c1D7
+     10,            // ProfileID::c1D8
+     11,            // ProfileID::c1D9
+     12,            // ProfileID::c1DA
+     13,            // ProfileID::c1DB
+     14,            // ProfileID::c1DC
+     15,            // ProfileID::c1DD
+     16,            // ProfileID::c1DE
+     17,            // ProfileID::c1DF
+     18,            // ProfileID::c1E0
+     19,            // ProfileID::c1E1
+     20,            // ProfileID::c1E2
+     26,            // ProfileID::c1E3
+     27,            // ProfileID::c1E4
+     28,            // ProfileID::c1E5
+     29,            // ProfileID::c1E6
+     30,            // ProfileID::c1E7
+     31,            // ProfileID::c1E8
+     32,            // ProfileID::c1E9
+     33,            // ProfileID::c1EA
+     34,            // ProfileID::c1EB
+     35,            // ProfileID::c1EC
+     36,            // ProfileID::c1ED
+     37,            // ProfileID::c1EE
+     38,            // ProfileID::c1EF
+     39,            // ProfileID::c1F0
+     40,            // ProfileID::c1F1
+     41,            // ProfileID::c1F2
+     42,            // ProfileID::c1F3
+     43,            // ProfileID::c1F4
+     44,            // ProfileID::c1F5
+     45,            // ProfileID::c1F6
+     46,            // ProfileID::c1F7
+    591,            // ProfileID::c1F8
+    427,            // ProfileID::c1F9
+    428,            // ProfileID::c1FA
+    429,            // ProfileID::c1FB
+    430,            // ProfileID::c1FC
+    431,            // ProfileID::c1FD
+    432,            // ProfileID::c1FE
+     86,            // ProfileID::c1FF
+     87,            // ProfileID::c200
+     88,            // ProfileID::c201
+     89,            // ProfileID::c202
+     90,            // ProfileID::c203
+     91,            // ProfileID::c204
+     94,            // ProfileID::c205
+     95,            // ProfileID::c206
+     97,            // ProfileID::c207
+     96,            // ProfileID::c208
+     98,            // ProfileID::c209
+     99,            // ProfileID::c20A
+    100,            // ProfileID::c20B
+    101,            // ProfileID::c20C
+    102,            // ProfileID::c20D
+    103,            // ProfileID::c20E
+     48 - 0x3ff,    // ProfileID::c20F
+    105,            // ProfileID::c210
+    106,            // ProfileID::c211
+    107,            // ProfileID::c212
+    108,            // ProfileID::c213
+    109,            // ProfileID::c214
+    110,            // ProfileID::c215
+    111,            // ProfileID::c216
+    112,            // ProfileID::c217
+    113,            // ProfileID::c218
+    114,            // ProfileID::c219
+    115,            // ProfileID::c21A
+    116,            // ProfileID::c21B
+    117,            // ProfileID::c21C
+    118,            // ProfileID::c21D
+     38 - 0x3ff,    // ProfileID::c21E
+     39 - 0x3ff,    // ProfileID::c21F
+     40 - 0x3ff,    // ProfileID::c220
+     46 - 0x3ff,    // ProfileID::c221
+     47 - 0x3ff,    // ProfileID::c222
+     42 - 0x3ff,    // ProfileID::c223
+    119,            // ProfileID::c224
+    124,            // ProfileID::c225
+    125,            // ProfileID::c226
+     97 - 0x3ff,    // ProfileID::c227
+     98 - 0x3ff,    // ProfileID::c228
+    126,            // ProfileID::c229
+    127,            // ProfileID::c22A
+    252,            // ProfileID::c22B
+    137,            // ProfileID::c22C
+    138,            // ProfileID::c22D
+    139,            // ProfileID::c22E
+    140,            // ProfileID::c22F
+    107 - 0x3ff,    // ProfileID::c230
+    141,            // ProfileID::c231
+    152,            // ProfileID::c232
+    153,            // ProfileID::c233
+    154,            // ProfileID::c234
+    227,            // ProfileID::c235
+    155,            // ProfileID::c236
+    156,            // ProfileID::c237
+    157,            // ProfileID::c238
+    158,            // ProfileID::c239
+    159,            // ProfileID::c23A
+    160,            // ProfileID::c23B
+    161,            // ProfileID::c23C
+    162,            // ProfileID::c23D
+    163,            // ProfileID::c23E
+      2 - 0x3ff,    // ProfileID::c23F
+      3 - 0x3ff,    // ProfileID::c240
+      4 - 0x3ff,    // ProfileID::c241
+      5 - 0x3ff,    // ProfileID::c242
+      6 - 0x3ff,    // ProfileID::c243
+      7 - 0x3ff,    // ProfileID::c244
+      8 - 0x3ff,    // ProfileID::c245
+      9 - 0x3ff,    // ProfileID::c246
+     10 - 0x3ff,    // ProfileID::c247
+     11 - 0x3ff,    // ProfileID::c248
+     12 - 0x3ff,    // ProfileID::c249
+     13 - 0x3ff,    // ProfileID::c24A
+     14 - 0x3ff,    // ProfileID::cBgCenter
+     15 - 0x3ff,    // ProfileID::c24C
+    106 - 0x3ff,    // ProfileID::c24D
+     16 - 0x3ff,    // ProfileID::c24E
+    254,            // ProfileID::c24F
+    255,            // ProfileID::c250
+    258,            // ProfileID::c251
+    259,            // ProfileID::c252
+    260,            // ProfileID::c253
+    261,            // ProfileID::c254
+    262,            // ProfileID::c255
+    263,            // ProfileID::c256
+    264,            // ProfileID::c257
+    265,            // ProfileID::c258
+    302,            // ProfileID::c259
+    310,            // ProfileID::c25A
+    311,            // ProfileID::c25B
+    312,            // ProfileID::c25C
+    313,            // ProfileID::c25D
+    314,            // ProfileID::c25E
+    315,            // ProfileID::c25F
+    316,            // ProfileID::c260
+    317,            // ProfileID::c261
+    333,            // ProfileID::c262
+    334,            // ProfileID::c263
+    426,            // ProfileID::c264
+    439,            // ProfileID::c265
+     37 - 0x3ff,    // ProfileID::c266
+     36 - 0x3ff,    // ProfileID::c267
+    505,            // ProfileID::c268
+    506,            // ProfileID::c269
+    507,            // ProfileID::c26A
+    508,            // ProfileID::c26B
+    509,            // ProfileID::c26C
+    510,            // ProfileID::c26D
+    511,            // ProfileID::c26E
+    512,            // ProfileID::c26F
+    513,            // ProfileID::c270
+     44 - 0x3ff,    // ProfileID::c271
+     45 - 0x3ff,    // ProfileID::c272
+    456,            // ProfileID::c273
+    458,            // ProfileID::c274
+    459,            // ProfileID::c275
+    460,            // ProfileID::c276
+    461,            // ProfileID::c277
+    462,            // ProfileID::c278
+    463,            // ProfileID::c279
+     84 - 0x3ff,    // ProfileID::c27A
+    464,            // ProfileID::c27B
+    465,            // ProfileID::c27C
+    142,            // ProfileID::c27D
+    143,            // ProfileID::c27E
+    144,            // ProfileID::c27F
+    145,            // ProfileID::c280
+    146,            // ProfileID::c281
+    147,            // ProfileID::c282
+    148,            // ProfileID::c283
+    149,            // ProfileID::c284
+    150,            // ProfileID::c285
+    151,            // ProfileID::c286
+    540,            // ProfileID::c287
+    541,            // ProfileID::c288
+    542,            // ProfileID::c289
+    504,            // ProfileID::c28A
+    543,            // ProfileID::c28B
+    544,            // ProfileID::c28C
+    545,            // ProfileID::c28D
+    623,            // ProfileID::c28E
+    624,            // ProfileID::c28F
+    625,            // ProfileID::c290
+    626,            // ProfileID::c291
+    627,            // ProfileID::c292
+    628,            // ProfileID::c293
+    629,            // ProfileID::c294
+    630,            // ProfileID::c295
+    108 - 0x3ff,    // ProfileID::c296
+    109 - 0x3ff,    // ProfileID::c297
+    631,            // ProfileID::c298
+    632,            // ProfileID::c299
+    633,            // ProfileID::c29A
+    634,            // ProfileID::c29B
+    635,            // ProfileID::c29C
+    596,            // ProfileID::c29D
+    588,            // ProfileID::c29E
+    586,            // ProfileID::c29F
+    103 - 0x3ff,    // ProfileID::c2A0
+    589,            // ProfileID::c2A1
+    590,            // ProfileID::c2A2
+    592,            // ProfileID::c2A3
+    657,            // ProfileID::c2A4
+    658,            // ProfileID::c2A5
+    164,            // ProfileID::c2A6
+    165,            // ProfileID::c2A7
+    166,            // ProfileID::c2A8
+    167,            // ProfileID::c2A9
+    168,            // ProfileID::c2AA
+    169,            // ProfileID::c2AB
+     54 - 0x3ff,    // ProfileID::c2AC
+     55 - 0x3ff,    // ProfileID::c2AD
+     56 - 0x3ff,    // ProfileID::c2AE
+     57 - 0x3ff,    // ProfileID::c2AF
+     58 - 0x3ff,    // ProfileID::c2B0
+     59 - 0x3ff,    // ProfileID::c2B1
+     60 - 0x3ff,    // ProfileID::c2B2
+     61 - 0x3ff,    // ProfileID::c2B3
+     62 - 0x3ff,    // ProfileID::c2B4
+    181,            // ProfileID::c2B5
+    182,            // ProfileID::c2B6
+    172,            // ProfileID::c2B7
+    174,            // ProfileID::c2B8
+    175,            // ProfileID::c2B9
+    176,            // ProfileID::c2BA
+    177,            // ProfileID::c2BB
+    178,            // ProfileID::c2BC
+    183,            // ProfileID::c2BD
+    184,            // ProfileID::c2BE
+    185,            // ProfileID::c2BF
+    186,            // ProfileID::c2C0
+    188,            // ProfileID::c2C1
+    189,            // ProfileID::c2C2
+    102 - 0x3ff,    // ProfileID::c2C3
+    190,            // ProfileID::c2C4
+    191,            // ProfileID::c2C5
+    194,            // ProfileID::c2C6
+     63 - 0x3ff,    // ProfileID::c2C7
+     64 - 0x3ff,    // ProfileID::c2C8
+    196,            // ProfileID::c2C9
+    197,            // ProfileID::c2CA
+    203,            // ProfileID::c2CB
+     89 - 0x3ff,    // ProfileID::c2CC
+    204,            // ProfileID::c2CD
+    207,            // ProfileID::c2CE
+    206,            // ProfileID::c2CF
+    170,            // ProfileID::c2D0
+    208,            // ProfileID::c2D1
+    192,            // ProfileID::c2D2
+    193,            // ProfileID::c2D3
+    210,            // ProfileID::c2D4
+    211,            // ProfileID::c2D5
+    213,            // ProfileID::c2D6
+    214,            // ProfileID::c2D7
+    666,            // ProfileID::c2D8
+    667,            // ProfileID::c2D9
+    668,            // ProfileID::c2DA
+    669,            // ProfileID::c2DB
+    670,            // ProfileID::c2DC
+    671,            // ProfileID::c2DD
+    672,            // ProfileID::c2DE
+    674,            // ProfileID::c2DF
+    675,            // ProfileID::c2E0
+    676,            // ProfileID::c2E1
+    677,            // ProfileID::c2E2
+    678,            // ProfileID::c2E3
+    295,            // ProfileID::c2E4
+    296,            // ProfileID::c2E5
+    297,            // ProfileID::c2E6
+    298,            // ProfileID::c2E7
+    299,            // ProfileID::c2E8
+    300,            // ProfileID::c2E9
+    301,            // ProfileID::c2EA
+     43 - 0x3ff,    // ProfileID::c2EB
+     69 - 0x3ff,    // ProfileID::c2EC
+     70 - 0x3ff,    // ProfileID::c2ED
+    303,            // ProfileID::c2EE
+    304,            // ProfileID::c2EF
+    305,            // ProfileID::c2F0
+    306,            // ProfileID::c2F1
+    307,            // ProfileID::c2F2
+    335,            // ProfileID::c2F3
+    493,            // ProfileID::c2F4
+    340,            // ProfileID::c2F5
+    339,            // ProfileID::c2F6
+    342,            // ProfileID::c2F7
+    341,            // ProfileID::c2F8
+    344,            // ProfileID::c2F9
+    343,            // ProfileID::c2FA
+    346,            // ProfileID::c2FB
+    345,            // ProfileID::c2FC
+    348,            // ProfileID::c2FD
+    347,            // ProfileID::c2FE
+    349,            // ProfileID::c2FF
+    350,            // ProfileID::c300
+    351,            // ProfileID::c301
+     96 - 0x3ff,    // ProfileID::c302
+    494,            // ProfileID::c303
+    495,            // ProfileID::c304
+     21,            // ProfileID::c305
+     22,            // ProfileID::c306
+     23,            // ProfileID::c307
+     24,            // ProfileID::c308
+     25,            // ProfileID::c309
+    597,            // ProfileID::c30A
+    599,            // ProfileID::c30B
+    600,            // ProfileID::c30C
+    601,            // ProfileID::c30D
+    602,            // ProfileID::c30E
+    603,            // ProfileID::c30F
+    604,            // ProfileID::c310
+    433,            // ProfileID::c311
+    434,            // ProfileID::c312
+    472,            // ProfileID::c313
+    473,            // ProfileID::c314
+    474,            // ProfileID::c315
+    475,            // ProfileID::c316
+    476,            // ProfileID::c317
+    477,            // ProfileID::c318
+    478,            // ProfileID::c319
+     90 - 0x3ff,    // ProfileID::c31A
+     93 - 0x3ff,    // ProfileID::c31B
+     94 - 0x3ff,    // ProfileID::c31C
+    487,            // ProfileID::c31D
+    486,            // ProfileID::c31E
+    491,            // ProfileID::c31F
+    570,            // ProfileID::c320
+    659,            // ProfileID::c321
+    641,            // ProfileID::c322
+    642,            // ProfileID::c323
+    643,            // ProfileID::c324
+    644,            // ProfileID::c325
+    646,            // ProfileID::c326
+    653,            // ProfileID::c327
+    654,            // ProfileID::c328
+    655,            // ProfileID::c329
+    665,            // ProfileID::c32A
+    656,            // ProfileID::c32B
+    660,            // ProfileID::c32C
+    661,            // ProfileID::c32D
+     85 - 0x3ff,    // ProfileID::c32E
+    662,            // ProfileID::c32F
+    663,            // ProfileID::c330
+    664,            // ProfileID::c331
+    686,            // ProfileID::c332
+    687,            // ProfileID::c333
+    690,            // ProfileID::c334
+    691,            // ProfileID::c335
+    692,            // ProfileID::c336
+    693,            // ProfileID::c337
+    695,            // ProfileID::c338
+    696,            // ProfileID::c339
+    710,            // ProfileID::c33A
+    711,            // ProfileID::c33B
+    715,            // ProfileID::c33C
+    714,            // ProfileID::c33D
+    716,            // ProfileID::c33E
+    717,            // ProfileID::c33F
+    718,            // ProfileID::c340
+    719,            // ProfileID::c341
+    720,            // ProfileID::c342
+     99 - 0x3ff,    // ProfileID::c343
+    100 - 0x3ff,    // ProfileID::c344
+    101 - 0x3ff,    // ProfileID::c345
+    104 - 0x3ff,    // ProfileID::c346
+    116 - 0x3ff,    // ProfileID::c347
+    729,            // ProfileID::c348
+    730,            // ProfileID::c349
+    731,            // ProfileID::c34A
+    732,            // ProfileID::c34B
+    733,            // ProfileID::c34C
+    734,            // ProfileID::c34D
+    735,            // ProfileID::c34E
+    736,            // ProfileID::c34F
+    726,            // ProfileID::c350
+    110 - 0x3ff,    // ProfileID::c351
+    113 - 0x3ff,    // ProfileID::c352
+    114 - 0x3ff,    // ProfileID::c353
+    256,            // ProfileID::c354
+    257,            // ProfileID::c355
+    737,            // ProfileID::cCourseSelectPlayer
+    738,            // ProfileID::cCourseSelectPlayer_2P_3P_4P
+    739,            // ProfileID::c358
+    740,            // ProfileID::c359
+    741,            // ProfileID::c35A
+    742,            // ProfileID::c35B
+    743,            // ProfileID::c35C
+    744,            // ProfileID::c35D
+    745,            // ProfileID::c35E
+    746,            // ProfileID::c35F
+    747,            // ProfileID::c360
+    748,            // ProfileID::c361
+    749,            // ProfileID::c362
+    751,            // ProfileID::c363
+    750,            // ProfileID::c364
+    752,            // ProfileID::c365
+    754,            // ProfileID::c366
+    755,            // ProfileID::c367
+    756,            // ProfileID::c368
+    757,            // ProfileID::c369
+    758,            // ProfileID::c36A
+    759,            // ProfileID::c36B
+    760,            // ProfileID::c36C
+    761,            // ProfileID::c36D
+    762,            // ProfileID::c36E
+    763,            // ProfileID::c36F
+    764,            // ProfileID::c370
+    765,            // ProfileID::c371
+    766,            // ProfileID::c372
+    767,            // ProfileID::c373
+    768,            // ProfileID::c374
+    769,            // ProfileID::c375
+    770,            // ProfileID::c376
+    771,            // ProfileID::c377
+    772,            // ProfileID::c378
+    773,            // ProfileID::c379
+    774,            // ProfileID::c37A
+    775,            // ProfileID::c37B
+    777,            // ProfileID::c37C
+    778,            // ProfileID::c37D
+    779,            // ProfileID::c37E
+    780,            // ProfileID::c37F
+    781,            // ProfileID::c380
+    782,            // ProfileID::c381
+    783,            // ProfileID::c382
+    784,            // ProfileID::c383
+    785,            // ProfileID::c384
+    786,            // ProfileID::c385
+    787,            // ProfileID::c386
+    788,            // ProfileID::c387
+    789,            // ProfileID::c388
+    790,            // ProfileID::c389
+    791,            // ProfileID::c38A
+    792,            // ProfileID::c38B
+    793,            // ProfileID::c38C
+    753,            // ProfileID::c38D
+    794,            // ProfileID::c38E
+    795,            // ProfileID::c38F
+      0 - 0x3ff     // ProfileID::c390
+};
+
+// -----------------------------------------  ResType ----------------------------------------- //
+
+const u8 Profile::cResType[cProfileID_Max] = {
+    Profile::cResType_Boot,         // ProfileID::c000
+    Profile::cResType_Boot,         // ProfileID::c001
+    Profile::cResType_Boot,         // ProfileID::c002
+    Profile::cResType_Boot,         // ProfileID::c003
+    Profile::cResType_Boot,         // ProfileID::c004
+    Profile::cResType_Boot,         // ProfileID::c005
+    Profile::cResType_Boot,         // ProfileID::c006
+    Profile::cResType_Boot,         // ProfileID::c007
+    Profile::cResType_Boot,         // ProfileID::c008
+    Profile::cResType_Boot,         // ProfileID::c009
+    Profile::cResType_Boot,         // ProfileID::c00A
+    Profile::cResType_Boot,         // ProfileID::c00B
+    Profile::cResType_Boot,         // ProfileID::c00C
+    Profile::cResType_Boot,         // ProfileID::c00D
+    Profile::cResType_Boot,         // ProfileID::c00E
+    Profile::cResType_Boot,         // ProfileID::c00F
+    Profile::cResType_Boot,         // ProfileID::c010
+    Profile::cResType_Boot,         // ProfileID::c011
+    Profile::cResType_Boot,         // ProfileID::c012
+    Profile::cResType_Boot,         // ProfileID::c013
+    Profile::cResType_Boot,         // ProfileID::c014
+    Profile::cResType_Course,       // ProfileID::c015
+    Profile::cResType_Course,       // ProfileID::c016
+    Profile::cResType_Course,       // ProfileID::c017
+    Profile::cResType_Course,       // ProfileID::c018
+    Profile::cResType_Course,       // ProfileID::c019
+    Profile::cResType_Boot,         // ProfileID::c01A
+    Profile::cResType_Boot,         // ProfileID::c01B
+    Profile::cResType_Boot,         // ProfileID::c01C
+    Profile::cResType_Boot,         // ProfileID::c01D
+    Profile::cResType_Boot,         // ProfileID::c01E
+    Profile::cResType_Boot,         // ProfileID::c01F
+    Profile::cResType_Course,       // ProfileID::c020
+    Profile::cResType_Course,       // ProfileID::c021
+    Profile::cResType_Course,       // ProfileID::c022
+    Profile::cResType_Course,       // ProfileID::c023
+    Profile::cResType_Course,       // ProfileID::c024
+    Profile::cResType_Boot,         // ProfileID::c025
+    Profile::cResType_Course,       // ProfileID::c026
+    Profile::cResType_Boot,         // ProfileID::c027
+    Profile::cResType_Boot,         // ProfileID::c028
+    Profile::cResType_Boot,         // ProfileID::c029
+    Profile::cResType_Boot,         // ProfileID::c02A
+    Profile::cResType_Course,       // ProfileID::c02B
+    Profile::cResType_Course,       // ProfileID::c02C
+    Profile::cResType_Boot,         // ProfileID::c02D
+    Profile::cResType_Boot,         // ProfileID::c02E
+    Profile::cResType_Boot,         // ProfileID::c02F
+    Profile::cResType_Boot,         // ProfileID::c030
+    Profile::cResType_Boot,         // ProfileID::c031
+    Profile::cResType_Course,       // ProfileID::c032
+    Profile::cResType_Course,       // ProfileID::c033
+    Profile::cResType_Course,       // ProfileID::c034
+    Profile::cResType_Course,       // ProfileID::c035
+    Profile::cResType_Course,       // ProfileID::c036
+    Profile::cResType_Course,       // ProfileID::c037
+    Profile::cResType_Course,       // ProfileID::c038
+    Profile::cResType_Course,       // ProfileID::c039
+    Profile::cResType_Course,       // ProfileID::c03A
+    Profile::cResType_Course,       // ProfileID::c03B
+    Profile::cResType_Course,       // ProfileID::c03C
+    Profile::cResType_Course,       // ProfileID::c03D
+    Profile::cResType_Course,       // ProfileID::c03E
+    Profile::cResType_Course,       // ProfileID::c03F
+    Profile::cResType_Course,       // ProfileID::c040
+    Profile::cResType_Course,       // ProfileID::c041
+    Profile::cResType_Course,       // ProfileID::c042
+    Profile::cResType_Course,       // ProfileID::c043
+    Profile::cResType_Course,       // ProfileID::c044
+    Profile::cResType_Course,       // ProfileID::c045
+    Profile::cResType_Course,       // ProfileID::c046
+    Profile::cResType_Course,       // ProfileID::c047
+    Profile::cResType_Course,       // ProfileID::c048
+    Profile::cResType_Course,       // ProfileID::c049
+    Profile::cResType_Course,       // ProfileID::c04A
+    Profile::cResType_Course,       // ProfileID::c04B
+    Profile::cResType_Course,       // ProfileID::c04C
+    Profile::cResType_Course,       // ProfileID::c04D
+    Profile::cResType_Course,       // ProfileID::c04E
+    Profile::cResType_Course,       // ProfileID::c04F
+    Profile::cResType_Course,       // ProfileID::c050
+    Profile::cResType_Course,       // ProfileID::c051
+    Profile::cResType_Course,       // ProfileID::c052
+    Profile::cResType_Course,       // ProfileID::c053
+    Profile::cResType_Course,       // ProfileID::c054
+    Profile::cResType_Course,       // ProfileID::c055
+    Profile::cResType_Course,       // ProfileID::c056
+    Profile::cResType_Course,       // ProfileID::c057
+    Profile::cResType_Course,       // ProfileID::c058
+    Profile::cResType_Boot,         // ProfileID::c059
+    Profile::cResType_Course,       // ProfileID::c05A
+    Profile::cResType_Course,       // ProfileID::c05B
+    Profile::cResType_Course,       // ProfileID::c05C
+    Profile::cResType_Course,       // ProfileID::c05D
+    Profile::cResType_Course,       // ProfileID::c05E
+    Profile::cResType_Course,       // ProfileID::c05F
+    Profile::cResType_Course,       // ProfileID::c060
+    Profile::cResType_Course,       // ProfileID::c061
+    Profile::cResType_Course,       // ProfileID::c062
+    Profile::cResType_Course,       // ProfileID::c063
+    Profile::cResType_Course,       // ProfileID::c064
+    Profile::cResType_Course,       // ProfileID::c065
+    Profile::cResType_Course,       // ProfileID::c066
+    Profile::cResType_Course,       // ProfileID::c067
+    Profile::cResType_Course,       // ProfileID::c068
+    Profile::cResType_Course,       // ProfileID::c069
+    Profile::cResType_Course,       // ProfileID::c06A
+    Profile::cResType_Course,       // ProfileID::c06B
+    Profile::cResType_Course,       // ProfileID::c06C
+    Profile::cResType_Course,       // ProfileID::c06D
+    Profile::cResType_Course,       // ProfileID::c06E
+    Profile::cResType_Course,       // ProfileID::c06F
+    Profile::cResType_Course,       // ProfileID::c070
+    Profile::cResType_Course,       // ProfileID::c071
+    Profile::cResType_Course,       // ProfileID::c072
+    Profile::cResType_Course,       // ProfileID::c073
+    Profile::cResType_Course,       // ProfileID::c074
+    Profile::cResType_Course,       // ProfileID::c075
+    Profile::cResType_Course,       // ProfileID::c076
+    Profile::cResType_Course,       // ProfileID::c077
+    Profile::cResType_Course,       // ProfileID::c078
+    Profile::cResType_Course,       // ProfileID::c079
+    Profile::cResType_Course,       // ProfileID::c07A
+    Profile::cResType_Course,       // ProfileID::c07B
+    Profile::cResType_Course,       // ProfileID::c07C
+    Profile::cResType_Course,       // ProfileID::c07D
+    Profile::cResType_Course,       // ProfileID::c07E
+    Profile::cResType_Course,       // ProfileID::c07F
+    Profile::cResType_Course,       // ProfileID::c080
+    Profile::cResType_Course,       // ProfileID::c081
+    Profile::cResType_Course,       // ProfileID::c082
+    Profile::cResType_Course,       // ProfileID::c083
+    Profile::cResType_Course,       // ProfileID::c084
+    Profile::cResType_Course,       // ProfileID::c085
+    Profile::cResType_Course,       // ProfileID::c086
+    Profile::cResType_Course,       // ProfileID::c087
+    Profile::cResType_Course,       // ProfileID::c088
+    Profile::cResType_Course,       // ProfileID::c089
+    Profile::cResType_Course,       // ProfileID::c08A
+    Profile::cResType_Course,       // ProfileID::c08B
+    Profile::cResType_Course,       // ProfileID::c08C
+    Profile::cResType_Course,       // ProfileID::c08D
+    Profile::cResType_Course,       // ProfileID::c08E
+    Profile::cResType_Course,       // ProfileID::c08F
+    Profile::cResType_Course,       // ProfileID::c090
+    Profile::cResType_Course,       // ProfileID::c091
+    Profile::cResType_Course,       // ProfileID::c092
+    Profile::cResType_Course,       // ProfileID::c093
+    Profile::cResType_Course,       // ProfileID::c094
+    Profile::cResType_Course,       // ProfileID::c095
+    Profile::cResType_Course,       // ProfileID::c096
+    Profile::cResType_Course,       // ProfileID::c097
+    Profile::cResType_Course,       // ProfileID::c098
+    Profile::cResType_Course,       // ProfileID::c099
+    Profile::cResType_Course,       // ProfileID::c09A
+    Profile::cResType_Course,       // ProfileID::c09B
+    Profile::cResType_Course,       // ProfileID::c09C
+    Profile::cResType_Course,       // ProfileID::c09D
+    Profile::cResType_Course,       // ProfileID::c09E
+    Profile::cResType_Course,       // ProfileID::c09F
+    Profile::cResType_Course,       // ProfileID::c0A0
+    Profile::cResType_Course,       // ProfileID::c0A1
+    Profile::cResType_Course,       // ProfileID::c0A2
+    Profile::cResType_Course,       // ProfileID::c0A3
+    Profile::cResType_Course,       // ProfileID::c0A4
+    Profile::cResType_Course,       // ProfileID::c0A5
+    Profile::cResType_Course,       // ProfileID::c0A6
+    Profile::cResType_Course,       // ProfileID::c0A7
+    Profile::cResType_Course,       // ProfileID::c0A8
+    Profile::cResType_Course,       // ProfileID::c0A9
+    Profile::cResType_Course,       // ProfileID::c0AA
+    Profile::cResType_Course,       // ProfileID::c0AB
+    Profile::cResType_Course,       // ProfileID::c0AC
+    Profile::cResType_Course,       // ProfileID::c0AD
+    Profile::cResType_Course,       // ProfileID::c0AE
+    Profile::cResType_Course,       // ProfileID::c0AF
+    Profile::cResType_Course,       // ProfileID::c0B0
+    Profile::cResType_Course,       // ProfileID::c0B1
+    Profile::cResType_Course,       // ProfileID::c0B2
+    Profile::cResType_Course,       // ProfileID::c0B3
+    Profile::cResType_Course,       // ProfileID::c0B4
+    Profile::cResType_Course,       // ProfileID::c0B5
+    Profile::cResType_Course,       // ProfileID::c0B6
+    Profile::cResType_Course,       // ProfileID::c0B7
+    Profile::cResType_Course,       // ProfileID::c0B8
+    Profile::cResType_Course,       // ProfileID::c0B9
+    Profile::cResType_Course,       // ProfileID::c0BA
+    Profile::cResType_Course,       // ProfileID::c0BB
+    Profile::cResType_Course,       // ProfileID::c0BC
+    Profile::cResType_Boot,         // ProfileID::c0BD
+    Profile::cResType_Course,       // ProfileID::c0BE
+    Profile::cResType_Course,       // ProfileID::c0BF
+    Profile::cResType_Course,       // ProfileID::c0C0
+    Profile::cResType_Course,       // ProfileID::c0C1
+    Profile::cResType_Course,       // ProfileID::c0C2
+    Profile::cResType_Course,       // ProfileID::c0C3
+    Profile::cResType_Course,       // ProfileID::c0C4
+    Profile::cResType_Course,       // ProfileID::c0C5
+    Profile::cResType_Course,       // ProfileID::c0C6
+    Profile::cResType_Course,       // ProfileID::c0C7
+    Profile::cResType_Course,       // ProfileID::c0C8
+    Profile::cResType_Course,       // ProfileID::c0C9
+    Profile::cResType_Course,       // ProfileID::c0CA
+    Profile::cResType_Course,       // ProfileID::c0CB
+    Profile::cResType_Course,       // ProfileID::c0CC
+    Profile::cResType_Course,       // ProfileID::c0CD
+    Profile::cResType_Course,       // ProfileID::c0CE
+    Profile::cResType_Course,       // ProfileID::c0CF
+    Profile::cResType_Course,       // ProfileID::c0D0
+    Profile::cResType_Course,       // ProfileID::c0D1
+    Profile::cResType_Course,       // ProfileID::cFloorHoleDokan
+    Profile::cResType_Course,       // ProfileID::c0D3
+    Profile::cResType_Course,       // ProfileID::c0D4
+    Profile::cResType_Course,       // ProfileID::c0D5
+    Profile::cResType_Course,       // ProfileID::c0D6
+    Profile::cResType_Course,       // ProfileID::c0D7
+    Profile::cResType_Course,       // ProfileID::c0D8
+    Profile::cResType_Course,       // ProfileID::c0D9
+    Profile::cResType_Course,       // ProfileID::c0DA
+    Profile::cResType_Course,       // ProfileID::c0DB
+    Profile::cResType_Course,       // ProfileID::c0DC
+    Profile::cResType_Course,       // ProfileID::c0DD
+    Profile::cResType_Course,       // ProfileID::c0DE
+    Profile::cResType_Course,       // ProfileID::c0DF
+    Profile::cResType_Course,       // ProfileID::c0E0
+    Profile::cResType_Course,       // ProfileID::c0E1
+    Profile::cResType_Course,       // ProfileID::c0E2
+    Profile::cResType_Course,       // ProfileID::c0E3
+    Profile::cResType_Course,       // ProfileID::c0E4
+    Profile::cResType_Course,       // ProfileID::c0E5
+    Profile::cResType_Course,       // ProfileID::c0E6
+    Profile::cResType_Course,       // ProfileID::c0E7
+    Profile::cResType_Course,       // ProfileID::c0E8
+    Profile::cResType_Course,       // ProfileID::c0E9
+    Profile::cResType_Course,       // ProfileID::c0EA
+    Profile::cResType_Course,       // ProfileID::c0EB
+    Profile::cResType_Course,       // ProfileID::c0EC
+    Profile::cResType_Boot,         // ProfileID::c0ED
+    Profile::cResType_Course,       // ProfileID::c0EE
+    Profile::cResType_Course,       // ProfileID::c0EF
+    Profile::cResType_Course,       // ProfileID::c0F0
+    Profile::cResType_Course,       // ProfileID::c0F1
+    Profile::cResType_Course,       // ProfileID::c0F2
+    Profile::cResType_Course,       // ProfileID::c0F3
+    Profile::cResType_Course,       // ProfileID::c0F4
+    Profile::cResType_Course,       // ProfileID::c0F5
+    Profile::cResType_Course,       // ProfileID::c0F6
+    Profile::cResType_Course,       // ProfileID::c0F7
+    Profile::cResType_Course,       // ProfileID::c0F8
+    Profile::cResType_Course,       // ProfileID::c0F9
+    Profile::cResType_Course,       // ProfileID::c0FA
+    Profile::cResType_Course,       // ProfileID::c0FB
+    Profile::cResType_Course,       // ProfileID::c0FC
+    Profile::cResType_Course,       // ProfileID::c0FD
+    Profile::cResType_Course,       // ProfileID::c0FE
+    Profile::cResType_Course,       // ProfileID::c0FF
+    Profile::cResType_Course,       // ProfileID::c100
+    Profile::cResType_Course,       // ProfileID::c101
+    Profile::cResType_Course,       // ProfileID::c102
+    Profile::cResType_Course,       // ProfileID::c103
+    Profile::cResType_Course,       // ProfileID::c104
+    Profile::cResType_Course,       // ProfileID::c105
+    Profile::cResType_Course,       // ProfileID::c106
+    Profile::cResType_Course,       // ProfileID::c107
+    Profile::cResType_Course,       // ProfileID::c108
+    Profile::cResType_Course,       // ProfileID::c109
+    Profile::cResType_Course,       // ProfileID::c10A
+    Profile::cResType_Course,       // ProfileID::c10B
+    Profile::cResType_Course,       // ProfileID::c10C
+    Profile::cResType_Course,       // ProfileID::c10D
+    Profile::cResType_Course,       // ProfileID::c10E
+    Profile::cResType_Course,       // ProfileID::c10F
+    Profile::cResType_Course,       // ProfileID::c110
+    Profile::cResType_Course,       // ProfileID::c111
+    Profile::cResType_Course,       // ProfileID::c112
+    Profile::cResType_Course,       // ProfileID::c113
+    Profile::cResType_Course,       // ProfileID::c114
+    Profile::cResType_Course,       // ProfileID::c115
+    Profile::cResType_Course,       // ProfileID::c116
+    Profile::cResType_Course,       // ProfileID::c117
+    Profile::cResType_Course,       // ProfileID::c118
+    Profile::cResType_Course,       // ProfileID::c119
+    Profile::cResType_Course,       // ProfileID::c11A
+    Profile::cResType_Boot,         // ProfileID::c11B
+    Profile::cResType_Boot,         // ProfileID::c11C
+    Profile::cResType_Course,       // ProfileID::c11D
+    Profile::cResType_Course,       // ProfileID::c11E
+    Profile::cResType_Boot,         // ProfileID::c11F
+    Profile::cResType_Boot,         // ProfileID::c120
+    Profile::cResType_Boot,         // ProfileID::c121
+    Profile::cResType_Boot,         // ProfileID::c122
+    Profile::cResType_Boot,         // ProfileID::c123
+    Profile::cResType_Boot,         // ProfileID::c124
+    Profile::cResType_Boot,         // ProfileID::c125
+    Profile::cResType_Boot,         // ProfileID::c126
+    Profile::cResType_Boot,         // ProfileID::c127
+    Profile::cResType_Boot,         // ProfileID::c128
+    Profile::cResType_Boot,         // ProfileID::c129
+    Profile::cResType_Boot,         // ProfileID::c12A
+    Profile::cResType_Boot,         // ProfileID::c12B
+    Profile::cResType_Boot,         // ProfileID::c12C
+    Profile::cResType_Boot,         // ProfileID::c12D
+    Profile::cResType_Boot,         // ProfileID::c12E
+    Profile::cResType_Boot,         // ProfileID::c12F
+    Profile::cResType_Boot,         // ProfileID::c130
+    Profile::cResType_Boot,         // ProfileID::c131
+    Profile::cResType_Boot,         // ProfileID::c132
+    Profile::cResType_Boot,         // ProfileID::c133
+    Profile::cResType_Boot,         // ProfileID::c134
+    Profile::cResType_Boot,         // ProfileID::c135
+    Profile::cResType_Course,       // ProfileID::c136
+    Profile::cResType_Boot,         // ProfileID::c137
+    Profile::cResType_Course,       // ProfileID::c138
+    Profile::cResType_Boot,         // ProfileID::c139
+    Profile::cResType_Course,       // ProfileID::c13A
+    Profile::cResType_Course,       // ProfileID::c13B
+    Profile::cResType_Course,       // ProfileID::c13C
+    Profile::cResType_Course,       // ProfileID::c13D
+    Profile::cResType_Course,       // ProfileID::c13E
+    Profile::cResType_Boot,         // ProfileID::c13F
+    Profile::cResType_Course,       // ProfileID::c140
+    Profile::cResType_Course,       // ProfileID::c141
+    Profile::cResType_Boot,         // ProfileID::c142
+    Profile::cResType_Course,       // ProfileID::c143
+    Profile::cResType_Course,       // ProfileID::c144
+    Profile::cResType_Course,       // ProfileID::c145
+    Profile::cResType_Course,       // ProfileID::c146
+    Profile::cResType_Course,       // ProfileID::c147
+    Profile::cResType_Course,       // ProfileID::c148
+    Profile::cResType_Course,       // ProfileID::c149
+    Profile::cResType_Course,       // ProfileID::c14A
+    Profile::cResType_Course,       // ProfileID::c14B
+    Profile::cResType_Course,       // ProfileID::c14C
+    Profile::cResType_Course,       // ProfileID::c14D
+    Profile::cResType_Course,       // ProfileID::c14E
+    Profile::cResType_Course,       // ProfileID::c14F
+    Profile::cResType_Course,       // ProfileID::c150
+    Profile::cResType_Course,       // ProfileID::c151
+    Profile::cResType_Course,       // ProfileID::c152
+    Profile::cResType_Course,       // ProfileID::c153
+    Profile::cResType_Course,       // ProfileID::c154
+    Profile::cResType_Course,       // ProfileID::c155
+    Profile::cResType_Course,       // ProfileID::c156
+    Profile::cResType_Course,       // ProfileID::c157
+    Profile::cResType_Course,       // ProfileID::c158
+    Profile::cResType_Course,       // ProfileID::c159
+    Profile::cResType_Course,       // ProfileID::c15A
+    Profile::cResType_Course,       // ProfileID::c15B
+    Profile::cResType_Course,       // ProfileID::c15C
+    Profile::cResType_Course,       // ProfileID::c15D
+    Profile::cResType_Course,       // ProfileID::c15E
+    Profile::cResType_Course,       // ProfileID::c15F
+    Profile::cResType_Course,       // ProfileID::c160
+    Profile::cResType_Course,       // ProfileID::c161
+    Profile::cResType_Course,       // ProfileID::c162
+    Profile::cResType_Course,       // ProfileID::c163
+    Profile::cResType_Course,       // ProfileID::c164
+    Profile::cResType_Course,       // ProfileID::c165
+    Profile::cResType_Course,       // ProfileID::c166
+    Profile::cResType_Course,       // ProfileID::c167
+    Profile::cResType_Course,       // ProfileID::c168
+    Profile::cResType_Course,       // ProfileID::c169
+    Profile::cResType_Course,       // ProfileID::c16A
+    Profile::cResType_Course,       // ProfileID::c16B
+    Profile::cResType_Course,       // ProfileID::c16C
+    Profile::cResType_Course,       // ProfileID::c16D
+    Profile::cResType_Course,       // ProfileID::c16E
+    Profile::cResType_Course,       // ProfileID::c16F
+    Profile::cResType_Course,       // ProfileID::c170
+    Profile::cResType_Course,       // ProfileID::c171
+    Profile::cResType_Course,       // ProfileID::c172
+    Profile::cResType_Course,       // ProfileID::c173
+    Profile::cResType_Course,       // ProfileID::c174
+    Profile::cResType_Course,       // ProfileID::c175
+    Profile::cResType_Course,       // ProfileID::c176
+    Profile::cResType_Course,       // ProfileID::c177
+    Profile::cResType_Course,       // ProfileID::c178
+    Profile::cResType_Course,       // ProfileID::c179
+    Profile::cResType_Course,       // ProfileID::c17A
+    Profile::cResType_Course,       // ProfileID::c17B
+    Profile::cResType_Course,       // ProfileID::c17C
+    Profile::cResType_Course,       // ProfileID::c17D
+    Profile::cResType_Course,       // ProfileID::c17E
+    Profile::cResType_Course,       // ProfileID::c17F
+    Profile::cResType_Course,       // ProfileID::c180
+    Profile::cResType_Course,       // ProfileID::c181
+    Profile::cResType_Course,       // ProfileID::c182
+    Profile::cResType_Course,       // ProfileID::c183
+    Profile::cResType_Course,       // ProfileID::c184
+    Profile::cResType_Course,       // ProfileID::c185
+    Profile::cResType_Course,       // ProfileID::c186
+    Profile::cResType_Course,       // ProfileID::c187
+    Profile::cResType_Boot,         // ProfileID::c188
+    Profile::cResType_Boot,         // ProfileID::c189
+    Profile::cResType_Boot,         // ProfileID::c18A
+    Profile::cResType_Boot,         // ProfileID::c18B
+    Profile::cResType_Boot,         // ProfileID::c18C
+    Profile::cResType_Course,       // ProfileID::c18D
+    Profile::cResType_Boot,         // ProfileID::c18E
+    Profile::cResType_Boot,         // ProfileID::c18F
+    Profile::cResType_Boot,         // ProfileID::c190
+    Profile::cResType_Boot,         // ProfileID::c191
+    Profile::cResType_Boot,         // ProfileID::c192
+    Profile::cResType_Boot,         // ProfileID::c193
+    Profile::cResType_Boot,         // ProfileID::c194
+    Profile::cResType_Boot,         // ProfileID::c195
+    Profile::cResType_Boot,         // ProfileID::c196
+    Profile::cResType_Boot,         // ProfileID::c197
+    Profile::cResType_Boot,         // ProfileID::c198
+    Profile::cResType_Course,       // ProfileID::c199
+    Profile::cResType_Boot,         // ProfileID::c19A
+    Profile::cResType_Boot,         // ProfileID::c19B
+    Profile::cResType_Boot,         // ProfileID::c19C
+    Profile::cResType_Boot,         // ProfileID::c19D
+    Profile::cResType_Boot,         // ProfileID::c19E
+    Profile::cResType_Boot,         // ProfileID::c19F
+    Profile::cResType_Boot,         // ProfileID::c1A0
+    Profile::cResType_Boot,         // ProfileID::c1A1
+    Profile::cResType_Course,       // ProfileID::c1A2
+    Profile::cResType_Boot,         // ProfileID::c1A3
+    Profile::cResType_Boot,         // ProfileID::c1A4
+    Profile::cResType_Boot,         // ProfileID::c1A5
+    Profile::cResType_Boot,         // ProfileID::c1A6
+    Profile::cResType_Boot,         // ProfileID::c1A7
+    Profile::cResType_Boot,         // ProfileID::c1A8
+    Profile::cResType_Boot,         // ProfileID::c1A9
+    Profile::cResType_Course,       // ProfileID::c1AA
+    Profile::cResType_Course,       // ProfileID::c1AB
+    Profile::cResType_Course,       // ProfileID::c1AC
+    Profile::cResType_Course,       // ProfileID::c1AD
+    Profile::cResType_Course,       // ProfileID::c1AE
+    Profile::cResType_Course,       // ProfileID::c1AF
+    Profile::cResType_Course,       // ProfileID::c1B0
+    Profile::cResType_Course,       // ProfileID::c1B1
+    Profile::cResType_Course,       // ProfileID::c1B2
+    Profile::cResType_Course,       // ProfileID::c1B3
+    Profile::cResType_Course,       // ProfileID::c1B4
+    Profile::cResType_Course,       // ProfileID::c1B5
+    Profile::cResType_Course,       // ProfileID::c1B6
+    Profile::cResType_Boot,         // ProfileID::c1B7
+    Profile::cResType_Boot,         // ProfileID::c1B8
+    Profile::cResType_Boot,         // ProfileID::c1B9
+    Profile::cResType_Boot,         // ProfileID::cYoshi
+    Profile::cResType_Boot,         // ProfileID::cTottenPlayer
+    Profile::cResType_Boot,         // ProfileID::cPlayerObject
+    Profile::cResType_Boot,         // ProfileID::c1BD
+    Profile::cResType_Boot,         // ProfileID::c1BE
+    Profile::cResType_Boot,         // ProfileID::c1BF
+    Profile::cResType_Boot,         // ProfileID::c1C0
+    Profile::cResType_Boot,         // ProfileID::c1C1
+    Profile::cResType_Boot,         // ProfileID::c1C2
+    Profile::cResType_Boot,         // ProfileID::c1C3
+    Profile::cResType_Course,       // ProfileID::c1C4
+    Profile::cResType_Course,       // ProfileID::c1C5
+    Profile::cResType_Course,       // ProfileID::c1C6
+    Profile::cResType_Course,       // ProfileID::c1C7
+    Profile::cResType_Course,       // ProfileID::c1C8
+    Profile::cResType_Course,       // ProfileID::c1C9
+    Profile::cResType_Course,       // ProfileID::c1CA
+    Profile::cResType_Course,       // ProfileID::c1CB
+    Profile::cResType_Course,       // ProfileID::c1CC
+    Profile::cResType_Course,       // ProfileID::c1CD
+    Profile::cResType_Course,       // ProfileID::c1CE
+    Profile::cResType_Boot,         // ProfileID::c1CF
+    Profile::cResType_Course,       // ProfileID::c1D0
+    Profile::cResType_Course,       // ProfileID::c1D1
+    Profile::cResType_Course,       // ProfileID::c1D2
+    Profile::cResType_Course,       // ProfileID::c1D3
+    Profile::cResType_Course,       // ProfileID::c1D4
+    Profile::cResType_Course,       // ProfileID::c1D5
+    Profile::cResType_Course,       // ProfileID::c1D6
+    Profile::cResType_Course,       // ProfileID::c1D7
+    Profile::cResType_Course,       // ProfileID::c1D8
+    Profile::cResType_Course,       // ProfileID::c1D9
+    Profile::cResType_Boot,         // ProfileID::c1DA
+    Profile::cResType_Boot,         // ProfileID::c1DB
+    Profile::cResType_Boot,         // ProfileID::c1DC
+    Profile::cResType_Boot,         // ProfileID::c1DD
+    Profile::cResType_Boot,         // ProfileID::c1DE
+    Profile::cResType_Course,       // ProfileID::c1DF
+    Profile::cResType_Course,       // ProfileID::c1E0
+    Profile::cResType_Course,       // ProfileID::c1E1
+    Profile::cResType_Course,       // ProfileID::c1E2
+    Profile::cResType_Course,       // ProfileID::c1E3
+    Profile::cResType_Course,       // ProfileID::c1E4
+    Profile::cResType_Course,       // ProfileID::c1E5
+    Profile::cResType_Course,       // ProfileID::c1E6
+    Profile::cResType_Course,       // ProfileID::c1E7
+    Profile::cResType_Course,       // ProfileID::c1E8
+    Profile::cResType_Course,       // ProfileID::c1E9
+    Profile::cResType_Course,       // ProfileID::c1EA
+    Profile::cResType_Course,       // ProfileID::c1EB
+    Profile::cResType_Course,       // ProfileID::c1EC
+    Profile::cResType_Course,       // ProfileID::c1ED
+    Profile::cResType_Course,       // ProfileID::c1EE
+    Profile::cResType_Course,       // ProfileID::c1EF
+    Profile::cResType_Course,       // ProfileID::c1F0
+    Profile::cResType_Course,       // ProfileID::c1F1
+    Profile::cResType_Course,       // ProfileID::c1F2
+    Profile::cResType_Course,       // ProfileID::c1F3
+    Profile::cResType_Course,       // ProfileID::c1F4
+    Profile::cResType_Course,       // ProfileID::c1F5
+    Profile::cResType_Course,       // ProfileID::c1F6
+    Profile::cResType_Course,       // ProfileID::c1F7
+    Profile::cResType_Course,       // ProfileID::c1F8
+    Profile::cResType_Course,       // ProfileID::c1F9
+    Profile::cResType_Course,       // ProfileID::c1FA
+    Profile::cResType_Course,       // ProfileID::c1FB
+    Profile::cResType_Course,       // ProfileID::c1FC
+    Profile::cResType_Course,       // ProfileID::c1FD
+    Profile::cResType_Course,       // ProfileID::c1FE
+    Profile::cResType_Boot,         // ProfileID::c1FF
+    Profile::cResType_Course,       // ProfileID::c200
+    Profile::cResType_Course,       // ProfileID::c201
+    Profile::cResType_Course,       // ProfileID::c202
+    Profile::cResType_Course,       // ProfileID::c203
+    Profile::cResType_Course,       // ProfileID::c204
+    Profile::cResType_Course,       // ProfileID::c205
+    Profile::cResType_Course,       // ProfileID::c206
+    Profile::cResType_Course,       // ProfileID::c207
+    Profile::cResType_Course,       // ProfileID::c208
+    Profile::cResType_Course,       // ProfileID::c209
+    Profile::cResType_Course,       // ProfileID::c20A
+    Profile::cResType_Course,       // ProfileID::c20B
+    Profile::cResType_Course,       // ProfileID::c20C
+    Profile::cResType_Course,       // ProfileID::c20D
+    Profile::cResType_Course,       // ProfileID::c20E
+    Profile::cResType_Course,       // ProfileID::c20F
+    Profile::cResType_Course,       // ProfileID::c210
+    Profile::cResType_Course,       // ProfileID::c211
+    Profile::cResType_Course,       // ProfileID::c212
+    Profile::cResType_Course,       // ProfileID::c213
+    Profile::cResType_Course,       // ProfileID::c214
+    Profile::cResType_Course,       // ProfileID::c215
+    Profile::cResType_Course,       // ProfileID::c216
+    Profile::cResType_Course,       // ProfileID::c217
+    Profile::cResType_Course,       // ProfileID::c218
+    Profile::cResType_Course,       // ProfileID::c219
+    Profile::cResType_Course,       // ProfileID::c21A
+    Profile::cResType_Course,       // ProfileID::c21B
+    Profile::cResType_Course,       // ProfileID::c21C
+    Profile::cResType_Course,       // ProfileID::c21D
+    Profile::cResType_Course,       // ProfileID::c21E
+    Profile::cResType_Course,       // ProfileID::c21F
+    Profile::cResType_Course,       // ProfileID::c220
+    Profile::cResType_Course,       // ProfileID::c221
+    Profile::cResType_Course,       // ProfileID::c222
+    Profile::cResType_Course,       // ProfileID::c223
+    Profile::cResType_Course,       // ProfileID::c224
+    Profile::cResType_Course,       // ProfileID::c225
+    Profile::cResType_Course,       // ProfileID::c226
+    Profile::cResType_Course,       // ProfileID::c227
+    Profile::cResType_Course,       // ProfileID::c228
+    Profile::cResType_Course,       // ProfileID::c229
+    Profile::cResType_Course,       // ProfileID::c22A
+    Profile::cResType_Boot,         // ProfileID::c22B
+    Profile::cResType_Course,       // ProfileID::c22C
+    Profile::cResType_Course,       // ProfileID::c22D
+    Profile::cResType_Course,       // ProfileID::c22E
+    Profile::cResType_Course,       // ProfileID::c22F
+    Profile::cResType_Course,       // ProfileID::c230
+    Profile::cResType_Course,       // ProfileID::c231
+    Profile::cResType_Course,       // ProfileID::c232
+    Profile::cResType_Course,       // ProfileID::c233
+    Profile::cResType_Course,       // ProfileID::c234
+    Profile::cResType_Course,       // ProfileID::c235
+    Profile::cResType_Course,       // ProfileID::c236
+    Profile::cResType_Course,       // ProfileID::c237
+    Profile::cResType_Course,       // ProfileID::c238
+    Profile::cResType_Course,       // ProfileID::c239
+    Profile::cResType_Course,       // ProfileID::c23A
+    Profile::cResType_Course,       // ProfileID::c23B
+    Profile::cResType_Course,       // ProfileID::c23C
+    Profile::cResType_Course,       // ProfileID::c23D
+    Profile::cResType_Course,       // ProfileID::c23E
+    Profile::cResType_Boot,         // ProfileID::c23F
+    Profile::cResType_Boot,         // ProfileID::c240
+    Profile::cResType_Boot,         // ProfileID::c241
+    Profile::cResType_Boot,         // ProfileID::c242
+    Profile::cResType_Boot,         // ProfileID::c243
+    Profile::cResType_Boot,         // ProfileID::c244
+    Profile::cResType_Boot,         // ProfileID::c245
+    Profile::cResType_Boot,         // ProfileID::c246
+    Profile::cResType_Boot,         // ProfileID::c247
+    Profile::cResType_Boot,         // ProfileID::c248
+    Profile::cResType_Boot,         // ProfileID::c249
+    Profile::cResType_Boot,         // ProfileID::c24A
+    Profile::cResType_Boot,         // ProfileID::cBgCenter
+    Profile::cResType_Boot,         // ProfileID::c24C
+    Profile::cResType_Boot,         // ProfileID::c24D
+    Profile::cResType_Boot,         // ProfileID::c24E
+    Profile::cResType_Boot,         // ProfileID::c24F
+    Profile::cResType_Boot,         // ProfileID::c250
+    Profile::cResType_Boot,         // ProfileID::c251
+    Profile::cResType_Boot,         // ProfileID::c252
+    Profile::cResType_Boot,         // ProfileID::c253
+    Profile::cResType_Boot,         // ProfileID::c254
+    Profile::cResType_Boot,         // ProfileID::c255
+    Profile::cResType_Boot,         // ProfileID::c256
+    Profile::cResType_Boot,         // ProfileID::c257
+    Profile::cResType_Boot,         // ProfileID::c258
+    Profile::cResType_Course,       // ProfileID::c259
+    Profile::cResType_Course,       // ProfileID::c25A
+    Profile::cResType_Course,       // ProfileID::c25B
+    Profile::cResType_Course,       // ProfileID::c25C
+    Profile::cResType_Course,       // ProfileID::c25D
+    Profile::cResType_Course,       // ProfileID::c25E
+    Profile::cResType_Course,       // ProfileID::c25F
+    Profile::cResType_Course,       // ProfileID::c260
+    Profile::cResType_Course,       // ProfileID::c261
+    Profile::cResType_Course,       // ProfileID::c262
+    Profile::cResType_Course,       // ProfileID::c263
+    Profile::cResType_Course,       // ProfileID::c264
+    Profile::cResType_Course,       // ProfileID::c265
+    Profile::cResType_Course,       // ProfileID::c266
+    Profile::cResType_Course,       // ProfileID::c267
+    Profile::cResType_Course,       // ProfileID::c268
+    Profile::cResType_Course,       // ProfileID::c269
+    Profile::cResType_Course,       // ProfileID::c26A
+    Profile::cResType_Course,       // ProfileID::c26B
+    Profile::cResType_Course,       // ProfileID::c26C
+    Profile::cResType_Course,       // ProfileID::c26D
+    Profile::cResType_Course,       // ProfileID::c26E
+    Profile::cResType_Course,       // ProfileID::c26F
+    Profile::cResType_Course,       // ProfileID::c270
+    Profile::cResType_Course,       // ProfileID::c271
+    Profile::cResType_Course,       // ProfileID::c272
+    Profile::cResType_Boot,         // ProfileID::c273
+    Profile::cResType_Boot,         // ProfileID::c274
+    Profile::cResType_Boot,         // ProfileID::c275
+    Profile::cResType_Boot,         // ProfileID::c276
+    Profile::cResType_Boot,         // ProfileID::c277
+    Profile::cResType_Course,       // ProfileID::c278
+    Profile::cResType_Course,       // ProfileID::c279
+    Profile::cResType_Course,       // ProfileID::c27A
+    Profile::cResType_Course,       // ProfileID::c27B
+    Profile::cResType_Course,       // ProfileID::c27C
+    Profile::cResType_Course,       // ProfileID::c27D
+    Profile::cResType_Course,       // ProfileID::c27E
+    Profile::cResType_Course,       // ProfileID::c27F
+    Profile::cResType_Course,       // ProfileID::c280
+    Profile::cResType_Course,       // ProfileID::c281
+    Profile::cResType_Course,       // ProfileID::c282
+    Profile::cResType_Course,       // ProfileID::c283
+    Profile::cResType_Course,       // ProfileID::c284
+    Profile::cResType_Course,       // ProfileID::c285
+    Profile::cResType_Course,       // ProfileID::c286
+    Profile::cResType_Course,       // ProfileID::c287
+    Profile::cResType_Course,       // ProfileID::c288
+    Profile::cResType_Course,       // ProfileID::c289
+    Profile::cResType_Course,       // ProfileID::c28A
+    Profile::cResType_Course,       // ProfileID::c28B
+    Profile::cResType_Course,       // ProfileID::c28C
+    Profile::cResType_Course,       // ProfileID::c28D
+    Profile::cResType_Course,       // ProfileID::c28E
+    Profile::cResType_Course,       // ProfileID::c28F
+    Profile::cResType_Course,       // ProfileID::c290
+    Profile::cResType_Course,       // ProfileID::c291
+    Profile::cResType_Course,       // ProfileID::c292
+    Profile::cResType_Course,       // ProfileID::c293
+    Profile::cResType_Course,       // ProfileID::c294
+    Profile::cResType_Course,       // ProfileID::c295
+    Profile::cResType_Course,       // ProfileID::c296
+    Profile::cResType_Course,       // ProfileID::c297
+    Profile::cResType_Course,       // ProfileID::c298
+    Profile::cResType_Course,       // ProfileID::c299
+    Profile::cResType_Course,       // ProfileID::c29A
+    Profile::cResType_Course,       // ProfileID::c29B
+    Profile::cResType_Course,       // ProfileID::c29C
+    Profile::cResType_Course,       // ProfileID::c29D
+    Profile::cResType_Course,       // ProfileID::c29E
+    Profile::cResType_Course,       // ProfileID::c29F
+    Profile::cResType_Course,       // ProfileID::c2A0
+    Profile::cResType_Course,       // ProfileID::c2A1
+    Profile::cResType_Course,       // ProfileID::c2A2
+    Profile::cResType_Course,       // ProfileID::c2A3
+    Profile::cResType_Course,       // ProfileID::c2A4
+    Profile::cResType_Course,       // ProfileID::c2A5
+    Profile::cResType_Course,       // ProfileID::c2A6
+    Profile::cResType_Course,       // ProfileID::c2A7
+    Profile::cResType_Course,       // ProfileID::c2A8
+    Profile::cResType_Course,       // ProfileID::c2A9
+    Profile::cResType_Course,       // ProfileID::c2AA
+    Profile::cResType_Course,       // ProfileID::c2AB
+    Profile::cResType_Course,       // ProfileID::c2AC
+    Profile::cResType_Course,       // ProfileID::c2AD
+    Profile::cResType_Course,       // ProfileID::c2AE
+    Profile::cResType_Course,       // ProfileID::c2AF
+    Profile::cResType_Course,       // ProfileID::c2B0
+    Profile::cResType_Course,       // ProfileID::c2B1
+    Profile::cResType_Course,       // ProfileID::c2B2
+    Profile::cResType_Course,       // ProfileID::c2B3
+    Profile::cResType_Course,       // ProfileID::c2B4
+    Profile::cResType_Course,       // ProfileID::c2B5
+    Profile::cResType_Course,       // ProfileID::c2B6
+    Profile::cResType_Course,       // ProfileID::c2B7
+    Profile::cResType_Course,       // ProfileID::c2B8
+    Profile::cResType_Course,       // ProfileID::c2B9
+    Profile::cResType_Course,       // ProfileID::c2BA
+    Profile::cResType_Course,       // ProfileID::c2BB
+    Profile::cResType_Course,       // ProfileID::c2BC
+    Profile::cResType_Course,       // ProfileID::c2BD
+    Profile::cResType_Course,       // ProfileID::c2BE
+    Profile::cResType_Course,       // ProfileID::c2BF
+    Profile::cResType_Course,       // ProfileID::c2C0
+    Profile::cResType_Course,       // ProfileID::c2C1
+    Profile::cResType_Course,       // ProfileID::c2C2
+    Profile::cResType_Course,       // ProfileID::c2C3
+    Profile::cResType_Course,       // ProfileID::c2C4
+    Profile::cResType_Course,       // ProfileID::c2C5
+    Profile::cResType_Course,       // ProfileID::c2C6
+    Profile::cResType_Course,       // ProfileID::c2C7
+    Profile::cResType_Course,       // ProfileID::c2C8
+    Profile::cResType_Course,       // ProfileID::c2C9
+    Profile::cResType_Course,       // ProfileID::c2CA
+    Profile::cResType_Course,       // ProfileID::c2CB
+    Profile::cResType_Course,       // ProfileID::c2CC
+    Profile::cResType_Course,       // ProfileID::c2CD
+    Profile::cResType_Course,       // ProfileID::c2CE
+    Profile::cResType_Course,       // ProfileID::c2CF
+    Profile::cResType_Course,       // ProfileID::c2D0
+    Profile::cResType_Course,       // ProfileID::c2D1
+    Profile::cResType_Course,       // ProfileID::c2D2
+    Profile::cResType_Course,       // ProfileID::c2D3
+    Profile::cResType_Course,       // ProfileID::c2D4
+    Profile::cResType_Course,       // ProfileID::c2D5
+    Profile::cResType_Course,       // ProfileID::c2D6
+    Profile::cResType_Course,       // ProfileID::c2D7
+    Profile::cResType_Course,       // ProfileID::c2D8
+    Profile::cResType_Course,       // ProfileID::c2D9
+    Profile::cResType_Course,       // ProfileID::c2DA
+    Profile::cResType_Course,       // ProfileID::c2DB
+    Profile::cResType_Course,       // ProfileID::c2DC
+    Profile::cResType_Course,       // ProfileID::c2DD
+    Profile::cResType_Course,       // ProfileID::c2DE
+    Profile::cResType_Course,       // ProfileID::c2DF
+    Profile::cResType_Course,       // ProfileID::c2E0
+    Profile::cResType_Course,       // ProfileID::c2E1
+    Profile::cResType_Course,       // ProfileID::c2E2
+    Profile::cResType_Course,       // ProfileID::c2E3
+    Profile::cResType_Course,       // ProfileID::c2E4
+    Profile::cResType_Course,       // ProfileID::c2E5
+    Profile::cResType_Course,       // ProfileID::c2E6
+    Profile::cResType_Course,       // ProfileID::c2E7
+    Profile::cResType_Course,       // ProfileID::c2E8
+    Profile::cResType_Course,       // ProfileID::c2E9
+    Profile::cResType_Course,       // ProfileID::c2EA
+    Profile::cResType_Boot,         // ProfileID::c2EB
+    Profile::cResType_Boot,         // ProfileID::c2EC
+    Profile::cResType_Boot,         // ProfileID::c2ED
+    Profile::cResType_Course,       // ProfileID::c2EE
+    Profile::cResType_Course,       // ProfileID::c2EF
+    Profile::cResType_Course,       // ProfileID::c2F0
+    Profile::cResType_Course,       // ProfileID::c2F1
+    Profile::cResType_Course,       // ProfileID::c2F2
+    Profile::cResType_Course,       // ProfileID::c2F3
+    Profile::cResType_Course,       // ProfileID::c2F4
+    Profile::cResType_Course,       // ProfileID::c2F5
+    Profile::cResType_Course,       // ProfileID::c2F6
+    Profile::cResType_Course,       // ProfileID::c2F7
+    Profile::cResType_Course,       // ProfileID::c2F8
+    Profile::cResType_Course,       // ProfileID::c2F9
+    Profile::cResType_Course,       // ProfileID::c2FA
+    Profile::cResType_Course,       // ProfileID::c2FB
+    Profile::cResType_Course,       // ProfileID::c2FC
+    Profile::cResType_Course,       // ProfileID::c2FD
+    Profile::cResType_Course,       // ProfileID::c2FE
+    Profile::cResType_Course,       // ProfileID::c2FF
+    Profile::cResType_Course,       // ProfileID::c300
+    Profile::cResType_Course,       // ProfileID::c301
+    Profile::cResType_Course,       // ProfileID::c302
+    Profile::cResType_Course,       // ProfileID::c303
+    Profile::cResType_Course,       // ProfileID::c304
+    Profile::cResType_Course,       // ProfileID::c305
+    Profile::cResType_Course,       // ProfileID::c306
+    Profile::cResType_Course,       // ProfileID::c307
+    Profile::cResType_Course,       // ProfileID::c308
+    Profile::cResType_Course,       // ProfileID::c309
+    Profile::cResType_Course,       // ProfileID::c30A
+    Profile::cResType_Course,       // ProfileID::c30B
+    Profile::cResType_Course,       // ProfileID::c30C
+    Profile::cResType_Course,       // ProfileID::c30D
+    Profile::cResType_Boot,         // ProfileID::c30E
+    Profile::cResType_Course,       // ProfileID::c30F
+    Profile::cResType_Course,       // ProfileID::c310
+    Profile::cResType_Course,       // ProfileID::c311
+    Profile::cResType_Course,       // ProfileID::c312
+    Profile::cResType_Course,       // ProfileID::c313
+    Profile::cResType_Course,       // ProfileID::c314
+    Profile::cResType_Course,       // ProfileID::c315
+    Profile::cResType_Boot,         // ProfileID::c316
+    Profile::cResType_Boot,         // ProfileID::c317
+    Profile::cResType_Boot,         // ProfileID::c318
+    Profile::cResType_Course,       // ProfileID::c319
+    Profile::cResType_Course,       // ProfileID::c31A
+    Profile::cResType_Course,       // ProfileID::c31B
+    Profile::cResType_Course,       // ProfileID::c31C
+    Profile::cResType_Course,       // ProfileID::c31D
+    Profile::cResType_Course,       // ProfileID::c31E
+    Profile::cResType_Course,       // ProfileID::c31F
+    Profile::cResType_Course,       // ProfileID::c320
+    Profile::cResType_Course,       // ProfileID::c321
+    Profile::cResType_Course,       // ProfileID::c322
+    Profile::cResType_Course,       // ProfileID::c323
+    Profile::cResType_Course,       // ProfileID::c324
+    Profile::cResType_Course,       // ProfileID::c325
+    Profile::cResType_Course,       // ProfileID::c326
+    Profile::cResType_Boot,         // ProfileID::c327
+    Profile::cResType_Course,       // ProfileID::c328
+    Profile::cResType_Boot,         // ProfileID::c329
+    Profile::cResType_Boot,         // ProfileID::c32A
+    Profile::cResType_Boot,         // ProfileID::c32B
+    Profile::cResType_Course,       // ProfileID::c32C
+    Profile::cResType_Course,       // ProfileID::c32D
+    Profile::cResType_Course,       // ProfileID::c32E
+    Profile::cResType_Course,       // ProfileID::c32F
+    Profile::cResType_Course,       // ProfileID::c330
+    Profile::cResType_Course,       // ProfileID::c331
+    Profile::cResType_Course,       // ProfileID::c332
+    Profile::cResType_Course,       // ProfileID::c333
+    Profile::cResType_Course,       // ProfileID::c334
+    Profile::cResType_Course,       // ProfileID::c335
+    Profile::cResType_Course,       // ProfileID::c336
+    Profile::cResType_Course,       // ProfileID::c337
+    Profile::cResType_Course,       // ProfileID::c338
+    Profile::cResType_Course,       // ProfileID::c339
+    Profile::cResType_Course,       // ProfileID::c33A
+    Profile::cResType_Course,       // ProfileID::c33B
+    Profile::cResType_Course,       // ProfileID::c33C
+    Profile::cResType_Course,       // ProfileID::c33D
+    Profile::cResType_Course,       // ProfileID::c33E
+    Profile::cResType_Course,       // ProfileID::c33F
+    Profile::cResType_Course,       // ProfileID::c340
+    Profile::cResType_Course,       // ProfileID::c341
+    Profile::cResType_Course,       // ProfileID::c342
+    Profile::cResType_Course,       // ProfileID::c343
+    Profile::cResType_Course,       // ProfileID::c344
+    Profile::cResType_Course,       // ProfileID::c345
+    Profile::cResType_Course,       // ProfileID::c346
+    Profile::cResType_Course,       // ProfileID::c347
+    Profile::cResType_Course,       // ProfileID::c348
+    Profile::cResType_Course,       // ProfileID::c349
+    Profile::cResType_Course,       // ProfileID::c34A
+    Profile::cResType_Course,       // ProfileID::c34B
+    Profile::cResType_Course,       // ProfileID::c34C
+    Profile::cResType_Course,       // ProfileID::c34D
+    Profile::cResType_Course,       // ProfileID::c34E
+    Profile::cResType_Course,       // ProfileID::c34F
+    Profile::cResType_Course,       // ProfileID::c350
+    Profile::cResType_Course,       // ProfileID::c351
+    Profile::cResType_Boot,         // ProfileID::c352
+    Profile::cResType_Course,       // ProfileID::c353
+    Profile::cResType_Boot,         // ProfileID::c354
+    Profile::cResType_Boot,         // ProfileID::c355
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPlayer
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPlayer_2P_3P_4P
+    Profile::cResType_CourseSelect, // ProfileID::c358
+    Profile::cResType_CourseSelect, // ProfileID::c359
+    Profile::cResType_CourseSelect, // ProfileID::c35A
+    Profile::cResType_CourseSelect, // ProfileID::c35B
+    Profile::cResType_CourseSelect, // ProfileID::c35C
+    Profile::cResType_CourseSelect, // ProfileID::c35D
+    Profile::cResType_CourseSelect, // ProfileID::c35E
+    Profile::cResType_CourseSelect, // ProfileID::c35F
+    Profile::cResType_CourseSelect, // ProfileID::c360
+    Profile::cResType_CourseSelect, // ProfileID::c361
+    Profile::cResType_CourseSelect, // ProfileID::c362
+    Profile::cResType_CourseSelect, // ProfileID::c363
+    Profile::cResType_CourseSelect, // ProfileID::c364
+    Profile::cResType_CourseSelect, // ProfileID::c365
+    Profile::cResType_CourseSelect, // ProfileID::c366
+    Profile::cResType_CourseSelect, // ProfileID::c367
+    Profile::cResType_CourseSelect, // ProfileID::c368
+    Profile::cResType_CourseSelect, // ProfileID::c369
+    Profile::cResType_CourseSelect, // ProfileID::c36A
+    Profile::cResType_CourseSelect, // ProfileID::c36B
+    Profile::cResType_CourseSelect, // ProfileID::c36C
+    Profile::cResType_CourseSelect, // ProfileID::c36D
+    Profile::cResType_CourseSelect, // ProfileID::c36E
+    Profile::cResType_CourseSelect, // ProfileID::c36F
+    Profile::cResType_CourseSelect, // ProfileID::c370
+    Profile::cResType_CourseSelect, // ProfileID::c371
+    Profile::cResType_CourseSelect, // ProfileID::c372
+    Profile::cResType_CourseSelect, // ProfileID::c373
+    Profile::cResType_CourseSelect, // ProfileID::c374
+    Profile::cResType_CourseSelect, // ProfileID::c375
+    Profile::cResType_CourseSelect, // ProfileID::c376
+    Profile::cResType_CourseSelect, // ProfileID::c377
+    Profile::cResType_CourseSelect, // ProfileID::c378
+    Profile::cResType_CourseSelect, // ProfileID::c379
+    Profile::cResType_CourseSelect, // ProfileID::c37A
+    Profile::cResType_CourseSelect, // ProfileID::c37B
+    Profile::cResType_CourseSelect, // ProfileID::c37C
+    Profile::cResType_CourseSelect, // ProfileID::c37D
+    Profile::cResType_CourseSelect, // ProfileID::c37E
+    Profile::cResType_CourseSelect, // ProfileID::c37F
+    Profile::cResType_CourseSelect, // ProfileID::c380
+    Profile::cResType_CourseSelect, // ProfileID::c381
+    Profile::cResType_CourseSelect, // ProfileID::c382
+    Profile::cResType_CourseSelect, // ProfileID::c383
+    Profile::cResType_CourseSelect, // ProfileID::c384
+    Profile::cResType_CourseSelect, // ProfileID::c385
+    Profile::cResType_CourseSelect, // ProfileID::c386
+    Profile::cResType_CourseSelect, // ProfileID::c387
+    Profile::cResType_CourseSelect, // ProfileID::c388
+    Profile::cResType_CourseSelect, // ProfileID::c389
+    Profile::cResType_CourseSelect, // ProfileID::c38A
+    Profile::cResType_CourseSelect, // ProfileID::c38B
+    Profile::cResType_CourseSelect, // ProfileID::c38C
+    Profile::cResType_CourseSelect, // ProfileID::c38D
+    Profile::cResType_Course,       // ProfileID::c38E
+    Profile::cResType_Course,       // ProfileID::c38F
+    Profile::cResType_Course        // ProfileID::c390
+};
+
+// -------------------------------------------  Res ------------------------------------------- //
+
+static const sead::SafeString cRes_015[]  = {
+    "bombhei",
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_016[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_017[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_018[]  = {
+    "miniGame_shuffle",
+    "block_pata",
+    "KinopioMdl",
+    "CommonAnm",
+    "KinopioAnm",
+    "miniGame_mochimaki",
+    "miniGame_slot"
+};
+
+static const sead::SafeString cRes_019[]  = {
+    "R_miniGame_shuffle",
+    "block_pata",
+    "KinopioMdl",
+    "CommonAnm",
+    "KinopioAnm",
+    "miniGame_mochimaki",
+    "miniGame_slot"
+};
+
+static const sead::SafeString cRes_021[]  = {
+    "I_star"
+};
+
+static const sead::SafeString cRes_022[]  = {
+    "baloon_ABC",
+    "YoshiChibi_TexBubble",
+    "copyright",
+    "YoshiChibi_TexBalloon",
+    "YoshiChibi_TexLight",
+    "balloon",
+    "obj_coin",
+    "shadowkun"
+};
+
+static const sead::SafeString cRes_023[]  = {
+    "baloon_ABC",
+    "YoshiChibi_TexBubble",
+    "R_copyright",
+    "YoshiChibi_TexBalloon",
+    "YoshiChibi_TexLight",
+    "balloon",
+    "obj_coin",
+    "shadowkun"
+};
+
+static const sead::SafeString cRes_024[]  = {
+    "peach"
+};
+
+static const sead::SafeString cRes_026[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_02B[]  = {
+    "guru"
+};
+
+static const sead::SafeString cRes_02C[]  = {
+    "guru"
+};
+
+static const sead::SafeString cRes_02D[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_02E[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_032[]  = {
+    "bombhei"
+};
+
+static const sead::SafeString cRes_033[]  = {
+    "bolt",
+    "bolt_pyramid"
+};
+
+static const sead::SafeString cRes_035[]  = {
+    "circle_ground",
+    "circle_ground_sabaku",
+    "circle_ground_kori"
+};
+
+static const sead::SafeString cRes_036[]  = {
+    "lift_zen_toride_iron"
+};
+
+static const sead::SafeString cRes_037[]  = {
+    "lift_zen_toride"
+};
+
+static const sead::SafeString cRes_038[]  = {
+    "lift_zen_nohara"
+};
+
+static const sead::SafeString cRes_039[]  = {
+    "lift_zen_kogen"
+};
+
+static const sead::SafeString cRes_03A[]  = {
+    "lift_zen_ashiba"
+};
+
+static const sead::SafeString cRes_03B[]  = {
+    "lift_zen_kaihei"
+};
+
+static const sead::SafeString cRes_03C[]  = {
+    "lift_zen_toride_iron"
+};
+
+static const sead::SafeString cRes_03D[]  = {
+    "lift_zen_toride"
+};
+
+static const sead::SafeString cRes_03E[]  = {
+    "lift_zen_shiro_iwa"
+};
+
+static const sead::SafeString cRes_03F[]  = {
+    "lift_zen_toride_iron"
+};
+
+static const sead::SafeString cRes_040[]  = {
+    "lift_zen_nohara"
+};
+
+static const sead::SafeString cRes_041[]  = {
+    "lift_zen_kogen"
+};
+
+static const sead::SafeString cRes_042[]  = {
+    "lift_zen_kumiawase"
+};
+
+static const sead::SafeString cRes_043[]  = {
+    "lift_zen_tagaichigai"
+};
+
+static const sead::SafeString cRes_044[]  = {
+    "lift_zen_tagaichigai"
+};
+
+static const sead::SafeString cRes_045[]  = {
+    "lift_zen_shiro_yogan"
+};
+
+static const sead::SafeString cRes_046[]  = {
+    "lift_zen_sabaku_iseki"
+};
+
+static const sead::SafeString cRes_047[]  = {
+    "lift_zen_toride_rock"
+};
+
+static const sead::SafeString cRes_048[]  = {
+    "lift_zen_toride_rock"
+};
+
+static const sead::SafeString cRes_049[]  = {
+    "lift_zen_shiro"
+};
+
+static const sead::SafeString cRes_04A[]  = {
+    "lift_zen_warning"
+};
+
+static const sead::SafeString cRes_04B[]  = {
+    "lift_han_iwakabe",
+    "lift_han_iwakabe_moyou"
+};
+
+static const sead::SafeString cRes_04C[]  = {
+    "obj_kinoko"
+};
+
+static const sead::SafeString cRes_04D[]  = {
+    "lift_kinoko_sora"
+};
+
+static const sead::SafeString cRes_04E[]  = {
+    "lift_kinoko_sora"
+};
+
+static const sead::SafeString cRes_04F[]  = {
+    "lift_zen_star"
+};
+
+static const sead::SafeString cRes_050[]  = {
+    "obj_kinoko"
+};
+
+static const sead::SafeString cRes_051[]  = {
+    "obj_kinoko",
+    "lift_kinoko_shiso"
+};
+
+static const sead::SafeString cRes_052[]  = {
+    "lift_trampoline"
+};
+
+static const sead::SafeString cRes_053[]  = {
+    "lift_trampoline"
+};
+
+static const sead::SafeString cRes_054[]  = {
+    "obj_waterfull",
+    "obj_waterhalf"
+};
+
+static const sead::SafeString cRes_055[]  = {
+    "obj_magma",
+    "obj_magmadeco",
+    "obj_magmawave",
+    "yogan_line"
+};
+
+static const sead::SafeString cRes_056[]  = {
+    "obj_poisonwater",
+    "obj_magmadeco"
+};
+
+static const sead::SafeString cRes_057[]  = {
+    "obj_quicksand"
+};
+
+static const sead::SafeString cRes_058[]  = {
+    "obj_envfog"
+};
+
+static const sead::SafeString cRes_059[]  = {
+    "obj_envfog"
+};
+
+static const sead::SafeString cRes_05A[]  = {
+    "mario_brothers_yuka"
+};
+
+static const sead::SafeString cRes_05B[]  = {
+    "koopaJr_clown_yuka"
+};
+
+static const sead::SafeString cRes_05C[]  = {
+    "lift_han_spin",
+    "bolt"
+};
+
+static const sead::SafeString cRes_05F[]  = {
+    "lift_huriko_ue"
+};
+
+static const sead::SafeString cRes_060[]  = {
+    "lift_huriko_ue"
+};
+
+static const sead::SafeString cRes_061[]  = {
+    "lift_han_rotate_light"
+};
+
+static const sead::SafeString cRes_062[]  = {
+    "lift_huriko_yougan"
+};
+
+static const sead::SafeString cRes_063[]  = {
+    "lift_huriko_yougan"
+};
+
+static const sead::SafeString cRes_064[]  = {
+    "test_lift"
+};
+
+static const sead::SafeString cRes_065[]  = {
+    "killer_houdai",
+    "killer"
+};
+
+static const sead::SafeString cRes_066[]  = {
+    "killer_houdai",
+    "killer"
+};
+
+static const sead::SafeString cRes_067[]  = {
+    "killer_mag_houdai",
+    "killer_mag"
+};
+
+static const sead::SafeString cRes_068[]  = {
+    "killer_mag_houdai",
+    "killer_mag"
+};
+
+static const sead::SafeString cRes_069[]  = {
+    "killer_houdai",
+    "killer"
+};
+
+static const sead::SafeString cRes_06A[]  = {
+    "killer_mag_houdai",
+    "killer_mag"
+};
+
+static const sead::SafeString cRes_06B[]  = {
+    "killer_mag_houdai",
+    "killer_mag"
+};
+
+static const sead::SafeString cRes_06C[]  = {
+    "R_killer_mag_houdai",
+    "killer_mag"
+};
+
+static const sead::SafeString cRes_06D[]  = {
+    "R_killer_mag_houdai",
+    "killer_mag"
+};
+
+static const sead::SafeString cRes_06E[]  = {
+    "R_killer_mag_houdai",
+    "killer_mag"
+};
+
+static const sead::SafeString cRes_06F[]  = {
+    "R_killer_mag_houdai",
+    "killer_mag"
+};
+
+static const sead::SafeString cRes_070[]  = {
+    "killer_rot_houdai",
+    "killer"
+};
+
+static const sead::SafeString cRes_071[]  = {
+    "killer_rot_houdai",
+    "killer"
+};
+
+static const sead::SafeString cRes_072[]  = {
+    "houdai_slope",
+    "houdai_ball",
+    "bombhei"
+};
+
+static const sead::SafeString cRes_073[]  = {
+    "houdai_rot",
+    "houdai_ball"
+};
+
+static const sead::SafeString cRes_074[]  = {
+    "houdai_rot_large_B",
+    "houdai_ball"
+};
+
+static const sead::SafeString cRes_075[]  = {
+    "houdai",
+    "houdai_ball"
+};
+
+static const sead::SafeString cRes_076[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_077[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_079[]  = {
+    "sandpillar"
+};
+
+static const sead::SafeString cRes_07A[]  = {
+    "sandpillar"
+};
+
+static const sead::SafeString cRes_07B[]  = {
+    "waterpillar"
+};
+
+static const sead::SafeString cRes_07C[]  = {
+    "waterpillar"
+};
+
+static const sead::SafeString cRes_07D[]  = {
+    "waterpillar"
+};
+
+static const sead::SafeString cRes_07E[]  = {
+    "waterpillar"
+};
+
+static const sead::SafeString cRes_07F[]  = {
+    "waterpillar"
+};
+
+static const sead::SafeString cRes_080[]  = {
+    "firepillar"
+};
+
+static const sead::SafeString cRes_081[]  = {
+    "lift_zen_kaitenita",
+    "lift_zen_kaitenita_toride"
+};
+
+static const sead::SafeString cRes_082[]  = {
+    "obj_dokan"
+};
+
+static const sead::SafeString cRes_083[]  = {
+    "obj_dokan"
+};
+
+static const sead::SafeString cRes_084[]  = {
+    "obj_dokan"
+};
+
+static const sead::SafeString cRes_085[]  = {
+    "obj_dokan"
+};
+
+static const sead::SafeString cRes_086[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_087[]  = {
+    "obj_dokan_CB"
+};
+
+static const sead::SafeString cRes_088[]  = {
+    "obj_dokan_CB"
+};
+
+static const sead::SafeString cRes_089[]  = {
+    "obj_dokan_CB"
+};
+
+static const sead::SafeString cRes_08A[]  = {
+    "obj_dokan_CB"
+};
+
+static const sead::SafeString cRes_08B[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_08C[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_08D[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_08E[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_08F[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_090[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_091[]  = {
+    "obj_dokan_cannon",
+    "obj_dokan"
+};
+
+static const sead::SafeString cRes_092[]  = {
+    "obj_dokan_cannon",
+    "obj_dokan"
+};
+
+static const sead::SafeString cRes_093[]  = {
+    "lift_zen_hanebashi"
+};
+
+static const sead::SafeString cRes_094[]  = {
+    "lift_zen_hanebashi"
+};
+
+static const sead::SafeString cRes_095[]  = {
+    "lift_zen_hanebashi"
+};
+
+static const sead::SafeString cRes_096[]  = {
+    "lift_zen_yoko"
+};
+
+static const sead::SafeString cRes_097[]  = {
+    "test_lift"
+};
+
+static const sead::SafeString cRes_098[]  = {
+    "test_lift"
+};
+
+static const sead::SafeString cRes_099[]  = {
+    "lift_zen_chika_pori"
+};
+
+static const sead::SafeString cRes_09B[]  = {
+    "lift_zen_rotate_wood"
+};
+
+static const sead::SafeString cRes_09C[]  = {
+    "lift_zen_rotate_wood"
+};
+
+static const sead::SafeString cRes_09D[]  = {
+    "lift_zen_rotate_stone"
+};
+
+static const sead::SafeString cRes_09E[]  = {
+    "lift_obake_chikei"
+};
+
+static const sead::SafeString cRes_09F[]  = {
+    "lift_obake_chikei"
+};
+
+static const sead::SafeString cRes_0A0[]  = {
+    "lift_obake_chikei"
+};
+
+static const sead::SafeString cRes_0A1[]  = {
+    "lift_obake_chikei_heya"
+};
+
+static const sead::SafeString cRes_0A2[]  = {
+    "lift_zen_color_pori"
+};
+
+static const sead::SafeString cRes_0A3[]  = {
+    "lift_zen_toride_iron"
+};
+
+static const sead::SafeString cRes_0A4[]  = {
+    "lift_zen_toride_iron"
+};
+
+static const sead::SafeString cRes_0A5[]  = {
+    "lift_zen_toride_iron"
+};
+
+static const sead::SafeString cRes_0A6[]  = {
+    "lift_obake_chikei_fune"
+};
+
+static const sead::SafeString cRes_0A7[]  = {
+    "lift_zen_hammer"
+};
+
+static const sead::SafeString cRes_0A8[]  = {
+    "lift_moaidon"
+};
+
+static const sead::SafeString cRes_0A9[]  = {
+    "lift_moaidon"
+};
+
+static const sead::SafeString cRes_0AA[]  = {
+    "lift_moaidon"
+};
+
+static const sead::SafeString cRes_0AB[]  = {
+    "lift_moaidon"
+};
+
+static const sead::SafeString cRes_0AC[]  = {
+    "lift_moaidon"
+};
+
+static const sead::SafeString cRes_0AD[]  = {
+    "lift_zen_spin_cube"
+};
+
+static const sead::SafeString cRes_0AE[]  = {
+    "lift_zen_spin_pyramid"
+};
+
+static const sead::SafeString cRes_0AF[]  = {
+    "lift_zen_spin_pyramid"
+};
+
+static const sead::SafeString cRes_0B0[]  = {
+    "lift_turi_ashiba"
+};
+
+static const sead::SafeString cRes_0B1[]  = {
+    "lift_turi_ashiba_wire"
+};
+
+static const sead::SafeString cRes_0B2[]  = {
+    "lift_zen_yogan_down"
+};
+
+static const sead::SafeString cRes_0B3[]  = {
+    "lift_obake_chikei"
+};
+
+static const sead::SafeString cRes_0B4[]  = {
+    "lift_number_ship_yougan",
+    "lift_number_ship"
+};
+
+static const sead::SafeString cRes_0B5[]  = {
+    "block_challenge"
+};
+
+static const sead::SafeString cRes_0B6[]  = {
+    "block_odai",
+    "coinedit_batten"
+};
+
+static const sead::SafeString cRes_0B7[]  = {
+    "block_challenge"
+};
+
+static const sead::SafeString cRes_0B8[]  = {
+    "lift_torokko"
+};
+
+static const sead::SafeString cRes_0B9[]  = {
+    "lift_torokko"
+};
+
+static const sead::SafeString cRes_0BA[]  = {
+    "lift_torokko"
+};
+
+static const sead::SafeString cRes_0BB[]  = {
+    "light_search",
+    "Mask_flashlight_obake",
+    "Mask"
+};
+
+static const sead::SafeString cRes_0BC[]  = {
+    "block_challenge"
+};
+
+static const sead::SafeString cRes_0BD[]  = {
+    "block_tsuta"
+};
+
+static const sead::SafeString cRes_0BE[]  = {
+    "obj_yashi",
+    "obj_yashi_sabaku"
+};
+
+static const sead::SafeString cRes_0BF[]  = {
+    "iron_boll_hole"
+};
+
+static const sead::SafeString cRes_0C0[]  = {
+    "iron_boll_hole"
+};
+
+static const sead::SafeString cRes_0C1[]  = {
+    "gorogoro"
+};
+
+static const sead::SafeString cRes_0C2[]  = {
+    "block_snake",
+    "block_snake_ice"
+};
+
+static const sead::SafeString cRes_0C3[]  = {
+    "block_snake",
+    "block_snake_ice"
+};
+
+static const sead::SafeString cRes_0C4[]  = {
+    "block_snake",
+    "block_snake_ice"
+};
+
+static const sead::SafeString cRes_0C5[]  = {
+    "lift_spin_kinoko",
+    "bolt"
+};
+
+static const sead::SafeString cRes_0C6[]  = {
+    "lift_spin_kinoko",
+    "bolt"
+};
+
+static const sead::SafeString cRes_0C7[]  = {
+    "lift_obake_chikei"
+};
+
+static const sead::SafeString cRes_0C8[]  = {
+    "light_block"
+};
+
+static const sead::SafeString cRes_0C9[]  = {
+    "lift_kinoko_yoko"
+};
+
+static const sead::SafeString cRes_0CA[]  = {
+    "lift_kinoko_yoko"
+};
+
+static const sead::SafeString cRes_0CB[]  = {
+    "block_slide"
+};
+
+static const sead::SafeString cRes_0CC[]  = {
+    "block_slide"
+};
+
+static const sead::SafeString cRes_0CD[]  = {
+    "met_pata"
+};
+
+static const sead::SafeString cRes_0CE[]  = {
+    "met_pataBig"
+};
+
+static const sead::SafeString cRes_0CF[]  = {
+    "met_pata"
+};
+
+static const sead::SafeString cRes_0D0[]  = {
+    "obj_gear",
+    "obj_gear_shiro"
+};
+
+static const sead::SafeString cRes_0D1[]  = {
+    "R_obj_gear",
+    "obj_gear_shiro"
+};
+
+static const sead::SafeString cRes_FloorHoleDokan[]  = {
+    "circle_ground_holeD_chika",
+    "obj_dokan"
+};
+
+static const sead::SafeString cRes_0D3[]  = {
+    "lift_han_wood",
+    "lift_han_stone",
+    "lift_kinoko_yoko",
+    "lift_han_spin",
+    "lift_kinoko_shiso",
+    "lift_han_sky"
+};
+
+static const sead::SafeString cRes_0D4[]  = {
+    "lift_han_wood",
+    "lift_han_stone",
+    "lift_kinoko_yoko",
+    "lift_han_spin",
+    "lift_kinoko_shiso",
+    "lift_han_sky"
+};
+
+static const sead::SafeString cRes_0D5[]  = {
+    "lift_han_wood",
+    "lift_han_stone",
+    "lift_kinoko_yoko",
+    "lift_han_spin",
+    "lift_kinoko_shiso",
+    "lift_han_sky"
+};
+
+static const sead::SafeString cRes_0D6[]  = {
+    "lift_han_wood",
+    "lift_han_stone",
+    "lift_kinoko_yoko",
+    "lift_han_spin",
+    "lift_kinoko_shiso",
+    "lift_han_sky"
+};
+
+static const sead::SafeString cRes_0D7[]  = {
+    "lift_han_wood"
+};
+
+static const sead::SafeString cRes_0D8[]  = {
+    "lift_han_wood"
+};
+
+static const sead::SafeString cRes_0D9[]  = {
+    "lift_han_wood",
+    "lift_han_stone",
+    "lift_kinoko_yoko",
+    "lift_han_spin",
+    "lift_kinoko_shiso"
+};
+
+static const sead::SafeString cRes_0DA[]  = {
+    "lift_han_wood",
+    "lift_han_stone",
+    "lift_kinoko_yoko",
+    "lift_han_spin",
+    "lift_kinoko_shiso"
+};
+
+static const sead::SafeString cRes_0DB[]  = {
+    "lift_han_wood",
+    "lift_han_stone",
+    "lift_kinoko_yoko",
+    "lift_han_spin",
+    "lift_kinoko_shiso"
+};
+
+static const sead::SafeString cRes_0DC[]  = {
+    "lift_kinoko_shiso"
+};
+
+static const sead::SafeString cRes_0DD[]  = {
+    "R_lift_kinoko_shiso"
+};
+
+static const sead::SafeString cRes_0DE[]  = {
+    "lift_maruta"
+};
+
+static const sead::SafeString cRes_0DF[]  = {
+    "lift_taru"
+};
+
+static const sead::SafeString cRes_0E0[]  = {
+    "fire_cannon"
+};
+
+static const sead::SafeString cRes_0E1[]  = {
+    "fire_cannon"
+};
+
+static const sead::SafeString cRes_0E2[]  = {
+    "fire_cannon"
+};
+
+static const sead::SafeString cRes_0E3[]  = {
+    "fire_rot_cannon"
+};
+
+static const sead::SafeString cRes_0E4[]  = {
+    "block_jump"
+};
+
+static const sead::SafeString cRes_0E5[]  = {
+    "noboribou_obake"
+};
+
+static const sead::SafeString cRes_0E6[]  = {
+    "lift_tenbin",
+    "lift_han_wood"
+};
+
+static const sead::SafeString cRes_0E7[]  = {
+    "lift_tenbin",
+    "lift_han_wood"
+};
+
+static const sead::SafeString cRes_0E8[]  = {
+    "lift_tenbin",
+    "lift_han_wood"
+};
+
+static const sead::SafeString cRes_0E9[]  = {
+    "lift_guraIwa"
+};
+
+static const sead::SafeString cRes_0EA[]  = {
+    "lift_zen_kanaami"
+};
+
+static const sead::SafeString cRes_0EB[]  = {
+    "bombhei",
+    "iron_ball"
+};
+
+static const sead::SafeString cRes_0EC[]  = {
+    "obj_waterfloat"
+};
+
+static const sead::SafeString cRes_0ED[]  = {
+    "ice"
+};
+
+static const sead::SafeString cRes_0EE[]  = {
+    "tarzantsuta"
+};
+
+static const sead::SafeString cRes_0EF[]  = {
+    "tarzantsuta"
+};
+
+static const sead::SafeString cRes_0F0[]  = {
+    "hashigo"
+};
+
+static const sead::SafeString cRes_0F1[]  = {
+    "box_wood"
+};
+
+static const sead::SafeString cRes_0F2[]  = {
+    "box_iron"
+};
+
+static const sead::SafeString cRes_0F3[]  = {
+    "remo_lift"
+};
+
+static const sead::SafeString cRes_0F4[]  = {
+    "remo_lift_line"
+};
+
+static const sead::SafeString cRes_0F6[]  = {
+    "obj_block"
+};
+
+static const sead::SafeString cRes_0F7[]  = {
+    "obj_block"
+};
+
+static const sead::SafeString cRes_0F8[]  = {
+    "block_help"
+};
+
+static const sead::SafeString cRes_0F9[]  = {
+    "R_block_luigi"
+};
+
+static const sead::SafeString cRes_0FA[]  = {
+    "lift_zen_toride_iron"
+};
+
+static const sead::SafeString cRes_0FB[]  = {
+    "lift_zen_toride_iron"
+};
+
+static const sead::SafeString cRes_0FC[]  = {
+    "yogan_jimen",
+    "yogan_jimen_line"
+};
+
+static const sead::SafeString cRes_0FD[]  = {
+    "R_yogan_jimen",
+    "R_yogan_jimen_line"
+};
+
+static const sead::SafeString cRes_0FE[]  = {
+    "block_zen_rail_shiro"
+};
+
+static const sead::SafeString cRes_0FF[]  = {
+    "block_zen_rail_shiro"
+};
+
+static const sead::SafeString cRes_100[]  = {
+    "lift_han_wood",
+    "lift_han_stone"
+};
+
+static const sead::SafeString cRes_101[]  = {
+    "lift_han_sky"
+};
+
+static const sead::SafeString cRes_102[]  = {
+    "test_lift"
+};
+
+static const sead::SafeString cRes_103[]  = {
+    "lift_kanransha"
+};
+
+static const sead::SafeString cRes_104[]  = {
+    "lift_han_leaf"
+};
+
+static const sead::SafeString cRes_105[]  = {
+    "miniGame_shuffle",
+    "block_pata",
+    "R_miniGame_shuffle"
+};
+
+static const sead::SafeString cRes_106[]  = {
+    "boss_cannon"
+};
+
+static const sead::SafeString cRes_107[]  = {
+    "lift_han_tsuru"
+};
+
+static const sead::SafeString cRes_108[]  = {
+    "boss_koopa_ashiba"
+};
+
+static const sead::SafeString cRes_109[]  = {
+    "boss_shutter_koopa"
+};
+
+static const sead::SafeString cRes_10A[]  = {
+    "ship_bottom"
+};
+
+static const sead::SafeString cRes_10B[]  = {
+    "ship_bottom"
+};
+
+static const sead::SafeString cRes_10C[]  = {
+    "ship_bottom"
+};
+
+static const sead::SafeString cRes_10D[]  = {
+    "lift_han_koopa"
+};
+
+static const sead::SafeString cRes_10E[]  = {
+    "lift_han_koopa"
+};
+
+static const sead::SafeString cRes_10F[]  = {
+    "lift_han_koopa"
+};
+
+static const sead::SafeString cRes_110[]  = {
+    "lift_han_hikousen"
+};
+
+static const sead::SafeString cRes_111[]  = {
+    "ice_wendy"
+};
+
+static const sead::SafeString cRes_112[]  = {
+    "room_iggy"
+};
+
+static const sead::SafeString cRes_113[]  = {
+    "goal_set"
+};
+
+static const sead::SafeString cRes_114[]  = {
+    "goal_set_kaiga"
+};
+
+static const sead::SafeString cRes_115[]  = {
+    "R_goal_set"
+};
+
+static const sead::SafeString cRes_116[]  = {
+    "R_goal_set_kaiga"
+};
+
+static const sead::SafeString cRes_118[]  = {
+    "cookie"
+};
+
+static const sead::SafeString cRes_119[]  = {
+    "magic_hand"
+};
+
+static const sead::SafeString cRes_11A[]  = {
+    "magic_hand"
+};
+
+static const sead::SafeString cRes_11B[]  = {
+    "block_ice",
+    "ice_coin"
+};
+
+static const sead::SafeString cRes_11D[]  = {
+    "lift_zen_float"
+};
+
+static const sead::SafeString cRes_11E[]  = {
+    "lift_zen_float"
+};
+
+static const sead::SafeString cRes_135[]  = {
+    "block_DRC"
+};
+
+static const sead::SafeString cRes_136[]  = {
+    "block_pata"
+};
+
+static const sead::SafeString cRes_138[]  = {
+    "block_cloud",
+    "jugem",
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_13A[]  = {
+    "switch"
+};
+
+static const sead::SafeString cRes_13B[]  = {
+    "switch"
+};
+
+static const sead::SafeString cRes_13C[]  = {
+    "I_yoshichibi_egg",
+    "YoshiChibi_TexBalloon",
+    "YoshiChibi_TexBubble",
+    "YoshiChibi_TexLight",
+    "balloon"
+};
+
+static const sead::SafeString cRes_140[]  = {
+    "block_pata"
+};
+
+static const sead::SafeString cRes_141[]  = {
+    "block_roulette"
+};
+
+static const sead::SafeString cRes_142[]  = {
+    "obj_chikuwa_block"
+};
+
+static const sead::SafeString cRes_143[]  = {
+    "block_kameck",
+    "obj_chikuwa_block"
+};
+
+static const sead::SafeString cRes_144[]  = {
+    "box_wood"
+};
+
+static const sead::SafeString cRes_145[]  = {
+    "box_iron"
+};
+
+static const sead::SafeString cRes_146[]  = {
+    "box_iron"
+};
+
+static const sead::SafeString cRes_147[]  = {
+    "box_iron"
+};
+
+static const sead::SafeString cRes_148[]  = {
+    "magic_hand"
+};
+
+static const sead::SafeString cRes_149[]  = {
+    "magic_hand"
+};
+
+static const sead::SafeString cRes_14A[]  = {
+    "magic_hand"
+};
+
+static const sead::SafeString cRes_14B[]  = {
+    "block_DRC_hide"
+};
+
+static const sead::SafeString cRes_14D[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_14E[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_14F[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_150[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_151[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_152[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_153[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_154[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_155[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_156[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_157[]  = {
+    "obj_dokan",
+    "obj_dokan_kaiga"
+};
+
+static const sead::SafeString cRes_158[]  = {
+    "switch"
+};
+
+static const sead::SafeString cRes_159[]  = {
+    "switch"
+};
+
+static const sead::SafeString cRes_15A[]  = {
+    "switch"
+};
+
+static const sead::SafeString cRes_15B[]  = {
+    "switch"
+};
+
+static const sead::SafeString cRes_15D[]  = {
+    "switch_koopa"
+};
+
+static const sead::SafeString cRes_15E[]  = {
+    "obj_turara_rakka_Big"
+};
+
+static const sead::SafeString cRes_15F[]  = {
+    "lemmy"
+};
+
+static const sead::SafeString cRes_160[]  = {
+    "lemmy"
+};
+
+static const sead::SafeString cRes_161[]  = {
+    "shell_fish",
+    "star_coin",
+    "switch"
+};
+
+static const sead::SafeString cRes_163[]  = {
+    "lift_ice_ashiba"
+};
+
+static const sead::SafeString cRes_164[]  = {
+    "lift_ice_ashiba"
+};
+
+static const sead::SafeString cRes_165[]  = {
+    "lift_ice_ashiba"
+};
+
+static const sead::SafeString cRes_166[]  = {
+    "lift_suisha"
+};
+
+static const sead::SafeString cRes_167[]  = {
+    "lift_number_ship_up"
+};
+
+static const sead::SafeString cRes_168[]  = {
+    "lift_number_ship_up"
+};
+
+static const sead::SafeString cRes_169[]  = {
+    "R_lift_number_ship_up"
+};
+
+static const sead::SafeString cRes_16A[]  = {
+    "ice"
+};
+
+static const sead::SafeString cRes_16B[]  = {
+    "lift_up_down_side"
+};
+
+static const sead::SafeString cRes_16C[]  = {
+    "lift_up_down_side"
+};
+
+static const sead::SafeString cRes_16D[]  = {
+    "block_ice_hard"
+};
+
+static const sead::SafeString cRes_16E[]  = {
+    "wanwan"
+};
+
+static const sead::SafeString cRes_16F[]  = {
+    "wanwan"
+};
+
+static const sead::SafeString cRes_170[]  = {
+    "ice_kameck",
+    "kuribo",
+    "nokonokoA",
+    "bombhei",
+    "choropoo",
+    "wing",
+    "kuriboMini"
+};
+
+static const sead::SafeString cRes_171[]  = {
+    "obj_turara_rakka"
+};
+
+static const sead::SafeString cRes_172[]  = {
+    "koopaJr_clown"
+};
+
+static const sead::SafeString cRes_173[]  = {
+    "koopaJr_clown",
+    "koopaJr_clown_b",
+    "bombhei"
+};
+
+static const sead::SafeString cRes_174[]  = {
+    "block_koopaJr_clown"
+};
+
+static const sead::SafeString cRes_175[]  = {
+    "koopaJr_clown"
+};
+
+static const sead::SafeString cRes_176[]  = {
+    "koopa",
+    "koopa_model",
+    "peach",
+    "boss_shutter_peach"
+};
+
+static const sead::SafeString cRes_177[]  = {
+    "center_firebar",
+    "firebar_L"
+};
+
+static const sead::SafeString cRes_178[]  = {
+    "center_firebar",
+    "firebar_L"
+};
+
+static const sead::SafeString cRes_179[]  = {
+    "firebar_L"
+};
+
+static const sead::SafeString cRes_17A[]  = {
+    "center_firebar",
+    "firebar_L"
+};
+
+static const sead::SafeString cRes_17B[]  = {
+    "block_ice"
+};
+
+static const sead::SafeString cRes_17D[]  = {
+    "met"
+};
+
+static const sead::SafeString cRes_17E[]  = {
+    "met"
+};
+
+static const sead::SafeString cRes_17F[]  = {
+    "unizo"
+};
+
+static const sead::SafeString cRes_180[]  = {
+    "unizo"
+};
+
+static const sead::SafeString cRes_181[]  = {
+    "unizoBig"
+};
+
+static const sead::SafeString cRes_182[]  = {
+    "unizo"
+};
+
+static const sead::SafeString cRes_183[]  = {
+    "block_pow",
+    "EF_POW"
+};
+
+static const sead::SafeString cRes_184[]  = {
+    "block_light"
+};
+
+static const sead::SafeString cRes_185[]  = {
+    "block_fly"
+};
+
+static const sead::SafeString cRes_186[]  = {
+    "ice",
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_187[]  = {
+    "block_taru"
+};
+
+static const sead::SafeString cRes_188[]  = {
+    "ice"
+};
+
+static const sead::SafeString cRes_189[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_18A[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_18B[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_18C[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_18D[]  = {
+    "obj_coin",
+    "ice_coin"
+};
+
+static const sead::SafeString cRes_18E[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_18F[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_190[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_191[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_192[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_193[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_194[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_195[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_196[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_197[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_198[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_199[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_19A[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_19C[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_19D[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_19F[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_1A0[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_1A1[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_1A3[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_1A4[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_1A5[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_1A6[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_1A7[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_1A8[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_1A9[]  = {
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_1AA[]  = {
+    "star_coin"
+};
+
+static const sead::SafeString cRes_1AB[]  = {
+    "star_coin"
+};
+
+static const sead::SafeString cRes_1AC[]  = {
+    "star_coin"
+};
+
+static const sead::SafeString cRes_1AD[]  = {
+    "star_coin"
+};
+
+static const sead::SafeString cRes_1AE[]  = {
+    "star_coin"
+};
+
+static const sead::SafeString cRes_1AF[]  = {
+    "star_coin"
+};
+
+static const sead::SafeString cRes_1B0[]  = {
+    "star_coin"
+};
+
+static const sead::SafeString cRes_1B1[]  = {
+    "star_coin"
+};
+
+static const sead::SafeString cRes_1B2[]  = {
+    "star_coin"
+};
+
+static const sead::SafeString cRes_1B3[]  = {
+    "star_coin"
+};
+
+static const sead::SafeString cRes_1B6[]  = {
+    "miniGame_mochimaki"
+};
+
+static const sead::SafeString cRes_1B9[]  = {
+    "balloon",
+    "I_kinoko"
+};
+
+static const sead::SafeString cRes_Yoshi[]  = {
+    "YoshiAnm",
+    "Yoshi_TexGreen",
+    "Yoshi_TexPink",
+    "Yoshi_TexYellow",
+    "Yoshi_TexLightBlue"
+};
+
+static const sead::SafeString cRes_TottenPlayer[]  = {
+    "EF_HipdropEX",
+    "shadowkun_player"
+};
+
+static const sead::SafeString cRes_PlayerObject[]  = {
+    "MarioMdl",
+    "LuigiMdl",
+    "KinopioMdl",
+    "MiiMdl",
+    "CommonAnm",
+    "LuigiAnm",
+    "KinopioAnm",
+    "MiiAnm",
+    "EF_HipdropEX"
+};
+
+static const sead::SafeString cRes_1BD[]  = {
+    "KinopioMdl",
+    "CommonAnm",
+    "KinopioAnm",
+    "baloon_hey"
+};
+
+static const sead::SafeString cRes_1BE[]  = {
+    "I_yoshichibi_egg",
+    "YoshiChibi_TexBalloon",
+    "YoshiChibi_TexBubble",
+    "YoshiChibi_TexLight",
+    "balloon_awachibiyoshi"
+};
+
+static const sead::SafeString cRes_1BF[]  = {
+    "YoshiChibi_TexBubble",
+    "balloon_awachibiyoshi"
+};
+
+static const sead::SafeString cRes_1C0[]  = {
+    "YoshiChibi_TexBalloon"
+};
+
+static const sead::SafeString cRes_1C1[]  = {
+    "YoshiChibi_TexLight"
+};
+
+static const sead::SafeString cRes_1C2[]  = {
+    "YoshiChibi_TexBalloon"
+};
+
+static const sead::SafeString cRes_1C3[]  = {
+    "balloon_awachibiyoshi",
+    "obj_coin",
+    "I_kinoko",
+    "I_fireflower",
+    "I_iceflower",
+    "I_musasabi"
+};
+
+static const sead::SafeString cRes_1C5[]  = {
+    "YoshiChibi_TexBubble",
+    "YoshiChibi_TexBalloon",
+    "YoshiChibi_TexLight",
+    "miniGame_slot"
+};
+
+static const sead::SafeString cRes_1C6[]  = {
+    "obj_coin",
+    "kuribo"
+};
+
+static const sead::SafeString cRes_1C8[]  = {
+    "shadowkun"
+};
+
+static const sead::SafeString cRes_1CB[]  = {
+    "shadowkun"
+};
+
+static const sead::SafeString cRes_1CC[]  = {
+    "shadowkun"
+};
+
+static const sead::SafeString cRes_1CE[]  = {
+    "KinopioMdl",
+    "CommonAnm",
+    "KinopioAnm"
+};
+
+static const sead::SafeString cRes_1CF[]  = {
+    "I_musasabi",
+    "I_star",
+    "I_kinoko",
+    "I_fireflower",
+    "I_iceflower"
+};
+
+static const sead::SafeString cRes_1D0[]  = {
+    "shadowkun"
+};
+
+static const sead::SafeString cRes_1D1[]  = {
+    "shadowkun"
+};
+
+static const sead::SafeString cRes_1D2[]  = {
+    "obj_balloon",
+    "kuribo",
+    "kakibo",
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_1D3[]  = {
+    "kuribo"
+};
+
+static const sead::SafeString cRes_1D4[]  = {
+    "kakibo"
+};
+
+static const sead::SafeString cRes_1D5[]  = {
+    "kuribo",
+    "wing"
+};
+
+static const sead::SafeString cRes_1D6[]  = {
+    "kuribo_iga"
+};
+
+static const sead::SafeString cRes_1D7[]  = {
+    "kuriboMini"
+};
+
+static const sead::SafeString cRes_1D8[]  = {
+    "kuribo",
+    "kuriboBig"
+};
+
+static const sead::SafeString cRes_1D9[]  = {
+    "kuribo",
+    "kuriboBig"
+};
+
+static const sead::SafeString cRes_1DF[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1E0[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1E1[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1E2[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1E3[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1E4[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1E5[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1E6[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1E7[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1E8[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1E9[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1EA[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1EB[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1EC[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1ED[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1EE[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1EF[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1F0[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1F1[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1F2[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_1F3[]  = {
+    "pakkun_walk"
+};
+
+static const sead::SafeString cRes_1F4[]  = {
+    "pakkun_water"
+};
+
+static const sead::SafeString cRes_1F5[]  = {
+    "pakkun_water"
+};
+
+static const sead::SafeString cRes_1F6[]  = {
+    "pakkun_black"
+};
+
+static const sead::SafeString cRes_1F7[]  = {
+    "pakkun_black"
+};
+
+static const sead::SafeString cRes_1F8[]  = {
+    "musasabi"
+};
+
+static const sead::SafeString cRes_1F9[]  = {
+    "sanbo"
+};
+
+static const sead::SafeString cRes_1FA[]  = {
+    "sanbo"
+};
+
+static const sead::SafeString cRes_1FB[]  = {
+    "hanachan_big"
+};
+
+static const sead::SafeString cRes_1FC[]  = {
+    "hanachan"
+};
+
+static const sead::SafeString cRes_1FD[]  = {
+    "hanachan"
+};
+
+static const sead::SafeString cRes_1FE[]  = {
+    "hanachan_big"
+};
+
+static const sead::SafeString cRes_200[]  = {
+    "nokonokoA"
+};
+
+static const sead::SafeString cRes_201[]  = {
+    "nokonokoA"
+};
+
+static const sead::SafeString cRes_202[]  = {
+    "nokonokoBig"
+};
+
+static const sead::SafeString cRes_203[]  = {
+    "nokonokoA",
+    "wing"
+};
+
+static const sead::SafeString cRes_204[]  = {
+    "nokonokoA",
+    "wing"
+};
+
+static const sead::SafeString cRes_205[]  = {
+    "togezo",
+    "paipo"
+};
+
+static const sead::SafeString cRes_206[]  = {
+    "togezo",
+    "paipo"
+};
+
+static const sead::SafeString cRes_207[]  = {
+    "kanibo"
+};
+
+static const sead::SafeString cRes_208[]  = {
+    "kanibo"
+};
+
+static const sead::SafeString cRes_209[]  = {
+    "bombhei"
+};
+
+static const sead::SafeString cRes_20A[]  = {
+    "bombhei"
+};
+
+static const sead::SafeString cRes_20B[]  = {
+    "bombhei"
+};
+
+static const sead::SafeString cRes_20C[]  = {
+    "mecha_koopa"
+};
+
+static const sead::SafeString cRes_20D[]  = {
+    "penguin2",
+    "ice"
+};
+
+static const sead::SafeString cRes_20E[]  = {
+    "penguin2"
+};
+
+static const sead::SafeString cRes_20F[]  = {
+    "penguin2"
+};
+
+static const sead::SafeString cRes_210[]  = {
+    "met_hone"
+};
+
+static const sead::SafeString cRes_211[]  = {
+    "met_hone"
+};
+
+static const sead::SafeString cRes_212[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_213[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_214[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_215[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_216[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_217[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_218[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_219[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_21A[]  = {
+    "pukupuku_mecha"
+};
+
+static const sead::SafeString cRes_21B[]  = {
+    "pukupuku_toge"
+};
+
+static const sead::SafeString cRes_21C[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_21D[]  = {
+    "pukupuku_mecha"
+};
+
+static const sead::SafeString cRes_21E[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_21F[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_220[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_221[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_222[]  = {
+    "pukupuku_mecha"
+};
+
+static const sead::SafeString cRes_223[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_224[]  = {
+    "fishbone"
+};
+
+static const sead::SafeString cRes_225[]  = {
+    "fugu"
+};
+
+static const sead::SafeString cRes_226[]  = {
+    "fuguBig"
+};
+
+static const sead::SafeString cRes_227[]  = {
+    "fugu"
+};
+
+static const sead::SafeString cRes_228[]  = {
+    "fuguBig"
+};
+
+static const sead::SafeString cRes_229[]  = {
+    "kurage"
+};
+
+static const sead::SafeString cRes_22A[]  = {
+    "ankou"
+};
+
+static const sead::SafeString cRes_22B[]  = {
+    "jump_step"
+};
+
+static const sead::SafeString cRes_22C[]  = {
+    "keronpa"
+};
+
+static const sead::SafeString cRes_22D[]  = {
+    "keronpa"
+};
+
+static const sead::SafeString cRes_230[]  = {
+    "keronpa"
+};
+
+static const sead::SafeString cRes_231[]  = {
+    "fire_snake"
+};
+
+static const sead::SafeString cRes_232[]  = {
+    "gorogoro"
+};
+
+static const sead::SafeString cRes_233[]  = {
+    "gorogoro"
+};
+
+static const sead::SafeString cRes_234[]  = {
+    "gorogoro"
+};
+
+static const sead::SafeString cRes_235[]  = {
+    "middle_flag"
+};
+
+static const sead::SafeString cRes_236[]  = {
+    "daikonbou"
+};
+
+static const sead::SafeString cRes_237[]  = {
+    "daikonbou"
+};
+
+static const sead::SafeString cRes_238[]  = {
+    "daikonbou"
+};
+
+static const sead::SafeString cRes_239[]  = {
+    "daikonbou"
+};
+
+static const sead::SafeString cRes_23A[]  = {
+    "daikonbou"
+};
+
+static const sead::SafeString cRes_23B[]  = {
+    "daikonbou"
+};
+
+static const sead::SafeString cRes_23C[]  = {
+    "kazan_rock"
+};
+
+static const sead::SafeString cRes_23D[]  = {
+    "kazan_rock"
+};
+
+static const sead::SafeString cRes_23E[]  = {
+    "kazan_rock"
+};
+
+static const sead::SafeString cRes_24F[]  = {
+    "I_kinoko"
+};
+
+static const sead::SafeString cRes_250[]  = {
+    "I_fireflower"
+};
+
+static const sead::SafeString cRes_251[]  = {
+    "I_kinoko"
+};
+
+static const sead::SafeString cRes_252[]  = {
+    "I_iceflower"
+};
+
+static const sead::SafeString cRes_253[]  = {
+    "I_propeller"
+};
+
+static const sead::SafeString cRes_254[]  = {
+    "I_penguin"
+};
+
+static const sead::SafeString cRes_255[]  = {
+    "I_kinoko"
+};
+
+static const sead::SafeString cRes_256[]  = {
+    "I_musasabi"
+};
+
+static const sead::SafeString cRes_257[]  = {
+    "I_moon"
+};
+
+static const sead::SafeString cRes_258[]  = {
+    "I_musasabi"
+};
+
+static const sead::SafeString cRes_259[]  = {
+    "obj_sea_wakame"
+};
+
+static const sead::SafeString cRes_25A[]  = {
+    "obj_door"
+};
+
+static const sead::SafeString cRes_25B[]  = {
+    "obj_door_obake"
+};
+
+static const sead::SafeString cRes_25C[]  = {
+    "obj_door_torideboss"
+};
+
+static const sead::SafeString cRes_25D[]  = {
+    "obj_door_torideboss"
+};
+
+static const sead::SafeString cRes_25E[]  = {
+    "obj_door_shiroboss"
+};
+
+static const sead::SafeString cRes_25F[]  = {
+    "obj_door_shiroboss"
+};
+
+static const sead::SafeString cRes_260[]  = {
+    "boss_koopa_door"
+};
+
+static const sead::SafeString cRes_261[]  = {
+    "boss_koopa_door"
+};
+
+static const sead::SafeString cRes_262[]  = {
+    "choropoo"
+};
+
+static const sead::SafeString cRes_263[]  = {
+    "choropoo"
+};
+
+static const sead::SafeString cRes_264[]  = {
+    "basabasa"
+};
+
+static const sead::SafeString cRes_265[]  = {
+    "center_fire"
+};
+
+static const sead::SafeString cRes_266[]  = {
+    "kuribo",
+    "kakibo",
+    "bombhei",
+    "nokonokoA"
+};
+
+static const sead::SafeString cRes_267[]  = {
+    "obj_kinoko",
+    "lift_kinoko_shiso"
+};
+
+static const sead::SafeString cRes_268[]  = {
+    "choropoo"
+};
+
+static const sead::SafeString cRes_269[]  = {
+    "choropoo"
+};
+
+static const sead::SafeString cRes_26A[]  = {
+    "choropoo"
+};
+
+static const sead::SafeString cRes_26B[]  = {
+    "pakkun_tane"
+};
+
+static const sead::SafeString cRes_26C[]  = {
+    "jugem",
+    "togezo",
+    "paipo",
+    "pakkun",
+    "pakkun_tane"
+};
+
+static const sead::SafeString cRes_26D[]  = {
+    "jugem",
+    "togezo",
+    "paipo"
+};
+
+static const sead::SafeString cRes_26E[]  = {
+    "jugem",
+    "togezo",
+    "paipo",
+    "pakkun",
+    "pakkun_tane"
+};
+
+static const sead::SafeString cRes_26F[]  = {
+    "jugem",
+    "togezo",
+    "paipo",
+    "pakkun",
+    "pakkun_tane"
+};
+
+static const sead::SafeString cRes_270[]  = {
+    "jugem",
+    "togezo",
+    "paipo",
+    "pakkun",
+    "pakkun_tane"
+};
+
+static const sead::SafeString cRes_271[]  = {
+    "jugem",
+    "togezo",
+    "paipo",
+    "pakkun",
+    "pakkun_tane"
+};
+
+static const sead::SafeString cRes_272[]  = {
+    "jugem",
+    "togezo",
+    "paipo",
+    "pakkun",
+    "pakkun_tane"
+};
+
+static const sead::SafeString cRes_278[]  = {
+    "killer_king"
+};
+
+static const sead::SafeString cRes_279[]  = {
+    "killer_king"
+};
+
+static const sead::SafeString cRes_27A[]  = {
+    "killer_mag"
+};
+
+static const sead::SafeString cRes_27B[]  = {
+    "dossun"
+};
+
+static const sead::SafeString cRes_27C[]  = {
+    "dossun"
+};
+
+static const sead::SafeString cRes_27D[]  = {
+    "gabon"
+};
+
+static const sead::SafeString cRes_27E[]  = {
+    "gabon"
+};
+
+static const sead::SafeString cRes_27F[]  = {
+    "gabon"
+};
+
+static const sead::SafeString cRes_280[]  = {
+    "gabon"
+};
+
+static const sead::SafeString cRes_281[]  = {
+    "gabon_rock"
+};
+
+static const sead::SafeString cRes_282[]  = {
+    "gabon_rock"
+};
+
+static const sead::SafeString cRes_283[]  = {
+    "gabon_rock"
+};
+
+static const sead::SafeString cRes_284[]  = {
+    "seichan"
+};
+
+static const sead::SafeString cRes_285[]  = {
+    "seichan"
+};
+
+static const sead::SafeString cRes_286[]  = {
+    "seichan"
+};
+
+static const sead::SafeString cRes_287[]  = {
+    "karon"
+};
+
+static const sead::SafeString cRes_288[]  = {
+    "karon"
+};
+
+static const sead::SafeString cRes_289[]  = {
+    "karon"
+};
+
+static const sead::SafeString cRes_28A[]  = {
+    "woochan"
+};
+
+static const sead::SafeString cRes_28B[]  = {
+    "mouse"
+};
+
+static const sead::SafeString cRes_28C[]  = {
+    "chorobon"
+};
+
+static const sead::SafeString cRes_28D[]  = {
+    "chorobon"
+};
+
+static const sead::SafeString cRes_28E[]  = {
+    "bubble"
+};
+
+static const sead::SafeString cRes_28F[]  = {
+    "bubble"
+};
+
+static const sead::SafeString cRes_290[]  = {
+    "bubble"
+};
+
+static const sead::SafeString cRes_291[]  = {
+    "bubble"
+};
+
+static const sead::SafeString cRes_292[]  = {
+    "crasher"
+};
+
+static const sead::SafeString cRes_293[]  = {
+    "unabon"
+};
+
+static const sead::SafeString cRes_294[]  = {
+    "unabon"
+};
+
+static const sead::SafeString cRes_295[]  = {
+    "unabon"
+};
+
+static const sead::SafeString cRes_296[]  = {
+    "unabon"
+};
+
+static const sead::SafeString cRes_297[]  = {
+    "unabon"
+};
+
+static const sead::SafeString cRes_298[]  = {
+    "unabon"
+};
+
+static const sead::SafeString cRes_299[]  = {
+    "KK"
+};
+
+static const sead::SafeString cRes_29A[]  = {
+    "KK"
+};
+
+static const sead::SafeString cRes_29B[]  = {
+    "KK"
+};
+
+static const sead::SafeString cRes_29D[]  = {
+    "wanwan"
+};
+
+static const sead::SafeString cRes_29E[]  = {
+    "poltergeist"
+};
+
+static const sead::SafeString cRes_29F[]  = {
+    "poltergeist"
+};
+
+static const sead::SafeString cRes_2A0[]  = {
+    "bakubaku"
+};
+
+static const sead::SafeString cRes_2A1[]  = {
+    "bakubaku"
+};
+
+static const sead::SafeString cRes_2A2[]  = {
+    "ibaramushi"
+};
+
+static const sead::SafeString cRes_2A3[]  = {
+    "crow"
+};
+
+static const sead::SafeString cRes_2A4[]  = {
+    "met_toge"
+};
+
+static const sead::SafeString cRes_2A5[]  = {
+    "met_toge"
+};
+
+static const sead::SafeString cRes_2A6[]  = {
+    "bunbun"
+};
+
+static const sead::SafeString cRes_2A7[]  = {
+    "bunbun"
+};
+
+static const sead::SafeString cRes_2A8[]  = {
+    "bunbun"
+};
+
+static const sead::SafeString cRes_2A9[]  = {
+    "bunbun"
+};
+
+static const sead::SafeString cRes_2AA[]  = {
+    "bunbun"
+};
+
+static const sead::SafeString cRes_2AB[]  = {
+    "bunbun"
+};
+
+static const sead::SafeString cRes_2AC[]  = {
+    "kameck"
+};
+
+static const sead::SafeString cRes_2B0[]  = {
+    "kameck",
+    "KK"
+};
+
+static const sead::SafeString cRes_2B2[]  = {
+    "koopaJr",
+    "koopaJr_clown",
+    "kameck"
+};
+
+static const sead::SafeString cRes_2B5[]  = {
+    "larry",
+    "boss_ef_attack"
+};
+
+static const sead::SafeString cRes_2B6[]  = {
+    "boss_ef_attack"
+};
+
+static const sead::SafeString cRes_2B7[]  = {
+    "lemmy"
+};
+
+static const sead::SafeString cRes_2B8[]  = {
+    "morton",
+    "deka_sanbo",
+    "ef_dekasanbo",
+    "EF_MortonHammerBlur"
+};
+
+static const sead::SafeString cRes_2B9[]  = {
+    "deka_sanbo",
+    "ef_dekasanbo"
+};
+
+static const sead::SafeString cRes_2BA[]  = {
+    "deka_sanbo",
+    "ef_dekasanbo"
+};
+
+static const sead::SafeString cRes_2BB[]  = {
+    "wendy"
+};
+
+static const sead::SafeString cRes_2BC[]  = {
+    "wendy"
+};
+
+static const sead::SafeString cRes_2BD[]  = {
+    "ludwig",
+    "boss_ef_attack"
+};
+
+static const sead::SafeString cRes_2BE[]  = {
+    "ludwig"
+};
+
+static const sead::SafeString cRes_2BF[]  = {
+    "iggy",
+    "woogan"
+};
+
+static const sead::SafeString cRes_2C1[]  = {
+    "woogan"
+};
+
+static const sead::SafeString cRes_2C2[]  = {
+    "roy",
+    "killer"
+};
+
+static const sead::SafeString cRes_2C3[]  = {
+    "lift_han_hikousen"
+};
+
+static const sead::SafeString cRes_2C4[]  = {
+    "boss_KK"
+};
+
+static const sead::SafeString cRes_2C6[]  = {
+    "kameck",
+    "ice_kameck",
+    "kuribo",
+    "nokonokoA",
+    "bombhei",
+    "choropoo",
+    "wing",
+    "kuriboMini"
+};
+
+static const sead::SafeString cRes_2CA[]  = {
+    "koopaJr",
+    "koopaJr_clown",
+    "koopa_model"
+};
+
+static const sead::SafeString cRes_2CB[]  = {
+    "koopa",
+    "koopa_model",
+    "boss_ef_attack"
+};
+
+static const sead::SafeString cRes_2CC[]  = {
+    "boss_ef_attack",
+    "koopa_model"
+};
+
+static const sead::SafeString cRes_2CD[]  = {
+    "boss_ef_attack",
+    "koopa_model"
+};
+
+static const sead::SafeString cRes_2CE[]  = {
+    "koopaJr_clown",
+    "kameck"
+};
+
+static const sead::SafeString cRes_2CF[]  = {
+    "koopaJr",
+    "koopaJr_clown",
+    "kameck"
+};
+
+static const sead::SafeString cRes_2D0[]  = {
+    "kameck"
+};
+
+static const sead::SafeString cRes_2D1[]  = {
+    "kameck"
+};
+
+static const sead::SafeString cRes_2D2[]  = {
+    "kameck"
+};
+
+static const sead::SafeString cRes_2D3[]  = {
+    "KK"
+};
+
+static const sead::SafeString cRes_2D4[]  = {
+    "koopa_model"
+};
+
+static const sead::SafeString cRes_2D5[]  = {
+    "koopaJr",
+    "koopaJr_clown",
+    "bombhei",
+    "koopa_model"
+};
+
+static const sead::SafeString cRes_2D7[]  = {
+    "bombhei"
+};
+
+static const sead::SafeString cRes_2D8[]  = {
+    "ShipLemmy"
+};
+
+static const sead::SafeString cRes_2D9[]  = {
+    "ShipMorton"
+};
+
+static const sead::SafeString cRes_2DA[]  = {
+    "ShipLarry"
+};
+
+static const sead::SafeString cRes_2DB[]  = {
+    "ShipWendy"
+};
+
+static const sead::SafeString cRes_2DC[]  = {
+    "ShipIggy"
+};
+
+static const sead::SafeString cRes_2DD[]  = {
+    "ShipRoy"
+};
+
+static const sead::SafeString cRes_2DE[]  = {
+    "ShipLudwig"
+};
+
+static const sead::SafeString cRes_2DF[]  = {
+    "peach"
+};
+
+static const sead::SafeString cRes_2E0[]  = {
+    "shadowkun"
+};
+
+static const sead::SafeString cRes_2E3[]  = {
+    "peach"
+};
+
+static const sead::SafeString cRes_2E4[]  = {
+    "kanban_yajirushi"
+};
+
+static const sead::SafeString cRes_2E5[]  = {
+    "kanban_yajirushi"
+};
+
+static const sead::SafeString cRes_2E6[]  = {
+    "kanban_yajirushi"
+};
+
+static const sead::SafeString cRes_2E7[]  = {
+    "R_kanban_1_1"
+};
+
+static const sead::SafeString cRes_2E8[]  = {
+    "R_kanban_9_9"
+};
+
+static const sead::SafeString cRes_2EE[]  = {
+    "red_ring"
+};
+
+static const sead::SafeString cRes_2EF[]  = {
+    "green_ring"
+};
+
+static const sead::SafeString cRes_2F0[]  = {
+    "red_ring",
+    "star_coin"
+};
+
+static const sead::SafeString cRes_2F1[]  = {
+    "R_blue_ring"
+};
+
+static const sead::SafeString cRes_2F2[]  = {
+    "goal_odai"
+};
+
+static const sead::SafeString cRes_2F3[]  = {
+    "fruit"
+};
+
+static const sead::SafeString cRes_2F4[]  = {
+    "fruits_kusa",
+    "fruits_kusa_gake"
+};
+
+static const sead::SafeString cRes_2F5[]  = {
+    "bros"
+};
+
+static const sead::SafeString cRes_2F6[]  = {
+    "bros"
+};
+
+static const sead::SafeString cRes_2F7[]  = {
+    "bros"
+};
+
+static const sead::SafeString cRes_2F8[]  = {
+    "bros"
+};
+
+static const sead::SafeString cRes_2F9[]  = {
+    "bros"
+};
+
+static const sead::SafeString cRes_2FB[]  = {
+    "bros"
+};
+
+static const sead::SafeString cRes_2FD[]  = {
+    "bros_mega"
+};
+
+static const sead::SafeString cRes_2FE[]  = {
+    "bros_mega"
+};
+
+static const sead::SafeString cRes_2FF[]  = {
+    "bilikyu"
+};
+
+static const sead::SafeString cRes_300[]  = {
+    "densen",
+    "bilikyu"
+};
+
+static const sead::SafeString cRes_301[]  = {
+    "densen"
+};
+
+static const sead::SafeString cRes_302[]  = {
+    "bilikyu"
+};
+
+static const sead::SafeString cRes_303[]  = {
+    "koton"
+};
+
+static const sead::SafeString cRes_304[]  = {
+    "koton"
+};
+
+static const sead::SafeString cRes_305[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_306[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_307[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_308[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_309[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_30A[]  = {
+    "obj_turara_rakka"
+};
+
+static const sead::SafeString cRes_30B[]  = {
+    "obj_turara_kotei"
+};
+
+static const sead::SafeString cRes_30C[]  = {
+    "teresa"
+};
+
+static const sead::SafeString cRes_30D[]  = {
+    "teresa"
+};
+
+static const sead::SafeString cRes_30F[]  = {
+    "teresa"
+};
+
+static const sead::SafeString cRes_310[]  = {
+    "teresa"
+};
+
+static const sead::SafeString cRes_311[]  = {
+    "huhu",
+    "env_mist"
+};
+
+static const sead::SafeString cRes_312[]  = {
+    "huhu",
+    "env_mist"
+};
+
+static const sead::SafeString cRes_313[]  = {
+    "env_mist"
+};
+
+static const sead::SafeString cRes_314[]  = {
+    "env_mist"
+};
+
+static const sead::SafeString cRes_315[]  = {
+    "env_mist"
+};
+
+static const sead::SafeString cRes_316[]  = {
+    "env_underwater"
+};
+
+static const sead::SafeString cRes_317[]  = {
+    "env_snow"
+};
+
+static const sead::SafeString cRes_318[]  = {
+    "obj_magmadeco"
+};
+
+static const sead::SafeString cRes_31C[]  = {
+    "I_musasabi"
+};
+
+static const sead::SafeString cRes_31D[]  = {
+    "shinkai_light"
+};
+
+static const sead::SafeString cRes_31F[]  = {
+    "big_shell"
+};
+
+static const sead::SafeString cRes_320[]  = {
+    "lift_zen_yoko"
+};
+
+static const sead::SafeString cRes_321[]  = {
+    "lift_huriko_yougan"
+};
+
+static const sead::SafeString cRes_322[]  = {
+    "guru"
+};
+
+static const sead::SafeString cRes_323[]  = {
+    "gesso"
+};
+
+static const sead::SafeString cRes_324[]  = {
+    "gessoMini"
+};
+
+static const sead::SafeString cRes_325[]  = {
+    "gesso",
+    "gessoMini"
+};
+
+static const sead::SafeString cRes_326[]  = {
+    "obj_nut"
+};
+
+static const sead::SafeString cRes_327[]  = {
+    "treasure_box",
+    "I_kinoko",
+    "I_fireflower",
+    "I_propeller",
+    "I_penguin",
+    "I_kinoko",
+    "I_star",
+    "I_iceflower",
+    "I_yoshichibi_egg",
+    "I_musasabi",
+    "shadowkun"
+};
+
+static const sead::SafeString cRes_329[]  = {
+    "I_kinoko",
+    "I_fireflower",
+    "I_propeller",
+    "I_penguin",
+    "I_kinoko",
+    "I_star",
+    "I_iceflower",
+    "I_yoshichibi_egg",
+    "I_musasabi"
+};
+
+static const sead::SafeString cRes_32A[]  = {
+    "I_yoshi_egg"
+};
+
+static const sead::SafeString cRes_32B[]  = {
+    "I_kinoko",
+    "I_fireflower",
+    "I_propeller",
+    "I_penguin",
+    "I_kinoko",
+    "I_star",
+    "I_iceflower",
+    "I_yoshichibi_egg",
+    "I_musasabi"
+};
+
+static const sead::SafeString cRes_32C[]  = {
+    "torpedo"
+};
+
+static const sead::SafeString cRes_32D[]  = {
+    "torpedo"
+};
+
+static const sead::SafeString cRes_32F[]  = {
+    "torpedo"
+};
+
+static const sead::SafeString cRes_330[]  = {
+    "torpedo"
+};
+
+static const sead::SafeString cRes_331[]  = {
+    "torpedo"
+};
+
+static const sead::SafeString cRes_332[]  = {
+    "boss_ef_attack"
+};
+
+static const sead::SafeString cRes_333[]  = {
+    "koopaJr_clown_b"
+};
+
+static const sead::SafeString cRes_334[]  = {
+    "koopaJr",
+    "koopaJr_clown",
+    "koopaJr_clown_m",
+    "magic_hand"
+};
+
+static const sead::SafeString cRes_335[]  = {
+    "koopaJr_clown",
+    "koopaJr_clown_m",
+    "torpedo"
+};
+
+static const sead::SafeString cRes_336[]  = {
+    "block_broken"
+};
+
+static const sead::SafeString cRes_337[]  = {
+    "koopaJr",
+    "koopaJr_clown",
+    "koopaJr_clown_b",
+    "bombhei",
+    "boss_ef_attack"
+};
+
+static const sead::SafeString cRes_338[]  = {
+    "koopaJr",
+    "koopaJr_clown",
+    "magic_hand"
+};
+
+static const sead::SafeString cRes_339[]  = {
+    "koopaJr_clown"
+};
+
+static const sead::SafeString cRes_33A[]  = {
+    "miniGame_shuffle",
+    "R_miniGame_shuffle"
+};
+
+static const sead::SafeString cRes_33B[]  = {
+    "miniGame_slot"
+};
+
+static const sead::SafeString cRes_33C[]  = {
+    "miniGame_mochimaki"
+};
+
+static const sead::SafeString cRes_33D[]  = {
+    "miniGame_mochimaki"
+};
+
+static const sead::SafeString cRes_33E[]  = {
+    "KinopioMdl",
+    "CommonAnm",
+    "KinopioAnm"
+};
+
+static const sead::SafeString cRes_33F[]  = {
+    "obj_tsuru"
+};
+
+static const sead::SafeString cRes_340[]  = {
+    "obj_dokan_joint"
+};
+
+static const sead::SafeString cRes_341[]  = {
+    "obj_dokan_joint"
+};
+
+static const sead::SafeString cRes_342[]  = {
+    "goal_kinoko_house"
+};
+
+static const sead::SafeString cRes_348[]  = {
+    "YoshiChibi_TexBubble",
+    "baloon_ABC"
+};
+
+static const sead::SafeString cRes_349[]  = {
+    "YoshiChibi_TexBalloon"
+};
+
+static const sead::SafeString cRes_34A[]  = {
+    "YoshiChibi_TexBalloon"
+};
+
+static const sead::SafeString cRes_34B[]  = {
+    "YoshiChibi_TexLight"
+};
+
+static const sead::SafeString cRes_34C[]  = {
+    "YoshiChibi_TexLight"
+};
+
+static const sead::SafeString cRes_34D[]  = {
+    "baloon_ABC"
+};
+
+static const sead::SafeString cRes_34E[]  = {
+    "balloon",
+    "obj_coin"
+};
+
+static const sead::SafeString cRes_34F[]  = {
+    "shadowkun"
+};
+
+static const sead::SafeString cRes_354[]  = {
+    "I_star_DRC"
+};
+
+static const sead::SafeString cRes_355[]  = {
+    "I_star"
+};
+
+static const sead::SafeString cRes_CourseSelectPlayer[]  = {
+    "MarioMdl",
+    "CommonAnm"
+};
+
+static const sead::SafeString cRes_CourseSelectPlayer_2P_3P_4P[]  = {
+    "MarioMdl",
+    "LuigiMdl",
+    "KinopioMdl",
+    "CommonAnm",
+    "LuigiAnm",
+    "KinopioAnm"
+};
+
+static const sead::SafeString cRes_358[]  = {
+    "YoshiChibi_TexBalloon",
+    "YoshiChibi_TexBubble"
+};
+
+static const sead::SafeString cRes_35A[]  = {
+    "cobCastle"
+};
+
+static const sead::SafeString cRes_35B[]  = {
+    "cobToride"
+};
+
+static const sead::SafeString cRes_35C[]  = {
+    "cobKinoko1up"
+};
+
+static const sead::SafeString cRes_35D[]  = {
+    "cobKinokoShuffle"
+};
+
+static const sead::SafeString cRes_35E[]  = {
+    "cobKinokoSlot"
+};
+
+static const sead::SafeString cRes_35F[]  = {
+    "cobPeachGates1st"
+};
+
+static const sead::SafeString cRes_360[]  = {
+    "cobPeachGates2nd"
+};
+
+static const sead::SafeString cRes_361[]  = {
+    "cobCourse",
+    "cobRing",
+    "cobStarCoin"
+};
+
+static const sead::SafeString cRes_362[]  = {
+    "cobCannon"
+};
+
+static const sead::SafeString cRes_364[]  = {
+    "cobGhost"
+};
+
+static const sead::SafeString cRes_365[]  = {
+    "bros"
+};
+
+static const sead::SafeString cRes_366[]  = {
+    "cobShipLemmy"
+};
+
+static const sead::SafeString cRes_367[]  = {
+    "cobShipMorton"
+};
+
+static const sead::SafeString cRes_368[]  = {
+    "cobShipLarry"
+};
+
+static const sead::SafeString cRes_369[]  = {
+    "cobShipWendy"
+};
+
+static const sead::SafeString cRes_36A[]  = {
+    "cobShipIggy"
+};
+
+static const sead::SafeString cRes_36B[]  = {
+    "cobShipRoy"
+};
+
+static const sead::SafeString cRes_36C[]  = {
+    "cobShipLudwig"
+};
+
+static const sead::SafeString cRes_36D[]  = {
+    "cobShipKoopaJr",
+    "magic_hand"
+};
+
+static const sead::SafeString cRes_36E[]  = {
+    "cobShipKoopaJrBoro",
+    "cobShipKoopaJrJimen"
+};
+
+static const sead::SafeString cRes_36F[]  = {
+    "cobSurrender"
+};
+
+static const sead::SafeString cRes_370[]  = {
+    "cobSwitchA"
+};
+
+static const sead::SafeString cRes_371[]  = {
+    "cobSwitchB"
+};
+
+static const sead::SafeString cRes_372[]  = {
+    "teresa"
+};
+
+static const sead::SafeString cRes_373[]  = {
+    "kameck"
+};
+
+static const sead::SafeString cRes_374[]  = {
+    "kameck",
+    "bunbun",
+    "boss_KK"
+};
+
+static const sead::SafeString cRes_375[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_376[]  = {
+    "KinopioMdl",
+    "KinopioAnm"
+};
+
+static const sead::SafeString cRes_377[]  = {
+    "pukupuku"
+};
+
+static const sead::SafeString cRes_378[]  = {
+    "chorobon",
+    "block_pata"
+};
+
+static const sead::SafeString cRes_379[]  = {
+    "I_star",
+    "I_kinoko",
+    "I_fireflower",
+    "I_iceflower",
+    "I_musasabi",
+    "block_pata"
+};
+
+static const sead::SafeString cRes_37A[]  = {
+    "teresa"
+};
+
+static const sead::SafeString cRes_37B[]  = {
+    "cobFlagPeach",
+    "cobFlagKoopa"
+};
+
+static const sead::SafeString cRes_37C[]  = {
+    "I_musasabi",
+    "I_kinoko"
+};
+
+static const sead::SafeString cRes_37D[]  = {
+    "cobWaterPillar"
+};
+
+static const sead::SafeString cRes_37E[]  = {
+    "cobRainbowYoko",
+    "cobRainbowTate"
+};
+
+static const sead::SafeString cRes_37F[]  = {
+    "obj_baloon_Mii"
+};
+
+static const sead::SafeString cRes_380[]  = {
+    "penguin2"
+};
+
+static const sead::SafeString cRes_381[]  = {
+    "I_iceflower",
+    "I_kinoko"
+};
+
+static const sead::SafeString cRes_382[]  = {
+    "kuribo"
+};
+
+static const sead::SafeString cRes_383[]  = {
+    "pakkun"
+};
+
+static const sead::SafeString cRes_384[]  = {
+    "balloon_shadowkun"
+};
+
+static const sead::SafeString cRes_385[]  = {
+    "unizoBig"
+};
+
+static const sead::SafeString cRes_386[]  = {
+    "cobTomb"
+};
+
+static const sead::SafeString cRes_387[]  = {
+    "shadowkun"
+};
+
+static const sead::SafeString cRes_388[]  = {
+    "lift_torokko"
+};
+
+static const sead::SafeString cRes_389[]  = {
+    "koopaJr",
+    "koopaJr_clown"
+};
+
+static const sead::SafeString cRes_38A[]  = {
+    "peach",
+    "cobPeachWindow"
+};
+
+static const sead::SafeString cRes_38B[]  = {
+    "I_musasabi"
+};
+
+static const sead::SafeString cRes_38C[]  = {
+    "cobStarGate"
+};
+
+static const sead::SafeString cRes_38E[]  = {
+    "I_fireflower",
+    "miniGame_shuffle"
+};
+
+static const sead::SafeString cRes_38F[]  = {
+    "kuribo"
+};
+
+// ------------------------------------------ ResNum ------------------------------------------ //
+
+template <s32 N>
+inline s32 GetResNum(const sead::SafeString (&)[N])
+{
+    return N;
+}
+
+const u8 Profile::cResNum[cProfileID_Max] = {
+    0,                                              // ProfileID::c000
+    0,                                              // ProfileID::c001
+    0,                                              // ProfileID::c002
+    0,                                              // ProfileID::c003
+    0,                                              // ProfileID::c004
+    0,                                              // ProfileID::c005
+    0,                                              // ProfileID::c006
+    0,                                              // ProfileID::c007
+    0,                                              // ProfileID::c008
+    0,                                              // ProfileID::c009
+    0,                                              // ProfileID::c00A
+    0,                                              // ProfileID::c00B
+    0,                                              // ProfileID::c00C
+    0,                                              // ProfileID::c00D
+    0,                                              // ProfileID::c00E
+    0,                                              // ProfileID::c00F
+    0,                                              // ProfileID::c010
+    0,                                              // ProfileID::c011
+    0,                                              // ProfileID::c012
+    0,                                              // ProfileID::c013
+    0,                                              // ProfileID::c014
+    GetResNum(cRes_015),                            // ProfileID::c015
+    GetResNum(cRes_016),                            // ProfileID::c016
+    GetResNum(cRes_017),                            // ProfileID::c017
+    GetResNum(cRes_018),                            // ProfileID::c018
+    GetResNum(cRes_019),                            // ProfileID::c019
+    0,                                              // ProfileID::c01A
+    0,                                              // ProfileID::c01B
+    0,                                              // ProfileID::c01C
+    0,                                              // ProfileID::c01D
+    0,                                              // ProfileID::c01E
+    0,                                              // ProfileID::c01F
+    0,                                              // ProfileID::c020
+    GetResNum(cRes_021),                            // ProfileID::c021
+    GetResNum(cRes_022),                            // ProfileID::c022
+    GetResNum(cRes_023),                            // ProfileID::c023
+    GetResNum(cRes_024),                            // ProfileID::c024
+    0,                                              // ProfileID::c025
+    GetResNum(cRes_026),                            // ProfileID::c026
+    0,                                              // ProfileID::c027
+    0,                                              // ProfileID::c028
+    0,                                              // ProfileID::c029
+    0,                                              // ProfileID::c02A
+    GetResNum(cRes_02B),                            // ProfileID::c02B
+    GetResNum(cRes_02C),                            // ProfileID::c02C
+    GetResNum(cRes_02D),                            // ProfileID::c02D
+    GetResNum(cRes_02E),                            // ProfileID::c02E
+    0,                                              // ProfileID::c02F
+    0,                                              // ProfileID::c030
+    0,                                              // ProfileID::c031
+    GetResNum(cRes_032),                            // ProfileID::c032
+    GetResNum(cRes_033),                            // ProfileID::c033
+    0,                                              // ProfileID::c034
+    GetResNum(cRes_035),                            // ProfileID::c035
+    GetResNum(cRes_036),                            // ProfileID::c036
+    GetResNum(cRes_037),                            // ProfileID::c037
+    GetResNum(cRes_038),                            // ProfileID::c038
+    GetResNum(cRes_039),                            // ProfileID::c039
+    GetResNum(cRes_03A),                            // ProfileID::c03A
+    GetResNum(cRes_03B),                            // ProfileID::c03B
+    GetResNum(cRes_03C),                            // ProfileID::c03C
+    GetResNum(cRes_03D),                            // ProfileID::c03D
+    GetResNum(cRes_03E),                            // ProfileID::c03E
+    GetResNum(cRes_03F),                            // ProfileID::c03F
+    GetResNum(cRes_040),                            // ProfileID::c040
+    GetResNum(cRes_041),                            // ProfileID::c041
+    GetResNum(cRes_042),                            // ProfileID::c042
+    GetResNum(cRes_043),                            // ProfileID::c043
+    GetResNum(cRes_044),                            // ProfileID::c044
+    GetResNum(cRes_045),                            // ProfileID::c045
+    GetResNum(cRes_046),                            // ProfileID::c046
+    GetResNum(cRes_047),                            // ProfileID::c047
+    GetResNum(cRes_048),                            // ProfileID::c048
+    GetResNum(cRes_049),                            // ProfileID::c049
+    GetResNum(cRes_04A),                            // ProfileID::c04A
+    GetResNum(cRes_04B),                            // ProfileID::c04B
+    GetResNum(cRes_04C),                            // ProfileID::c04C
+    GetResNum(cRes_04D),                            // ProfileID::c04D
+    GetResNum(cRes_04E),                            // ProfileID::c04E
+    GetResNum(cRes_04F),                            // ProfileID::c04F
+    GetResNum(cRes_050),                            // ProfileID::c050
+    GetResNum(cRes_051),                            // ProfileID::c051
+    GetResNum(cRes_052),                            // ProfileID::c052
+    GetResNum(cRes_053),                            // ProfileID::c053
+    GetResNum(cRes_054),                            // ProfileID::c054
+    GetResNum(cRes_055),                            // ProfileID::c055
+    GetResNum(cRes_056),                            // ProfileID::c056
+    GetResNum(cRes_057),                            // ProfileID::c057
+    GetResNum(cRes_058),                            // ProfileID::c058
+    GetResNum(cRes_059),                            // ProfileID::c059
+    GetResNum(cRes_05A),                            // ProfileID::c05A
+    GetResNum(cRes_05B),                            // ProfileID::c05B
+    GetResNum(cRes_05C),                            // ProfileID::c05C
+    0,                                              // ProfileID::c05D
+    0,                                              // ProfileID::c05E
+    GetResNum(cRes_05F),                            // ProfileID::c05F
+    GetResNum(cRes_060),                            // ProfileID::c060
+    GetResNum(cRes_061),                            // ProfileID::c061
+    GetResNum(cRes_062),                            // ProfileID::c062
+    GetResNum(cRes_063),                            // ProfileID::c063
+    GetResNum(cRes_064),                            // ProfileID::c064
+    GetResNum(cRes_065),                            // ProfileID::c065
+    GetResNum(cRes_066),                            // ProfileID::c066
+    GetResNum(cRes_067),                            // ProfileID::c067
+    GetResNum(cRes_068),                            // ProfileID::c068
+    GetResNum(cRes_069),                            // ProfileID::c069
+    GetResNum(cRes_06A),                            // ProfileID::c06A
+    GetResNum(cRes_06B),                            // ProfileID::c06B
+    GetResNum(cRes_06C),                            // ProfileID::c06C
+    GetResNum(cRes_06D),                            // ProfileID::c06D
+    GetResNum(cRes_06E),                            // ProfileID::c06E
+    GetResNum(cRes_06F),                            // ProfileID::c06F
+    GetResNum(cRes_070),                            // ProfileID::c070
+    GetResNum(cRes_071),                            // ProfileID::c071
+    GetResNum(cRes_072),                            // ProfileID::c072
+    GetResNum(cRes_073),                            // ProfileID::c073
+    GetResNum(cRes_074),                            // ProfileID::c074
+    GetResNum(cRes_075),                            // ProfileID::c075
+    GetResNum(cRes_076),                            // ProfileID::c076
+    GetResNum(cRes_077),                            // ProfileID::c077
+    0,                                              // ProfileID::c078
+    GetResNum(cRes_079),                            // ProfileID::c079
+    GetResNum(cRes_07A),                            // ProfileID::c07A
+    GetResNum(cRes_07B),                            // ProfileID::c07B
+    GetResNum(cRes_07C),                            // ProfileID::c07C
+    GetResNum(cRes_07D),                            // ProfileID::c07D
+    GetResNum(cRes_07E),                            // ProfileID::c07E
+    GetResNum(cRes_07F),                            // ProfileID::c07F
+    GetResNum(cRes_080),                            // ProfileID::c080
+    GetResNum(cRes_081),                            // ProfileID::c081
+    GetResNum(cRes_082),                            // ProfileID::c082
+    GetResNum(cRes_083),                            // ProfileID::c083
+    GetResNum(cRes_084),                            // ProfileID::c084
+    GetResNum(cRes_085),                            // ProfileID::c085
+    GetResNum(cRes_086),                            // ProfileID::c086
+    GetResNum(cRes_087),                            // ProfileID::c087
+    GetResNum(cRes_088),                            // ProfileID::c088
+    GetResNum(cRes_089),                            // ProfileID::c089
+    GetResNum(cRes_08A),                            // ProfileID::c08A
+    GetResNum(cRes_08B),                            // ProfileID::c08B
+    GetResNum(cRes_08C),                            // ProfileID::c08C
+    GetResNum(cRes_08D),                            // ProfileID::c08D
+    GetResNum(cRes_08E),                            // ProfileID::c08E
+    GetResNum(cRes_08F),                            // ProfileID::c08F
+    GetResNum(cRes_090),                            // ProfileID::c090
+    GetResNum(cRes_091),                            // ProfileID::c091
+    GetResNum(cRes_092),                            // ProfileID::c092
+    GetResNum(cRes_093),                            // ProfileID::c093
+    GetResNum(cRes_094),                            // ProfileID::c094
+    GetResNum(cRes_095),                            // ProfileID::c095
+    GetResNum(cRes_096),                            // ProfileID::c096
+    GetResNum(cRes_097),                            // ProfileID::c097
+    GetResNum(cRes_098),                            // ProfileID::c098
+    GetResNum(cRes_099),                            // ProfileID::c099
+    0,                                              // ProfileID::c09A
+    GetResNum(cRes_09B),                            // ProfileID::c09B
+    GetResNum(cRes_09C),                            // ProfileID::c09C
+    GetResNum(cRes_09D),                            // ProfileID::c09D
+    GetResNum(cRes_09E),                            // ProfileID::c09E
+    GetResNum(cRes_09F),                            // ProfileID::c09F
+    GetResNum(cRes_0A0),                            // ProfileID::c0A0
+    GetResNum(cRes_0A1),                            // ProfileID::c0A1
+    GetResNum(cRes_0A2),                            // ProfileID::c0A2
+    GetResNum(cRes_0A3),                            // ProfileID::c0A3
+    GetResNum(cRes_0A4),                            // ProfileID::c0A4
+    GetResNum(cRes_0A5),                            // ProfileID::c0A5
+    GetResNum(cRes_0A6),                            // ProfileID::c0A6
+    GetResNum(cRes_0A7),                            // ProfileID::c0A7
+    GetResNum(cRes_0A8),                            // ProfileID::c0A8
+    GetResNum(cRes_0A9),                            // ProfileID::c0A9
+    GetResNum(cRes_0AA),                            // ProfileID::c0AA
+    GetResNum(cRes_0AB),                            // ProfileID::c0AB
+    GetResNum(cRes_0AC),                            // ProfileID::c0AC
+    GetResNum(cRes_0AD),                            // ProfileID::c0AD
+    GetResNum(cRes_0AE),                            // ProfileID::c0AE
+    GetResNum(cRes_0AF),                            // ProfileID::c0AF
+    GetResNum(cRes_0B0),                            // ProfileID::c0B0
+    GetResNum(cRes_0B1),                            // ProfileID::c0B1
+    GetResNum(cRes_0B2),                            // ProfileID::c0B2
+    GetResNum(cRes_0B3),                            // ProfileID::c0B3
+    GetResNum(cRes_0B4),                            // ProfileID::c0B4
+    GetResNum(cRes_0B5),                            // ProfileID::c0B5
+    GetResNum(cRes_0B6),                            // ProfileID::c0B6
+    GetResNum(cRes_0B7),                            // ProfileID::c0B7
+    GetResNum(cRes_0B8),                            // ProfileID::c0B8
+    GetResNum(cRes_0B9),                            // ProfileID::c0B9
+    GetResNum(cRes_0BA),                            // ProfileID::c0BA
+    GetResNum(cRes_0BB),                            // ProfileID::c0BB
+    GetResNum(cRes_0BC),                            // ProfileID::c0BC
+    GetResNum(cRes_0BD),                            // ProfileID::c0BD
+    GetResNum(cRes_0BE),                            // ProfileID::c0BE
+    GetResNum(cRes_0BF),                            // ProfileID::c0BF
+    GetResNum(cRes_0C0),                            // ProfileID::c0C0
+    GetResNum(cRes_0C1),                            // ProfileID::c0C1
+    GetResNum(cRes_0C2),                            // ProfileID::c0C2
+    GetResNum(cRes_0C3),                            // ProfileID::c0C3
+    GetResNum(cRes_0C4),                            // ProfileID::c0C4
+    GetResNum(cRes_0C5),                            // ProfileID::c0C5
+    GetResNum(cRes_0C6),                            // ProfileID::c0C6
+    GetResNum(cRes_0C7),                            // ProfileID::c0C7
+    GetResNum(cRes_0C8),                            // ProfileID::c0C8
+    GetResNum(cRes_0C9),                            // ProfileID::c0C9
+    GetResNum(cRes_0CA),                            // ProfileID::c0CA
+    GetResNum(cRes_0CB),                            // ProfileID::c0CB
+    GetResNum(cRes_0CC),                            // ProfileID::c0CC
+    GetResNum(cRes_0CD),                            // ProfileID::c0CD
+    GetResNum(cRes_0CE),                            // ProfileID::c0CE
+    GetResNum(cRes_0CF),                            // ProfileID::c0CF
+    GetResNum(cRes_0D0),                            // ProfileID::c0D0
+    GetResNum(cRes_0D1),                            // ProfileID::c0D1
+    GetResNum(cRes_FloorHoleDokan),                 // ProfileID::cFloorHoleDokan
+    GetResNum(cRes_0D3),                            // ProfileID::c0D3
+    GetResNum(cRes_0D4),                            // ProfileID::c0D4
+    GetResNum(cRes_0D5),                            // ProfileID::c0D5
+    GetResNum(cRes_0D6),                            // ProfileID::c0D6
+    GetResNum(cRes_0D7),                            // ProfileID::c0D7
+    GetResNum(cRes_0D8),                            // ProfileID::c0D8
+    GetResNum(cRes_0D9),                            // ProfileID::c0D9
+    GetResNum(cRes_0DA),                            // ProfileID::c0DA
+    GetResNum(cRes_0DB),                            // ProfileID::c0DB
+    GetResNum(cRes_0DC),                            // ProfileID::c0DC
+    GetResNum(cRes_0DD),                            // ProfileID::c0DD
+    GetResNum(cRes_0DE),                            // ProfileID::c0DE
+    GetResNum(cRes_0DF),                            // ProfileID::c0DF
+    GetResNum(cRes_0E0),                            // ProfileID::c0E0
+    GetResNum(cRes_0E1),                            // ProfileID::c0E1
+    GetResNum(cRes_0E2),                            // ProfileID::c0E2
+    GetResNum(cRes_0E3),                            // ProfileID::c0E3
+    GetResNum(cRes_0E4),                            // ProfileID::c0E4
+    GetResNum(cRes_0E5),                            // ProfileID::c0E5
+    GetResNum(cRes_0E6),                            // ProfileID::c0E6
+    GetResNum(cRes_0E7),                            // ProfileID::c0E7
+    GetResNum(cRes_0E8),                            // ProfileID::c0E8
+    GetResNum(cRes_0E9),                            // ProfileID::c0E9
+    GetResNum(cRes_0EA),                            // ProfileID::c0EA
+    GetResNum(cRes_0EB),                            // ProfileID::c0EB
+    GetResNum(cRes_0EC),                            // ProfileID::c0EC
+    GetResNum(cRes_0ED),                            // ProfileID::c0ED
+    GetResNum(cRes_0EE),                            // ProfileID::c0EE
+    GetResNum(cRes_0EF),                            // ProfileID::c0EF
+    GetResNum(cRes_0F0),                            // ProfileID::c0F0
+    GetResNum(cRes_0F1),                            // ProfileID::c0F1
+    GetResNum(cRes_0F2),                            // ProfileID::c0F2
+    GetResNum(cRes_0F3),                            // ProfileID::c0F3
+    GetResNum(cRes_0F4),                            // ProfileID::c0F4
+    0,                                              // ProfileID::c0F5
+    GetResNum(cRes_0F6),                            // ProfileID::c0F6
+    GetResNum(cRes_0F7),                            // ProfileID::c0F7
+    GetResNum(cRes_0F8),                            // ProfileID::c0F8
+    GetResNum(cRes_0F9),                            // ProfileID::c0F9
+    GetResNum(cRes_0FA),                            // ProfileID::c0FA
+    GetResNum(cRes_0FB),                            // ProfileID::c0FB
+    GetResNum(cRes_0FC),                            // ProfileID::c0FC
+    GetResNum(cRes_0FD),                            // ProfileID::c0FD
+    GetResNum(cRes_0FE),                            // ProfileID::c0FE
+    GetResNum(cRes_0FF),                            // ProfileID::c0FF
+    GetResNum(cRes_100),                            // ProfileID::c100
+    GetResNum(cRes_101),                            // ProfileID::c101
+    GetResNum(cRes_102),                            // ProfileID::c102
+    GetResNum(cRes_103),                            // ProfileID::c103
+    GetResNum(cRes_104),                            // ProfileID::c104
+    GetResNum(cRes_105),                            // ProfileID::c105
+    GetResNum(cRes_106),                            // ProfileID::c106
+    GetResNum(cRes_107),                            // ProfileID::c107
+    GetResNum(cRes_108),                            // ProfileID::c108
+    GetResNum(cRes_109),                            // ProfileID::c109
+    GetResNum(cRes_10A),                            // ProfileID::c10A
+    GetResNum(cRes_10B),                            // ProfileID::c10B
+    GetResNum(cRes_10C),                            // ProfileID::c10C
+    GetResNum(cRes_10D),                            // ProfileID::c10D
+    GetResNum(cRes_10E),                            // ProfileID::c10E
+    GetResNum(cRes_10F),                            // ProfileID::c10F
+    GetResNum(cRes_110),                            // ProfileID::c110
+    GetResNum(cRes_111),                            // ProfileID::c111
+    GetResNum(cRes_112),                            // ProfileID::c112
+    GetResNum(cRes_113),                            // ProfileID::c113
+    GetResNum(cRes_114),                            // ProfileID::c114
+    GetResNum(cRes_115),                            // ProfileID::c115
+    GetResNum(cRes_116),                            // ProfileID::c116
+    0,                                              // ProfileID::c117
+    GetResNum(cRes_118),                            // ProfileID::c118
+    GetResNum(cRes_119),                            // ProfileID::c119
+    GetResNum(cRes_11A),                            // ProfileID::c11A
+    GetResNum(cRes_11B),                            // ProfileID::c11B
+    0,                                              // ProfileID::c11C
+    GetResNum(cRes_11D),                            // ProfileID::c11D
+    GetResNum(cRes_11E),                            // ProfileID::c11E
+    0,                                              // ProfileID::c11F
+    0,                                              // ProfileID::c120
+    0,                                              // ProfileID::c121
+    0,                                              // ProfileID::c122
+    0,                                              // ProfileID::c123
+    0,                                              // ProfileID::c124
+    0,                                              // ProfileID::c125
+    0,                                              // ProfileID::c126
+    0,                                              // ProfileID::c127
+    0,                                              // ProfileID::c128
+    0,                                              // ProfileID::c129
+    0,                                              // ProfileID::c12A
+    0,                                              // ProfileID::c12B
+    0,                                              // ProfileID::c12C
+    0,                                              // ProfileID::c12D
+    0,                                              // ProfileID::c12E
+    0,                                              // ProfileID::c12F
+    0,                                              // ProfileID::c130
+    0,                                              // ProfileID::c131
+    0,                                              // ProfileID::c132
+    0,                                              // ProfileID::c133
+    0,                                              // ProfileID::c134
+    GetResNum(cRes_135),                            // ProfileID::c135
+    GetResNum(cRes_136),                            // ProfileID::c136
+    0,                                              // ProfileID::c137
+    GetResNum(cRes_138),                            // ProfileID::c138
+    0,                                              // ProfileID::c139
+    GetResNum(cRes_13A),                            // ProfileID::c13A
+    GetResNum(cRes_13B),                            // ProfileID::c13B
+    GetResNum(cRes_13C),                            // ProfileID::c13C
+    0,                                              // ProfileID::c13D
+    0,                                              // ProfileID::c13E
+    0,                                              // ProfileID::c13F
+    GetResNum(cRes_140),                            // ProfileID::c140
+    GetResNum(cRes_141),                            // ProfileID::c141
+    GetResNum(cRes_142),                            // ProfileID::c142
+    GetResNum(cRes_143),                            // ProfileID::c143
+    GetResNum(cRes_144),                            // ProfileID::c144
+    GetResNum(cRes_145),                            // ProfileID::c145
+    GetResNum(cRes_146),                            // ProfileID::c146
+    GetResNum(cRes_147),                            // ProfileID::c147
+    GetResNum(cRes_148),                            // ProfileID::c148
+    GetResNum(cRes_149),                            // ProfileID::c149
+    GetResNum(cRes_14A),                            // ProfileID::c14A
+    GetResNum(cRes_14B),                            // ProfileID::c14B
+    0,                                              // ProfileID::c14C
+    GetResNum(cRes_14D),                            // ProfileID::c14D
+    GetResNum(cRes_14E),                            // ProfileID::c14E
+    GetResNum(cRes_14F),                            // ProfileID::c14F
+    GetResNum(cRes_150),                            // ProfileID::c150
+    GetResNum(cRes_151),                            // ProfileID::c151
+    GetResNum(cRes_152),                            // ProfileID::c152
+    GetResNum(cRes_153),                            // ProfileID::c153
+    GetResNum(cRes_154),                            // ProfileID::c154
+    GetResNum(cRes_155),                            // ProfileID::c155
+    GetResNum(cRes_156),                            // ProfileID::c156
+    GetResNum(cRes_157),                            // ProfileID::c157
+    GetResNum(cRes_158),                            // ProfileID::c158
+    GetResNum(cRes_159),                            // ProfileID::c159
+    GetResNum(cRes_15A),                            // ProfileID::c15A
+    GetResNum(cRes_15B),                            // ProfileID::c15B
+    0,                                              // ProfileID::c15C
+    GetResNum(cRes_15D),                            // ProfileID::c15D
+    GetResNum(cRes_15E),                            // ProfileID::c15E
+    GetResNum(cRes_15F),                            // ProfileID::c15F
+    GetResNum(cRes_160),                            // ProfileID::c160
+    GetResNum(cRes_161),                            // ProfileID::c161
+    0,                                              // ProfileID::c162
+    GetResNum(cRes_163),                            // ProfileID::c163
+    GetResNum(cRes_164),                            // ProfileID::c164
+    GetResNum(cRes_165),                            // ProfileID::c165
+    GetResNum(cRes_166),                            // ProfileID::c166
+    GetResNum(cRes_167),                            // ProfileID::c167
+    GetResNum(cRes_168),                            // ProfileID::c168
+    GetResNum(cRes_169),                            // ProfileID::c169
+    GetResNum(cRes_16A),                            // ProfileID::c16A
+    GetResNum(cRes_16B),                            // ProfileID::c16B
+    GetResNum(cRes_16C),                            // ProfileID::c16C
+    GetResNum(cRes_16D),                            // ProfileID::c16D
+    GetResNum(cRes_16E),                            // ProfileID::c16E
+    GetResNum(cRes_16F),                            // ProfileID::c16F
+    GetResNum(cRes_170),                            // ProfileID::c170
+    GetResNum(cRes_171),                            // ProfileID::c171
+    GetResNum(cRes_172),                            // ProfileID::c172
+    GetResNum(cRes_173),                            // ProfileID::c173
+    GetResNum(cRes_174),                            // ProfileID::c174
+    GetResNum(cRes_175),                            // ProfileID::c175
+    GetResNum(cRes_176),                            // ProfileID::c176
+    GetResNum(cRes_177),                            // ProfileID::c177
+    GetResNum(cRes_178),                            // ProfileID::c178
+    GetResNum(cRes_179),                            // ProfileID::c179
+    GetResNum(cRes_17A),                            // ProfileID::c17A
+    GetResNum(cRes_17B),                            // ProfileID::c17B
+    0,                                              // ProfileID::c17C
+    GetResNum(cRes_17D),                            // ProfileID::c17D
+    GetResNum(cRes_17E),                            // ProfileID::c17E
+    GetResNum(cRes_17F),                            // ProfileID::c17F
+    GetResNum(cRes_180),                            // ProfileID::c180
+    GetResNum(cRes_181),                            // ProfileID::c181
+    GetResNum(cRes_182),                            // ProfileID::c182
+    GetResNum(cRes_183),                            // ProfileID::c183
+    GetResNum(cRes_184),                            // ProfileID::c184
+    GetResNum(cRes_185),                            // ProfileID::c185
+    GetResNum(cRes_186),                            // ProfileID::c186
+    GetResNum(cRes_187),                            // ProfileID::c187
+    GetResNum(cRes_188),                            // ProfileID::c188
+    GetResNum(cRes_189),                            // ProfileID::c189
+    GetResNum(cRes_18A),                            // ProfileID::c18A
+    GetResNum(cRes_18B),                            // ProfileID::c18B
+    GetResNum(cRes_18C),                            // ProfileID::c18C
+    GetResNum(cRes_18D),                            // ProfileID::c18D
+    GetResNum(cRes_18E),                            // ProfileID::c18E
+    GetResNum(cRes_18F),                            // ProfileID::c18F
+    GetResNum(cRes_190),                            // ProfileID::c190
+    GetResNum(cRes_191),                            // ProfileID::c191
+    GetResNum(cRes_192),                            // ProfileID::c192
+    GetResNum(cRes_193),                            // ProfileID::c193
+    GetResNum(cRes_194),                            // ProfileID::c194
+    GetResNum(cRes_195),                            // ProfileID::c195
+    GetResNum(cRes_196),                            // ProfileID::c196
+    GetResNum(cRes_197),                            // ProfileID::c197
+    GetResNum(cRes_198),                            // ProfileID::c198
+    GetResNum(cRes_199),                            // ProfileID::c199
+    GetResNum(cRes_19A),                            // ProfileID::c19A
+    0,                                              // ProfileID::c19B
+    GetResNum(cRes_19C),                            // ProfileID::c19C
+    GetResNum(cRes_19D),                            // ProfileID::c19D
+    0,                                              // ProfileID::c19E
+    GetResNum(cRes_19F),                            // ProfileID::c19F
+    GetResNum(cRes_1A0),                            // ProfileID::c1A0
+    GetResNum(cRes_1A1),                            // ProfileID::c1A1
+    0,                                              // ProfileID::c1A2
+    GetResNum(cRes_1A3),                            // ProfileID::c1A3
+    GetResNum(cRes_1A4),                            // ProfileID::c1A4
+    GetResNum(cRes_1A5),                            // ProfileID::c1A5
+    GetResNum(cRes_1A6),                            // ProfileID::c1A6
+    GetResNum(cRes_1A7),                            // ProfileID::c1A7
+    GetResNum(cRes_1A8),                            // ProfileID::c1A8
+    GetResNum(cRes_1A9),                            // ProfileID::c1A9
+    GetResNum(cRes_1AA),                            // ProfileID::c1AA
+    GetResNum(cRes_1AB),                            // ProfileID::c1AB
+    GetResNum(cRes_1AC),                            // ProfileID::c1AC
+    GetResNum(cRes_1AD),                            // ProfileID::c1AD
+    GetResNum(cRes_1AE),                            // ProfileID::c1AE
+    GetResNum(cRes_1AF),                            // ProfileID::c1AF
+    GetResNum(cRes_1B0),                            // ProfileID::c1B0
+    GetResNum(cRes_1B1),                            // ProfileID::c1B1
+    GetResNum(cRes_1B2),                            // ProfileID::c1B2
+    GetResNum(cRes_1B3),                            // ProfileID::c1B3
+    0,                                              // ProfileID::c1B4
+    0,                                              // ProfileID::c1B5
+    GetResNum(cRes_1B6),                            // ProfileID::c1B6
+    0,                                              // ProfileID::c1B7
+    0,                                              // ProfileID::c1B8
+    GetResNum(cRes_1B9),                            // ProfileID::c1B9
+    GetResNum(cRes_Yoshi),                          // ProfileID::cYoshi
+    GetResNum(cRes_TottenPlayer),                   // ProfileID::cTottenPlayer
+    GetResNum(cRes_PlayerObject),                   // ProfileID::cPlayerObject
+    GetResNum(cRes_1BD),                            // ProfileID::c1BD
+    GetResNum(cRes_1BE),                            // ProfileID::c1BE
+    GetResNum(cRes_1BF),                            // ProfileID::c1BF
+    GetResNum(cRes_1C0),                            // ProfileID::c1C0
+    GetResNum(cRes_1C1),                            // ProfileID::c1C1
+    GetResNum(cRes_1C2),                            // ProfileID::c1C2
+    GetResNum(cRes_1C3),                            // ProfileID::c1C3
+    0,                                              // ProfileID::c1C4
+    GetResNum(cRes_1C5),                            // ProfileID::c1C5
+    GetResNum(cRes_1C6),                            // ProfileID::c1C6
+    0,                                              // ProfileID::c1C7
+    GetResNum(cRes_1C8),                            // ProfileID::c1C8
+    0,                                              // ProfileID::c1C9
+    0,                                              // ProfileID::c1CA
+    GetResNum(cRes_1CB),                            // ProfileID::c1CB
+    GetResNum(cRes_1CC),                            // ProfileID::c1CC
+    0,                                              // ProfileID::c1CD
+    GetResNum(cRes_1CE),                            // ProfileID::c1CE
+    GetResNum(cRes_1CF),                            // ProfileID::c1CF
+    GetResNum(cRes_1D0),                            // ProfileID::c1D0
+    GetResNum(cRes_1D1),                            // ProfileID::c1D1
+    GetResNum(cRes_1D2),                            // ProfileID::c1D2
+    GetResNum(cRes_1D3),                            // ProfileID::c1D3
+    GetResNum(cRes_1D4),                            // ProfileID::c1D4
+    GetResNum(cRes_1D5),                            // ProfileID::c1D5
+    GetResNum(cRes_1D6),                            // ProfileID::c1D6
+    GetResNum(cRes_1D7),                            // ProfileID::c1D7
+    GetResNum(cRes_1D8),                            // ProfileID::c1D8
+    GetResNum(cRes_1D9),                            // ProfileID::c1D9
+    0,                                              // ProfileID::c1DA
+    0,                                              // ProfileID::c1DB
+    0,                                              // ProfileID::c1DC
+    0,                                              // ProfileID::c1DD
+    0,                                              // ProfileID::c1DE
+    GetResNum(cRes_1DF),                            // ProfileID::c1DF
+    GetResNum(cRes_1E0),                            // ProfileID::c1E0
+    GetResNum(cRes_1E1),                            // ProfileID::c1E1
+    GetResNum(cRes_1E2),                            // ProfileID::c1E2
+    GetResNum(cRes_1E3),                            // ProfileID::c1E3
+    GetResNum(cRes_1E4),                            // ProfileID::c1E4
+    GetResNum(cRes_1E5),                            // ProfileID::c1E5
+    GetResNum(cRes_1E6),                            // ProfileID::c1E6
+    GetResNum(cRes_1E7),                            // ProfileID::c1E7
+    GetResNum(cRes_1E8),                            // ProfileID::c1E8
+    GetResNum(cRes_1E9),                            // ProfileID::c1E9
+    GetResNum(cRes_1EA),                            // ProfileID::c1EA
+    GetResNum(cRes_1EB),                            // ProfileID::c1EB
+    GetResNum(cRes_1EC),                            // ProfileID::c1EC
+    GetResNum(cRes_1ED),                            // ProfileID::c1ED
+    GetResNum(cRes_1EE),                            // ProfileID::c1EE
+    GetResNum(cRes_1EF),                            // ProfileID::c1EF
+    GetResNum(cRes_1F0),                            // ProfileID::c1F0
+    GetResNum(cRes_1F1),                            // ProfileID::c1F1
+    GetResNum(cRes_1F2),                            // ProfileID::c1F2
+    GetResNum(cRes_1F3),                            // ProfileID::c1F3
+    GetResNum(cRes_1F4),                            // ProfileID::c1F4
+    GetResNum(cRes_1F5),                            // ProfileID::c1F5
+    GetResNum(cRes_1F6),                            // ProfileID::c1F6
+    GetResNum(cRes_1F7),                            // ProfileID::c1F7
+    GetResNum(cRes_1F8),                            // ProfileID::c1F8
+    GetResNum(cRes_1F9),                            // ProfileID::c1F9
+    GetResNum(cRes_1FA),                            // ProfileID::c1FA
+    GetResNum(cRes_1FB),                            // ProfileID::c1FB
+    GetResNum(cRes_1FC),                            // ProfileID::c1FC
+    GetResNum(cRes_1FD),                            // ProfileID::c1FD
+    GetResNum(cRes_1FE),                            // ProfileID::c1FE
+    0,                                              // ProfileID::c1FF
+    GetResNum(cRes_200),                            // ProfileID::c200
+    GetResNum(cRes_201),                            // ProfileID::c201
+    GetResNum(cRes_202),                            // ProfileID::c202
+    GetResNum(cRes_203),                            // ProfileID::c203
+    GetResNum(cRes_204),                            // ProfileID::c204
+    GetResNum(cRes_205),                            // ProfileID::c205
+    GetResNum(cRes_206),                            // ProfileID::c206
+    GetResNum(cRes_207),                            // ProfileID::c207
+    GetResNum(cRes_208),                            // ProfileID::c208
+    GetResNum(cRes_209),                            // ProfileID::c209
+    GetResNum(cRes_20A),                            // ProfileID::c20A
+    GetResNum(cRes_20B),                            // ProfileID::c20B
+    GetResNum(cRes_20C),                            // ProfileID::c20C
+    GetResNum(cRes_20D),                            // ProfileID::c20D
+    GetResNum(cRes_20E),                            // ProfileID::c20E
+    GetResNum(cRes_20F),                            // ProfileID::c20F
+    GetResNum(cRes_210),                            // ProfileID::c210
+    GetResNum(cRes_211),                            // ProfileID::c211
+    GetResNum(cRes_212),                            // ProfileID::c212
+    GetResNum(cRes_213),                            // ProfileID::c213
+    GetResNum(cRes_214),                            // ProfileID::c214
+    GetResNum(cRes_215),                            // ProfileID::c215
+    GetResNum(cRes_216),                            // ProfileID::c216
+    GetResNum(cRes_217),                            // ProfileID::c217
+    GetResNum(cRes_218),                            // ProfileID::c218
+    GetResNum(cRes_219),                            // ProfileID::c219
+    GetResNum(cRes_21A),                            // ProfileID::c21A
+    GetResNum(cRes_21B),                            // ProfileID::c21B
+    GetResNum(cRes_21C),                            // ProfileID::c21C
+    GetResNum(cRes_21D),                            // ProfileID::c21D
+    GetResNum(cRes_21E),                            // ProfileID::c21E
+    GetResNum(cRes_21F),                            // ProfileID::c21F
+    GetResNum(cRes_220),                            // ProfileID::c220
+    GetResNum(cRes_221),                            // ProfileID::c221
+    GetResNum(cRes_222),                            // ProfileID::c222
+    GetResNum(cRes_223),                            // ProfileID::c223
+    GetResNum(cRes_224),                            // ProfileID::c224
+    GetResNum(cRes_225),                            // ProfileID::c225
+    GetResNum(cRes_226),                            // ProfileID::c226
+    GetResNum(cRes_227),                            // ProfileID::c227
+    GetResNum(cRes_228),                            // ProfileID::c228
+    GetResNum(cRes_229),                            // ProfileID::c229
+    GetResNum(cRes_22A),                            // ProfileID::c22A
+    GetResNum(cRes_22B),                            // ProfileID::c22B
+    GetResNum(cRes_22C),                            // ProfileID::c22C
+    GetResNum(cRes_22D),                            // ProfileID::c22D
+    0,                                              // ProfileID::c22E
+    0,                                              // ProfileID::c22F
+    GetResNum(cRes_230),                            // ProfileID::c230
+    GetResNum(cRes_231),                            // ProfileID::c231
+    GetResNum(cRes_232),                            // ProfileID::c232
+    GetResNum(cRes_233),                            // ProfileID::c233
+    GetResNum(cRes_234),                            // ProfileID::c234
+    GetResNum(cRes_235),                            // ProfileID::c235
+    GetResNum(cRes_236),                            // ProfileID::c236
+    GetResNum(cRes_237),                            // ProfileID::c237
+    GetResNum(cRes_238),                            // ProfileID::c238
+    GetResNum(cRes_239),                            // ProfileID::c239
+    GetResNum(cRes_23A),                            // ProfileID::c23A
+    GetResNum(cRes_23B),                            // ProfileID::c23B
+    GetResNum(cRes_23C),                            // ProfileID::c23C
+    GetResNum(cRes_23D),                            // ProfileID::c23D
+    GetResNum(cRes_23E),                            // ProfileID::c23E
+    0,                                              // ProfileID::c23F
+    0,                                              // ProfileID::c240
+    0,                                              // ProfileID::c241
+    0,                                              // ProfileID::c242
+    0,                                              // ProfileID::c243
+    0,                                              // ProfileID::c244
+    0,                                              // ProfileID::c245
+    0,                                              // ProfileID::c246
+    0,                                              // ProfileID::c247
+    0,                                              // ProfileID::c248
+    0,                                              // ProfileID::c249
+    0,                                              // ProfileID::c24A
+    0,                                              // ProfileID::cBgCenter
+    0,                                              // ProfileID::c24C
+    0,                                              // ProfileID::c24D
+    0,                                              // ProfileID::c24E
+    GetResNum(cRes_24F),                            // ProfileID::c24F
+    GetResNum(cRes_250),                            // ProfileID::c250
+    GetResNum(cRes_251),                            // ProfileID::c251
+    GetResNum(cRes_252),                            // ProfileID::c252
+    GetResNum(cRes_253),                            // ProfileID::c253
+    GetResNum(cRes_254),                            // ProfileID::c254
+    GetResNum(cRes_255),                            // ProfileID::c255
+    GetResNum(cRes_256),                            // ProfileID::c256
+    GetResNum(cRes_257),                            // ProfileID::c257
+    GetResNum(cRes_258),                            // ProfileID::c258
+    GetResNum(cRes_259),                            // ProfileID::c259
+    GetResNum(cRes_25A),                            // ProfileID::c25A
+    GetResNum(cRes_25B),                            // ProfileID::c25B
+    GetResNum(cRes_25C),                            // ProfileID::c25C
+    GetResNum(cRes_25D),                            // ProfileID::c25D
+    GetResNum(cRes_25E),                            // ProfileID::c25E
+    GetResNum(cRes_25F),                            // ProfileID::c25F
+    GetResNum(cRes_260),                            // ProfileID::c260
+    GetResNum(cRes_261),                            // ProfileID::c261
+    GetResNum(cRes_262),                            // ProfileID::c262
+    GetResNum(cRes_263),                            // ProfileID::c263
+    GetResNum(cRes_264),                            // ProfileID::c264
+    GetResNum(cRes_265),                            // ProfileID::c265
+    GetResNum(cRes_266),                            // ProfileID::c266
+    GetResNum(cRes_267),                            // ProfileID::c267
+    GetResNum(cRes_268),                            // ProfileID::c268
+    GetResNum(cRes_269),                            // ProfileID::c269
+    GetResNum(cRes_26A),                            // ProfileID::c26A
+    GetResNum(cRes_26B),                            // ProfileID::c26B
+    GetResNum(cRes_26C),                            // ProfileID::c26C
+    GetResNum(cRes_26D),                            // ProfileID::c26D
+    GetResNum(cRes_26E),                            // ProfileID::c26E
+    GetResNum(cRes_26F),                            // ProfileID::c26F
+    GetResNum(cRes_270),                            // ProfileID::c270
+    GetResNum(cRes_271),                            // ProfileID::c271
+    GetResNum(cRes_272),                            // ProfileID::c272
+    0,                                              // ProfileID::c273
+    0,                                              // ProfileID::c274
+    0,                                              // ProfileID::c275
+    0,                                              // ProfileID::c276
+    0,                                              // ProfileID::c277
+    GetResNum(cRes_278),                            // ProfileID::c278
+    GetResNum(cRes_279),                            // ProfileID::c279
+    GetResNum(cRes_27A),                            // ProfileID::c27A
+    GetResNum(cRes_27B),                            // ProfileID::c27B
+    GetResNum(cRes_27C),                            // ProfileID::c27C
+    GetResNum(cRes_27D),                            // ProfileID::c27D
+    GetResNum(cRes_27E),                            // ProfileID::c27E
+    GetResNum(cRes_27F),                            // ProfileID::c27F
+    GetResNum(cRes_280),                            // ProfileID::c280
+    GetResNum(cRes_281),                            // ProfileID::c281
+    GetResNum(cRes_282),                            // ProfileID::c282
+    GetResNum(cRes_283),                            // ProfileID::c283
+    GetResNum(cRes_284),                            // ProfileID::c284
+    GetResNum(cRes_285),                            // ProfileID::c285
+    GetResNum(cRes_286),                            // ProfileID::c286
+    GetResNum(cRes_287),                            // ProfileID::c287
+    GetResNum(cRes_288),                            // ProfileID::c288
+    GetResNum(cRes_289),                            // ProfileID::c289
+    GetResNum(cRes_28A),                            // ProfileID::c28A
+    GetResNum(cRes_28B),                            // ProfileID::c28B
+    GetResNum(cRes_28C),                            // ProfileID::c28C
+    GetResNum(cRes_28D),                            // ProfileID::c28D
+    GetResNum(cRes_28E),                            // ProfileID::c28E
+    GetResNum(cRes_28F),                            // ProfileID::c28F
+    GetResNum(cRes_290),                            // ProfileID::c290
+    GetResNum(cRes_291),                            // ProfileID::c291
+    GetResNum(cRes_292),                            // ProfileID::c292
+    GetResNum(cRes_293),                            // ProfileID::c293
+    GetResNum(cRes_294),                            // ProfileID::c294
+    GetResNum(cRes_295),                            // ProfileID::c295
+    GetResNum(cRes_296),                            // ProfileID::c296
+    GetResNum(cRes_297),                            // ProfileID::c297
+    GetResNum(cRes_298),                            // ProfileID::c298
+    GetResNum(cRes_299),                            // ProfileID::c299
+    GetResNum(cRes_29A),                            // ProfileID::c29A
+    GetResNum(cRes_29B),                            // ProfileID::c29B
+    0,                                              // ProfileID::c29C
+    GetResNum(cRes_29D),                            // ProfileID::c29D
+    GetResNum(cRes_29E),                            // ProfileID::c29E
+    GetResNum(cRes_29F),                            // ProfileID::c29F
+    GetResNum(cRes_2A0),                            // ProfileID::c2A0
+    GetResNum(cRes_2A1),                            // ProfileID::c2A1
+    GetResNum(cRes_2A2),                            // ProfileID::c2A2
+    GetResNum(cRes_2A3),                            // ProfileID::c2A3
+    GetResNum(cRes_2A4),                            // ProfileID::c2A4
+    GetResNum(cRes_2A5),                            // ProfileID::c2A5
+    GetResNum(cRes_2A6),                            // ProfileID::c2A6
+    GetResNum(cRes_2A7),                            // ProfileID::c2A7
+    GetResNum(cRes_2A8),                            // ProfileID::c2A8
+    GetResNum(cRes_2A9),                            // ProfileID::c2A9
+    GetResNum(cRes_2AA),                            // ProfileID::c2AA
+    GetResNum(cRes_2AB),                            // ProfileID::c2AB
+    GetResNum(cRes_2AC),                            // ProfileID::c2AC
+    0,                                              // ProfileID::c2AD
+    0,                                              // ProfileID::c2AE
+    0,                                              // ProfileID::c2AF
+    GetResNum(cRes_2B0),                            // ProfileID::c2B0
+    0,                                              // ProfileID::c2B1
+    GetResNum(cRes_2B2),                            // ProfileID::c2B2
+    0,                                              // ProfileID::c2B3
+    0,                                              // ProfileID::c2B4
+    GetResNum(cRes_2B5),                            // ProfileID::c2B5
+    GetResNum(cRes_2B6),                            // ProfileID::c2B6
+    GetResNum(cRes_2B7),                            // ProfileID::c2B7
+    GetResNum(cRes_2B8),                            // ProfileID::c2B8
+    GetResNum(cRes_2B9),                            // ProfileID::c2B9
+    GetResNum(cRes_2BA),                            // ProfileID::c2BA
+    GetResNum(cRes_2BB),                            // ProfileID::c2BB
+    GetResNum(cRes_2BC),                            // ProfileID::c2BC
+    GetResNum(cRes_2BD),                            // ProfileID::c2BD
+    GetResNum(cRes_2BE),                            // ProfileID::c2BE
+    GetResNum(cRes_2BF),                            // ProfileID::c2BF
+    0,                                              // ProfileID::c2C0
+    GetResNum(cRes_2C1),                            // ProfileID::c2C1
+    GetResNum(cRes_2C2),                            // ProfileID::c2C2
+    GetResNum(cRes_2C3),                            // ProfileID::c2C3
+    GetResNum(cRes_2C4),                            // ProfileID::c2C4
+    0,                                              // ProfileID::c2C5
+    GetResNum(cRes_2C6),                            // ProfileID::c2C6
+    0,                                              // ProfileID::c2C7
+    0,                                              // ProfileID::c2C8
+    0,                                              // ProfileID::c2C9
+    GetResNum(cRes_2CA),                            // ProfileID::c2CA
+    GetResNum(cRes_2CB),                            // ProfileID::c2CB
+    GetResNum(cRes_2CC),                            // ProfileID::c2CC
+    GetResNum(cRes_2CD),                            // ProfileID::c2CD
+    GetResNum(cRes_2CE),                            // ProfileID::c2CE
+    GetResNum(cRes_2CF),                            // ProfileID::c2CF
+    GetResNum(cRes_2D0),                            // ProfileID::c2D0
+    GetResNum(cRes_2D1),                            // ProfileID::c2D1
+    GetResNum(cRes_2D2),                            // ProfileID::c2D2
+    GetResNum(cRes_2D3),                            // ProfileID::c2D3
+    GetResNum(cRes_2D4),                            // ProfileID::c2D4
+    GetResNum(cRes_2D5),                            // ProfileID::c2D5
+    0,                                              // ProfileID::c2D6
+    GetResNum(cRes_2D7),                            // ProfileID::c2D7
+    GetResNum(cRes_2D8),                            // ProfileID::c2D8
+    GetResNum(cRes_2D9),                            // ProfileID::c2D9
+    GetResNum(cRes_2DA),                            // ProfileID::c2DA
+    GetResNum(cRes_2DB),                            // ProfileID::c2DB
+    GetResNum(cRes_2DC),                            // ProfileID::c2DC
+    GetResNum(cRes_2DD),                            // ProfileID::c2DD
+    GetResNum(cRes_2DE),                            // ProfileID::c2DE
+    GetResNum(cRes_2DF),                            // ProfileID::c2DF
+    GetResNum(cRes_2E0),                            // ProfileID::c2E0
+    0,                                              // ProfileID::c2E1
+    0,                                              // ProfileID::c2E2
+    GetResNum(cRes_2E3),                            // ProfileID::c2E3
+    GetResNum(cRes_2E4),                            // ProfileID::c2E4
+    GetResNum(cRes_2E5),                            // ProfileID::c2E5
+    GetResNum(cRes_2E6),                            // ProfileID::c2E6
+    GetResNum(cRes_2E7),                            // ProfileID::c2E7
+    GetResNum(cRes_2E8),                            // ProfileID::c2E8
+    0,                                              // ProfileID::c2E9
+    0,                                              // ProfileID::c2EA
+    0,                                              // ProfileID::c2EB
+    0,                                              // ProfileID::c2EC
+    0,                                              // ProfileID::c2ED
+    GetResNum(cRes_2EE),                            // ProfileID::c2EE
+    GetResNum(cRes_2EF),                            // ProfileID::c2EF
+    GetResNum(cRes_2F0),                            // ProfileID::c2F0
+    GetResNum(cRes_2F1),                            // ProfileID::c2F1
+    GetResNum(cRes_2F2),                            // ProfileID::c2F2
+    GetResNum(cRes_2F3),                            // ProfileID::c2F3
+    GetResNum(cRes_2F4),                            // ProfileID::c2F4
+    GetResNum(cRes_2F5),                            // ProfileID::c2F5
+    GetResNum(cRes_2F6),                            // ProfileID::c2F6
+    GetResNum(cRes_2F7),                            // ProfileID::c2F7
+    GetResNum(cRes_2F8),                            // ProfileID::c2F8
+    GetResNum(cRes_2F9),                            // ProfileID::c2F9
+    0,                                              // ProfileID::c2FA
+    GetResNum(cRes_2FB),                            // ProfileID::c2FB
+    0,                                              // ProfileID::c2FC
+    GetResNum(cRes_2FD),                            // ProfileID::c2FD
+    GetResNum(cRes_2FE),                            // ProfileID::c2FE
+    GetResNum(cRes_2FF),                            // ProfileID::c2FF
+    GetResNum(cRes_300),                            // ProfileID::c300
+    GetResNum(cRes_301),                            // ProfileID::c301
+    GetResNum(cRes_302),                            // ProfileID::c302
+    GetResNum(cRes_303),                            // ProfileID::c303
+    GetResNum(cRes_304),                            // ProfileID::c304
+    GetResNum(cRes_305),                            // ProfileID::c305
+    GetResNum(cRes_306),                            // ProfileID::c306
+    GetResNum(cRes_307),                            // ProfileID::c307
+    GetResNum(cRes_308),                            // ProfileID::c308
+    GetResNum(cRes_309),                            // ProfileID::c309
+    GetResNum(cRes_30A),                            // ProfileID::c30A
+    GetResNum(cRes_30B),                            // ProfileID::c30B
+    GetResNum(cRes_30C),                            // ProfileID::c30C
+    GetResNum(cRes_30D),                            // ProfileID::c30D
+    0,                                              // ProfileID::c30E
+    GetResNum(cRes_30F),                            // ProfileID::c30F
+    GetResNum(cRes_310),                            // ProfileID::c310
+    GetResNum(cRes_311),                            // ProfileID::c311
+    GetResNum(cRes_312),                            // ProfileID::c312
+    GetResNum(cRes_313),                            // ProfileID::c313
+    GetResNum(cRes_314),                            // ProfileID::c314
+    GetResNum(cRes_315),                            // ProfileID::c315
+    GetResNum(cRes_316),                            // ProfileID::c316
+    GetResNum(cRes_317),                            // ProfileID::c317
+    GetResNum(cRes_318),                            // ProfileID::c318
+    0,                                              // ProfileID::c319
+    0,                                              // ProfileID::c31A
+    0,                                              // ProfileID::c31B
+    GetResNum(cRes_31C),                            // ProfileID::c31C
+    GetResNum(cRes_31D),                            // ProfileID::c31D
+    0,                                              // ProfileID::c31E
+    GetResNum(cRes_31F),                            // ProfileID::c31F
+    GetResNum(cRes_320),                            // ProfileID::c320
+    GetResNum(cRes_321),                            // ProfileID::c321
+    GetResNum(cRes_322),                            // ProfileID::c322
+    GetResNum(cRes_323),                            // ProfileID::c323
+    GetResNum(cRes_324),                            // ProfileID::c324
+    GetResNum(cRes_325),                            // ProfileID::c325
+    GetResNum(cRes_326),                            // ProfileID::c326
+    GetResNum(cRes_327),                            // ProfileID::c327
+    0,                                              // ProfileID::c328
+    GetResNum(cRes_329),                            // ProfileID::c329
+    GetResNum(cRes_32A),                            // ProfileID::c32A
+    GetResNum(cRes_32B),                            // ProfileID::c32B
+    GetResNum(cRes_32C),                            // ProfileID::c32C
+    GetResNum(cRes_32D),                            // ProfileID::c32D
+    0,                                              // ProfileID::c32E
+    GetResNum(cRes_32F),                            // ProfileID::c32F
+    GetResNum(cRes_330),                            // ProfileID::c330
+    GetResNum(cRes_331),                            // ProfileID::c331
+    GetResNum(cRes_332),                            // ProfileID::c332
+    GetResNum(cRes_333),                            // ProfileID::c333
+    GetResNum(cRes_334),                            // ProfileID::c334
+    GetResNum(cRes_335),                            // ProfileID::c335
+    GetResNum(cRes_336),                            // ProfileID::c336
+    GetResNum(cRes_337),                            // ProfileID::c337
+    GetResNum(cRes_338),                            // ProfileID::c338
+    GetResNum(cRes_339),                            // ProfileID::c339
+    GetResNum(cRes_33A),                            // ProfileID::c33A
+    GetResNum(cRes_33B),                            // ProfileID::c33B
+    GetResNum(cRes_33C),                            // ProfileID::c33C
+    GetResNum(cRes_33D),                            // ProfileID::c33D
+    GetResNum(cRes_33E),                            // ProfileID::c33E
+    GetResNum(cRes_33F),                            // ProfileID::c33F
+    GetResNum(cRes_340),                            // ProfileID::c340
+    GetResNum(cRes_341),                            // ProfileID::c341
+    GetResNum(cRes_342),                            // ProfileID::c342
+    0,                                              // ProfileID::c343
+    0,                                              // ProfileID::c344
+    0,                                              // ProfileID::c345
+    0,                                              // ProfileID::c346
+    0,                                              // ProfileID::c347
+    GetResNum(cRes_348),                            // ProfileID::c348
+    GetResNum(cRes_349),                            // ProfileID::c349
+    GetResNum(cRes_34A),                            // ProfileID::c34A
+    GetResNum(cRes_34B),                            // ProfileID::c34B
+    GetResNum(cRes_34C),                            // ProfileID::c34C
+    GetResNum(cRes_34D),                            // ProfileID::c34D
+    GetResNum(cRes_34E),                            // ProfileID::c34E
+    GetResNum(cRes_34F),                            // ProfileID::c34F
+    0,                                              // ProfileID::c350
+    0,                                              // ProfileID::c351
+    0,                                              // ProfileID::c352
+    0,                                              // ProfileID::c353
+    GetResNum(cRes_354),                            // ProfileID::c354
+    GetResNum(cRes_355),                            // ProfileID::c355
+    GetResNum(cRes_CourseSelectPlayer),             // ProfileID::cCourseSelectPlayer
+    GetResNum(cRes_CourseSelectPlayer_2P_3P_4P),    // ProfileID::cCourseSelectPlayer_2P_3P_4P
+    GetResNum(cRes_358),                            // ProfileID::c358
+    0,                                              // ProfileID::c359
+    GetResNum(cRes_35A),                            // ProfileID::c35A
+    GetResNum(cRes_35B),                            // ProfileID::c35B
+    GetResNum(cRes_35C),                            // ProfileID::c35C
+    GetResNum(cRes_35D),                            // ProfileID::c35D
+    GetResNum(cRes_35E),                            // ProfileID::c35E
+    GetResNum(cRes_35F),                            // ProfileID::c35F
+    GetResNum(cRes_360),                            // ProfileID::c360
+    GetResNum(cRes_361),                            // ProfileID::c361
+    GetResNum(cRes_362),                            // ProfileID::c362
+    0,                                              // ProfileID::c363
+    GetResNum(cRes_364),                            // ProfileID::c364
+    GetResNum(cRes_365),                            // ProfileID::c365
+    GetResNum(cRes_366),                            // ProfileID::c366
+    GetResNum(cRes_367),                            // ProfileID::c367
+    GetResNum(cRes_368),                            // ProfileID::c368
+    GetResNum(cRes_369),                            // ProfileID::c369
+    GetResNum(cRes_36A),                            // ProfileID::c36A
+    GetResNum(cRes_36B),                            // ProfileID::c36B
+    GetResNum(cRes_36C),                            // ProfileID::c36C
+    GetResNum(cRes_36D),                            // ProfileID::c36D
+    GetResNum(cRes_36E),                            // ProfileID::c36E
+    GetResNum(cRes_36F),                            // ProfileID::c36F
+    GetResNum(cRes_370),                            // ProfileID::c370
+    GetResNum(cRes_371),                            // ProfileID::c371
+    GetResNum(cRes_372),                            // ProfileID::c372
+    GetResNum(cRes_373),                            // ProfileID::c373
+    GetResNum(cRes_374),                            // ProfileID::c374
+    GetResNum(cRes_375),                            // ProfileID::c375
+    GetResNum(cRes_376),                            // ProfileID::c376
+    GetResNum(cRes_377),                            // ProfileID::c377
+    GetResNum(cRes_378),                            // ProfileID::c378
+    GetResNum(cRes_379),                            // ProfileID::c379
+    GetResNum(cRes_37A),                            // ProfileID::c37A
+    GetResNum(cRes_37B),                            // ProfileID::c37B
+    GetResNum(cRes_37C),                            // ProfileID::c37C
+    GetResNum(cRes_37D),                            // ProfileID::c37D
+    GetResNum(cRes_37E),                            // ProfileID::c37E
+    GetResNum(cRes_37F),                            // ProfileID::c37F
+    GetResNum(cRes_380),                            // ProfileID::c380
+    GetResNum(cRes_381),                            // ProfileID::c381
+    GetResNum(cRes_382),                            // ProfileID::c382
+    GetResNum(cRes_383),                            // ProfileID::c383
+    GetResNum(cRes_384),                            // ProfileID::c384
+    GetResNum(cRes_385),                            // ProfileID::c385
+    GetResNum(cRes_386),                            // ProfileID::c386
+    GetResNum(cRes_387),                            // ProfileID::c387
+    GetResNum(cRes_388),                            // ProfileID::c388
+    GetResNum(cRes_389),                            // ProfileID::c389
+    GetResNum(cRes_38A),                            // ProfileID::c38A
+    GetResNum(cRes_38B),                            // ProfileID::c38B
+    GetResNum(cRes_38C),                            // ProfileID::c38C
+    0,                                              // ProfileID::c38D
+    GetResNum(cRes_38E),                            // ProfileID::c38E
+    GetResNum(cRes_38F),                            // ProfileID::c38F
+    0                                               // ProfileID::c390
+};
+
+// -----------------------------------------  ResList ----------------------------------------- //
+
+const sead::SafeString* Profile::cResList[cProfileID_Max] = {
+    nullptr,                            // ProfileID::c000
+    nullptr,                            // ProfileID::c001
+    nullptr,                            // ProfileID::c002
+    nullptr,                            // ProfileID::c003
+    nullptr,                            // ProfileID::c004
+    nullptr,                            // ProfileID::c005
+    nullptr,                            // ProfileID::c006
+    nullptr,                            // ProfileID::c007
+    nullptr,                            // ProfileID::c008
+    nullptr,                            // ProfileID::c009
+    nullptr,                            // ProfileID::c00A
+    nullptr,                            // ProfileID::c00B
+    nullptr,                            // ProfileID::c00C
+    nullptr,                            // ProfileID::c00D
+    nullptr,                            // ProfileID::c00E
+    nullptr,                            // ProfileID::c00F
+    nullptr,                            // ProfileID::c010
+    nullptr,                            // ProfileID::c011
+    nullptr,                            // ProfileID::c012
+    nullptr,                            // ProfileID::c013
+    nullptr,                            // ProfileID::c014
+    cRes_015,                           // ProfileID::c015
+    cRes_016,                           // ProfileID::c016
+    cRes_017,                           // ProfileID::c017
+    cRes_018,                           // ProfileID::c018
+    cRes_019,                           // ProfileID::c019
+    nullptr,                            // ProfileID::c01A
+    nullptr,                            // ProfileID::c01B
+    nullptr,                            // ProfileID::c01C
+    nullptr,                            // ProfileID::c01D
+    nullptr,                            // ProfileID::c01E
+    nullptr,                            // ProfileID::c01F
+    nullptr,                            // ProfileID::c020
+    cRes_021,                           // ProfileID::c021
+    cRes_022,                           // ProfileID::c022
+    cRes_023,                           // ProfileID::c023
+    cRes_024,                           // ProfileID::c024
+    nullptr,                            // ProfileID::c025
+    cRes_026,                           // ProfileID::c026
+    nullptr,                            // ProfileID::c027
+    nullptr,                            // ProfileID::c028
+    nullptr,                            // ProfileID::c029
+    nullptr,                            // ProfileID::c02A
+    cRes_02B,                           // ProfileID::c02B
+    cRes_02C,                           // ProfileID::c02C
+    cRes_02D,                           // ProfileID::c02D
+    cRes_02E,                           // ProfileID::c02E
+    nullptr,                            // ProfileID::c02F
+    nullptr,                            // ProfileID::c030
+    nullptr,                            // ProfileID::c031
+    cRes_032,                           // ProfileID::c032
+    cRes_033,                           // ProfileID::c033
+    nullptr,                            // ProfileID::c034
+    cRes_035,                           // ProfileID::c035
+    cRes_036,                           // ProfileID::c036
+    cRes_037,                           // ProfileID::c037
+    cRes_038,                           // ProfileID::c038
+    cRes_039,                           // ProfileID::c039
+    cRes_03A,                           // ProfileID::c03A
+    cRes_03B,                           // ProfileID::c03B
+    cRes_03C,                           // ProfileID::c03C
+    cRes_03D,                           // ProfileID::c03D
+    cRes_03E,                           // ProfileID::c03E
+    cRes_03F,                           // ProfileID::c03F
+    cRes_040,                           // ProfileID::c040
+    cRes_041,                           // ProfileID::c041
+    cRes_042,                           // ProfileID::c042
+    cRes_043,                           // ProfileID::c043
+    cRes_044,                           // ProfileID::c044
+    cRes_045,                           // ProfileID::c045
+    cRes_046,                           // ProfileID::c046
+    cRes_047,                           // ProfileID::c047
+    cRes_048,                           // ProfileID::c048
+    cRes_049,                           // ProfileID::c049
+    cRes_04A,                           // ProfileID::c04A
+    cRes_04B,                           // ProfileID::c04B
+    cRes_04C,                           // ProfileID::c04C
+    cRes_04D,                           // ProfileID::c04D
+    cRes_04E,                           // ProfileID::c04E
+    cRes_04F,                           // ProfileID::c04F
+    cRes_050,                           // ProfileID::c050
+    cRes_051,                           // ProfileID::c051
+    cRes_052,                           // ProfileID::c052
+    cRes_053,                           // ProfileID::c053
+    cRes_054,                           // ProfileID::c054
+    cRes_055,                           // ProfileID::c055
+    cRes_056,                           // ProfileID::c056
+    cRes_057,                           // ProfileID::c057
+    cRes_058,                           // ProfileID::c058
+    cRes_059,                           // ProfileID::c059
+    cRes_05A,                           // ProfileID::c05A
+    cRes_05B,                           // ProfileID::c05B
+    cRes_05C,                           // ProfileID::c05C
+    nullptr,                            // ProfileID::c05D
+    nullptr,                            // ProfileID::c05E
+    cRes_05F,                           // ProfileID::c05F
+    cRes_060,                           // ProfileID::c060
+    cRes_061,                           // ProfileID::c061
+    cRes_062,                           // ProfileID::c062
+    cRes_063,                           // ProfileID::c063
+    cRes_064,                           // ProfileID::c064
+    cRes_065,                           // ProfileID::c065
+    cRes_066,                           // ProfileID::c066
+    cRes_067,                           // ProfileID::c067
+    cRes_068,                           // ProfileID::c068
+    cRes_069,                           // ProfileID::c069
+    cRes_06A,                           // ProfileID::c06A
+    cRes_06B,                           // ProfileID::c06B
+    cRes_06C,                           // ProfileID::c06C
+    cRes_06D,                           // ProfileID::c06D
+    cRes_06E,                           // ProfileID::c06E
+    cRes_06F,                           // ProfileID::c06F
+    cRes_070,                           // ProfileID::c070
+    cRes_071,                           // ProfileID::c071
+    cRes_072,                           // ProfileID::c072
+    cRes_073,                           // ProfileID::c073
+    cRes_074,                           // ProfileID::c074
+    cRes_075,                           // ProfileID::c075
+    cRes_076,                           // ProfileID::c076
+    cRes_077,                           // ProfileID::c077
+    nullptr,                            // ProfileID::c078
+    cRes_079,                           // ProfileID::c079
+    cRes_07A,                           // ProfileID::c07A
+    cRes_07B,                           // ProfileID::c07B
+    cRes_07C,                           // ProfileID::c07C
+    cRes_07D,                           // ProfileID::c07D
+    cRes_07E,                           // ProfileID::c07E
+    cRes_07F,                           // ProfileID::c07F
+    cRes_080,                           // ProfileID::c080
+    cRes_081,                           // ProfileID::c081
+    cRes_082,                           // ProfileID::c082
+    cRes_083,                           // ProfileID::c083
+    cRes_084,                           // ProfileID::c084
+    cRes_085,                           // ProfileID::c085
+    cRes_086,                           // ProfileID::c086
+    cRes_087,                           // ProfileID::c087
+    cRes_088,                           // ProfileID::c088
+    cRes_089,                           // ProfileID::c089
+    cRes_08A,                           // ProfileID::c08A
+    cRes_08B,                           // ProfileID::c08B
+    cRes_08C,                           // ProfileID::c08C
+    cRes_08D,                           // ProfileID::c08D
+    cRes_08E,                           // ProfileID::c08E
+    cRes_08F,                           // ProfileID::c08F
+    cRes_090,                           // ProfileID::c090
+    cRes_091,                           // ProfileID::c091
+    cRes_092,                           // ProfileID::c092
+    cRes_093,                           // ProfileID::c093
+    cRes_094,                           // ProfileID::c094
+    cRes_095,                           // ProfileID::c095
+    cRes_096,                           // ProfileID::c096
+    cRes_097,                           // ProfileID::c097
+    cRes_098,                           // ProfileID::c098
+    cRes_099,                           // ProfileID::c099
+    nullptr,                            // ProfileID::c09A
+    cRes_09B,                           // ProfileID::c09B
+    cRes_09C,                           // ProfileID::c09C
+    cRes_09D,                           // ProfileID::c09D
+    cRes_09E,                           // ProfileID::c09E
+    cRes_09F,                           // ProfileID::c09F
+    cRes_0A0,                           // ProfileID::c0A0
+    cRes_0A1,                           // ProfileID::c0A1
+    cRes_0A2,                           // ProfileID::c0A2
+    cRes_0A3,                           // ProfileID::c0A3
+    cRes_0A4,                           // ProfileID::c0A4
+    cRes_0A5,                           // ProfileID::c0A5
+    cRes_0A6,                           // ProfileID::c0A6
+    cRes_0A7,                           // ProfileID::c0A7
+    cRes_0A8,                           // ProfileID::c0A8
+    cRes_0A9,                           // ProfileID::c0A9
+    cRes_0AA,                           // ProfileID::c0AA
+    cRes_0AB,                           // ProfileID::c0AB
+    cRes_0AC,                           // ProfileID::c0AC
+    cRes_0AD,                           // ProfileID::c0AD
+    cRes_0AE,                           // ProfileID::c0AE
+    cRes_0AF,                           // ProfileID::c0AF
+    cRes_0B0,                           // ProfileID::c0B0
+    cRes_0B1,                           // ProfileID::c0B1
+    cRes_0B2,                           // ProfileID::c0B2
+    cRes_0B3,                           // ProfileID::c0B3
+    cRes_0B4,                           // ProfileID::c0B4
+    cRes_0B5,                           // ProfileID::c0B5
+    cRes_0B6,                           // ProfileID::c0B6
+    cRes_0B7,                           // ProfileID::c0B7
+    cRes_0B8,                           // ProfileID::c0B8
+    cRes_0B9,                           // ProfileID::c0B9
+    cRes_0BA,                           // ProfileID::c0BA
+    cRes_0BB,                           // ProfileID::c0BB
+    cRes_0BC,                           // ProfileID::c0BC
+    cRes_0BD,                           // ProfileID::c0BD
+    cRes_0BE,                           // ProfileID::c0BE
+    cRes_0BF,                           // ProfileID::c0BF
+    cRes_0C0,                           // ProfileID::c0C0
+    cRes_0C1,                           // ProfileID::c0C1
+    cRes_0C2,                           // ProfileID::c0C2
+    cRes_0C3,                           // ProfileID::c0C3
+    cRes_0C4,                           // ProfileID::c0C4
+    cRes_0C5,                           // ProfileID::c0C5
+    cRes_0C6,                           // ProfileID::c0C6
+    cRes_0C7,                           // ProfileID::c0C7
+    cRes_0C8,                           // ProfileID::c0C8
+    cRes_0C9,                           // ProfileID::c0C9
+    cRes_0CA,                           // ProfileID::c0CA
+    cRes_0CB,                           // ProfileID::c0CB
+    cRes_0CC,                           // ProfileID::c0CC
+    cRes_0CD,                           // ProfileID::c0CD
+    cRes_0CE,                           // ProfileID::c0CE
+    cRes_0CF,                           // ProfileID::c0CF
+    cRes_0D0,                           // ProfileID::c0D0
+    cRes_0D1,                           // ProfileID::c0D1
+    cRes_FloorHoleDokan,                // ProfileID::cFloorHoleDokan
+    cRes_0D3,                           // ProfileID::c0D3
+    cRes_0D4,                           // ProfileID::c0D4
+    cRes_0D5,                           // ProfileID::c0D5
+    cRes_0D6,                           // ProfileID::c0D6
+    cRes_0D7,                           // ProfileID::c0D7
+    cRes_0D8,                           // ProfileID::c0D8
+    cRes_0D9,                           // ProfileID::c0D9
+    cRes_0DA,                           // ProfileID::c0DA
+    cRes_0DB,                           // ProfileID::c0DB
+    cRes_0DC,                           // ProfileID::c0DC
+    cRes_0DD,                           // ProfileID::c0DD
+    cRes_0DE,                           // ProfileID::c0DE
+    cRes_0DF,                           // ProfileID::c0DF
+    cRes_0E0,                           // ProfileID::c0E0
+    cRes_0E1,                           // ProfileID::c0E1
+    cRes_0E2,                           // ProfileID::c0E2
+    cRes_0E3,                           // ProfileID::c0E3
+    cRes_0E4,                           // ProfileID::c0E4
+    cRes_0E5,                           // ProfileID::c0E5
+    cRes_0E6,                           // ProfileID::c0E6
+    cRes_0E7,                           // ProfileID::c0E7
+    cRes_0E8,                           // ProfileID::c0E8
+    cRes_0E9,                           // ProfileID::c0E9
+    cRes_0EA,                           // ProfileID::c0EA
+    cRes_0EB,                           // ProfileID::c0EB
+    cRes_0EC,                           // ProfileID::c0EC
+    cRes_0ED,                           // ProfileID::c0ED
+    cRes_0EE,                           // ProfileID::c0EE
+    cRes_0EF,                           // ProfileID::c0EF
+    cRes_0F0,                           // ProfileID::c0F0
+    cRes_0F1,                           // ProfileID::c0F1
+    cRes_0F2,                           // ProfileID::c0F2
+    cRes_0F3,                           // ProfileID::c0F3
+    cRes_0F4,                           // ProfileID::c0F4
+    nullptr,                            // ProfileID::c0F5
+    cRes_0F6,                           // ProfileID::c0F6
+    cRes_0F7,                           // ProfileID::c0F7
+    cRes_0F8,                           // ProfileID::c0F8
+    cRes_0F9,                           // ProfileID::c0F9
+    cRes_0FA,                           // ProfileID::c0FA
+    cRes_0FB,                           // ProfileID::c0FB
+    cRes_0FC,                           // ProfileID::c0FC
+    cRes_0FD,                           // ProfileID::c0FD
+    cRes_0FE,                           // ProfileID::c0FE
+    cRes_0FF,                           // ProfileID::c0FF
+    cRes_100,                           // ProfileID::c100
+    cRes_101,                           // ProfileID::c101
+    cRes_102,                           // ProfileID::c102
+    cRes_103,                           // ProfileID::c103
+    cRes_104,                           // ProfileID::c104
+    cRes_105,                           // ProfileID::c105
+    cRes_106,                           // ProfileID::c106
+    cRes_107,                           // ProfileID::c107
+    cRes_108,                           // ProfileID::c108
+    cRes_109,                           // ProfileID::c109
+    cRes_10A,                           // ProfileID::c10A
+    cRes_10B,                           // ProfileID::c10B
+    cRes_10C,                           // ProfileID::c10C
+    cRes_10D,                           // ProfileID::c10D
+    cRes_10E,                           // ProfileID::c10E
+    cRes_10F,                           // ProfileID::c10F
+    cRes_110,                           // ProfileID::c110
+    cRes_111,                           // ProfileID::c111
+    cRes_112,                           // ProfileID::c112
+    cRes_113,                           // ProfileID::c113
+    cRes_114,                           // ProfileID::c114
+    cRes_115,                           // ProfileID::c115
+    cRes_116,                           // ProfileID::c116
+    nullptr,                            // ProfileID::c117
+    cRes_118,                           // ProfileID::c118
+    cRes_119,                           // ProfileID::c119
+    cRes_11A,                           // ProfileID::c11A
+    cRes_11B,                           // ProfileID::c11B
+    nullptr,                            // ProfileID::c11C
+    cRes_11D,                           // ProfileID::c11D
+    cRes_11E,                           // ProfileID::c11E
+    nullptr,                            // ProfileID::c11F
+    nullptr,                            // ProfileID::c120
+    nullptr,                            // ProfileID::c121
+    nullptr,                            // ProfileID::c122
+    nullptr,                            // ProfileID::c123
+    nullptr,                            // ProfileID::c124
+    nullptr,                            // ProfileID::c125
+    nullptr,                            // ProfileID::c126
+    nullptr,                            // ProfileID::c127
+    nullptr,                            // ProfileID::c128
+    nullptr,                            // ProfileID::c129
+    nullptr,                            // ProfileID::c12A
+    nullptr,                            // ProfileID::c12B
+    nullptr,                            // ProfileID::c12C
+    nullptr,                            // ProfileID::c12D
+    nullptr,                            // ProfileID::c12E
+    nullptr,                            // ProfileID::c12F
+    nullptr,                            // ProfileID::c130
+    nullptr,                            // ProfileID::c131
+    nullptr,                            // ProfileID::c132
+    nullptr,                            // ProfileID::c133
+    nullptr,                            // ProfileID::c134
+    cRes_135,                           // ProfileID::c135
+    cRes_136,                           // ProfileID::c136
+    nullptr,                            // ProfileID::c137
+    cRes_138,                           // ProfileID::c138
+    nullptr,                            // ProfileID::c139
+    cRes_13A,                           // ProfileID::c13A
+    cRes_13B,                           // ProfileID::c13B
+    cRes_13C,                           // ProfileID::c13C
+    nullptr,                            // ProfileID::c13D
+    nullptr,                            // ProfileID::c13E
+    nullptr,                            // ProfileID::c13F
+    cRes_140,                           // ProfileID::c140
+    cRes_141,                           // ProfileID::c141
+    cRes_142,                           // ProfileID::c142
+    cRes_143,                           // ProfileID::c143
+    cRes_144,                           // ProfileID::c144
+    cRes_145,                           // ProfileID::c145
+    cRes_146,                           // ProfileID::c146
+    cRes_147,                           // ProfileID::c147
+    cRes_148,                           // ProfileID::c148
+    cRes_149,                           // ProfileID::c149
+    cRes_14A,                           // ProfileID::c14A
+    cRes_14B,                           // ProfileID::c14B
+    nullptr,                            // ProfileID::c14C
+    cRes_14D,                           // ProfileID::c14D
+    cRes_14E,                           // ProfileID::c14E
+    cRes_14F,                           // ProfileID::c14F
+    cRes_150,                           // ProfileID::c150
+    cRes_151,                           // ProfileID::c151
+    cRes_152,                           // ProfileID::c152
+    cRes_153,                           // ProfileID::c153
+    cRes_154,                           // ProfileID::c154
+    cRes_155,                           // ProfileID::c155
+    cRes_156,                           // ProfileID::c156
+    cRes_157,                           // ProfileID::c157
+    cRes_158,                           // ProfileID::c158
+    cRes_159,                           // ProfileID::c159
+    cRes_15A,                           // ProfileID::c15A
+    cRes_15B,                           // ProfileID::c15B
+    nullptr,                            // ProfileID::c15C
+    cRes_15D,                           // ProfileID::c15D
+    cRes_15E,                           // ProfileID::c15E
+    cRes_15F,                           // ProfileID::c15F
+    cRes_160,                           // ProfileID::c160
+    cRes_161,                           // ProfileID::c161
+    nullptr,                            // ProfileID::c162
+    cRes_163,                           // ProfileID::c163
+    cRes_164,                           // ProfileID::c164
+    cRes_165,                           // ProfileID::c165
+    cRes_166,                           // ProfileID::c166
+    cRes_167,                           // ProfileID::c167
+    cRes_168,                           // ProfileID::c168
+    cRes_169,                           // ProfileID::c169
+    cRes_16A,                           // ProfileID::c16A
+    cRes_16B,                           // ProfileID::c16B
+    cRes_16C,                           // ProfileID::c16C
+    cRes_16D,                           // ProfileID::c16D
+    cRes_16E,                           // ProfileID::c16E
+    cRes_16F,                           // ProfileID::c16F
+    cRes_170,                           // ProfileID::c170
+    cRes_171,                           // ProfileID::c171
+    cRes_172,                           // ProfileID::c172
+    cRes_173,                           // ProfileID::c173
+    cRes_174,                           // ProfileID::c174
+    cRes_175,                           // ProfileID::c175
+    cRes_176,                           // ProfileID::c176
+    cRes_177,                           // ProfileID::c177
+    cRes_178,                           // ProfileID::c178
+    cRes_179,                           // ProfileID::c179
+    cRes_17A,                           // ProfileID::c17A
+    cRes_17B,                           // ProfileID::c17B
+    nullptr,                            // ProfileID::c17C
+    cRes_17D,                           // ProfileID::c17D
+    cRes_17E,                           // ProfileID::c17E
+    cRes_17F,                           // ProfileID::c17F
+    cRes_180,                           // ProfileID::c180
+    cRes_181,                           // ProfileID::c181
+    cRes_182,                           // ProfileID::c182
+    cRes_183,                           // ProfileID::c183
+    cRes_184,                           // ProfileID::c184
+    cRes_185,                           // ProfileID::c185
+    cRes_186,                           // ProfileID::c186
+    cRes_187,                           // ProfileID::c187
+    cRes_188,                           // ProfileID::c188
+    cRes_189,                           // ProfileID::c189
+    cRes_18A,                           // ProfileID::c18A
+    cRes_18B,                           // ProfileID::c18B
+    cRes_18C,                           // ProfileID::c18C
+    cRes_18D,                           // ProfileID::c18D
+    cRes_18E,                           // ProfileID::c18E
+    cRes_18F,                           // ProfileID::c18F
+    cRes_190,                           // ProfileID::c190
+    cRes_191,                           // ProfileID::c191
+    cRes_192,                           // ProfileID::c192
+    cRes_193,                           // ProfileID::c193
+    cRes_194,                           // ProfileID::c194
+    cRes_195,                           // ProfileID::c195
+    cRes_196,                           // ProfileID::c196
+    cRes_197,                           // ProfileID::c197
+    cRes_198,                           // ProfileID::c198
+    cRes_199,                           // ProfileID::c199
+    cRes_19A,                           // ProfileID::c19A
+    nullptr,                            // ProfileID::c19B
+    cRes_19C,                           // ProfileID::c19C
+    cRes_19D,                           // ProfileID::c19D
+    nullptr,                            // ProfileID::c19E
+    cRes_19F,                           // ProfileID::c19F
+    cRes_1A0,                           // ProfileID::c1A0
+    cRes_1A1,                           // ProfileID::c1A1
+    nullptr,                            // ProfileID::c1A2
+    cRes_1A3,                           // ProfileID::c1A3
+    cRes_1A4,                           // ProfileID::c1A4
+    cRes_1A5,                           // ProfileID::c1A5
+    cRes_1A6,                           // ProfileID::c1A6
+    cRes_1A7,                           // ProfileID::c1A7
+    cRes_1A8,                           // ProfileID::c1A8
+    cRes_1A9,                           // ProfileID::c1A9
+    cRes_1AA,                           // ProfileID::c1AA
+    cRes_1AB,                           // ProfileID::c1AB
+    cRes_1AC,                           // ProfileID::c1AC
+    cRes_1AD,                           // ProfileID::c1AD
+    cRes_1AE,                           // ProfileID::c1AE
+    cRes_1AF,                           // ProfileID::c1AF
+    cRes_1B0,                           // ProfileID::c1B0
+    cRes_1B1,                           // ProfileID::c1B1
+    cRes_1B2,                           // ProfileID::c1B2
+    cRes_1B3,                           // ProfileID::c1B3
+    nullptr,                            // ProfileID::c1B4
+    nullptr,                            // ProfileID::c1B5
+    cRes_1B6,                           // ProfileID::c1B6
+    nullptr,                            // ProfileID::c1B7
+    nullptr,                            // ProfileID::c1B8
+    cRes_1B9,                           // ProfileID::c1B9
+    cRes_Yoshi,                         // ProfileID::cYoshi
+    cRes_TottenPlayer,                  // ProfileID::cTottenPlayer
+    cRes_PlayerObject,                  // ProfileID::cPlayerObject
+    cRes_1BD,                           // ProfileID::c1BD
+    cRes_1BE,                           // ProfileID::c1BE
+    cRes_1BF,                           // ProfileID::c1BF
+    cRes_1C0,                           // ProfileID::c1C0
+    cRes_1C1,                           // ProfileID::c1C1
+    cRes_1C2,                           // ProfileID::c1C2
+    cRes_1C3,                           // ProfileID::c1C3
+    nullptr,                            // ProfileID::c1C4
+    cRes_1C5,                           // ProfileID::c1C5
+    cRes_1C6,                           // ProfileID::c1C6
+    nullptr,                            // ProfileID::c1C7
+    cRes_1C8,                           // ProfileID::c1C8
+    nullptr,                            // ProfileID::c1C9
+    nullptr,                            // ProfileID::c1CA
+    cRes_1CB,                           // ProfileID::c1CB
+    cRes_1CC,                           // ProfileID::c1CC
+    nullptr,                            // ProfileID::c1CD
+    cRes_1CE,                           // ProfileID::c1CE
+    cRes_1CF,                           // ProfileID::c1CF
+    cRes_1D0,                           // ProfileID::c1D0
+    cRes_1D1,                           // ProfileID::c1D1
+    cRes_1D2,                           // ProfileID::c1D2
+    cRes_1D3,                           // ProfileID::c1D3
+    cRes_1D4,                           // ProfileID::c1D4
+    cRes_1D5,                           // ProfileID::c1D5
+    cRes_1D6,                           // ProfileID::c1D6
+    cRes_1D7,                           // ProfileID::c1D7
+    cRes_1D8,                           // ProfileID::c1D8
+    cRes_1D9,                           // ProfileID::c1D9
+    nullptr,                            // ProfileID::c1DA
+    nullptr,                            // ProfileID::c1DB
+    nullptr,                            // ProfileID::c1DC
+    nullptr,                            // ProfileID::c1DD
+    nullptr,                            // ProfileID::c1DE
+    cRes_1DF,                           // ProfileID::c1DF
+    cRes_1E0,                           // ProfileID::c1E0
+    cRes_1E1,                           // ProfileID::c1E1
+    cRes_1E2,                           // ProfileID::c1E2
+    cRes_1E3,                           // ProfileID::c1E3
+    cRes_1E4,                           // ProfileID::c1E4
+    cRes_1E5,                           // ProfileID::c1E5
+    cRes_1E6,                           // ProfileID::c1E6
+    cRes_1E7,                           // ProfileID::c1E7
+    cRes_1E8,                           // ProfileID::c1E8
+    cRes_1E9,                           // ProfileID::c1E9
+    cRes_1EA,                           // ProfileID::c1EA
+    cRes_1EB,                           // ProfileID::c1EB
+    cRes_1EC,                           // ProfileID::c1EC
+    cRes_1ED,                           // ProfileID::c1ED
+    cRes_1EE,                           // ProfileID::c1EE
+    cRes_1EF,                           // ProfileID::c1EF
+    cRes_1F0,                           // ProfileID::c1F0
+    cRes_1F1,                           // ProfileID::c1F1
+    cRes_1F2,                           // ProfileID::c1F2
+    cRes_1F3,                           // ProfileID::c1F3
+    cRes_1F4,                           // ProfileID::c1F4
+    cRes_1F5,                           // ProfileID::c1F5
+    cRes_1F6,                           // ProfileID::c1F6
+    cRes_1F7,                           // ProfileID::c1F7
+    cRes_1F8,                           // ProfileID::c1F8
+    cRes_1F9,                           // ProfileID::c1F9
+    cRes_1FA,                           // ProfileID::c1FA
+    cRes_1FB,                           // ProfileID::c1FB
+    cRes_1FC,                           // ProfileID::c1FC
+    cRes_1FD,                           // ProfileID::c1FD
+    cRes_1FE,                           // ProfileID::c1FE
+    nullptr,                            // ProfileID::c1FF
+    cRes_200,                           // ProfileID::c200
+    cRes_201,                           // ProfileID::c201
+    cRes_202,                           // ProfileID::c202
+    cRes_203,                           // ProfileID::c203
+    cRes_204,                           // ProfileID::c204
+    cRes_205,                           // ProfileID::c205
+    cRes_206,                           // ProfileID::c206
+    cRes_207,                           // ProfileID::c207
+    cRes_208,                           // ProfileID::c208
+    cRes_209,                           // ProfileID::c209
+    cRes_20A,                           // ProfileID::c20A
+    cRes_20B,                           // ProfileID::c20B
+    cRes_20C,                           // ProfileID::c20C
+    cRes_20D,                           // ProfileID::c20D
+    cRes_20E,                           // ProfileID::c20E
+    cRes_20F,                           // ProfileID::c20F
+    cRes_210,                           // ProfileID::c210
+    cRes_211,                           // ProfileID::c211
+    cRes_212,                           // ProfileID::c212
+    cRes_213,                           // ProfileID::c213
+    cRes_214,                           // ProfileID::c214
+    cRes_215,                           // ProfileID::c215
+    cRes_216,                           // ProfileID::c216
+    cRes_217,                           // ProfileID::c217
+    cRes_218,                           // ProfileID::c218
+    cRes_219,                           // ProfileID::c219
+    cRes_21A,                           // ProfileID::c21A
+    cRes_21B,                           // ProfileID::c21B
+    cRes_21C,                           // ProfileID::c21C
+    cRes_21D,                           // ProfileID::c21D
+    cRes_21E,                           // ProfileID::c21E
+    cRes_21F,                           // ProfileID::c21F
+    cRes_220,                           // ProfileID::c220
+    cRes_221,                           // ProfileID::c221
+    cRes_222,                           // ProfileID::c222
+    cRes_223,                           // ProfileID::c223
+    cRes_224,                           // ProfileID::c224
+    cRes_225,                           // ProfileID::c225
+    cRes_226,                           // ProfileID::c226
+    cRes_227,                           // ProfileID::c227
+    cRes_228,                           // ProfileID::c228
+    cRes_229,                           // ProfileID::c229
+    cRes_22A,                           // ProfileID::c22A
+    cRes_22B,                           // ProfileID::c22B
+    cRes_22C,                           // ProfileID::c22C
+    cRes_22D,                           // ProfileID::c22D
+    nullptr,                            // ProfileID::c22E
+    nullptr,                            // ProfileID::c22F
+    cRes_230,                           // ProfileID::c230
+    cRes_231,                           // ProfileID::c231
+    cRes_232,                           // ProfileID::c232
+    cRes_233,                           // ProfileID::c233
+    cRes_234,                           // ProfileID::c234
+    cRes_235,                           // ProfileID::c235
+    cRes_236,                           // ProfileID::c236
+    cRes_237,                           // ProfileID::c237
+    cRes_238,                           // ProfileID::c238
+    cRes_239,                           // ProfileID::c239
+    cRes_23A,                           // ProfileID::c23A
+    cRes_23B,                           // ProfileID::c23B
+    cRes_23C,                           // ProfileID::c23C
+    cRes_23D,                           // ProfileID::c23D
+    cRes_23E,                           // ProfileID::c23E
+    nullptr,                            // ProfileID::c23F
+    nullptr,                            // ProfileID::c240
+    nullptr,                            // ProfileID::c241
+    nullptr,                            // ProfileID::c242
+    nullptr,                            // ProfileID::c243
+    nullptr,                            // ProfileID::c244
+    nullptr,                            // ProfileID::c245
+    nullptr,                            // ProfileID::c246
+    nullptr,                            // ProfileID::c247
+    nullptr,                            // ProfileID::c248
+    nullptr,                            // ProfileID::c249
+    nullptr,                            // ProfileID::c24A
+    nullptr,                            // ProfileID::cBgCenter
+    nullptr,                            // ProfileID::c24C
+    nullptr,                            // ProfileID::c24D
+    nullptr,                            // ProfileID::c24E
+    cRes_24F,                           // ProfileID::c24F
+    cRes_250,                           // ProfileID::c250
+    cRes_251,                           // ProfileID::c251
+    cRes_252,                           // ProfileID::c252
+    cRes_253,                           // ProfileID::c253
+    cRes_254,                           // ProfileID::c254
+    cRes_255,                           // ProfileID::c255
+    cRes_256,                           // ProfileID::c256
+    cRes_257,                           // ProfileID::c257
+    cRes_258,                           // ProfileID::c258
+    cRes_259,                           // ProfileID::c259
+    cRes_25A,                           // ProfileID::c25A
+    cRes_25B,                           // ProfileID::c25B
+    cRes_25C,                           // ProfileID::c25C
+    cRes_25D,                           // ProfileID::c25D
+    cRes_25E,                           // ProfileID::c25E
+    cRes_25F,                           // ProfileID::c25F
+    cRes_260,                           // ProfileID::c260
+    cRes_261,                           // ProfileID::c261
+    cRes_262,                           // ProfileID::c262
+    cRes_263,                           // ProfileID::c263
+    cRes_264,                           // ProfileID::c264
+    cRes_265,                           // ProfileID::c265
+    cRes_266,                           // ProfileID::c266
+    cRes_267,                           // ProfileID::c267
+    cRes_268,                           // ProfileID::c268
+    cRes_269,                           // ProfileID::c269
+    cRes_26A,                           // ProfileID::c26A
+    cRes_26B,                           // ProfileID::c26B
+    cRes_26C,                           // ProfileID::c26C
+    cRes_26D,                           // ProfileID::c26D
+    cRes_26E,                           // ProfileID::c26E
+    cRes_26F,                           // ProfileID::c26F
+    cRes_270,                           // ProfileID::c270
+    cRes_271,                           // ProfileID::c271
+    cRes_272,                           // ProfileID::c272
+    nullptr,                            // ProfileID::c273
+    nullptr,                            // ProfileID::c274
+    nullptr,                            // ProfileID::c275
+    nullptr,                            // ProfileID::c276
+    nullptr,                            // ProfileID::c277
+    cRes_278,                           // ProfileID::c278
+    cRes_279,                           // ProfileID::c279
+    cRes_27A,                           // ProfileID::c27A
+    cRes_27B,                           // ProfileID::c27B
+    cRes_27C,                           // ProfileID::c27C
+    cRes_27D,                           // ProfileID::c27D
+    cRes_27E,                           // ProfileID::c27E
+    cRes_27F,                           // ProfileID::c27F
+    cRes_280,                           // ProfileID::c280
+    cRes_281,                           // ProfileID::c281
+    cRes_282,                           // ProfileID::c282
+    cRes_283,                           // ProfileID::c283
+    cRes_284,                           // ProfileID::c284
+    cRes_285,                           // ProfileID::c285
+    cRes_286,                           // ProfileID::c286
+    cRes_287,                           // ProfileID::c287
+    cRes_288,                           // ProfileID::c288
+    cRes_289,                           // ProfileID::c289
+    cRes_28A,                           // ProfileID::c28A
+    cRes_28B,                           // ProfileID::c28B
+    cRes_28C,                           // ProfileID::c28C
+    cRes_28D,                           // ProfileID::c28D
+    cRes_28E,                           // ProfileID::c28E
+    cRes_28F,                           // ProfileID::c28F
+    cRes_290,                           // ProfileID::c290
+    cRes_291,                           // ProfileID::c291
+    cRes_292,                           // ProfileID::c292
+    cRes_293,                           // ProfileID::c293
+    cRes_294,                           // ProfileID::c294
+    cRes_295,                           // ProfileID::c295
+    cRes_296,                           // ProfileID::c296
+    cRes_297,                           // ProfileID::c297
+    cRes_298,                           // ProfileID::c298
+    cRes_299,                           // ProfileID::c299
+    cRes_29A,                           // ProfileID::c29A
+    cRes_29B,                           // ProfileID::c29B
+    nullptr,                            // ProfileID::c29C
+    cRes_29D,                           // ProfileID::c29D
+    cRes_29E,                           // ProfileID::c29E
+    cRes_29F,                           // ProfileID::c29F
+    cRes_2A0,                           // ProfileID::c2A0
+    cRes_2A1,                           // ProfileID::c2A1
+    cRes_2A2,                           // ProfileID::c2A2
+    cRes_2A3,                           // ProfileID::c2A3
+    cRes_2A4,                           // ProfileID::c2A4
+    cRes_2A5,                           // ProfileID::c2A5
+    cRes_2A6,                           // ProfileID::c2A6
+    cRes_2A7,                           // ProfileID::c2A7
+    cRes_2A8,                           // ProfileID::c2A8
+    cRes_2A9,                           // ProfileID::c2A9
+    cRes_2AA,                           // ProfileID::c2AA
+    cRes_2AB,                           // ProfileID::c2AB
+    cRes_2AC,                           // ProfileID::c2AC
+    nullptr,                            // ProfileID::c2AD
+    nullptr,                            // ProfileID::c2AE
+    nullptr,                            // ProfileID::c2AF
+    cRes_2B0,                           // ProfileID::c2B0
+    nullptr,                            // ProfileID::c2B1
+    cRes_2B2,                           // ProfileID::c2B2
+    nullptr,                            // ProfileID::c2B3
+    nullptr,                            // ProfileID::c2B4
+    cRes_2B5,                           // ProfileID::c2B5
+    cRes_2B6,                           // ProfileID::c2B6
+    cRes_2B7,                           // ProfileID::c2B7
+    cRes_2B8,                           // ProfileID::c2B8
+    cRes_2B9,                           // ProfileID::c2B9
+    cRes_2BA,                           // ProfileID::c2BA
+    cRes_2BB,                           // ProfileID::c2BB
+    cRes_2BC,                           // ProfileID::c2BC
+    cRes_2BD,                           // ProfileID::c2BD
+    cRes_2BE,                           // ProfileID::c2BE
+    cRes_2BF,                           // ProfileID::c2BF
+    nullptr,                            // ProfileID::c2C0
+    cRes_2C1,                           // ProfileID::c2C1
+    cRes_2C2,                           // ProfileID::c2C2
+    cRes_2C3,                           // ProfileID::c2C3
+    cRes_2C4,                           // ProfileID::c2C4
+    nullptr,                            // ProfileID::c2C5
+    cRes_2C6,                           // ProfileID::c2C6
+    nullptr,                            // ProfileID::c2C7
+    nullptr,                            // ProfileID::c2C8
+    nullptr,                            // ProfileID::c2C9
+    cRes_2CA,                           // ProfileID::c2CA
+    cRes_2CB,                           // ProfileID::c2CB
+    cRes_2CC,                           // ProfileID::c2CC
+    cRes_2CD,                           // ProfileID::c2CD
+    cRes_2CE,                           // ProfileID::c2CE
+    cRes_2CF,                           // ProfileID::c2CF
+    cRes_2D0,                           // ProfileID::c2D0
+    cRes_2D1,                           // ProfileID::c2D1
+    cRes_2D2,                           // ProfileID::c2D2
+    cRes_2D3,                           // ProfileID::c2D3
+    cRes_2D4,                           // ProfileID::c2D4
+    cRes_2D5,                           // ProfileID::c2D5
+    nullptr,                            // ProfileID::c2D6
+    cRes_2D7,                           // ProfileID::c2D7
+    cRes_2D8,                           // ProfileID::c2D8
+    cRes_2D9,                           // ProfileID::c2D9
+    cRes_2DA,                           // ProfileID::c2DA
+    cRes_2DB,                           // ProfileID::c2DB
+    cRes_2DC,                           // ProfileID::c2DC
+    cRes_2DD,                           // ProfileID::c2DD
+    cRes_2DE,                           // ProfileID::c2DE
+    cRes_2DF,                           // ProfileID::c2DF
+    cRes_2E0,                           // ProfileID::c2E0
+    nullptr,                            // ProfileID::c2E1
+    nullptr,                            // ProfileID::c2E2
+    cRes_2E3,                           // ProfileID::c2E3
+    cRes_2E4,                           // ProfileID::c2E4
+    cRes_2E5,                           // ProfileID::c2E5
+    cRes_2E6,                           // ProfileID::c2E6
+    cRes_2E7,                           // ProfileID::c2E7
+    cRes_2E8,                           // ProfileID::c2E8
+    nullptr,                            // ProfileID::c2E9
+    nullptr,                            // ProfileID::c2EA
+    nullptr,                            // ProfileID::c2EB
+    nullptr,                            // ProfileID::c2EC
+    nullptr,                            // ProfileID::c2ED
+    cRes_2EE,                           // ProfileID::c2EE
+    cRes_2EF,                           // ProfileID::c2EF
+    cRes_2F0,                           // ProfileID::c2F0
+    cRes_2F1,                           // ProfileID::c2F1
+    cRes_2F2,                           // ProfileID::c2F2
+    cRes_2F3,                           // ProfileID::c2F3
+    cRes_2F4,                           // ProfileID::c2F4
+    cRes_2F5,                           // ProfileID::c2F5
+    cRes_2F6,                           // ProfileID::c2F6
+    cRes_2F7,                           // ProfileID::c2F7
+    cRes_2F8,                           // ProfileID::c2F8
+    cRes_2F9,                           // ProfileID::c2F9
+    nullptr,                            // ProfileID::c2FA
+    cRes_2FB,                           // ProfileID::c2FB
+    nullptr,                            // ProfileID::c2FC
+    cRes_2FD,                           // ProfileID::c2FD
+    cRes_2FE,                           // ProfileID::c2FE
+    cRes_2FF,                           // ProfileID::c2FF
+    cRes_300,                           // ProfileID::c300
+    cRes_301,                           // ProfileID::c301
+    cRes_302,                           // ProfileID::c302
+    cRes_303,                           // ProfileID::c303
+    cRes_304,                           // ProfileID::c304
+    cRes_305,                           // ProfileID::c305
+    cRes_306,                           // ProfileID::c306
+    cRes_307,                           // ProfileID::c307
+    cRes_308,                           // ProfileID::c308
+    cRes_309,                           // ProfileID::c309
+    cRes_30A,                           // ProfileID::c30A
+    cRes_30B,                           // ProfileID::c30B
+    cRes_30C,                           // ProfileID::c30C
+    cRes_30D,                           // ProfileID::c30D
+    nullptr,                            // ProfileID::c30E
+    cRes_30F,                           // ProfileID::c30F
+    cRes_310,                           // ProfileID::c310
+    cRes_311,                           // ProfileID::c311
+    cRes_312,                           // ProfileID::c312
+    cRes_313,                           // ProfileID::c313
+    cRes_314,                           // ProfileID::c314
+    cRes_315,                           // ProfileID::c315
+    cRes_316,                           // ProfileID::c316
+    cRes_317,                           // ProfileID::c317
+    cRes_318,                           // ProfileID::c318
+    nullptr,                            // ProfileID::c319
+    nullptr,                            // ProfileID::c31A
+    nullptr,                            // ProfileID::c31B
+    cRes_31C,                           // ProfileID::c31C
+    cRes_31D,                           // ProfileID::c31D
+    nullptr,                            // ProfileID::c31E
+    cRes_31F,                           // ProfileID::c31F
+    cRes_320,                           // ProfileID::c320
+    cRes_321,                           // ProfileID::c321
+    cRes_322,                           // ProfileID::c322
+    cRes_323,                           // ProfileID::c323
+    cRes_324,                           // ProfileID::c324
+    cRes_325,                           // ProfileID::c325
+    cRes_326,                           // ProfileID::c326
+    cRes_327,                           // ProfileID::c327
+    nullptr,                            // ProfileID::c328
+    cRes_329,                           // ProfileID::c329
+    cRes_32A,                           // ProfileID::c32A
+    cRes_32B,                           // ProfileID::c32B
+    cRes_32C,                           // ProfileID::c32C
+    cRes_32D,                           // ProfileID::c32D
+    nullptr,                            // ProfileID::c32E
+    cRes_32F,                           // ProfileID::c32F
+    cRes_330,                           // ProfileID::c330
+    cRes_331,                           // ProfileID::c331
+    cRes_332,                           // ProfileID::c332
+    cRes_333,                           // ProfileID::c333
+    cRes_334,                           // ProfileID::c334
+    cRes_335,                           // ProfileID::c335
+    cRes_336,                           // ProfileID::c336
+    cRes_337,                           // ProfileID::c337
+    cRes_338,                           // ProfileID::c338
+    cRes_339,                           // ProfileID::c339
+    cRes_33A,                           // ProfileID::c33A
+    cRes_33B,                           // ProfileID::c33B
+    cRes_33C,                           // ProfileID::c33C
+    cRes_33D,                           // ProfileID::c33D
+    cRes_33E,                           // ProfileID::c33E
+    cRes_33F,                           // ProfileID::c33F
+    cRes_340,                           // ProfileID::c340
+    cRes_341,                           // ProfileID::c341
+    cRes_342,                           // ProfileID::c342
+    nullptr,                            // ProfileID::c343
+    nullptr,                            // ProfileID::c344
+    nullptr,                            // ProfileID::c345
+    nullptr,                            // ProfileID::c346
+    nullptr,                            // ProfileID::c347
+    cRes_348,                           // ProfileID::c348
+    cRes_349,                           // ProfileID::c349
+    cRes_34A,                           // ProfileID::c34A
+    cRes_34B,                           // ProfileID::c34B
+    cRes_34C,                           // ProfileID::c34C
+    cRes_34D,                           // ProfileID::c34D
+    cRes_34E,                           // ProfileID::c34E
+    cRes_34F,                           // ProfileID::c34F
+    nullptr,                            // ProfileID::c350
+    nullptr,                            // ProfileID::c351
+    nullptr,                            // ProfileID::c352
+    nullptr,                            // ProfileID::c353
+    cRes_354,                           // ProfileID::c354
+    cRes_355,                           // ProfileID::c355
+    cRes_CourseSelectPlayer,            // ProfileID::cCourseSelectPlayer
+    cRes_CourseSelectPlayer_2P_3P_4P,   // ProfileID::cCourseSelectPlayer_2P_3P_4P
+    cRes_358,                           // ProfileID::c358
+    nullptr,                            // ProfileID::c359
+    cRes_35A,                           // ProfileID::c35A
+    cRes_35B,                           // ProfileID::c35B
+    cRes_35C,                           // ProfileID::c35C
+    cRes_35D,                           // ProfileID::c35D
+    cRes_35E,                           // ProfileID::c35E
+    cRes_35F,                           // ProfileID::c35F
+    cRes_360,                           // ProfileID::c360
+    cRes_361,                           // ProfileID::c361
+    cRes_362,                           // ProfileID::c362
+    nullptr,                            // ProfileID::c363
+    cRes_364,                           // ProfileID::c364
+    cRes_365,                           // ProfileID::c365
+    cRes_366,                           // ProfileID::c366
+    cRes_367,                           // ProfileID::c367
+    cRes_368,                           // ProfileID::c368
+    cRes_369,                           // ProfileID::c369
+    cRes_36A,                           // ProfileID::c36A
+    cRes_36B,                           // ProfileID::c36B
+    cRes_36C,                           // ProfileID::c36C
+    cRes_36D,                           // ProfileID::c36D
+    cRes_36E,                           // ProfileID::c36E
+    cRes_36F,                           // ProfileID::c36F
+    cRes_370,                           // ProfileID::c370
+    cRes_371,                           // ProfileID::c371
+    cRes_372,                           // ProfileID::c372
+    cRes_373,                           // ProfileID::c373
+    cRes_374,                           // ProfileID::c374
+    cRes_375,                           // ProfileID::c375
+    cRes_376,                           // ProfileID::c376
+    cRes_377,                           // ProfileID::c377
+    cRes_378,                           // ProfileID::c378
+    cRes_379,                           // ProfileID::c379
+    cRes_37A,                           // ProfileID::c37A
+    cRes_37B,                           // ProfileID::c37B
+    cRes_37C,                           // ProfileID::c37C
+    cRes_37D,                           // ProfileID::c37D
+    cRes_37E,                           // ProfileID::c37E
+    cRes_37F,                           // ProfileID::c37F
+    cRes_380,                           // ProfileID::c380
+    cRes_381,                           // ProfileID::c381
+    cRes_382,                           // ProfileID::c382
+    cRes_383,                           // ProfileID::c383
+    cRes_384,                           // ProfileID::c384
+    cRes_385,                           // ProfileID::c385
+    cRes_386,                           // ProfileID::c386
+    cRes_387,                           // ProfileID::c387
+    cRes_388,                           // ProfileID::c388
+    cRes_389,                           // ProfileID::c389
+    cRes_38A,                           // ProfileID::c38A
+    cRes_38B,                           // ProfileID::c38B
+    cRes_38C,                           // ProfileID::c38C
+    nullptr,                            // ProfileID::c38D
+    cRes_38E,                           // ProfileID::c38E
+    cRes_38F,                           // ProfileID::c38F
+    nullptr                             // ProfileID::c390
+};
