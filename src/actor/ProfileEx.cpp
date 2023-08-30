@@ -16,7 +16,7 @@ Profile::ResType Profile::getResType(s32 id)
     return ResType(cResType[id]);
 }
 
-u8 Profile::getResNum(s32 id)
+u32 Profile::getResNum(s32 id)
 {
     if (static_cast<u32>(id) >= cProfileID_Max)
         return 0;
@@ -945,14 +945,14 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     792,            // ProfileID::c38B
     793,            // ProfileID::c38C
     753,            // ProfileID::c38D
-    794,            // ProfileID::c38E
-    795,            // ProfileID::c38F
-      0 - 0x3ff     // ProfileID::c390
+    794,            // Profile 910
+    795,            // Profile 911
+      0 - 0x3ff     // Profile 912
 };
 
 // -----------------------------------------  ResType ----------------------------------------- //
 
-const u8 Profile::cResType[cProfileID_Max] = {
+const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c000
     Profile::cResType_Boot,         // ProfileID::c001
     Profile::cResType_Boot,         // ProfileID::c002
@@ -1863,9 +1863,9 @@ const u8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_CourseSelect, // ProfileID::c38B
     Profile::cResType_CourseSelect, // ProfileID::c38C
     Profile::cResType_CourseSelect, // ProfileID::c38D
-    Profile::cResType_Course,       // ProfileID::c38E
-    Profile::cResType_Course,       // ProfileID::c38F
-    Profile::cResType_Course        // ProfileID::c390
+    Profile::cResType_Course,       // Profile 910
+    Profile::cResType_Course,       // Profile 911
+    Profile::cResType_Course        // Profile 912
 };
 
 // -------------------------------------------  Res ------------------------------------------- //
@@ -5234,11 +5234,9 @@ static const sead::SafeString cRes_38F[]  = {
 
 // ------------------------------------------ ResNum ------------------------------------------ //
 
-template <s32 N>
-inline s32 GetResNum(const sead::SafeString (&)[N])
-{
-    return N;
-}
+template <typename T, size_t N>
+u8 (&_ResNumGetter(T(&)[N]))[N];
+#define GetResNum(array) (sizeof(_ResNumGetter(array)))
 
 const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                              // ProfileID::c000
@@ -6151,9 +6149,9 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_38B),                            // ProfileID::c38B
     GetResNum(cRes_38C),                            // ProfileID::c38C
     0,                                              // ProfileID::c38D
-    GetResNum(cRes_38E),                            // ProfileID::c38E
-    GetResNum(cRes_38F),                            // ProfileID::c38F
-    0                                               // ProfileID::c390
+    GetResNum(cRes_38E),                            // Profile 910
+    GetResNum(cRes_38F),                            // Profile 911
+    0                                               // Profile 912
 };
 
 // -----------------------------------------  ResList ----------------------------------------- //
@@ -7069,7 +7067,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_38B,                           // ProfileID::c38B
     cRes_38C,                           // ProfileID::c38C
     nullptr,                            // ProfileID::c38D
-    cRes_38E,                           // ProfileID::c38E
-    cRes_38F,                           // ProfileID::c38F
-    nullptr                             // ProfileID::c390
+    cRes_38E,                           // Profile 910
+    cRes_38F,                           // Profile 911
+    nullptr                             // Profile 912
 };
