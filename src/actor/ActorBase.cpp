@@ -7,7 +7,7 @@
 
 s32 ActorBase::getProfileID() const
 {
-    return mpProfile->getID();
+    return mpActorProfile->getID();
 }
 
 void ActorBase::removeChild(ActorBase* p_child)
@@ -17,9 +17,9 @@ void ActorBase::removeChild(ActorBase* p_child)
 }
 
 ActorBase::ActorBase(const ActorCreateParam& param)
-    : mpHeap(sead::HeapMgr::instance()->getCurrentHeap())
+    : mpActorHeap(sead::HeapMgr::instance()->getCurrentHeap())
     , mActorUniqueID(ActorMgr::instance()->mActorCreateID)
-    , mpProfile(param.p_profile)
+    , mpActorProfile(param.p_profile)
     , mCreateImmediately(ActorMgr::instance()->mActorCreateImmediately)
     , _d(param._28 != nullptr)
     , mIsActive(false)

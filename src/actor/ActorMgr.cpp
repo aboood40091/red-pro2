@@ -12,8 +12,8 @@
 SEAD_SINGLETON_DISPOSER_IMPL(ActorMgr)
 
 ActorMgr::ActorMgr()
-    : mpPlayerHeap(nullptr)
-    , mpActorHeap(nullptr)
+    : mpPlayerUnitHeap(nullptr)
+    , mpActorUnitHeap(nullptr)
     , mActorPtrCache(sead::HeapMgr::instance()->getCurrentHeap(), 520)
     , mActorCreateImmediately(false)
     , mActorDrawDone(false)
@@ -44,18 +44,18 @@ ActorBase* ActorMgr::doConstructActor_(const ActorCreateParam& param, bool creat
     ActorBase* p_actor = nullptr;
     sead::Heap* heap = nullptr;
 
-    u32 prof_id = param.p_profile->getID();
+    s32 profile_id = param.p_profile->getID();
 
-    if (prof_id == ProfileID::cPlayerObject ||
-        prof_id == ProfileID::cTottenPlayer ||
-        prof_id == ProfileID::cCourseSelectPlayer ||
-        prof_id == ProfileID::cCourseSelectPlayer_2P_3P_4P)
+    if (profile_id == ProfileID::cPlayerObject ||
+        profile_id == ProfileID::cTottenPlayer ||
+        profile_id == ProfileID::cCourseSelectPlayer ||
+        profile_id == ProfileID::cCourseSelectPlayer_2P_3P_4P)
     {
-        heap = sead::FrameHeap::tryCreate(0, "PlayerHeap", mpPlayerHeap);
+        heap = sead::FrameHeap::tryCreate(0, "PlayerHeap", mpPlayerUnitHeap);
     }
     else
     {
-        heap = sead::FrameHeap::tryCreate(0, "ActorHeap", mpActorHeap);
+        heap = sead::FrameHeap::tryCreate(0, "ActorHeap", mpActorUnitHeap);
     }
 
     if (heap != nullptr)
@@ -82,7 +82,7 @@ ActorBase::MainState ActorMgr::doCreate_(ActorBase* p_actor)
     s32 ret = p_actor->preCreate_();
     if (ret)
     {
-        sead::CurrentHeapSetter chs(p_actor->getHeap());
+        sead::CurrentHeapSetter chs(p_actor->getActorHeap());
 
         ret = p_actor->create_();
         switch (ret)
@@ -122,13 +122,13 @@ void ActorMgr::doDelete_(ActorBase* p_actor)
 
 void ActorMgr::pushExecuteAndDrawList_(ActorBase* p_actor)
 {
-    s32 prof_id = p_actor->getProfileID();
+    s32 profile_id = p_actor->getProfileID();
 
     bool added = false;
 
     for (ActorBase::List::iterator itr = mExecuteManage.begin(), itr_end = mExecuteManage.end(); itr != itr_end; ++itr)
     {
-        if (prof_id <= itr->getProfileID())
+        if (profile_id <= itr->getProfileID())
         {
             mExecuteManage.insertBefore(&(*itr), p_actor);
             added = true;
@@ -235,7 +235,7 @@ void ActorMgr::doDeleteActors_(bool destroy)
         mDeleteManage.erase(p_actor);
         mActorPtrCache.popActor(p_actor);
 
-        sead::Heap* heap = p_actor->getHeap();
+        sead::Heap* heap = p_actor->getActorHeap();
 
         delete p_actor;
 
@@ -253,14 +253,14 @@ void ActorMgr::doDeleteActors_(bool destroy)
 
 void ActorMgr::initialize(sead::Heap* heap)
 {
-    mpPlayerHeap = sead::UnitHeap::tryCreateWithBlockNum(0x001A0000 + 0x200,   4, "PlayerUnitHeap", 4, heap);
-    mpActorHeap  = sead::UnitHeap::tryCreateWithBlockNum(0x00020000 + 0x200, 512, "ActorUnitHeap",  4, heap);
+    mpPlayerUnitHeap = sead::UnitHeap::tryCreateWithBlockNum(0x001A0000 + 0x200,   4, "PlayerUnitHeap", 4, heap);
+    mpActorUnitHeap  = sead::UnitHeap::tryCreateWithBlockNum(0x00020000 + 0x200, 512, "ActorUnitHeap",  4, heap);
 }
 
 void ActorMgr::createAdditionalHeap(sead::Heap** pp_heap)
 {
     if (*pp_heap == nullptr)
-        *pp_heap = sead::FrameHeap::tryCreate(0, "ActorAdditionalHeap", mpActorHeap);
+        *pp_heap = sead::FrameHeap::tryCreate(0, "ActorAdditionalHeap", mpActorUnitHeap);
 }
 
 void ActorMgr::destroyAdditionalHeap(sead::Heap** pp_heap)
@@ -342,15 +342,15 @@ ActorBase* ActorMgr::createImmediately(const ActorCreateParam& param, CreateOpti
     return nullptr;
 }
 
-ActorMgr::iterator ActorMgr::find(s32 prof_id, iterator pp_start) const
+ActorMgr::iterator ActorMgr::find(s32 i_profile_id, iterator pp_start) const
 {
-    ActorProfileFindFunc func(prof_id);
+    ActorProfileFindFunc func(i_profile_id);
     return mActorPtrCache.find(&func, pp_start);
 }
 
-u32 ActorMgr::count(s32 prof_id) const
+u32 ActorMgr::count(s32 i_profile_id) const
 {
-    ActorProfileFindFunc func(prof_id);
+    ActorProfileFindFunc func(i_profile_id);
     return mActorPtrCache.count(&func);
 }
 
