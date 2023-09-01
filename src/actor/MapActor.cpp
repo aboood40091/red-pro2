@@ -208,7 +208,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c186,                            // 203
     ProfileID::c28C,                            // 204
     ProfileID::c137,                            // 205
-    ProfileID::c2A6,                            // 206
+    ProfileID::cBun,                            // 206
     ProfileID::c080,                            // 207
     ProfileID::c13A,                            // 208
     ProfileID::c13B,                            // 209
@@ -218,21 +218,21 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c0EE,                            // 213
     ProfileID::c02F,                            // 214
     ProfileID::c22B,                            // 215
-    ProfileID::c2AC,                            // 216
+    ProfileID::cBunDemo,                        // 216
     ProfileID::c03D,                            // 217
     ProfileID::c30C,                            // 218
     ProfileID::c30D,                            // 219
     ProfileID::c30E,                            // 220
     ProfileID::c30F,                            // 221
     ProfileID::c0C2,                            // 222
-    ProfileID::c2A7,                            // 223
+    ProfileID::cBunW2,                          // 223
     ProfileID::c1C0,                            // 224
-    ProfileID::c2AB,                            // 225
+    ProfileID::cBunW6,                          // 225
     ProfileID::c163,                            // 226
     ProfileID::c164,                            // 227
     ProfileID::c05F,                            // 228
     ProfileID::c311,                            // 229
-    ProfileID::c2B5,                            // 230
+    ProfileID::cLarry,                          // 230
     ProfileID::c165,                            // 231
     ProfileID::c0C8,                            // 232
     ProfileID::c12A,                            // 233
@@ -246,9 +246,9 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c0C5,                            // 241
     ProfileID::c0C6,                            // 242
     ProfileID::c1BF,                            // 243
-    ProfileID::c2B6,                            // 244
-    ProfileID::c2AD,                            // 245
-    ProfileID::c2A9,                            // 246
+    ProfileID::cKokoopaSearchFire,              // 244
+    ProfileID::cKokoopaDemo,                    // 245
+    ProfileID::cBunW4,                          // 246
     ProfileID::c1D6,                            // 247
     ProfileID::c0C7,                            // 248
     ProfileID::c1FC,                            // 249
@@ -298,13 +298,13 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c0E3,                            // 293
     ProfileID::c0E5,                            // 294
     ProfileID::c0E4,                            // 295
-    ProfileID::c2B7,                            // 296
+    ProfileID::cLemmy,                          // 296
     ProfileID::c031,                            // 297
     ProfileID::c161,                            // 298
     ProfileID::c167,                            // 299
     ProfileID::c168,                            // 300
     ProfileID::c1FE,                            // 301
-    ProfileID::c2A8,                            // 302
+    ProfileID::cBunW3,                          // 302
     ProfileID::c303,                            // 303
     ProfileID::c0E9,                            // 304
     ProfileID::c29E,                            // 305
@@ -319,7 +319,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c0EB,                            // 314
     ProfileID::c0E6,                            // 315
     ProfileID::c099,                            // 316
-    ProfileID::c2AA,                            // 317
+    ProfileID::cBunW5,                          // 317
     ProfileID::c28F,                            // 318
     ProfileID::c0B2,                            // 319
     ProfileID::c292,                            // 320
@@ -370,7 +370,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c1C1,                            // 365
     ProfileID::c016,                            // 366
     ProfileID::c16B,                            // 367
-    ProfileID::c2B8,                            // 368
+    ProfileID::cMorton,                         // 368
     ProfileID::c1B4,                            // 369
     ProfileID::c1A3,                            // 370
     ProfileID::c097,                            // 371
@@ -385,48 +385,48 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c13C,                            // 380
     ProfileID::c17A,                            // 381
     ProfileID::c293,                            // 382
-    ProfileID::c2BB,                            // 383
+    ProfileID::cWendy,                          // 383
     ProfileID::c24E,                            // 384
-    ProfileID::c2BD,                            // 385
+    ProfileID::cLudwig,                         // 385
     ProfileID::c18D,                            // 386
     ProfileID::c331,                            // 387
     ProfileID::c103,                            // 388
-    ProfileID::c2C2,                            // 389
+    ProfileID::cRoy,                            // 389
     ProfileID::c09B,                            // 390
     ProfileID::c09D,                            // 391
-    ProfileID::c334,                            // 392
+    ProfileID::cUnderwaterKoopaJr,              // 392
     ProfileID::c16D,                            // 393
     ProfileID::c330,                            // 394
     ProfileID::c04F,                            // 395
     ProfileID::c104,                            // 396
     ProfileID::c131,                            // 397
     ProfileID::c132,                            // 398
-    ProfileID::c334,                            // 399
+    ProfileID::cUnderwaterKoopaJr,              // 399
     ProfileID::c061,                            // 400
     ProfileID::c01A,                            // 401
     ProfileID::c2EF,                            // 402
-    ProfileID::c2BF,                            // 403
+    ProfileID::cIggy,                           // 403
     ProfileID::c157,                            // 404
     ProfileID::c042,                            // 405
-    ProfileID::c2C4,                            // 406
+    ProfileID::cBossKK,                         // 406
     ProfileID::c05A,                            // 407
     ProfileID::c33E,                            // 408
     ProfileID::c16E,                            // 409
     ProfileID::c0FE,                            // 410
-    ProfileID::c2C6,                            // 411
-    ProfileID::c2AF,                            // 412
+    ProfileID::cKameck,                         // 411
+    ProfileID::cKameckDemo,                     // 412
     ProfileID::c1CB,                            // 413
-    ProfileID::c2D8,                            // 414
-    ProfileID::c2D9,                            // 415
-    ProfileID::c27A,                            // 416
-    ProfileID::c2DA,                            // 417
-    ProfileID::c2DB,                            // 418
-    ProfileID::c2DC,                            // 419
-    ProfileID::c2DD,                            // 420
-    ProfileID::c2DE,                            // 421
+    ProfileID::cKokoopaShipLemmy,               // 414
+    ProfileID::cKokoopaShipMorton,              // 415
+    ProfileID::cWakiSearchMagKiller,            // 416
+    ProfileID::cKokoopaShipLarry,               // 417
+    ProfileID::cKokoopaShipWendy,               // 418
+    ProfileID::cKokoopaShipIggy,                // 419
+    ProfileID::cKokoopaShipRoy,                 // 420
+    ProfileID::cKokoopaShipLudwig,              // 421
     ProfileID::c13D,                            // 422
     ProfileID::c018,                            // 423
-    ProfileID::c106,                            // 424
+    ProfileID::cKokoopaShipWarpCannon,          // 424
     ProfileID::c107,                            // 425
     ProfileID::c1D2,                            // 426
     ProfileID::c11D,                            // 427
@@ -434,10 +434,10 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c043,                            // 429
     ProfileID::c03F,                            // 430
     ProfileID::c03E,                            // 431
-    ProfileID::c2AE,                            // 432
-    ProfileID::c337,                            // 433
+    ProfileID::cKoopaJrDemo,                    // 432
+    ProfileID::cBoxingKoopaJr,                  // 433
     ProfileID::c0A3,                            // 434
-    ProfileID::c2B0,                            // 435
+    ProfileID::cBossKKDemo,                     // 435
     ProfileID::c05E,                            // 436
     ProfileID::c1D3,                            // 437
     ProfileID::c1D3,                            // 438
@@ -452,34 +452,34 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c2A5,                            // 447
     ProfileID::c32E,                            // 448
     ProfileID::c328,                            // 449
-    ProfileID::c2C7,                            // 450
+    ProfileID::cKameckIceConfig,                // 450
     ProfileID::c1C8,                            // 451
     ProfileID::c1C5,                            // 452
     ProfileID::c148,                            // 453
     ProfileID::c149,                            // 454
     ProfileID::c010,                            // 455
-    ProfileID::c2C8,                            // 456
+    ProfileID::cKameckWarpPos,                  // 456
     ProfileID::c05B,                            // 457
     ProfileID::c088,                            // 458
-    ProfileID::c2CA,                            // 459
+    ProfileID::cPeachFinalCastleKoopaJr,        // 459
     ProfileID::c01D,                            // 460
     ProfileID::c01E,                            // 461
-    ProfileID::c2CB,                            // 462
+    ProfileID::cKoopa,                          // 462
     ProfileID::c15C,                            // 463
     ProfileID::c108,                            // 464
     ProfileID::c143,                            // 465
-    ProfileID::c2B2,                            // 466
-    ProfileID::c109,                            // 467
-    ProfileID::c2CC,                            // 468
-    ProfileID::c2DF,                            // 469
+    ProfileID::cKoopaDemo,                      // 466
+    ProfileID::cKoopaShutter,                   // 467
+    ProfileID::cKoopaFireWaki,                  // 468
+    ProfileID::cPeach,                          // 469
     ProfileID::c2F0,                            // 470
     ProfileID::c1D8,                            // 471
     ProfileID::c1D9,                            // 472
-    ProfileID::c176,                            // 473
+    ProfileID::cFinalKoopa,                     // 473
     ProfileID::c33C,                            // 474
     ProfileID::c13E,                            // 475
     ProfileID::c202,                            // 476
-    ProfileID::c2D5,                            // 477
+    ProfileID::cFinalKoopaJr,                   // 477
     ProfileID::c174,                            // 478
     ProfileID::c04A,                            // 479
     ProfileID::c1B3,                            // 480
@@ -493,13 +493,13 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c295,                            // 488
     ProfileID::c10A,                            // 489
     ProfileID::c10B,                            // 490
-    ProfileID::c10D,                            // 491
-    ProfileID::c10E,                            // 492
+    ProfileID::cPeachFinalCastleKoopaJrLift,    // 491
+    ProfileID::cPeachFinalCastleKoopaJrLiftHmove, // 492
     ProfileID::c03A,                            // 493
-    ProfileID::c336,                            // 494
+    ProfileID::cUnderwaterKoopaJrRetreatPos,    // 494
     ProfileID::c020,                            // 495
     ProfileID::c1A5,                            // 496
-    ProfileID::c2B3,                            // 497
+    ProfileID::cFinalKoopaDemo,                 // 497
     ProfileID::c18A,                            // 498
     ProfileID::c04B,                            // 499
     ProfileID::c300,                            // 500
@@ -529,13 +529,13 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c047,                            // 524
     ProfileID::c133,                            // 525
     ProfileID::c134,                            // 526
-    ProfileID::c2B4,                            // 527
+    ProfileID::cPeachDemo,                      // 527
     ProfileID::c343,                            // 528
     ProfileID::c2A3,                            // 529
     ProfileID::c0AE,                            // 530
     ProfileID::c345,                            // 531
-    ProfileID::c2C3,                            // 532
-    ProfileID::c171,                            // 533
+    ProfileID::cRoyLiftWaki,                    // 532
+    ProfileID::cWendyIcicle,                    // 533
     ProfileID::c0D5,                            // 534
     ProfileID::c0D6,                            // 535
     ProfileID::c268,                            // 536
@@ -560,9 +560,9 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c17C,                            // 555
     ProfileID::c348,                            // 556
     ProfileID::c022,                            // 557
-    ProfileID::c2B1,                            // 558
+    ProfileID::cPeachFinalCastleKoopaJrDemo,    // 558
     ProfileID::c1CA,                            // 559
-    ProfileID::c111,                            // 560
+    ProfileID::cWendyFloor,                     // 560
     ProfileID::c31B,                            // 561
     ProfileID::c039,                            // 562
     ProfileID::c041,                            // 563
@@ -606,12 +606,12 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c1D0,                            // 601
     ProfileID::c0EF,                            // 602
     ProfileID::c314,                            // 603
-    ProfileID::c338,                            // 604
-    ProfileID::c339,                            // 605
+    ProfileID::cBoxingKoopaJrPostBattleDemo,    // 604
+    ProfileID::cBoxingKoopaJrClownPostBattleDemo, // 605
     ProfileID::c17E,                            // 606
     ProfileID::c1AC,                            // 607
     ProfileID::c351,                            // 608
-    ProfileID::c112,                            // 609
+    ProfileID::cIggyRoom,                       // 609
     ProfileID::c31C,                            // 610
     ProfileID::c1FB,                            // 611
     ProfileID::c11C,                            // 612
@@ -629,7 +629,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c012,                            // 624
     ProfileID::c0AF,                            // 625
     ProfileID::c29A,                            // 626
-    ProfileID::c10F,                            // 627
+    ProfileID::cPeachFinalCastleKoopaJrLiftPairObj, // 627
     ProfileID::c01F,                            // 628
     ProfileID::c272,                            // 629
     ProfileID::c115,                            // 630
