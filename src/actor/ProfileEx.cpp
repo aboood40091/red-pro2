@@ -891,60 +891,60 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     257,            // ProfileID::c355
     737,            // ProfileID::cCourseSelectPlayer
     738,            // ProfileID::cCourseSelectPlayer2PSub
-    739,            // ProfileID::c358
-    740,            // ProfileID::c359
-    741,            // ProfileID::c35A
-    742,            // ProfileID::c35B
-    743,            // ProfileID::c35C
-    744,            // ProfileID::c35D
-    745,            // ProfileID::c35E
-    746,            // ProfileID::c35F
-    747,            // ProfileID::c360
-    748,            // ProfileID::c361
-    749,            // ProfileID::c362
-    751,            // ProfileID::c363
-    750,            // ProfileID::c364
-    752,            // ProfileID::c365
-    754,            // ProfileID::c366
-    755,            // ProfileID::c367
-    756,            // ProfileID::c368
-    757,            // ProfileID::c369
-    758,            // ProfileID::c36A
-    759,            // ProfileID::c36B
-    760,            // ProfileID::c36C
-    761,            // ProfileID::c36D
-    762,            // ProfileID::c36E
-    763,            // ProfileID::c36F
-    764,            // ProfileID::c370
-    765,            // ProfileID::c371
-    766,            // ProfileID::c372
-    767,            // ProfileID::c373
-    768,            // ProfileID::c374
-    769,            // ProfileID::c375
-    770,            // ProfileID::c376
-    771,            // ProfileID::c377
-    772,            // ProfileID::c378
-    773,            // ProfileID::c379
-    774,            // ProfileID::c37A
-    775,            // ProfileID::c37B
-    777,            // ProfileID::c37C
-    778,            // ProfileID::c37D
-    779,            // ProfileID::c37E
-    780,            // ProfileID::c37F
-    781,            // ProfileID::c380
-    782,            // ProfileID::c381
-    783,            // ProfileID::c382
-    784,            // ProfileID::c383
-    785,            // ProfileID::c384
-    786,            // ProfileID::c385
-    787,            // ProfileID::c386
-    788,            // ProfileID::c387
-    789,            // ProfileID::c388
-    790,            // ProfileID::c389
-    791,            // ProfileID::c38A
-    792,            // ProfileID::c38B
-    793,            // ProfileID::c38C
-    753,            // ProfileID::c38D
+    739,            // ProfileID::cCourseSelectChibiYoshi
+    740,            // ProfileID::cCourseSelectCamera
+    741,            // ProfileID::cCourseSelectCastle
+    742,            // ProfileID::cCourseSelectToride
+    743,            // ProfileID::cCourseSelectKinokoHouse1up
+    744,            // ProfileID::cCourseSelectKinokoHouseShuffle
+    745,            // ProfileID::cCourseSelectKinokoHouseSlot
+    746,            // ProfileID::cCourseSelectPeachGates1st
+    747,            // ProfileID::cCourseSelectPeachGates2nd
+    748,            // ProfileID::cCourseSelectCoursePoint
+    749,            // ProfileID::cCourseSelectWorldMoveDokan
+    751,            // ProfileID::cCourseSelectW8Cloud
+    750,            // ProfileID::cCourseSelectGhost
+    752,            // ProfileID::cCourseSelectW2Bros
+    754,            // ProfileID::cCourseSelectShipW1
+    755,            // ProfileID::cCourseSelectShipW2
+    756,            // ProfileID::cCourseSelectShipW3
+    757,            // ProfileID::cCourseSelectShipW4
+    758,            // ProfileID::cCourseSelectShipW5
+    759,            // ProfileID::cCourseSelectShipW6
+    760,            // ProfileID::cCourseSelectShipW7
+    761,            // ProfileID::cCourseSelectShipW8
+    762,            // ProfileID::cCourseSelectShipW8Broken
+    763,            // ProfileID::cCourseSelectSurrender
+    764,            // ProfileID::cCourseSelectSwitchA
+    765,            // ProfileID::cCourseSelectSwitchB
+    766,            // ProfileID::cCourseSelectTeresa
+    767,            // ProfileID::cCourseSelectOpeningKameck
+    768,            // ProfileID::cCourseSelectTorideBoss
+    769,            // ProfileID::cCourseSelectPakkun
+    770,            // ProfileID::cCourseSelectShadowFirstDemoKinopio
+    771,            // ProfileID::cCourseSelectTobiPuku
+    772,            // ProfileID::cCourseSelectChorobon
+    773,            // ProfileID::cCourseSelectW7Item
+    774,            // ProfileID::cCourseSelectW5Teresa
+    775,            // ProfileID::cCourseSelectFlag
+    777,            // ProfileID::cCourseSelectMusasabi
+    778,            // ProfileID::cCourseSelectWPillar
+    779,            // ProfileID::cCourseSelectW7Bridge
+    780,            // ProfileID::cCourseSelectMiiBalloon
+    781,            // ProfileID::cCourseSelectPenguin
+    782,            // ProfileID::cCourseSelectW4Item
+    783,            // ProfileID::cCourseSelectW2Kuribo
+    784,            // ProfileID::cCourseSelectPakkunBig
+    785,            // ProfileID::cCourseSelectShadowKunIcon
+    786,            // ProfileID::cCourseSelectDekaUnira
+    787,            // ProfileID::cCourseSelectTomb
+    788,            // ProfileID::cCourseSelectShadowFirstDemoShadowKun
+    789,            // ProfileID::cCourseSelectKotsuCoaster
+    790,            // ProfileID::cCourseSelectKoopaJr
+    791,            // ProfileID::cCourseSelectPeach
+    792,            // ProfileID::cCourseSelectW1Item
+    793,            // ProfileID::cCourseSelectStarGate
+    753,            // ProfileID::cCourseSelectEventAssistant
     794,            // Profile 910
     795,            // Profile 911
       0 - 0x3ff     // Profile 912
@@ -1809,60 +1809,60 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c355
     Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPlayer
     Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPlayer2PSub
-    Profile::cResType_CourseSelect, // ProfileID::c358
-    Profile::cResType_CourseSelect, // ProfileID::c359
-    Profile::cResType_CourseSelect, // ProfileID::c35A
-    Profile::cResType_CourseSelect, // ProfileID::c35B
-    Profile::cResType_CourseSelect, // ProfileID::c35C
-    Profile::cResType_CourseSelect, // ProfileID::c35D
-    Profile::cResType_CourseSelect, // ProfileID::c35E
-    Profile::cResType_CourseSelect, // ProfileID::c35F
-    Profile::cResType_CourseSelect, // ProfileID::c360
-    Profile::cResType_CourseSelect, // ProfileID::c361
-    Profile::cResType_CourseSelect, // ProfileID::c362
-    Profile::cResType_CourseSelect, // ProfileID::c363
-    Profile::cResType_CourseSelect, // ProfileID::c364
-    Profile::cResType_CourseSelect, // ProfileID::c365
-    Profile::cResType_CourseSelect, // ProfileID::c366
-    Profile::cResType_CourseSelect, // ProfileID::c367
-    Profile::cResType_CourseSelect, // ProfileID::c368
-    Profile::cResType_CourseSelect, // ProfileID::c369
-    Profile::cResType_CourseSelect, // ProfileID::c36A
-    Profile::cResType_CourseSelect, // ProfileID::c36B
-    Profile::cResType_CourseSelect, // ProfileID::c36C
-    Profile::cResType_CourseSelect, // ProfileID::c36D
-    Profile::cResType_CourseSelect, // ProfileID::c36E
-    Profile::cResType_CourseSelect, // ProfileID::c36F
-    Profile::cResType_CourseSelect, // ProfileID::c370
-    Profile::cResType_CourseSelect, // ProfileID::c371
-    Profile::cResType_CourseSelect, // ProfileID::c372
-    Profile::cResType_CourseSelect, // ProfileID::c373
-    Profile::cResType_CourseSelect, // ProfileID::c374
-    Profile::cResType_CourseSelect, // ProfileID::c375
-    Profile::cResType_CourseSelect, // ProfileID::c376
-    Profile::cResType_CourseSelect, // ProfileID::c377
-    Profile::cResType_CourseSelect, // ProfileID::c378
-    Profile::cResType_CourseSelect, // ProfileID::c379
-    Profile::cResType_CourseSelect, // ProfileID::c37A
-    Profile::cResType_CourseSelect, // ProfileID::c37B
-    Profile::cResType_CourseSelect, // ProfileID::c37C
-    Profile::cResType_CourseSelect, // ProfileID::c37D
-    Profile::cResType_CourseSelect, // ProfileID::c37E
-    Profile::cResType_CourseSelect, // ProfileID::c37F
-    Profile::cResType_CourseSelect, // ProfileID::c380
-    Profile::cResType_CourseSelect, // ProfileID::c381
-    Profile::cResType_CourseSelect, // ProfileID::c382
-    Profile::cResType_CourseSelect, // ProfileID::c383
-    Profile::cResType_CourseSelect, // ProfileID::c384
-    Profile::cResType_CourseSelect, // ProfileID::c385
-    Profile::cResType_CourseSelect, // ProfileID::c386
-    Profile::cResType_CourseSelect, // ProfileID::c387
-    Profile::cResType_CourseSelect, // ProfileID::c388
-    Profile::cResType_CourseSelect, // ProfileID::c389
-    Profile::cResType_CourseSelect, // ProfileID::c38A
-    Profile::cResType_CourseSelect, // ProfileID::c38B
-    Profile::cResType_CourseSelect, // ProfileID::c38C
-    Profile::cResType_CourseSelect, // ProfileID::c38D
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectChibiYoshi
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectCamera
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectCastle
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectToride
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectKinokoHouse1up
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectKinokoHouseShuffle
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectKinokoHouseSlot
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPeachGates1st
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPeachGates2nd
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectCoursePoint
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectWorldMoveDokan
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectW8Cloud
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectGhost
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectW2Bros
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShipW1
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShipW2
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShipW3
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShipW4
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShipW5
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShipW6
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShipW7
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShipW8
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShipW8Broken
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectSurrender
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectSwitchA
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectSwitchB
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectTeresa
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectOpeningKameck
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectTorideBoss
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPakkun
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShadowFirstDemoKinopio
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectTobiPuku
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectChorobon
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectW7Item
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectW5Teresa
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectFlag
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectMusasabi
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectWPillar
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectW7Bridge
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectMiiBalloon
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPenguin
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectW4Item
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectW2Kuribo
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPakkunBig
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShadowKunIcon
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectDekaUnira
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectTomb
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectShadowFirstDemoShadowKun
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectKotsuCoaster
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectKoopaJr
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPeach
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectW1Item
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectStarGate
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectEventAssistant
     Profile::cResType_Course,       // Profile 910
     Profile::cResType_Course,       // Profile 911
     Profile::cResType_Course        // Profile 912
@@ -4999,140 +4999,140 @@ static const sead::SafeString cRes_CourseSelectPlayer2PSub[]  = {
     "KinopioAnm"
 };
 
-static const sead::SafeString cRes_358[]  = {
+static const sead::SafeString cRes_CourseSelectChibiYoshi[]  = {
     "YoshiChibi_TexBalloon",
     "YoshiChibi_TexBubble"
 };
 
-static const sead::SafeString cRes_35A[]  = {
+static const sead::SafeString cRes_CourseSelectCastle[]  = {
     "cobCastle"
 };
 
-static const sead::SafeString cRes_35B[]  = {
+static const sead::SafeString cRes_CourseSelectToride[]  = {
     "cobToride"
 };
 
-static const sead::SafeString cRes_35C[]  = {
+static const sead::SafeString cRes_CourseSelectKinokoHouse1up[]  = {
     "cobKinoko1up"
 };
 
-static const sead::SafeString cRes_35D[]  = {
+static const sead::SafeString cRes_CourseSelectKinokoHouseShuffle[]  = {
     "cobKinokoShuffle"
 };
 
-static const sead::SafeString cRes_35E[]  = {
+static const sead::SafeString cRes_CourseSelectKinokoHouseSlot[]  = {
     "cobKinokoSlot"
 };
 
-static const sead::SafeString cRes_35F[]  = {
+static const sead::SafeString cRes_CourseSelectPeachGates1st[]  = {
     "cobPeachGates1st"
 };
 
-static const sead::SafeString cRes_360[]  = {
+static const sead::SafeString cRes_CourseSelectPeachGates2nd[]  = {
     "cobPeachGates2nd"
 };
 
-static const sead::SafeString cRes_361[]  = {
+static const sead::SafeString cRes_CourseSelectCoursePoint[]  = {
     "cobCourse",
     "cobRing",
     "cobStarCoin"
 };
 
-static const sead::SafeString cRes_362[]  = {
+static const sead::SafeString cRes_CourseSelectWorldMoveDokan[]  = {
     "cobCannon"
 };
 
-static const sead::SafeString cRes_364[]  = {
+static const sead::SafeString cRes_CourseSelectGhost[]  = {
     "cobGhost"
 };
 
-static const sead::SafeString cRes_365[]  = {
+static const sead::SafeString cRes_CourseSelectW2Bros[]  = {
     "bros"
 };
 
-static const sead::SafeString cRes_366[]  = {
+static const sead::SafeString cRes_CourseSelectShipW1[]  = {
     "cobShipLemmy"
 };
 
-static const sead::SafeString cRes_367[]  = {
+static const sead::SafeString cRes_CourseSelectShipW2[]  = {
     "cobShipMorton"
 };
 
-static const sead::SafeString cRes_368[]  = {
+static const sead::SafeString cRes_CourseSelectShipW3[]  = {
     "cobShipLarry"
 };
 
-static const sead::SafeString cRes_369[]  = {
+static const sead::SafeString cRes_CourseSelectShipW4[]  = {
     "cobShipWendy"
 };
 
-static const sead::SafeString cRes_36A[]  = {
+static const sead::SafeString cRes_CourseSelectShipW5[]  = {
     "cobShipIggy"
 };
 
-static const sead::SafeString cRes_36B[]  = {
+static const sead::SafeString cRes_CourseSelectShipW6[]  = {
     "cobShipRoy"
 };
 
-static const sead::SafeString cRes_36C[]  = {
+static const sead::SafeString cRes_CourseSelectShipW7[]  = {
     "cobShipLudwig"
 };
 
-static const sead::SafeString cRes_36D[]  = {
+static const sead::SafeString cRes_CourseSelectShipW8[]  = {
     "cobShipKoopaJr",
     "magic_hand"
 };
 
-static const sead::SafeString cRes_36E[]  = {
+static const sead::SafeString cRes_CourseSelectShipW8Broken[]  = {
     "cobShipKoopaJrBoro",
     "cobShipKoopaJrJimen"
 };
 
-static const sead::SafeString cRes_36F[]  = {
+static const sead::SafeString cRes_CourseSelectSurrender[]  = {
     "cobSurrender"
 };
 
-static const sead::SafeString cRes_370[]  = {
+static const sead::SafeString cRes_CourseSelectSwitchA[]  = {
     "cobSwitchA"
 };
 
-static const sead::SafeString cRes_371[]  = {
+static const sead::SafeString cRes_CourseSelectSwitchB[]  = {
     "cobSwitchB"
 };
 
-static const sead::SafeString cRes_372[]  = {
+static const sead::SafeString cRes_CourseSelectTeresa[]  = {
     "teresa"
 };
 
-static const sead::SafeString cRes_373[]  = {
+static const sead::SafeString cRes_CourseSelectOpeningKameck[]  = {
     "kameck"
 };
 
-static const sead::SafeString cRes_374[]  = {
+static const sead::SafeString cRes_CourseSelectTorideBoss[]  = {
     "kameck",
     "bunbun",
     "boss_KK"
 };
 
-static const sead::SafeString cRes_375[]  = {
+static const sead::SafeString cRes_CourseSelectPakkun[]  = {
     "pakkun"
 };
 
-static const sead::SafeString cRes_376[]  = {
+static const sead::SafeString cRes_CourseSelectShadowFirstDemoKinopio[]  = {
     "KinopioMdl",
     "KinopioAnm"
 };
 
-static const sead::SafeString cRes_377[]  = {
+static const sead::SafeString cRes_CourseSelectTobiPuku[]  = {
     "pukupuku"
 };
 
-static const sead::SafeString cRes_378[]  = {
+static const sead::SafeString cRes_CourseSelectChorobon[]  = {
     "chorobon",
     "block_pata"
 };
 
-static const sead::SafeString cRes_379[]  = {
+static const sead::SafeString cRes_CourseSelectW7Item[]  = {
     "I_star",
     "I_kinoko",
     "I_fireflower",
@@ -5141,85 +5141,85 @@ static const sead::SafeString cRes_379[]  = {
     "block_pata"
 };
 
-static const sead::SafeString cRes_37A[]  = {
+static const sead::SafeString cRes_CourseSelectW5Teresa[]  = {
     "teresa"
 };
 
-static const sead::SafeString cRes_37B[]  = {
+static const sead::SafeString cRes_CourseSelectFlag[]  = {
     "cobFlagPeach",
     "cobFlagKoopa"
 };
 
-static const sead::SafeString cRes_37C[]  = {
+static const sead::SafeString cRes_CourseSelectMusasabi[]  = {
     "I_musasabi",
     "I_kinoko"
 };
 
-static const sead::SafeString cRes_37D[]  = {
+static const sead::SafeString cRes_CourseSelectWPillar[]  = {
     "cobWaterPillar"
 };
 
-static const sead::SafeString cRes_37E[]  = {
+static const sead::SafeString cRes_CourseSelectW7Bridge[]  = {
     "cobRainbowYoko",
     "cobRainbowTate"
 };
 
-static const sead::SafeString cRes_37F[]  = {
+static const sead::SafeString cRes_CourseSelectMiiBalloon[]  = {
     "obj_baloon_Mii"
 };
 
-static const sead::SafeString cRes_380[]  = {
+static const sead::SafeString cRes_CourseSelectPenguin[]  = {
     "penguin2"
 };
 
-static const sead::SafeString cRes_381[]  = {
+static const sead::SafeString cRes_CourseSelectW4Item[]  = {
     "I_iceflower",
     "I_kinoko"
 };
 
-static const sead::SafeString cRes_382[]  = {
+static const sead::SafeString cRes_CourseSelectW2Kuribo[]  = {
     "kuribo"
 };
 
-static const sead::SafeString cRes_383[]  = {
+static const sead::SafeString cRes_CourseSelectPakkunBig[]  = {
     "pakkun"
 };
 
-static const sead::SafeString cRes_384[]  = {
+static const sead::SafeString cRes_CourseSelectShadowKunIcon[]  = {
     "balloon_shadowkun"
 };
 
-static const sead::SafeString cRes_385[]  = {
+static const sead::SafeString cRes_CourseSelectDekaUnira[]  = {
     "unizoBig"
 };
 
-static const sead::SafeString cRes_386[]  = {
+static const sead::SafeString cRes_CourseSelectTomb[]  = {
     "cobTomb"
 };
 
-static const sead::SafeString cRes_387[]  = {
+static const sead::SafeString cRes_CourseSelectShadowFirstDemoShadowKun[]  = {
     "shadowkun"
 };
 
-static const sead::SafeString cRes_388[]  = {
+static const sead::SafeString cRes_CourseSelectKotsuCoaster[]  = {
     "lift_torokko"
 };
 
-static const sead::SafeString cRes_389[]  = {
+static const sead::SafeString cRes_CourseSelectKoopaJr[]  = {
     "koopaJr",
     "koopaJr_clown"
 };
 
-static const sead::SafeString cRes_38A[]  = {
+static const sead::SafeString cRes_CourseSelectPeach[]  = {
     "peach",
     "cobPeachWindow"
 };
 
-static const sead::SafeString cRes_38B[]  = {
+static const sead::SafeString cRes_CourseSelectW1Item[]  = {
     "I_musasabi"
 };
 
-static const sead::SafeString cRes_38C[]  = {
+static const sead::SafeString cRes_CourseSelectStarGate[]  = {
     "cobStarGate"
 };
 
@@ -6095,60 +6095,60 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_355),                            // ProfileID::c355
     GetResNum(cRes_CourseSelectPlayer),             // ProfileID::cCourseSelectPlayer
     GetResNum(cRes_CourseSelectPlayer2PSub),        // ProfileID::cCourseSelectPlayer2PSub
-    GetResNum(cRes_358),                            // ProfileID::c358
-    0,                                              // ProfileID::c359
-    GetResNum(cRes_35A),                            // ProfileID::c35A
-    GetResNum(cRes_35B),                            // ProfileID::c35B
-    GetResNum(cRes_35C),                            // ProfileID::c35C
-    GetResNum(cRes_35D),                            // ProfileID::c35D
-    GetResNum(cRes_35E),                            // ProfileID::c35E
-    GetResNum(cRes_35F),                            // ProfileID::c35F
-    GetResNum(cRes_360),                            // ProfileID::c360
-    GetResNum(cRes_361),                            // ProfileID::c361
-    GetResNum(cRes_362),                            // ProfileID::c362
-    0,                                              // ProfileID::c363
-    GetResNum(cRes_364),                            // ProfileID::c364
-    GetResNum(cRes_365),                            // ProfileID::c365
-    GetResNum(cRes_366),                            // ProfileID::c366
-    GetResNum(cRes_367),                            // ProfileID::c367
-    GetResNum(cRes_368),                            // ProfileID::c368
-    GetResNum(cRes_369),                            // ProfileID::c369
-    GetResNum(cRes_36A),                            // ProfileID::c36A
-    GetResNum(cRes_36B),                            // ProfileID::c36B
-    GetResNum(cRes_36C),                            // ProfileID::c36C
-    GetResNum(cRes_36D),                            // ProfileID::c36D
-    GetResNum(cRes_36E),                            // ProfileID::c36E
-    GetResNum(cRes_36F),                            // ProfileID::c36F
-    GetResNum(cRes_370),                            // ProfileID::c370
-    GetResNum(cRes_371),                            // ProfileID::c371
-    GetResNum(cRes_372),                            // ProfileID::c372
-    GetResNum(cRes_373),                            // ProfileID::c373
-    GetResNum(cRes_374),                            // ProfileID::c374
-    GetResNum(cRes_375),                            // ProfileID::c375
-    GetResNum(cRes_376),                            // ProfileID::c376
-    GetResNum(cRes_377),                            // ProfileID::c377
-    GetResNum(cRes_378),                            // ProfileID::c378
-    GetResNum(cRes_379),                            // ProfileID::c379
-    GetResNum(cRes_37A),                            // ProfileID::c37A
-    GetResNum(cRes_37B),                            // ProfileID::c37B
-    GetResNum(cRes_37C),                            // ProfileID::c37C
-    GetResNum(cRes_37D),                            // ProfileID::c37D
-    GetResNum(cRes_37E),                            // ProfileID::c37E
-    GetResNum(cRes_37F),                            // ProfileID::c37F
-    GetResNum(cRes_380),                            // ProfileID::c380
-    GetResNum(cRes_381),                            // ProfileID::c381
-    GetResNum(cRes_382),                            // ProfileID::c382
-    GetResNum(cRes_383),                            // ProfileID::c383
-    GetResNum(cRes_384),                            // ProfileID::c384
-    GetResNum(cRes_385),                            // ProfileID::c385
-    GetResNum(cRes_386),                            // ProfileID::c386
-    GetResNum(cRes_387),                            // ProfileID::c387
-    GetResNum(cRes_388),                            // ProfileID::c388
-    GetResNum(cRes_389),                            // ProfileID::c389
-    GetResNum(cRes_38A),                            // ProfileID::c38A
-    GetResNum(cRes_38B),                            // ProfileID::c38B
-    GetResNum(cRes_38C),                            // ProfileID::c38C
-    0,                                              // ProfileID::c38D
+    GetResNum(cRes_CourseSelectChibiYoshi),         // ProfileID::cCourseSelectChibiYoshi
+    0,                                              // ProfileID::cCourseSelectCamera
+    GetResNum(cRes_CourseSelectCastle),             // ProfileID::cCourseSelectCastle
+    GetResNum(cRes_CourseSelectToride),             // ProfileID::cCourseSelectToride
+    GetResNum(cRes_CourseSelectKinokoHouse1up),     // ProfileID::cCourseSelectKinokoHouse1up
+    GetResNum(cRes_CourseSelectKinokoHouseShuffle), // ProfileID::cCourseSelectKinokoHouseShuffle
+    GetResNum(cRes_CourseSelectKinokoHouseSlot),    // ProfileID::cCourseSelectKinokoHouseSlot
+    GetResNum(cRes_CourseSelectPeachGates1st),      // ProfileID::cCourseSelectPeachGates1st
+    GetResNum(cRes_CourseSelectPeachGates2nd),      // ProfileID::cCourseSelectPeachGates2nd
+    GetResNum(cRes_CourseSelectCoursePoint),        // ProfileID::cCourseSelectCoursePoint
+    GetResNum(cRes_CourseSelectWorldMoveDokan),     // ProfileID::cCourseSelectWorldMoveDokan
+    0,                                              // ProfileID::cCourseSelectW8Cloud
+    GetResNum(cRes_CourseSelectGhost),              // ProfileID::cCourseSelectGhost
+    GetResNum(cRes_CourseSelectW2Bros),             // ProfileID::cCourseSelectW2Bros
+    GetResNum(cRes_CourseSelectShipW1),             // ProfileID::cCourseSelectShipW1
+    GetResNum(cRes_CourseSelectShipW2),             // ProfileID::cCourseSelectShipW2
+    GetResNum(cRes_CourseSelectShipW3),             // ProfileID::cCourseSelectShipW3
+    GetResNum(cRes_CourseSelectShipW4),             // ProfileID::cCourseSelectShipW4
+    GetResNum(cRes_CourseSelectShipW5),             // ProfileID::cCourseSelectShipW5
+    GetResNum(cRes_CourseSelectShipW6),             // ProfileID::cCourseSelectShipW6
+    GetResNum(cRes_CourseSelectShipW7),             // ProfileID::cCourseSelectShipW7
+    GetResNum(cRes_CourseSelectShipW8),             // ProfileID::cCourseSelectShipW8
+    GetResNum(cRes_CourseSelectShipW8Broken),       // ProfileID::cCourseSelectShipW8Broken
+    GetResNum(cRes_CourseSelectSurrender),          // ProfileID::cCourseSelectSurrender
+    GetResNum(cRes_CourseSelectSwitchA),            // ProfileID::cCourseSelectSwitchA
+    GetResNum(cRes_CourseSelectSwitchB),            // ProfileID::cCourseSelectSwitchB
+    GetResNum(cRes_CourseSelectTeresa),             // ProfileID::cCourseSelectTeresa
+    GetResNum(cRes_CourseSelectOpeningKameck),      // ProfileID::cCourseSelectOpeningKameck
+    GetResNum(cRes_CourseSelectTorideBoss),         // ProfileID::cCourseSelectTorideBoss
+    GetResNum(cRes_CourseSelectPakkun),             // ProfileID::cCourseSelectPakkun
+    GetResNum(cRes_CourseSelectShadowFirstDemoKinopio), // ProfileID::cCourseSelectShadowFirstDemoKinopio
+    GetResNum(cRes_CourseSelectTobiPuku),           // ProfileID::cCourseSelectTobiPuku
+    GetResNum(cRes_CourseSelectChorobon),           // ProfileID::cCourseSelectChorobon
+    GetResNum(cRes_CourseSelectW7Item),             // ProfileID::cCourseSelectW7Item
+    GetResNum(cRes_CourseSelectW5Teresa),           // ProfileID::cCourseSelectW5Teresa
+    GetResNum(cRes_CourseSelectFlag),               // ProfileID::cCourseSelectFlag
+    GetResNum(cRes_CourseSelectMusasabi),           // ProfileID::cCourseSelectMusasabi
+    GetResNum(cRes_CourseSelectWPillar),            // ProfileID::cCourseSelectWPillar
+    GetResNum(cRes_CourseSelectW7Bridge),           // ProfileID::cCourseSelectW7Bridge
+    GetResNum(cRes_CourseSelectMiiBalloon),         // ProfileID::cCourseSelectMiiBalloon
+    GetResNum(cRes_CourseSelectPenguin),            // ProfileID::cCourseSelectPenguin
+    GetResNum(cRes_CourseSelectW4Item),             // ProfileID::cCourseSelectW4Item
+    GetResNum(cRes_CourseSelectW2Kuribo),           // ProfileID::cCourseSelectW2Kuribo
+    GetResNum(cRes_CourseSelectPakkunBig),          // ProfileID::cCourseSelectPakkunBig
+    GetResNum(cRes_CourseSelectShadowKunIcon),      // ProfileID::cCourseSelectShadowKunIcon
+    GetResNum(cRes_CourseSelectDekaUnira),          // ProfileID::cCourseSelectDekaUnira
+    GetResNum(cRes_CourseSelectTomb),               // ProfileID::cCourseSelectTomb
+    GetResNum(cRes_CourseSelectShadowFirstDemoShadowKun), // ProfileID::cCourseSelectShadowFirstDemoShadowKun
+    GetResNum(cRes_CourseSelectKotsuCoaster),       // ProfileID::cCourseSelectKotsuCoaster
+    GetResNum(cRes_CourseSelectKoopaJr),            // ProfileID::cCourseSelectKoopaJr
+    GetResNum(cRes_CourseSelectPeach),              // ProfileID::cCourseSelectPeach
+    GetResNum(cRes_CourseSelectW1Item),             // ProfileID::cCourseSelectW1Item
+    GetResNum(cRes_CourseSelectStarGate),           // ProfileID::cCourseSelectStarGate
+    0,                                              // ProfileID::cCourseSelectEventAssistant
     GetResNum(cRes_38E),                            // Profile 910
     GetResNum(cRes_38F),                            // Profile 911
     0                                               // Profile 912
@@ -7013,60 +7013,60 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_355,                           // ProfileID::c355
     cRes_CourseSelectPlayer,            // ProfileID::cCourseSelectPlayer
     cRes_CourseSelectPlayer2PSub,       // ProfileID::cCourseSelectPlayer2PSub
-    cRes_358,                           // ProfileID::c358
-    nullptr,                            // ProfileID::c359
-    cRes_35A,                           // ProfileID::c35A
-    cRes_35B,                           // ProfileID::c35B
-    cRes_35C,                           // ProfileID::c35C
-    cRes_35D,                           // ProfileID::c35D
-    cRes_35E,                           // ProfileID::c35E
-    cRes_35F,                           // ProfileID::c35F
-    cRes_360,                           // ProfileID::c360
-    cRes_361,                           // ProfileID::c361
-    cRes_362,                           // ProfileID::c362
-    nullptr,                            // ProfileID::c363
-    cRes_364,                           // ProfileID::c364
-    cRes_365,                           // ProfileID::c365
-    cRes_366,                           // ProfileID::c366
-    cRes_367,                           // ProfileID::c367
-    cRes_368,                           // ProfileID::c368
-    cRes_369,                           // ProfileID::c369
-    cRes_36A,                           // ProfileID::c36A
-    cRes_36B,                           // ProfileID::c36B
-    cRes_36C,                           // ProfileID::c36C
-    cRes_36D,                           // ProfileID::c36D
-    cRes_36E,                           // ProfileID::c36E
-    cRes_36F,                           // ProfileID::c36F
-    cRes_370,                           // ProfileID::c370
-    cRes_371,                           // ProfileID::c371
-    cRes_372,                           // ProfileID::c372
-    cRes_373,                           // ProfileID::c373
-    cRes_374,                           // ProfileID::c374
-    cRes_375,                           // ProfileID::c375
-    cRes_376,                           // ProfileID::c376
-    cRes_377,                           // ProfileID::c377
-    cRes_378,                           // ProfileID::c378
-    cRes_379,                           // ProfileID::c379
-    cRes_37A,                           // ProfileID::c37A
-    cRes_37B,                           // ProfileID::c37B
-    cRes_37C,                           // ProfileID::c37C
-    cRes_37D,                           // ProfileID::c37D
-    cRes_37E,                           // ProfileID::c37E
-    cRes_37F,                           // ProfileID::c37F
-    cRes_380,                           // ProfileID::c380
-    cRes_381,                           // ProfileID::c381
-    cRes_382,                           // ProfileID::c382
-    cRes_383,                           // ProfileID::c383
-    cRes_384,                           // ProfileID::c384
-    cRes_385,                           // ProfileID::c385
-    cRes_386,                           // ProfileID::c386
-    cRes_387,                           // ProfileID::c387
-    cRes_388,                           // ProfileID::c388
-    cRes_389,                           // ProfileID::c389
-    cRes_38A,                           // ProfileID::c38A
-    cRes_38B,                           // ProfileID::c38B
-    cRes_38C,                           // ProfileID::c38C
-    nullptr,                            // ProfileID::c38D
+    cRes_CourseSelectChibiYoshi,        // ProfileID::cCourseSelectChibiYoshi
+    nullptr,                            // ProfileID::cCourseSelectCamera
+    cRes_CourseSelectCastle,            // ProfileID::cCourseSelectCastle
+    cRes_CourseSelectToride,            // ProfileID::cCourseSelectToride
+    cRes_CourseSelectKinokoHouse1up,    // ProfileID::cCourseSelectKinokoHouse1up
+    cRes_CourseSelectKinokoHouseShuffle, // ProfileID::cCourseSelectKinokoHouseShuffle
+    cRes_CourseSelectKinokoHouseSlot,   // ProfileID::cCourseSelectKinokoHouseSlot
+    cRes_CourseSelectPeachGates1st,     // ProfileID::cCourseSelectPeachGates1st
+    cRes_CourseSelectPeachGates2nd,     // ProfileID::cCourseSelectPeachGates2nd
+    cRes_CourseSelectCoursePoint,       // ProfileID::cCourseSelectCoursePoint
+    cRes_CourseSelectWorldMoveDokan,    // ProfileID::cCourseSelectWorldMoveDokan
+    nullptr,                            // ProfileID::cCourseSelectW8Cloud
+    cRes_CourseSelectGhost,             // ProfileID::cCourseSelectGhost
+    cRes_CourseSelectW2Bros,            // ProfileID::cCourseSelectW2Bros
+    cRes_CourseSelectShipW1,            // ProfileID::cCourseSelectShipW1
+    cRes_CourseSelectShipW2,            // ProfileID::cCourseSelectShipW2
+    cRes_CourseSelectShipW3,            // ProfileID::cCourseSelectShipW3
+    cRes_CourseSelectShipW4,            // ProfileID::cCourseSelectShipW4
+    cRes_CourseSelectShipW5,            // ProfileID::cCourseSelectShipW5
+    cRes_CourseSelectShipW6,            // ProfileID::cCourseSelectShipW6
+    cRes_CourseSelectShipW7,            // ProfileID::cCourseSelectShipW7
+    cRes_CourseSelectShipW8,            // ProfileID::cCourseSelectShipW8
+    cRes_CourseSelectShipW8Broken,      // ProfileID::cCourseSelectShipW8Broken
+    cRes_CourseSelectSurrender,         // ProfileID::cCourseSelectSurrender
+    cRes_CourseSelectSwitchA,           // ProfileID::cCourseSelectSwitchA
+    cRes_CourseSelectSwitchB,           // ProfileID::cCourseSelectSwitchB
+    cRes_CourseSelectTeresa,            // ProfileID::cCourseSelectTeresa
+    cRes_CourseSelectOpeningKameck,     // ProfileID::cCourseSelectOpeningKameck
+    cRes_CourseSelectTorideBoss,        // ProfileID::cCourseSelectTorideBoss
+    cRes_CourseSelectPakkun,            // ProfileID::cCourseSelectPakkun
+    cRes_CourseSelectShadowFirstDemoKinopio, // ProfileID::cCourseSelectShadowFirstDemoKinopio
+    cRes_CourseSelectTobiPuku,          // ProfileID::cCourseSelectTobiPuku
+    cRes_CourseSelectChorobon,          // ProfileID::cCourseSelectChorobon
+    cRes_CourseSelectW7Item,            // ProfileID::cCourseSelectW7Item
+    cRes_CourseSelectW5Teresa,          // ProfileID::cCourseSelectW5Teresa
+    cRes_CourseSelectFlag,              // ProfileID::cCourseSelectFlag
+    cRes_CourseSelectMusasabi,          // ProfileID::cCourseSelectMusasabi
+    cRes_CourseSelectWPillar,           // ProfileID::cCourseSelectWPillar
+    cRes_CourseSelectW7Bridge,          // ProfileID::cCourseSelectW7Bridge
+    cRes_CourseSelectMiiBalloon,        // ProfileID::cCourseSelectMiiBalloon
+    cRes_CourseSelectPenguin,           // ProfileID::cCourseSelectPenguin
+    cRes_CourseSelectW4Item,            // ProfileID::cCourseSelectW4Item
+    cRes_CourseSelectW2Kuribo,          // ProfileID::cCourseSelectW2Kuribo
+    cRes_CourseSelectPakkunBig,         // ProfileID::cCourseSelectPakkunBig
+    cRes_CourseSelectShadowKunIcon,     // ProfileID::cCourseSelectShadowKunIcon
+    cRes_CourseSelectDekaUnira,         // ProfileID::cCourseSelectDekaUnira
+    cRes_CourseSelectTomb,              // ProfileID::cCourseSelectTomb
+    cRes_CourseSelectShadowFirstDemoShadowKun, // ProfileID::cCourseSelectShadowFirstDemoShadowKun
+    cRes_CourseSelectKotsuCoaster,      // ProfileID::cCourseSelectKotsuCoaster
+    cRes_CourseSelectKoopaJr,           // ProfileID::cCourseSelectKoopaJr
+    cRes_CourseSelectPeach,             // ProfileID::cCourseSelectPeach
+    cRes_CourseSelectW1Item,            // ProfileID::cCourseSelectW1Item
+    cRes_CourseSelectStarGate,          // ProfileID::cCourseSelectStarGate
+    nullptr,                            // ProfileID::cCourseSelectEventAssistant
     cRes_38E,                           // Profile 910
     cRes_38F,                           // Profile 911
     nullptr                             // Profile 912
