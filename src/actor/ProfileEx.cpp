@@ -509,10 +509,10 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
       9,            // ProfileID::c1D7
      10,            // ProfileID::c1D8
      11,            // ProfileID::c1D9
-     12,            // ProfileID::c1DA
-     13,            // ProfileID::c1DB
-     14,            // ProfileID::c1DC
-     15,            // ProfileID::c1DD
+     12,            // ProfileID::cIceBall
+     13,            // ProfileID::cIceBallPakkun
+     14,            // ProfileID::cFireBallPlayer
+     15,            // ProfileID::cFireBallPakkun
      16,            // ProfileID::c1DE
      17,            // ProfileID::c1DF
      18,            // ProfileID::c1E0
@@ -593,8 +593,8 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     252,            // ProfileID::c22B
     137,            // ProfileID::c22C
     138,            // ProfileID::c22D
-    139,            // ProfileID::c22E
-    140,            // ProfileID::c22F
+    139,            // ProfileID::cFireBallKeronpa
+    140,            // ProfileID::cFireBallKeronpaRDash
     107 - 0x3ff,    // ProfileID::c230
     141,            // ProfileID::c231
     152,            // ProfileID::c232
@@ -652,7 +652,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
      37 - 0x3ff,    // ProfileID::c266
      36 - 0x3ff,    // ProfileID::c267
     505,            // ProfileID::c268
-    506,            // ProfileID::c269
+    506,            // ProfileID::cSpanner
     507,            // ProfileID::c26A
     508,            // ProfileID::c26B
     509,            // ProfileID::c26C
@@ -675,12 +675,12 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     142,            // ProfileID::c27D
     143,            // ProfileID::c27E
     144,            // ProfileID::c27F
-    145,            // ProfileID::c280
+    145,            // ProfileID::cGabonRock
     146,            // ProfileID::c281
     147,            // ProfileID::c282
-    148,            // ProfileID::c283
+    148,            // ProfileID::cRockGabonRock
     149,            // ProfileID::c284
-    150,            // ProfileID::c285
+    150,            // ProfileID::cSeichanSnowBall
     151,            // ProfileID::c286
     540,            // ProfileID::c287
     541,            // ProfileID::c288
@@ -793,15 +793,15 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     335,            // ProfileID::c2F3
     493,            // ProfileID::c2F4
     340,            // ProfileID::c2F5
-    339,            // ProfileID::c2F6
+    339,            // ProfileID::cHammer
     342,            // ProfileID::c2F7
-    341,            // ProfileID::c2F8
+    341,            // ProfileID::cBoomerang
     344,            // ProfileID::c2F9
-    343,            // ProfileID::c2FA
+    343,            // ProfileID::cFireBallBros
     346,            // ProfileID::c2FB
-    345,            // ProfileID::c2FC
+    345,            // ProfileID::cIceBallBros
     348,            // ProfileID::c2FD
-    347,            // ProfileID::c2FE
+    347,            // ProfileID::cMegaHammer
     349,            // ProfileID::c2FF
     350,            // ProfileID::c300
     351,            // ProfileID::c301
@@ -1427,10 +1427,10 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c1D7
     Profile::cResType_Course,       // ProfileID::c1D8
     Profile::cResType_Course,       // ProfileID::c1D9
-    Profile::cResType_Boot,         // ProfileID::c1DA
-    Profile::cResType_Boot,         // ProfileID::c1DB
-    Profile::cResType_Boot,         // ProfileID::c1DC
-    Profile::cResType_Boot,         // ProfileID::c1DD
+    Profile::cResType_Boot,         // ProfileID::cIceBall
+    Profile::cResType_Boot,         // ProfileID::cIceBallPakkun
+    Profile::cResType_Boot,         // ProfileID::cFireBallPlayer
+    Profile::cResType_Boot,         // ProfileID::cFireBallPakkun
     Profile::cResType_Boot,         // ProfileID::c1DE
     Profile::cResType_Course,       // ProfileID::c1DF
     Profile::cResType_Course,       // ProfileID::c1E0
@@ -1511,8 +1511,8 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c22B
     Profile::cResType_Course,       // ProfileID::c22C
     Profile::cResType_Course,       // ProfileID::c22D
-    Profile::cResType_Course,       // ProfileID::c22E
-    Profile::cResType_Course,       // ProfileID::c22F
+    Profile::cResType_Course,       // ProfileID::cFireBallKeronpa
+    Profile::cResType_Course,       // ProfileID::cFireBallKeronpaRDash
     Profile::cResType_Course,       // ProfileID::c230
     Profile::cResType_Course,       // ProfileID::c231
     Profile::cResType_Course,       // ProfileID::c232
@@ -1570,7 +1570,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c266
     Profile::cResType_Course,       // ProfileID::c267
     Profile::cResType_Course,       // ProfileID::c268
-    Profile::cResType_Course,       // ProfileID::c269
+    Profile::cResType_Course,       // ProfileID::cSpanner
     Profile::cResType_Course,       // ProfileID::c26A
     Profile::cResType_Course,       // ProfileID::c26B
     Profile::cResType_Course,       // ProfileID::c26C
@@ -1593,12 +1593,12 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c27D
     Profile::cResType_Course,       // ProfileID::c27E
     Profile::cResType_Course,       // ProfileID::c27F
-    Profile::cResType_Course,       // ProfileID::c280
+    Profile::cResType_Course,       // ProfileID::cGabonRock
     Profile::cResType_Course,       // ProfileID::c281
     Profile::cResType_Course,       // ProfileID::c282
-    Profile::cResType_Course,       // ProfileID::c283
+    Profile::cResType_Course,       // ProfileID::cRockGabonRock
     Profile::cResType_Course,       // ProfileID::c284
-    Profile::cResType_Course,       // ProfileID::c285
+    Profile::cResType_Course,       // ProfileID::cSeichanSnowBall
     Profile::cResType_Course,       // ProfileID::c286
     Profile::cResType_Course,       // ProfileID::c287
     Profile::cResType_Course,       // ProfileID::c288
@@ -1711,15 +1711,15 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c2F3
     Profile::cResType_Course,       // ProfileID::c2F4
     Profile::cResType_Course,       // ProfileID::c2F5
-    Profile::cResType_Course,       // ProfileID::c2F6
+    Profile::cResType_Course,       // ProfileID::cHammer
     Profile::cResType_Course,       // ProfileID::c2F7
-    Profile::cResType_Course,       // ProfileID::c2F8
+    Profile::cResType_Course,       // ProfileID::cBoomerang
     Profile::cResType_Course,       // ProfileID::c2F9
-    Profile::cResType_Course,       // ProfileID::c2FA
+    Profile::cResType_Course,       // ProfileID::cFireBallBros
     Profile::cResType_Course,       // ProfileID::c2FB
-    Profile::cResType_Course,       // ProfileID::c2FC
+    Profile::cResType_Course,       // ProfileID::cIceBallBros
     Profile::cResType_Course,       // ProfileID::c2FD
-    Profile::cResType_Course,       // ProfileID::c2FE
+    Profile::cResType_Course,       // ProfileID::cMegaHammer
     Profile::cResType_Course,       // ProfileID::c2FF
     Profile::cResType_Course,       // ProfileID::c300
     Profile::cResType_Course,       // ProfileID::c301
@@ -4104,7 +4104,7 @@ static const sead::SafeString cRes_268[]  = {
     "choropoo"
 };
 
-static const sead::SafeString cRes_269[]  = {
+static const sead::SafeString cRes_Spanner[]  = {
     "choropoo"
 };
 
@@ -4202,7 +4202,7 @@ static const sead::SafeString cRes_27F[]  = {
     "gabon"
 };
 
-static const sead::SafeString cRes_280[]  = {
+static const sead::SafeString cRes_GabonRock[]  = {
     "gabon"
 };
 
@@ -4214,7 +4214,7 @@ static const sead::SafeString cRes_282[]  = {
     "gabon_rock"
 };
 
-static const sead::SafeString cRes_283[]  = {
+static const sead::SafeString cRes_RockGabonRock[]  = {
     "gabon_rock"
 };
 
@@ -4222,7 +4222,7 @@ static const sead::SafeString cRes_284[]  = {
     "seichan"
 };
 
-static const sead::SafeString cRes_285[]  = {
+static const sead::SafeString cRes_SeichanSnowBall[]  = {
     "seichan"
 };
 
@@ -4627,7 +4627,7 @@ static const sead::SafeString cRes_2F5[]  = {
     "bros"
 };
 
-static const sead::SafeString cRes_2F6[]  = {
+static const sead::SafeString cRes_Hammer[]  = {
     "bros"
 };
 
@@ -4635,7 +4635,7 @@ static const sead::SafeString cRes_2F7[]  = {
     "bros"
 };
 
-static const sead::SafeString cRes_2F8[]  = {
+static const sead::SafeString cRes_Boomerang[]  = {
     "bros"
 };
 
@@ -4651,7 +4651,7 @@ static const sead::SafeString cRes_2FD[]  = {
     "bros_mega"
 };
 
-static const sead::SafeString cRes_2FE[]  = {
+static const sead::SafeString cRes_MegaHammer[]  = {
     "bros_mega"
 };
 
@@ -5713,10 +5713,10 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_1D7),                            // ProfileID::c1D7
     GetResNum(cRes_1D8),                            // ProfileID::c1D8
     GetResNum(cRes_1D9),                            // ProfileID::c1D9
-    0,                                              // ProfileID::c1DA
-    0,                                              // ProfileID::c1DB
-    0,                                              // ProfileID::c1DC
-    0,                                              // ProfileID::c1DD
+    0,                                              // ProfileID::cIceBall
+    0,                                              // ProfileID::cIceBallPakkun
+    0,                                              // ProfileID::cFireBallPlayer
+    0,                                              // ProfileID::cFireBallPakkun
     0,                                              // ProfileID::c1DE
     GetResNum(cRes_1DF),                            // ProfileID::c1DF
     GetResNum(cRes_1E0),                            // ProfileID::c1E0
@@ -5797,8 +5797,8 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_22B),                            // ProfileID::c22B
     GetResNum(cRes_22C),                            // ProfileID::c22C
     GetResNum(cRes_22D),                            // ProfileID::c22D
-    0,                                              // ProfileID::c22E
-    0,                                              // ProfileID::c22F
+    0,                                              // ProfileID::cFireBallKeronpa
+    0,                                              // ProfileID::cFireBallKeronpaRDash
     GetResNum(cRes_230),                            // ProfileID::c230
     GetResNum(cRes_231),                            // ProfileID::c231
     GetResNum(cRes_232),                            // ProfileID::c232
@@ -5856,7 +5856,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_266),                            // ProfileID::c266
     GetResNum(cRes_267),                            // ProfileID::c267
     GetResNum(cRes_268),                            // ProfileID::c268
-    GetResNum(cRes_269),                            // ProfileID::c269
+    GetResNum(cRes_Spanner),                        // ProfileID::cSpanner
     GetResNum(cRes_26A),                            // ProfileID::c26A
     GetResNum(cRes_26B),                            // ProfileID::c26B
     GetResNum(cRes_26C),                            // ProfileID::c26C
@@ -5879,12 +5879,12 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_27D),                            // ProfileID::c27D
     GetResNum(cRes_27E),                            // ProfileID::c27E
     GetResNum(cRes_27F),                            // ProfileID::c27F
-    GetResNum(cRes_280),                            // ProfileID::c280
+    GetResNum(cRes_GabonRock),                      // ProfileID::cGabonRock
     GetResNum(cRes_281),                            // ProfileID::c281
     GetResNum(cRes_282),                            // ProfileID::c282
-    GetResNum(cRes_283),                            // ProfileID::c283
+    GetResNum(cRes_RockGabonRock),                  // ProfileID::cRockGabonRock
     GetResNum(cRes_284),                            // ProfileID::c284
-    GetResNum(cRes_285),                            // ProfileID::c285
+    GetResNum(cRes_SeichanSnowBall),                // ProfileID::cSeichanSnowBall
     GetResNum(cRes_286),                            // ProfileID::c286
     GetResNum(cRes_287),                            // ProfileID::c287
     GetResNum(cRes_288),                            // ProfileID::c288
@@ -5997,15 +5997,15 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_2F3),                            // ProfileID::c2F3
     GetResNum(cRes_2F4),                            // ProfileID::c2F4
     GetResNum(cRes_2F5),                            // ProfileID::c2F5
-    GetResNum(cRes_2F6),                            // ProfileID::c2F6
+    GetResNum(cRes_Hammer),                         // ProfileID::cHammer
     GetResNum(cRes_2F7),                            // ProfileID::c2F7
-    GetResNum(cRes_2F8),                            // ProfileID::c2F8
+    GetResNum(cRes_Boomerang),                      // ProfileID::cBoomerang
     GetResNum(cRes_2F9),                            // ProfileID::c2F9
-    0,                                              // ProfileID::c2FA
+    0,                                              // ProfileID::cFireBallBros
     GetResNum(cRes_2FB),                            // ProfileID::c2FB
-    0,                                              // ProfileID::c2FC
+    0,                                              // ProfileID::cIceBallBros
     GetResNum(cRes_2FD),                            // ProfileID::c2FD
-    GetResNum(cRes_2FE),                            // ProfileID::c2FE
+    GetResNum(cRes_MegaHammer),                     // ProfileID::cMegaHammer
     GetResNum(cRes_2FF),                            // ProfileID::c2FF
     GetResNum(cRes_300),                            // ProfileID::c300
     GetResNum(cRes_301),                            // ProfileID::c301
@@ -6631,10 +6631,10 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_1D7,                           // ProfileID::c1D7
     cRes_1D8,                           // ProfileID::c1D8
     cRes_1D9,                           // ProfileID::c1D9
-    nullptr,                            // ProfileID::c1DA
-    nullptr,                            // ProfileID::c1DB
-    nullptr,                            // ProfileID::c1DC
-    nullptr,                            // ProfileID::c1DD
+    nullptr,                            // ProfileID::cIceBall
+    nullptr,                            // ProfileID::cIceBallPakkun
+    nullptr,                            // ProfileID::cFireBallPlayer
+    nullptr,                            // ProfileID::cFireBallPakkun
     nullptr,                            // ProfileID::c1DE
     cRes_1DF,                           // ProfileID::c1DF
     cRes_1E0,                           // ProfileID::c1E0
@@ -6715,8 +6715,8 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_22B,                           // ProfileID::c22B
     cRes_22C,                           // ProfileID::c22C
     cRes_22D,                           // ProfileID::c22D
-    nullptr,                            // ProfileID::c22E
-    nullptr,                            // ProfileID::c22F
+    nullptr,                            // ProfileID::cFireBallKeronpa
+    nullptr,                            // ProfileID::cFireBallKeronpaRDash
     cRes_230,                           // ProfileID::c230
     cRes_231,                           // ProfileID::c231
     cRes_232,                           // ProfileID::c232
@@ -6774,7 +6774,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_266,                           // ProfileID::c266
     cRes_267,                           // ProfileID::c267
     cRes_268,                           // ProfileID::c268
-    cRes_269,                           // ProfileID::c269
+    cRes_Spanner,                       // ProfileID::cSpanner
     cRes_26A,                           // ProfileID::c26A
     cRes_26B,                           // ProfileID::c26B
     cRes_26C,                           // ProfileID::c26C
@@ -6797,12 +6797,12 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_27D,                           // ProfileID::c27D
     cRes_27E,                           // ProfileID::c27E
     cRes_27F,                           // ProfileID::c27F
-    cRes_280,                           // ProfileID::c280
+    cRes_GabonRock,                     // ProfileID::cGabonRock
     cRes_281,                           // ProfileID::c281
     cRes_282,                           // ProfileID::c282
-    cRes_283,                           // ProfileID::c283
+    cRes_RockGabonRock,                 // ProfileID::cRockGabonRock
     cRes_284,                           // ProfileID::c284
-    cRes_285,                           // ProfileID::c285
+    cRes_SeichanSnowBall,               // ProfileID::cSeichanSnowBall
     cRes_286,                           // ProfileID::c286
     cRes_287,                           // ProfileID::c287
     cRes_288,                           // ProfileID::c288
@@ -6915,15 +6915,15 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_2F3,                           // ProfileID::c2F3
     cRes_2F4,                           // ProfileID::c2F4
     cRes_2F5,                           // ProfileID::c2F5
-    cRes_2F6,                           // ProfileID::c2F6
+    cRes_Hammer,                        // ProfileID::cHammer
     cRes_2F7,                           // ProfileID::c2F7
-    cRes_2F8,                           // ProfileID::c2F8
+    cRes_Boomerang,                     // ProfileID::cBoomerang
     cRes_2F9,                           // ProfileID::c2F9
-    nullptr,                            // ProfileID::c2FA
+    nullptr,                            // ProfileID::cFireBallBros
     cRes_2FB,                           // ProfileID::c2FB
-    nullptr,                            // ProfileID::c2FC
+    nullptr,                            // ProfileID::cIceBallBros
     cRes_2FD,                           // ProfileID::c2FD
-    cRes_2FE,                           // ProfileID::c2FE
+    cRes_MegaHammer,                    // ProfileID::cMegaHammer
     cRes_2FF,                           // ProfileID::c2FF
     cRes_300,                           // ProfileID::c300
     cRes_301,                           // ProfileID::c301
