@@ -59,18 +59,18 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
      75 - 0x3ff,    // ProfileID::c015
      76 - 0x3ff,    // ProfileID::c016
      77 - 0x3ff,    // ProfileID::c017
-     78 - 0x3ff,    // ProfileID::c018
-     79 - 0x3ff,    // ProfileID::c019
-     80 - 0x3ff,    // ProfileID::c01A
-     81 - 0x3ff,    // ProfileID::c01B
-     82 - 0x3ff,    // ProfileID::c01C
+     78 - 0x3ff,    // ProfileID::cMiniGameMgr
+     79 - 0x3ff,    // ProfileID::cMiniGameMgrRDash
+     80 - 0x3ff,    // ProfileID::cShuffleBlockMgr
+     81 - 0x3ff,    // ProfileID::cSlotMgr
+     82 - 0x3ff,    // ProfileID::cCoinmakiMgr
      86 - 0x3ff,    // ProfileID::c01D
      87 - 0x3ff,    // ProfileID::c01E
      88 - 0x3ff,    // ProfileID::c01F
      91 - 0x3ff,    // ProfileID::c020
      95 - 0x3ff,    // ProfileID::cShootingStar
-    727,            // ProfileID::c022
-    728,            // ProfileID::c023
+    727,            // ProfileID::cStaffRollMgr
+    728,            // ProfileID::cStaffRollMgrRDash
     105 - 0x3ff,    // ProfileID::c024
     689,            // ProfileID::c025
      41 - 0x3ff,    // ProfileID::c026
@@ -296,7 +296,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
      75,            // ProfileID::c102
     580,            // ProfileID::c103
     593,            // ProfileID::c104
-    712,            // ProfileID::c105
+    712,            // ProfileID::cShuffleBlock
     673,            // ProfileID::cKokoopaShipWarpCannon
     619,            // ProfileID::c107
     685,            // ProfileID::c108
@@ -473,7 +473,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     327,            // ProfileID::c1B3
     332,            // ProfileID::c1B4
     331,            // ProfileID::c1B5
-    713,            // ProfileID::c1B6
+    713,            // ProfileID::cCoinmakiCoin
     117 - 0x3ff,    // ProfileID::c1B7
     112 - 0x3ff,    // ProfileID::c1B8
       0,            // ProfileID::c1B9
@@ -488,7 +488,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     236,            // ProfileID::c1C2
     233,            // ProfileID::c1C3
     232,            // ProfileID::c1C4
-    709,            // ProfileID::c1C5
+    709,            // ProfileID::cSlotYoshiChibi
      83 - 0x3ff,    // ProfileID::c1C6
     237,            // ProfileID::c1C7
     238,            // ProfileID::c1C8
@@ -861,11 +861,11 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     693,            // ProfileID::cBoxingKoopaJr
     695,            // ProfileID::cBoxingKoopaJrPostBattleDemo
     696,            // ProfileID::cBoxingKoopaJrClownPostBattleDemo
-    710,            // ProfileID::c33A
-    711,            // ProfileID::c33B
-    715,            // ProfileID::c33C
-    714,            // ProfileID::c33D
-    716,            // ProfileID::c33E
+    710,            // ProfileID::cMiniGamePanelItem
+    711,            // ProfileID::cSlotItem
+    715,            // ProfileID::cCoinmakiCannon
+    714,            // ProfileID::cCoinmakiItem
+    716,            // ProfileID::cMiniGameKinopio
     717,            // ProfileID::c33F
     718,            // ProfileID::c340
     719,            // ProfileID::c341
@@ -875,14 +875,14 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     101 - 0x3ff,    // ProfileID::c345
     104 - 0x3ff,    // ProfileID::c346
     116 - 0x3ff,    // ProfileID::c347
-    729,            // ProfileID::c348
-    730,            // ProfileID::c349
-    731,            // ProfileID::c34A
-    732,            // ProfileID::c34B
-    733,            // ProfileID::c34C
-    734,            // ProfileID::c34D
-    735,            // ProfileID::c34E
-    736,            // ProfileID::c34F
+    729,            // ProfileID::cStaffCreditChibiYoshiABC
+    730,            // ProfileID::cStaffCreditChibiYoshiBalloon
+    731,            // ProfileID::cStaffCreditChibiYoshiBalloonCheer
+    732,            // ProfileID::cStaffCreditChibiYoshiLight
+    733,            // ProfileID::cStaffCreditChibiYoshiLightCheer
+    734,            // ProfileID::cStaffCreditSoapABC
+    735,            // ProfileID::cStaffCreditSoapCoin
+    736,            // ProfileID::cStaffCreditTottenKun
     726,            // ProfileID::c350
     110 - 0x3ff,    // ProfileID::c351
     113 - 0x3ff,    // ProfileID::c352
@@ -977,18 +977,18 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c015
     Profile::cResType_Course,       // ProfileID::c016
     Profile::cResType_Course,       // ProfileID::c017
-    Profile::cResType_Course,       // ProfileID::c018
-    Profile::cResType_Course,       // ProfileID::c019
-    Profile::cResType_Boot,         // ProfileID::c01A
-    Profile::cResType_Boot,         // ProfileID::c01B
-    Profile::cResType_Boot,         // ProfileID::c01C
+    Profile::cResType_Course,       // ProfileID::cMiniGameMgr
+    Profile::cResType_Course,       // ProfileID::cMiniGameMgrRDash
+    Profile::cResType_Boot,         // ProfileID::cShuffleBlockMgr
+    Profile::cResType_Boot,         // ProfileID::cSlotMgr
+    Profile::cResType_Boot,         // ProfileID::cCoinmakiMgr
     Profile::cResType_Boot,         // ProfileID::c01D
     Profile::cResType_Boot,         // ProfileID::c01E
     Profile::cResType_Boot,         // ProfileID::c01F
     Profile::cResType_Course,       // ProfileID::c020
     Profile::cResType_Course,       // ProfileID::cShootingStar
-    Profile::cResType_Course,       // ProfileID::c022
-    Profile::cResType_Course,       // ProfileID::c023
+    Profile::cResType_Course,       // ProfileID::cStaffRollMgr
+    Profile::cResType_Course,       // ProfileID::cStaffRollMgrRDash
     Profile::cResType_Course,       // ProfileID::c024
     Profile::cResType_Boot,         // ProfileID::c025
     Profile::cResType_Course,       // ProfileID::c026
@@ -1214,7 +1214,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c102
     Profile::cResType_Course,       // ProfileID::c103
     Profile::cResType_Course,       // ProfileID::c104
-    Profile::cResType_Course,       // ProfileID::c105
+    Profile::cResType_Course,       // ProfileID::cShuffleBlock
     Profile::cResType_Course,       // ProfileID::cKokoopaShipWarpCannon
     Profile::cResType_Course,       // ProfileID::c107
     Profile::cResType_Course,       // ProfileID::c108
@@ -1391,7 +1391,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c1B3
     Profile::cResType_Course,       // ProfileID::c1B4
     Profile::cResType_Course,       // ProfileID::c1B5
-    Profile::cResType_Course,       // ProfileID::c1B6
+    Profile::cResType_Course,       // ProfileID::cCoinmakiCoin
     Profile::cResType_Boot,         // ProfileID::c1B7
     Profile::cResType_Boot,         // ProfileID::c1B8
     Profile::cResType_Boot,         // ProfileID::c1B9
@@ -1406,7 +1406,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c1C2
     Profile::cResType_Boot,         // ProfileID::c1C3
     Profile::cResType_Course,       // ProfileID::c1C4
-    Profile::cResType_Course,       // ProfileID::c1C5
+    Profile::cResType_Course,       // ProfileID::cSlotYoshiChibi
     Profile::cResType_Course,       // ProfileID::c1C6
     Profile::cResType_Course,       // ProfileID::c1C7
     Profile::cResType_Course,       // ProfileID::c1C8
@@ -1779,11 +1779,11 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::cBoxingKoopaJr
     Profile::cResType_Course,       // ProfileID::cBoxingKoopaJrPostBattleDemo
     Profile::cResType_Course,       // ProfileID::cBoxingKoopaJrClownPostBattleDemo
-    Profile::cResType_Course,       // ProfileID::c33A
-    Profile::cResType_Course,       // ProfileID::c33B
-    Profile::cResType_Course,       // ProfileID::c33C
-    Profile::cResType_Course,       // ProfileID::c33D
-    Profile::cResType_Course,       // ProfileID::c33E
+    Profile::cResType_Course,       // ProfileID::cMiniGamePanelItem
+    Profile::cResType_Course,       // ProfileID::cSlotItem
+    Profile::cResType_Course,       // ProfileID::cCoinmakiCannon
+    Profile::cResType_Course,       // ProfileID::cCoinmakiItem
+    Profile::cResType_Course,       // ProfileID::cMiniGameKinopio
     Profile::cResType_Course,       // ProfileID::c33F
     Profile::cResType_Course,       // ProfileID::c340
     Profile::cResType_Course,       // ProfileID::c341
@@ -1793,14 +1793,14 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c345
     Profile::cResType_Course,       // ProfileID::c346
     Profile::cResType_Course,       // ProfileID::c347
-    Profile::cResType_Course,       // ProfileID::c348
-    Profile::cResType_Course,       // ProfileID::c349
-    Profile::cResType_Course,       // ProfileID::c34A
-    Profile::cResType_Course,       // ProfileID::c34B
-    Profile::cResType_Course,       // ProfileID::c34C
-    Profile::cResType_Course,       // ProfileID::c34D
-    Profile::cResType_Course,       // ProfileID::c34E
-    Profile::cResType_Course,       // ProfileID::c34F
+    Profile::cResType_Course,       // ProfileID::cStaffCreditChibiYoshiABC
+    Profile::cResType_Course,       // ProfileID::cStaffCreditChibiYoshiBalloon
+    Profile::cResType_Course,       // ProfileID::cStaffCreditChibiYoshiBalloonCheer
+    Profile::cResType_Course,       // ProfileID::cStaffCreditChibiYoshiLight
+    Profile::cResType_Course,       // ProfileID::cStaffCreditChibiYoshiLightCheer
+    Profile::cResType_Course,       // ProfileID::cStaffCreditSoapABC
+    Profile::cResType_Course,       // ProfileID::cStaffCreditSoapCoin
+    Profile::cResType_Course,       // ProfileID::cStaffCreditTottenKun
     Profile::cResType_Course,       // ProfileID::c350
     Profile::cResType_Course,       // ProfileID::c351
     Profile::cResType_Boot,         // ProfileID::c352
@@ -1883,7 +1883,7 @@ static const sead::SafeString cRes_017[]  = {
     "obj_coin"
 };
 
-static const sead::SafeString cRes_018[]  = {
+static const sead::SafeString cRes_MiniGameMgr[]  = {
     "miniGame_shuffle",
     "block_pata",
     "KinopioMdl",
@@ -1893,7 +1893,7 @@ static const sead::SafeString cRes_018[]  = {
     "miniGame_slot"
 };
 
-static const sead::SafeString cRes_019[]  = {
+static const sead::SafeString cRes_MiniGameMgrRDash[]  = {
     "R_miniGame_shuffle",
     "block_pata",
     "KinopioMdl",
@@ -1907,7 +1907,7 @@ static const sead::SafeString cRes_ShootingStar[]  = {
     "I_star"
 };
 
-static const sead::SafeString cRes_022[]  = {
+static const sead::SafeString cRes_StaffRollMgr[]  = {
     "baloon_ABC",
     "YoshiChibi_TexBubble",
     "copyright",
@@ -1918,7 +1918,7 @@ static const sead::SafeString cRes_022[]  = {
     "shadowkun"
 };
 
-static const sead::SafeString cRes_023[]  = {
+static const sead::SafeString cRes_StaffRollMgrRDash[]  = {
     "baloon_ABC",
     "YoshiChibi_TexBubble",
     "R_copyright",
@@ -2864,7 +2864,7 @@ static const sead::SafeString cRes_104[]  = {
     "lift_han_leaf"
 };
 
-static const sead::SafeString cRes_105[]  = {
+static const sead::SafeString cRes_ShuffleBlock[]  = {
     "miniGame_shuffle",
     "block_pata",
     "R_miniGame_shuffle"
@@ -3460,7 +3460,7 @@ static const sead::SafeString cRes_1B3[]  = {
     "star_coin"
 };
 
-static const sead::SafeString cRes_1B6[]  = {
+static const sead::SafeString cRes_CoinmakiCoin[]  = {
     "miniGame_mochimaki"
 };
 
@@ -3535,7 +3535,7 @@ static const sead::SafeString cRes_1C3[]  = {
     "I_musasabi"
 };
 
-static const sead::SafeString cRes_1C5[]  = {
+static const sead::SafeString cRes_SlotYoshiChibi[]  = {
     "YoshiChibi_TexBubble",
     "YoshiChibi_TexBalloon",
     "YoshiChibi_TexLight",
@@ -4904,24 +4904,24 @@ static const sead::SafeString cRes_BoxingKoopaJrClownPostBattleDemo[]  = {
     "koopaJr_clown"
 };
 
-static const sead::SafeString cRes_33A[]  = {
+static const sead::SafeString cRes_MiniGamePanelItem[]  = {
     "miniGame_shuffle",
     "R_miniGame_shuffle"
 };
 
-static const sead::SafeString cRes_33B[]  = {
+static const sead::SafeString cRes_SlotItem[]  = {
     "miniGame_slot"
 };
 
-static const sead::SafeString cRes_33C[]  = {
+static const sead::SafeString cRes_CoinmakiCannon[]  = {
     "miniGame_mochimaki"
 };
 
-static const sead::SafeString cRes_33D[]  = {
+static const sead::SafeString cRes_CoinmakiItem[]  = {
     "miniGame_mochimaki"
 };
 
-static const sead::SafeString cRes_33E[]  = {
+static const sead::SafeString cRes_MiniGameKinopio[]  = {
     "KinopioMdl",
     "CommonAnm",
     "KinopioAnm"
@@ -4943,37 +4943,37 @@ static const sead::SafeString cRes_342[]  = {
     "goal_kinoko_house"
 };
 
-static const sead::SafeString cRes_348[]  = {
+static const sead::SafeString cRes_StaffCreditChibiYoshiABC[]  = {
     "YoshiChibi_TexBubble",
     "baloon_ABC"
 };
 
-static const sead::SafeString cRes_349[]  = {
+static const sead::SafeString cRes_StaffCreditChibiYoshiBalloon[]  = {
     "YoshiChibi_TexBalloon"
 };
 
-static const sead::SafeString cRes_34A[]  = {
+static const sead::SafeString cRes_StaffCreditChibiYoshiBalloonCheer[]  = {
     "YoshiChibi_TexBalloon"
 };
 
-static const sead::SafeString cRes_34B[]  = {
+static const sead::SafeString cRes_StaffCreditChibiYoshiLight[]  = {
     "YoshiChibi_TexLight"
 };
 
-static const sead::SafeString cRes_34C[]  = {
+static const sead::SafeString cRes_StaffCreditChibiYoshiLightCheer[]  = {
     "YoshiChibi_TexLight"
 };
 
-static const sead::SafeString cRes_34D[]  = {
+static const sead::SafeString cRes_StaffCreditSoapABC[]  = {
     "baloon_ABC"
 };
 
-static const sead::SafeString cRes_34E[]  = {
+static const sead::SafeString cRes_StaffCreditSoapCoin[]  = {
     "balloon",
     "obj_coin"
 };
 
-static const sead::SafeString cRes_34F[]  = {
+static const sead::SafeString cRes_StaffCreditTottenKun[]  = {
     "shadowkun"
 };
 
@@ -5263,18 +5263,18 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_015),                            // ProfileID::c015
     GetResNum(cRes_016),                            // ProfileID::c016
     GetResNum(cRes_017),                            // ProfileID::c017
-    GetResNum(cRes_018),                            // ProfileID::c018
-    GetResNum(cRes_019),                            // ProfileID::c019
-    0,                                              // ProfileID::c01A
-    0,                                              // ProfileID::c01B
-    0,                                              // ProfileID::c01C
+    GetResNum(cRes_MiniGameMgr),                    // ProfileID::cMiniGameMgr
+    GetResNum(cRes_MiniGameMgrRDash),               // ProfileID::cMiniGameMgrRDash
+    0,                                              // ProfileID::cShuffleBlockMgr
+    0,                                              // ProfileID::cSlotMgr
+    0,                                              // ProfileID::cCoinmakiMgr
     0,                                              // ProfileID::c01D
     0,                                              // ProfileID::c01E
     0,                                              // ProfileID::c01F
     0,                                              // ProfileID::c020
     GetResNum(cRes_ShootingStar),                   // ProfileID::cShootingStar
-    GetResNum(cRes_022),                            // ProfileID::c022
-    GetResNum(cRes_023),                            // ProfileID::c023
+    GetResNum(cRes_StaffRollMgr),                   // ProfileID::cStaffRollMgr
+    GetResNum(cRes_StaffRollMgrRDash),              // ProfileID::cStaffRollMgrRDash
     GetResNum(cRes_024),                            // ProfileID::c024
     0,                                              // ProfileID::c025
     GetResNum(cRes_026),                            // ProfileID::c026
@@ -5500,7 +5500,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_102),                            // ProfileID::c102
     GetResNum(cRes_103),                            // ProfileID::c103
     GetResNum(cRes_104),                            // ProfileID::c104
-    GetResNum(cRes_105),                            // ProfileID::c105
+    GetResNum(cRes_ShuffleBlock),                   // ProfileID::cShuffleBlock
     GetResNum(cRes_KokoopaShipWarpCannon),          // ProfileID::cKokoopaShipWarpCannon
     GetResNum(cRes_107),                            // ProfileID::c107
     GetResNum(cRes_108),                            // ProfileID::c108
@@ -5677,7 +5677,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_1B3),                            // ProfileID::c1B3
     0,                                              // ProfileID::c1B4
     0,                                              // ProfileID::c1B5
-    GetResNum(cRes_1B6),                            // ProfileID::c1B6
+    GetResNum(cRes_CoinmakiCoin),                   // ProfileID::cCoinmakiCoin
     0,                                              // ProfileID::c1B7
     0,                                              // ProfileID::c1B8
     GetResNum(cRes_1B9),                            // ProfileID::c1B9
@@ -5692,7 +5692,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_1C2),                            // ProfileID::c1C2
     GetResNum(cRes_1C3),                            // ProfileID::c1C3
     0,                                              // ProfileID::c1C4
-    GetResNum(cRes_1C5),                            // ProfileID::c1C5
+    GetResNum(cRes_SlotYoshiChibi),                 // ProfileID::cSlotYoshiChibi
     GetResNum(cRes_1C6),                            // ProfileID::c1C6
     0,                                              // ProfileID::c1C7
     GetResNum(cRes_1C8),                            // ProfileID::c1C8
@@ -6065,11 +6065,11 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_BoxingKoopaJr),                  // ProfileID::cBoxingKoopaJr
     GetResNum(cRes_BoxingKoopaJrPostBattleDemo),    // ProfileID::cBoxingKoopaJrPostBattleDemo
     GetResNum(cRes_BoxingKoopaJrClownPostBattleDemo), // ProfileID::cBoxingKoopaJrClownPostBattleDemo
-    GetResNum(cRes_33A),                            // ProfileID::c33A
-    GetResNum(cRes_33B),                            // ProfileID::c33B
-    GetResNum(cRes_33C),                            // ProfileID::c33C
-    GetResNum(cRes_33D),                            // ProfileID::c33D
-    GetResNum(cRes_33E),                            // ProfileID::c33E
+    GetResNum(cRes_MiniGamePanelItem),              // ProfileID::cMiniGamePanelItem
+    GetResNum(cRes_SlotItem),                       // ProfileID::cSlotItem
+    GetResNum(cRes_CoinmakiCannon),                 // ProfileID::cCoinmakiCannon
+    GetResNum(cRes_CoinmakiItem),                   // ProfileID::cCoinmakiItem
+    GetResNum(cRes_MiniGameKinopio),                // ProfileID::cMiniGameKinopio
     GetResNum(cRes_33F),                            // ProfileID::c33F
     GetResNum(cRes_340),                            // ProfileID::c340
     GetResNum(cRes_341),                            // ProfileID::c341
@@ -6079,14 +6079,14 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                              // ProfileID::c345
     0,                                              // ProfileID::c346
     0,                                              // ProfileID::c347
-    GetResNum(cRes_348),                            // ProfileID::c348
-    GetResNum(cRes_349),                            // ProfileID::c349
-    GetResNum(cRes_34A),                            // ProfileID::c34A
-    GetResNum(cRes_34B),                            // ProfileID::c34B
-    GetResNum(cRes_34C),                            // ProfileID::c34C
-    GetResNum(cRes_34D),                            // ProfileID::c34D
-    GetResNum(cRes_34E),                            // ProfileID::c34E
-    GetResNum(cRes_34F),                            // ProfileID::c34F
+    GetResNum(cRes_StaffCreditChibiYoshiABC),       // ProfileID::cStaffCreditChibiYoshiABC
+    GetResNum(cRes_StaffCreditChibiYoshiBalloon),   // ProfileID::cStaffCreditChibiYoshiBalloon
+    GetResNum(cRes_StaffCreditChibiYoshiBalloonCheer), // ProfileID::cStaffCreditChibiYoshiBalloonCheer
+    GetResNum(cRes_StaffCreditChibiYoshiLight),     // ProfileID::cStaffCreditChibiYoshiLight
+    GetResNum(cRes_StaffCreditChibiYoshiLightCheer), // ProfileID::cStaffCreditChibiYoshiLightCheer
+    GetResNum(cRes_StaffCreditSoapABC),             // ProfileID::cStaffCreditSoapABC
+    GetResNum(cRes_StaffCreditSoapCoin),            // ProfileID::cStaffCreditSoapCoin
+    GetResNum(cRes_StaffCreditTottenKun),           // ProfileID::cStaffCreditTottenKun
     0,                                              // ProfileID::c350
     0,                                              // ProfileID::c351
     0,                                              // ProfileID::c352
@@ -6181,18 +6181,18 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_015,                           // ProfileID::c015
     cRes_016,                           // ProfileID::c016
     cRes_017,                           // ProfileID::c017
-    cRes_018,                           // ProfileID::c018
-    cRes_019,                           // ProfileID::c019
-    nullptr,                            // ProfileID::c01A
-    nullptr,                            // ProfileID::c01B
-    nullptr,                            // ProfileID::c01C
+    cRes_MiniGameMgr,                   // ProfileID::cMiniGameMgr
+    cRes_MiniGameMgrRDash,              // ProfileID::cMiniGameMgrRDash
+    nullptr,                            // ProfileID::cShuffleBlockMgr
+    nullptr,                            // ProfileID::cSlotMgr
+    nullptr,                            // ProfileID::cCoinmakiMgr
     nullptr,                            // ProfileID::c01D
     nullptr,                            // ProfileID::c01E
     nullptr,                            // ProfileID::c01F
     nullptr,                            // ProfileID::c020
     cRes_ShootingStar,                  // ProfileID::cShootingStar
-    cRes_022,                           // ProfileID::c022
-    cRes_023,                           // ProfileID::c023
+    cRes_StaffRollMgr,                  // ProfileID::cStaffRollMgr
+    cRes_StaffRollMgrRDash,             // ProfileID::cStaffRollMgrRDash
     cRes_024,                           // ProfileID::c024
     nullptr,                            // ProfileID::c025
     cRes_026,                           // ProfileID::c026
@@ -6418,7 +6418,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_102,                           // ProfileID::c102
     cRes_103,                           // ProfileID::c103
     cRes_104,                           // ProfileID::c104
-    cRes_105,                           // ProfileID::c105
+    cRes_ShuffleBlock,                  // ProfileID::cShuffleBlock
     cRes_KokoopaShipWarpCannon,         // ProfileID::cKokoopaShipWarpCannon
     cRes_107,                           // ProfileID::c107
     cRes_108,                           // ProfileID::c108
@@ -6595,7 +6595,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_1B3,                           // ProfileID::c1B3
     nullptr,                            // ProfileID::c1B4
     nullptr,                            // ProfileID::c1B5
-    cRes_1B6,                           // ProfileID::c1B6
+    cRes_CoinmakiCoin,                  // ProfileID::cCoinmakiCoin
     nullptr,                            // ProfileID::c1B7
     nullptr,                            // ProfileID::c1B8
     cRes_1B9,                           // ProfileID::c1B9
@@ -6610,7 +6610,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_1C2,                           // ProfileID::c1C2
     cRes_1C3,                           // ProfileID::c1C3
     nullptr,                            // ProfileID::c1C4
-    cRes_1C5,                           // ProfileID::c1C5
+    cRes_SlotYoshiChibi,                // ProfileID::cSlotYoshiChibi
     cRes_1C6,                           // ProfileID::c1C6
     nullptr,                            // ProfileID::c1C7
     cRes_1C8,                           // ProfileID::c1C8
@@ -6983,11 +6983,11 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_BoxingKoopaJr,                 // ProfileID::cBoxingKoopaJr
     cRes_BoxingKoopaJrPostBattleDemo,   // ProfileID::cBoxingKoopaJrPostBattleDemo
     cRes_BoxingKoopaJrClownPostBattleDemo, // ProfileID::cBoxingKoopaJrClownPostBattleDemo
-    cRes_33A,                           // ProfileID::c33A
-    cRes_33B,                           // ProfileID::c33B
-    cRes_33C,                           // ProfileID::c33C
-    cRes_33D,                           // ProfileID::c33D
-    cRes_33E,                           // ProfileID::c33E
+    cRes_MiniGamePanelItem,             // ProfileID::cMiniGamePanelItem
+    cRes_SlotItem,                      // ProfileID::cSlotItem
+    cRes_CoinmakiCannon,                // ProfileID::cCoinmakiCannon
+    cRes_CoinmakiItem,                  // ProfileID::cCoinmakiItem
+    cRes_MiniGameKinopio,               // ProfileID::cMiniGameKinopio
     cRes_33F,                           // ProfileID::c33F
     cRes_340,                           // ProfileID::c340
     cRes_341,                           // ProfileID::c341
@@ -6997,14 +6997,14 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     nullptr,                            // ProfileID::c345
     nullptr,                            // ProfileID::c346
     nullptr,                            // ProfileID::c347
-    cRes_348,                           // ProfileID::c348
-    cRes_349,                           // ProfileID::c349
-    cRes_34A,                           // ProfileID::c34A
-    cRes_34B,                           // ProfileID::c34B
-    cRes_34C,                           // ProfileID::c34C
-    cRes_34D,                           // ProfileID::c34D
-    cRes_34E,                           // ProfileID::c34E
-    cRes_34F,                           // ProfileID::c34F
+    cRes_StaffCreditChibiYoshiABC,      // ProfileID::cStaffCreditChibiYoshiABC
+    cRes_StaffCreditChibiYoshiBalloon,  // ProfileID::cStaffCreditChibiYoshiBalloon
+    cRes_StaffCreditChibiYoshiBalloonCheer, // ProfileID::cStaffCreditChibiYoshiBalloonCheer
+    cRes_StaffCreditChibiYoshiLight,    // ProfileID::cStaffCreditChibiYoshiLight
+    cRes_StaffCreditChibiYoshiLightCheer, // ProfileID::cStaffCreditChibiYoshiLightCheer
+    cRes_StaffCreditSoapABC,            // ProfileID::cStaffCreditSoapABC
+    cRes_StaffCreditSoapCoin,           // ProfileID::cStaffCreditSoapCoin
+    cRes_StaffCreditTottenKun,          // ProfileID::cStaffCreditTottenKun
     nullptr,                            // ProfileID::c350
     nullptr,                            // ProfileID::c351
     nullptr,                            // ProfileID::c352

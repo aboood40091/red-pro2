@@ -403,14 +403,14 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c132,                            // 398
     ProfileID::cUnderwaterKoopaJr,              // 399
     ProfileID::c061,                            // 400
-    ProfileID::c01A,                            // 401
+    ProfileID::cShuffleBlockMgr,                // 401
     ProfileID::c2EF,                            // 402
     ProfileID::cIggy,                           // 403
     ProfileID::c157,                            // 404
     ProfileID::c042,                            // 405
     ProfileID::cBossKK,                         // 406
     ProfileID::c05A,                            // 407
-    ProfileID::c33E,                            // 408
+    ProfileID::cMiniGameKinopio,                // 408
     ProfileID::c16E,                            // 409
     ProfileID::c0FE,                            // 410
     ProfileID::cKameck,                         // 411
@@ -425,7 +425,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::cKokoopaShipRoy,                 // 420
     ProfileID::cKokoopaShipLudwig,              // 421
     ProfileID::c13D,                            // 422
-    ProfileID::c018,                            // 423
+    ProfileID::cMiniGameMgr,                    // 423
     ProfileID::cKokoopaShipWarpCannon,          // 424
     ProfileID::c107,                            // 425
     ProfileID::c1D2,                            // 426
@@ -454,7 +454,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c328,                            // 449
     ProfileID::cKameckIceConfig,                // 450
     ProfileID::c1C8,                            // 451
-    ProfileID::c1C5,                            // 452
+    ProfileID::cSlotYoshiChibi,                 // 452
     ProfileID::c148,                            // 453
     ProfileID::c149,                            // 454
     ProfileID::c010,                            // 455
@@ -476,7 +476,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c1D8,                            // 471
     ProfileID::c1D9,                            // 472
     ProfileID::cFinalKoopa,                     // 473
-    ProfileID::c33C,                            // 474
+    ProfileID::cCoinmakiCannon,                 // 474
     ProfileID::c13E,                            // 475
     ProfileID::c202,                            // 476
     ProfileID::cFinalKoopaJr,                   // 477
@@ -558,8 +558,8 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c16C,                            // 553
     ProfileID::c346,                            // 554
     ProfileID::c17C,                            // 555
-    ProfileID::c348,                            // 556
-    ProfileID::c022,                            // 557
+    ProfileID::cStaffCreditChibiYoshiABC,       // 556
+    ProfileID::cStaffRollMgr,                   // 557
     ProfileID::cPeachFinalCastleKoopaJrDemo,    // 558
     ProfileID::c1CA,                            // 559
     ProfileID::cWendyFloor,                     // 560
@@ -672,7 +672,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c092,                            // 667
     ProfileID::c10C,                            // 668
     ProfileID::c048,                            // 669
-    ProfileID::c019,                            // 670
+    ProfileID::cMiniGameMgrRDash,               // 670
     ProfileID::c0C0,                            // 671
     ProfileID::c14C,                            // 672
     ProfileID::c2ED,                            // 673
@@ -691,7 +691,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c15A,                            // 686
     ProfileID::c20B,                            // 687
     ProfileID::c146,                            // 688
-    ProfileID::c023,                            // 689
+    ProfileID::cStaffRollMgrRDash,              // 689
     ProfileID::c2E7,                            // 690
     ProfileID::c2E8,                            // 691
     ProfileID::c124,                            // 692
