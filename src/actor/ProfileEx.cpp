@@ -68,7 +68,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
      87 - 0x3ff,    // ProfileID::c01E
      88 - 0x3ff,    // ProfileID::c01F
      91 - 0x3ff,    // ProfileID::c020
-     95 - 0x3ff,    // ProfileID::c021
+     95 - 0x3ff,    // ProfileID::cShootingStar
     727,            // ProfileID::c022
     728,            // ProfileID::c023
     105 - 0x3ff,    // ProfileID::c024
@@ -498,7 +498,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     242,            // ProfileID::c1CC
     243,            // ProfileID::c1CD
     244,            // ProfileID::c1CE
-    245,            // ProfileID::c1CF
+    245,            // ProfileID::cQuestPrizeItem
     246,            // ProfileID::c1D0
     247,            // ProfileID::c1D1
     679,            // ProfileID::c1D2
@@ -626,16 +626,16 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
      15 - 0x3ff,    // ProfileID::c24C
     106 - 0x3ff,    // ProfileID::c24D
      16 - 0x3ff,    // ProfileID::c24E
-    254,            // ProfileID::c24F
-    255,            // ProfileID::c250
-    258,            // ProfileID::c251
-    259,            // ProfileID::c252
-    260,            // ProfileID::c253
-    261,            // ProfileID::c254
-    262,            // ProfileID::c255
-    263,            // ProfileID::c256
-    264,            // ProfileID::c257
-    265,            // ProfileID::c258
+    254,            // ProfileID::cKinoko
+    255,            // ProfileID::cFireFlower
+    258,            // ProfileID::cMameKinoko
+    259,            // ProfileID::cIceFlower
+    260,            // ProfileID::cPropeller
+    261,            // ProfileID::cPenguin
+    262,            // ProfileID::cOneUpKinoko
+    263,            // ProfileID::cMusasabi
+    264,            // ProfileID::cSuperMoon
+    265,            // ProfileID::cTitleDemoItem
     302,            // ProfileID::c259
     310,            // ProfileID::c25A
     311,            // ProfileID::c25B
@@ -844,9 +844,9 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     646,            // ProfileID::c326
     653,            // ProfileID::c327
     654,            // ProfileID::c328
-    655,            // ProfileID::c329
+    655,            // ProfileID::cBattleItem
     665,            // ProfileID::c32A
-    656,            // ProfileID::c32B
+    656,            // ProfileID::cVsBattleItem
     660,            // ProfileID::c32C
     661,            // ProfileID::c32D
      85 - 0x3ff,    // ProfileID::c32E
@@ -887,8 +887,8 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     110 - 0x3ff,    // ProfileID::c351
     113 - 0x3ff,    // ProfileID::c352
     114 - 0x3ff,    // ProfileID::c353
-    256,            // ProfileID::c354
-    257,            // ProfileID::c355
+    256,            // ProfileID::cRealizeFeverStar
+    257,            // ProfileID::cStar
     737,            // ProfileID::cCourseSelectPlayer
     738,            // ProfileID::cCourseSelectPlayer2PSub
     739,            // ProfileID::cCourseSelectChibiYoshi
@@ -986,7 +986,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c01E
     Profile::cResType_Boot,         // ProfileID::c01F
     Profile::cResType_Course,       // ProfileID::c020
-    Profile::cResType_Course,       // ProfileID::c021
+    Profile::cResType_Course,       // ProfileID::cShootingStar
     Profile::cResType_Course,       // ProfileID::c022
     Profile::cResType_Course,       // ProfileID::c023
     Profile::cResType_Course,       // ProfileID::c024
@@ -1416,7 +1416,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c1CC
     Profile::cResType_Course,       // ProfileID::c1CD
     Profile::cResType_Course,       // ProfileID::c1CE
-    Profile::cResType_Boot,         // ProfileID::c1CF
+    Profile::cResType_Boot,         // ProfileID::cQuestPrizeItem
     Profile::cResType_Course,       // ProfileID::c1D0
     Profile::cResType_Course,       // ProfileID::c1D1
     Profile::cResType_Course,       // ProfileID::c1D2
@@ -1544,16 +1544,16 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c24C
     Profile::cResType_Boot,         // ProfileID::c24D
     Profile::cResType_Boot,         // ProfileID::c24E
-    Profile::cResType_Boot,         // ProfileID::c24F
-    Profile::cResType_Boot,         // ProfileID::c250
-    Profile::cResType_Boot,         // ProfileID::c251
-    Profile::cResType_Boot,         // ProfileID::c252
-    Profile::cResType_Boot,         // ProfileID::c253
-    Profile::cResType_Boot,         // ProfileID::c254
-    Profile::cResType_Boot,         // ProfileID::c255
-    Profile::cResType_Boot,         // ProfileID::c256
-    Profile::cResType_Boot,         // ProfileID::c257
-    Profile::cResType_Boot,         // ProfileID::c258
+    Profile::cResType_Boot,         // ProfileID::cKinoko
+    Profile::cResType_Boot,         // ProfileID::cFireFlower
+    Profile::cResType_Boot,         // ProfileID::cMameKinoko
+    Profile::cResType_Boot,         // ProfileID::cIceFlower
+    Profile::cResType_Boot,         // ProfileID::cPropeller
+    Profile::cResType_Boot,         // ProfileID::cPenguin
+    Profile::cResType_Boot,         // ProfileID::cOneUpKinoko
+    Profile::cResType_Boot,         // ProfileID::cMusasabi
+    Profile::cResType_Boot,         // ProfileID::cSuperMoon
+    Profile::cResType_Boot,         // ProfileID::cTitleDemoItem
     Profile::cResType_Course,       // ProfileID::c259
     Profile::cResType_Course,       // ProfileID::c25A
     Profile::cResType_Course,       // ProfileID::c25B
@@ -1762,9 +1762,9 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c326
     Profile::cResType_Boot,         // ProfileID::c327
     Profile::cResType_Course,       // ProfileID::c328
-    Profile::cResType_Boot,         // ProfileID::c329
+    Profile::cResType_Boot,         // ProfileID::cBattleItem
     Profile::cResType_Boot,         // ProfileID::c32A
-    Profile::cResType_Boot,         // ProfileID::c32B
+    Profile::cResType_Boot,         // ProfileID::cVsBattleItem
     Profile::cResType_Course,       // ProfileID::c32C
     Profile::cResType_Course,       // ProfileID::c32D
     Profile::cResType_Course,       // ProfileID::c32E
@@ -1805,8 +1805,8 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c351
     Profile::cResType_Boot,         // ProfileID::c352
     Profile::cResType_Course,       // ProfileID::c353
-    Profile::cResType_Boot,         // ProfileID::c354
-    Profile::cResType_Boot,         // ProfileID::c355
+    Profile::cResType_Boot,         // ProfileID::cRealizeFeverStar
+    Profile::cResType_Boot,         // ProfileID::cStar
     Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPlayer
     Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPlayer2PSub
     Profile::cResType_CourseSelect, // ProfileID::cCourseSelectChibiYoshi
@@ -1903,7 +1903,7 @@ static const sead::SafeString cRes_019[]  = {
     "miniGame_slot"
 };
 
-static const sead::SafeString cRes_021[]  = {
+static const sead::SafeString cRes_ShootingStar[]  = {
     "I_star"
 };
 
@@ -3565,7 +3565,7 @@ static const sead::SafeString cRes_1CE[]  = {
     "KinopioAnm"
 };
 
-static const sead::SafeString cRes_1CF[]  = {
+static const sead::SafeString cRes_QuestPrizeItem[]  = {
     "I_musasabi",
     "I_star",
     "I_kinoko",
@@ -3996,43 +3996,43 @@ static const sead::SafeString cRes_23E[]  = {
     "kazan_rock"
 };
 
-static const sead::SafeString cRes_24F[]  = {
+static const sead::SafeString cRes_Kinoko[]  = {
     "I_kinoko"
 };
 
-static const sead::SafeString cRes_250[]  = {
+static const sead::SafeString cRes_FireFlower[]  = {
     "I_fireflower"
 };
 
-static const sead::SafeString cRes_251[]  = {
+static const sead::SafeString cRes_MameKinoko[]  = {
     "I_kinoko"
 };
 
-static const sead::SafeString cRes_252[]  = {
+static const sead::SafeString cRes_IceFlower[]  = {
     "I_iceflower"
 };
 
-static const sead::SafeString cRes_253[]  = {
+static const sead::SafeString cRes_Propeller[]  = {
     "I_propeller"
 };
 
-static const sead::SafeString cRes_254[]  = {
+static const sead::SafeString cRes_Penguin[]  = {
     "I_penguin"
 };
 
-static const sead::SafeString cRes_255[]  = {
+static const sead::SafeString cRes_OneUpKinoko[]  = {
     "I_kinoko"
 };
 
-static const sead::SafeString cRes_256[]  = {
+static const sead::SafeString cRes_Musasabi[]  = {
     "I_musasabi"
 };
 
-static const sead::SafeString cRes_257[]  = {
+static const sead::SafeString cRes_SuperMoon[]  = {
     "I_moon"
 };
 
-static const sead::SafeString cRes_258[]  = {
+static const sead::SafeString cRes_TitleDemoItem[]  = {
     "I_musasabi"
 };
 
@@ -4813,7 +4813,7 @@ static const sead::SafeString cRes_327[]  = {
     "shadowkun"
 };
 
-static const sead::SafeString cRes_329[]  = {
+static const sead::SafeString cRes_BattleItem[]  = {
     "I_kinoko",
     "I_fireflower",
     "I_propeller",
@@ -4829,7 +4829,7 @@ static const sead::SafeString cRes_32A[]  = {
     "I_yoshi_egg"
 };
 
-static const sead::SafeString cRes_32B[]  = {
+static const sead::SafeString cRes_VsBattleItem[]  = {
     "I_kinoko",
     "I_fireflower",
     "I_propeller",
@@ -4977,11 +4977,11 @@ static const sead::SafeString cRes_34F[]  = {
     "shadowkun"
 };
 
-static const sead::SafeString cRes_354[]  = {
+static const sead::SafeString cRes_RealizeFeverStar[]  = {
     "I_star_DRC"
 };
 
-static const sead::SafeString cRes_355[]  = {
+static const sead::SafeString cRes_Star[]  = {
     "I_star"
 };
 
@@ -5272,7 +5272,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                              // ProfileID::c01E
     0,                                              // ProfileID::c01F
     0,                                              // ProfileID::c020
-    GetResNum(cRes_021),                            // ProfileID::c021
+    GetResNum(cRes_ShootingStar),                   // ProfileID::cShootingStar
     GetResNum(cRes_022),                            // ProfileID::c022
     GetResNum(cRes_023),                            // ProfileID::c023
     GetResNum(cRes_024),                            // ProfileID::c024
@@ -5702,7 +5702,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_1CC),                            // ProfileID::c1CC
     0,                                              // ProfileID::c1CD
     GetResNum(cRes_1CE),                            // ProfileID::c1CE
-    GetResNum(cRes_1CF),                            // ProfileID::c1CF
+    GetResNum(cRes_QuestPrizeItem),                 // ProfileID::cQuestPrizeItem
     GetResNum(cRes_1D0),                            // ProfileID::c1D0
     GetResNum(cRes_1D1),                            // ProfileID::c1D1
     GetResNum(cRes_1D2),                            // ProfileID::c1D2
@@ -5830,16 +5830,16 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                              // ProfileID::c24C
     0,                                              // ProfileID::c24D
     0,                                              // ProfileID::c24E
-    GetResNum(cRes_24F),                            // ProfileID::c24F
-    GetResNum(cRes_250),                            // ProfileID::c250
-    GetResNum(cRes_251),                            // ProfileID::c251
-    GetResNum(cRes_252),                            // ProfileID::c252
-    GetResNum(cRes_253),                            // ProfileID::c253
-    GetResNum(cRes_254),                            // ProfileID::c254
-    GetResNum(cRes_255),                            // ProfileID::c255
-    GetResNum(cRes_256),                            // ProfileID::c256
-    GetResNum(cRes_257),                            // ProfileID::c257
-    GetResNum(cRes_258),                            // ProfileID::c258
+    GetResNum(cRes_Kinoko),                         // ProfileID::cKinoko
+    GetResNum(cRes_FireFlower),                     // ProfileID::cFireFlower
+    GetResNum(cRes_MameKinoko),                     // ProfileID::cMameKinoko
+    GetResNum(cRes_IceFlower),                      // ProfileID::cIceFlower
+    GetResNum(cRes_Propeller),                      // ProfileID::cPropeller
+    GetResNum(cRes_Penguin),                        // ProfileID::cPenguin
+    GetResNum(cRes_OneUpKinoko),                    // ProfileID::cOneUpKinoko
+    GetResNum(cRes_Musasabi),                       // ProfileID::cMusasabi
+    GetResNum(cRes_SuperMoon),                      // ProfileID::cSuperMoon
+    GetResNum(cRes_TitleDemoItem),                  // ProfileID::cTitleDemoItem
     GetResNum(cRes_259),                            // ProfileID::c259
     GetResNum(cRes_25A),                            // ProfileID::c25A
     GetResNum(cRes_25B),                            // ProfileID::c25B
@@ -6048,9 +6048,9 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_326),                            // ProfileID::c326
     GetResNum(cRes_327),                            // ProfileID::c327
     0,                                              // ProfileID::c328
-    GetResNum(cRes_329),                            // ProfileID::c329
+    GetResNum(cRes_BattleItem),                     // ProfileID::cBattleItem
     GetResNum(cRes_32A),                            // ProfileID::c32A
-    GetResNum(cRes_32B),                            // ProfileID::c32B
+    GetResNum(cRes_VsBattleItem),                   // ProfileID::cVsBattleItem
     GetResNum(cRes_32C),                            // ProfileID::c32C
     GetResNum(cRes_32D),                            // ProfileID::c32D
     0,                                              // ProfileID::c32E
@@ -6091,8 +6091,8 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                              // ProfileID::c351
     0,                                              // ProfileID::c352
     0,                                              // ProfileID::c353
-    GetResNum(cRes_354),                            // ProfileID::c354
-    GetResNum(cRes_355),                            // ProfileID::c355
+    GetResNum(cRes_RealizeFeverStar),               // ProfileID::cRealizeFeverStar
+    GetResNum(cRes_Star),                           // ProfileID::cStar
     GetResNum(cRes_CourseSelectPlayer),             // ProfileID::cCourseSelectPlayer
     GetResNum(cRes_CourseSelectPlayer2PSub),        // ProfileID::cCourseSelectPlayer2PSub
     GetResNum(cRes_CourseSelectChibiYoshi),         // ProfileID::cCourseSelectChibiYoshi
@@ -6190,7 +6190,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     nullptr,                            // ProfileID::c01E
     nullptr,                            // ProfileID::c01F
     nullptr,                            // ProfileID::c020
-    cRes_021,                           // ProfileID::c021
+    cRes_ShootingStar,                  // ProfileID::cShootingStar
     cRes_022,                           // ProfileID::c022
     cRes_023,                           // ProfileID::c023
     cRes_024,                           // ProfileID::c024
@@ -6620,7 +6620,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_1CC,                           // ProfileID::c1CC
     nullptr,                            // ProfileID::c1CD
     cRes_1CE,                           // ProfileID::c1CE
-    cRes_1CF,                           // ProfileID::c1CF
+    cRes_QuestPrizeItem,                // ProfileID::cQuestPrizeItem
     cRes_1D0,                           // ProfileID::c1D0
     cRes_1D1,                           // ProfileID::c1D1
     cRes_1D2,                           // ProfileID::c1D2
@@ -6748,16 +6748,16 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     nullptr,                            // ProfileID::c24C
     nullptr,                            // ProfileID::c24D
     nullptr,                            // ProfileID::c24E
-    cRes_24F,                           // ProfileID::c24F
-    cRes_250,                           // ProfileID::c250
-    cRes_251,                           // ProfileID::c251
-    cRes_252,                           // ProfileID::c252
-    cRes_253,                           // ProfileID::c253
-    cRes_254,                           // ProfileID::c254
-    cRes_255,                           // ProfileID::c255
-    cRes_256,                           // ProfileID::c256
-    cRes_257,                           // ProfileID::c257
-    cRes_258,                           // ProfileID::c258
+    cRes_Kinoko,                        // ProfileID::cKinoko
+    cRes_FireFlower,                    // ProfileID::cFireFlower
+    cRes_MameKinoko,                    // ProfileID::cMameKinoko
+    cRes_IceFlower,                     // ProfileID::cIceFlower
+    cRes_Propeller,                     // ProfileID::cPropeller
+    cRes_Penguin,                       // ProfileID::cPenguin
+    cRes_OneUpKinoko,                   // ProfileID::cOneUpKinoko
+    cRes_Musasabi,                      // ProfileID::cMusasabi
+    cRes_SuperMoon,                     // ProfileID::cSuperMoon
+    cRes_TitleDemoItem,                 // ProfileID::cTitleDemoItem
     cRes_259,                           // ProfileID::c259
     cRes_25A,                           // ProfileID::c25A
     cRes_25B,                           // ProfileID::c25B
@@ -6966,9 +6966,9 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_326,                           // ProfileID::c326
     cRes_327,                           // ProfileID::c327
     nullptr,                            // ProfileID::c328
-    cRes_329,                           // ProfileID::c329
+    cRes_BattleItem,                    // ProfileID::cBattleItem
     cRes_32A,                           // ProfileID::c32A
-    cRes_32B,                           // ProfileID::c32B
+    cRes_VsBattleItem,                  // ProfileID::cVsBattleItem
     cRes_32C,                           // ProfileID::c32C
     cRes_32D,                           // ProfileID::c32D
     nullptr,                            // ProfileID::c32E
@@ -7009,8 +7009,8 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     nullptr,                            // ProfileID::c351
     nullptr,                            // ProfileID::c352
     nullptr,                            // ProfileID::c353
-    cRes_354,                           // ProfileID::c354
-    cRes_355,                           // ProfileID::c355
+    cRes_RealizeFeverStar,              // ProfileID::cRealizeFeverStar
+    cRes_Star,                          // ProfileID::cStar
     cRes_CourseSelectPlayer,            // ProfileID::cCourseSelectPlayer
     cRes_CourseSelectPlayer2PSub,       // ProfileID::cCourseSelectPlayer2PSub
     cRes_CourseSelectChibiYoshi,        // ProfileID::cCourseSelectChibiYoshi

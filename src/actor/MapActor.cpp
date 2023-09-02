@@ -509,7 +509,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c232,                            // 504
     ProfileID::c233,                            // 505
     ProfileID::c0B5,                            // 506
-    ProfileID::c021,                            // 507
+    ProfileID::cShootingStar,                   // 507
     ProfileID::c101,                            // 508
     ProfileID::c155,                            // 509
     ProfileID::c156,                            // 510
@@ -549,7 +549,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c04E,                            // 544
     ProfileID::c2A0,                            // 545
     ProfileID::c2E9,                            // 546
-    ProfileID::c1CF,                            // 547
+    ProfileID::cQuestPrizeItem,                 // 547
     ProfileID::c0BC,                            // 548
     ProfileID::c046,                            // 549
     ProfileID::c1EB,                            // 550
