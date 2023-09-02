@@ -49,7 +49,7 @@ ActorBase* ActorMgr::doConstructActor_(const ActorCreateParam& param, bool creat
     if (profile_id == ProfileID::cPlayerObject ||
         profile_id == ProfileID::cTottenPlayer ||
         profile_id == ProfileID::cCourseSelectPlayer ||
-        profile_id == ProfileID::cCourseSelectPlayer_2P_3P_4P)
+        profile_id == ProfileID::cCourseSelectPlayer2PSub)
     {
         heap = sead::FrameHeap::tryCreate(0, "PlayerHeap", mpPlayerUnitHeap);
     }

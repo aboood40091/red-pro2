@@ -890,7 +890,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     256,            // ProfileID::c354
     257,            // ProfileID::c355
     737,            // ProfileID::cCourseSelectPlayer
-    738,            // ProfileID::cCourseSelectPlayer_2P_3P_4P
+    738,            // ProfileID::cCourseSelectPlayer2PSub
     739,            // ProfileID::c358
     740,            // ProfileID::c359
     741,            // ProfileID::c35A
@@ -1808,7 +1808,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c354
     Profile::cResType_Boot,         // ProfileID::c355
     Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPlayer
-    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPlayer_2P_3P_4P
+    Profile::cResType_CourseSelect, // ProfileID::cCourseSelectPlayer2PSub
     Profile::cResType_CourseSelect, // ProfileID::c358
     Profile::cResType_CourseSelect, // ProfileID::c359
     Profile::cResType_CourseSelect, // ProfileID::c35A
@@ -4990,7 +4990,7 @@ static const sead::SafeString cRes_CourseSelectPlayer[]  = {
     "CommonAnm"
 };
 
-static const sead::SafeString cRes_CourseSelectPlayer_2P_3P_4P[]  = {
+static const sead::SafeString cRes_CourseSelectPlayer2PSub[]  = {
     "MarioMdl",
     "LuigiMdl",
     "KinopioMdl",
@@ -6094,7 +6094,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_354),                            // ProfileID::c354
     GetResNum(cRes_355),                            // ProfileID::c355
     GetResNum(cRes_CourseSelectPlayer),             // ProfileID::cCourseSelectPlayer
-    GetResNum(cRes_CourseSelectPlayer_2P_3P_4P),    // ProfileID::cCourseSelectPlayer_2P_3P_4P
+    GetResNum(cRes_CourseSelectPlayer2PSub),        // ProfileID::cCourseSelectPlayer2PSub
     GetResNum(cRes_358),                            // ProfileID::c358
     0,                                              // ProfileID::c359
     GetResNum(cRes_35A),                            // ProfileID::c35A
@@ -7012,7 +7012,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_354,                           // ProfileID::c354
     cRes_355,                           // ProfileID::c355
     cRes_CourseSelectPlayer,            // ProfileID::cCourseSelectPlayer
-    cRes_CourseSelectPlayer_2P_3P_4P,   // ProfileID::cCourseSelectPlayer_2P_3P_4P
+    cRes_CourseSelectPlayer2PSub,       // ProfileID::cCourseSelectPlayer2PSub
     cRes_358,                           // ProfileID::c358
     nullptr,                            // ProfileID::c359
     cRes_35A,                           // ProfileID::c35A
