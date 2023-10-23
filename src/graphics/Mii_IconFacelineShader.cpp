@@ -1,4 +1,4 @@
-#include <graphics/Mii_IconFaceline.h>
+#include <graphics/Mii_IconFacelineShader.h>
 
 namespace Mii {
 
@@ -23,7 +23,7 @@ static const char* s_sampler_name[c_sampler_num] = {
 
 }
 
-void IconFaceline::initializeShader(agl::ShaderProgramArchive* p_archive, sead::Heap* heap)
+void IconFacelineShader::initializeShader(agl::ShaderProgramArchive* p_archive, sead::Heap* heap)
 {
     agl::ShaderProgram* p = const_cast<agl::ShaderProgram*>(p_archive->searchShaderProgram("iconFaceline"));
 

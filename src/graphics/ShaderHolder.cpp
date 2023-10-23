@@ -1,5 +1,5 @@
 #include <graphics/DynamicLightRenderer.h>
-#include <graphics/Mii_IconFaceline.h>
+#include <graphics/Mii_IconFacelineShader.h>
 #include <graphics/Mii_Shader.h>
 #include <graphics/MosaicFilter.h>
 #include <graphics/ShaderHolder.h>
@@ -73,7 +73,7 @@ void ShaderHolder::initialize(sead::Heap* heap)
     // mii_icon_faceline_shader
     {
         agl::ShaderProgramArchive* p_archive = createShaderArchive_("mii_icon_faceline_shader", heap);
-        Mii::IconFaceline::initializeShader(p_archive, heap);
+        Mii::IconFacelineShader::initializeShader(p_archive, heap);
         pushBackShaderArchive_("mii_icon_faceline_shader", p_archive, heap);
     }
     // mosaic_filter
