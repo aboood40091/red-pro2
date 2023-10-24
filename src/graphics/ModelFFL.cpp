@@ -103,6 +103,10 @@ void ModelFFL::setSpecialDrawType()
     mDrawType = cDrawType_Special;
 }
 
+void ModelFFL::calc()
+{
+}
+
 void ModelFFL::updateView(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
 {
 }
