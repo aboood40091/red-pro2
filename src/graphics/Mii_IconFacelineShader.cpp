@@ -50,29 +50,26 @@ void IconFacelineShader::destroy()
 
 void IconFacelineShader::setViewUniform(const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, const sead::Matrix34f& world_mtx) const
 {
-    mpShaderProgram->getUniformLocation(cUniform_ViewMtx).setUniform(view_mtx);
-    mpShaderProgram->getUniformLocation(cUniform_ProjMtx).setUniform(proj_mtx);
-    mpShaderProgram->getUniformLocation(cUniform_WorldMtx).setUniform(world_mtx);
+    mpShaderProgram->getUniformLocation(cUniform_ViewMtx).setVec4Array(view_mtx);
+    mpShaderProgram->getUniformLocation(cUniform_ProjMtx).setVec4Array(proj_mtx);
+    mpShaderProgram->getUniformLocation(cUniform_WorldMtx).setVec4Array(world_mtx);
 }
 
 void IconFacelineShader::setResolutionUniform(u32 width, u32 height) const
 {
-    f32 resolution_x = width;
-    mpShaderProgram->getUniformLocation(cUniform_ResolutionX).setUniform(resolution_x);
-    f32 resolution_y = height;
-    mpShaderProgram->getUniformLocation(cUniform_ResolutionY).setUniform(resolution_y);
+    mpShaderProgram->getUniformLocation(cUniform_ResolutionX).setFloat(width);
+    mpShaderProgram->getUniformLocation(cUniform_ResolutionY).setFloat(height);
 }
 
 void IconFacelineShader::setLineWidthUniform(s32 line_width) const
 {
-    f32 line_width_f = line_width;
-    mpShaderProgram->getUniformLocation(cUniform_LineWidth).setUniform(line_width_f);
+    mpShaderProgram->getUniformLocation(cUniform_LineWidth).setFloat(line_width);
 }
 
 bool IconFacelineShader::activateTexture(const agl::TextureData& texture_data, Sampler sampler)
 {
     mTextureSampler[sampler].applyTextureData(texture_data);
-    return mTextureSampler[sampler].activate(mpShaderProgram, sampler);
+    return mTextureSampler[sampler].activate(mpShaderProgram->getSamplerLocationValidate(sampler));
 }
 
 bool IconFacelineShader::initializeShader_()
