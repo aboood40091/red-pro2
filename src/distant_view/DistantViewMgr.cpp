@@ -141,12 +141,12 @@ void DistantViewMgr::calcModelMtx_()
     p_model->setMtxRT(model_mtx);
 }
 
-void DistantViewMgr::drawParticle_(const agl::lyr::RenderInfo& render_info)
+void DistantViewMgr::drawParticle_(const agl::lyr::RenderInfo& render_info) const
 {
     PtclMgr::instance()->draw(render_info, 0);
 }
 
-void DistantViewMgr::applyDepthOfField_(const agl::lyr::RenderInfo& render_info)
+void DistantViewMgr::applyDepthOfField_(const agl::lyr::RenderInfo& render_info) const
 {
     const agl::RenderBuffer* p_render_buffer = static_cast<const agl::RenderBuffer*>(render_info.getFrameBuffer());
     if (!p_render_buffer)

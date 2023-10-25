@@ -12,11 +12,7 @@ ModelGpuInitializer::ModelGpuInitializer()
     : mpHeap(nullptr)
     , mDoubleBufferIndex(0)
 {
-    mDrawMethod.bind(
-        this,
-        reinterpret_cast<sead::Delegate<ModelGpuInitializer>::MethodPtr>(&ModelGpuInitializer::initializeGpuDrawMethod_),   // Why... ?
-        "Mii Initialize Gpu"
-    );
+    mDrawMethod.bind(this, &ModelGpuInitializer::initializeGpuDrawMethod_, "Mii Initialize Gpu");
 
     agl::lyr::Renderer::instance()->getLayer(LayerMgr::cLayer_Gather)->pushBackDrawMethod(0, &mDrawMethod);
 }
