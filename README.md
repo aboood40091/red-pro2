@@ -5,3 +5,4 @@ See Sead for matching policy.
 
 ## Dependencies
 * [Sead](https://github.com/aboood40091/sead) and included packages "agl" and "nw_ptcl" (and their dependencies).  
+* [FFL](https://github.com/aboood40091/ffl).  
