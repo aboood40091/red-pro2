@@ -55,12 +55,12 @@ bool ModelFFL::initialize(const FFLCharModelDesc* p_desc, const sead::Vector3f& 
     return allocBuffer_();
 }
 
-bool ModelFFL::initialize(Mii::SlotID id, const FFLCharModelDesc* p_desc, const sead::Vector3f& scale, sead::Heap* heap, sead::Heap* heap_tmp)
+bool ModelFFL::initialize(Mii::DataSource source, const FFLCharModelDesc* p_desc, const sead::Vector3f& scale, sead::Heap* heap, sead::Heap* heap_tmp)
 {
-    mSlotID = id;
+    mDataSource = source;
 
     FFLStoreData store_data;
-    if (!Mii::SlotMgr::getStoreData(&store_data, mSlotID))
+    if (!Mii::SlotMgr::getStoreData(&store_data, mDataSource))
         return false;
 
     InitArgStoreData arg;
@@ -160,12 +160,12 @@ bool ModelFFL::getAdditionalInfo(FFLAdditionalInfo* p_additional_info, BOOL chec
 
     FFLStoreData store_data;
 
-    switch (mSlotID.getType())
+    switch (mDataSource.getType())
     {
-    case 2:
-    case 3:
-    case 4:
-        if (!Mii::SlotMgr::getStoreData(&store_data, mSlotID))
+    case Mii::DataSource::cType_StoreData_Save:
+    case Mii::DataSource::cType_StoreData_Custom:
+    case Mii::DataSource::cType_StoreData_Account:
+        if (!Mii::SlotMgr::getStoreData(&store_data, mDataSource))
             return false;
 
         source = FFL_DATA_SOURCE_STORE_DATA;
@@ -376,17 +376,17 @@ void ModelFFL::initializeGpu_()
 
 bool ModelFFL::setCharModelSource_(const FFLStoreData* p_store_data)
 {
-    switch (mSlotID.getType())
+    switch (mDataSource.getType())
     {
-    case 0:
+    case Mii::DataSource::cType_Database_Default:
         mCharModelSource.dataSource = FFL_DATA_SOURCE_DEFAULT;
         mCharModelSource.pBuffer = nullptr;
-        mCharModelSource.index = mSlotID.getSlotNo();
+        mCharModelSource.index = mDataSource.getIndex();
         break;
-    case 1:
+    case Mii::DataSource::cType_Database_Official:
         mCharModelSource.dataSource = FFL_DATA_SOURCE_OFFICIAL;
         mCharModelSource.pBuffer = NULL;
-        mCharModelSource.index = mSlotID.getSlotNo();
+        mCharModelSource.index = mDataSource.getIndex();
         break;
     default:
         mCharModelSource.dataSource = FFL_DATA_SOURCE_STORE_DATA;
