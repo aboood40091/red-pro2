@@ -374,7 +374,7 @@ void ModelFFL::initializeGpu_()
     FFLInitCharModelGPUStep(&mCharModel);
 }
 
-bool ModelFFL::setCharModelSource_(const FFLStoreData* p_store_data)
+bool ModelFFL::setCharModelSource_(const FFLStoreData* p_store_data, u16)
 {
     switch (mDataSource.getType())
     {
