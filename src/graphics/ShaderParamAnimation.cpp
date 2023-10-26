@@ -1,4 +1,4 @@
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 #include <graphics/ModelResource.h>
 #include <graphics/ShaderParamAnimation.h>
 
@@ -21,7 +21,7 @@ ShaderParamAnimation::~ShaderParamAnimation()
     }
 }
 
-bool ShaderParamAnimation::init(const ModelNW* p_model, const ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array)
+bool ShaderParamAnimation::init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array)
 {
     RIO_ASSERT(p_model != nullptr);
     RIO_ASSERT(p_mdl_res != nullptr);
@@ -59,7 +59,7 @@ void ShaderParamAnimation::updateInitArg_(nw::g3d::ShaderParamAnimObj::InitArg* 
         p_arg->Reserve(p_res_file->GetTexSrtAnim(idx_anim));
 }
 
-void ShaderParamAnimation::bindModel(const ModelNW* p_model, s32 index)
+void ShaderParamAnimation::bindModel(const ModelG3d* p_model, s32 index)
 {
     if (mpModel)
         unbindModel();

@@ -1,7 +1,7 @@
 #include <distant_view/DistantViewMgr.h>
 #include <distant_view/DVCameraParam.h>
 #include <graphics/BasicModel.h>
-#include <graphics/ModelNW.h>
+#include <graphics/ModelG3d.h>
 #include <graphics/Renderer.h>
 #include <graphics/RenderObjLayer.h>
 
@@ -173,7 +173,7 @@ void DistantViewMgr::destroy()
 
     if (mpBasicModel)
     {
-        ModelNW* p_mdl = mpBasicModel->getModel();
+        ModelG3d* p_mdl = mpBasicModel->getModel();
         if (p_mdl)
         {
             delete p_mdl;
@@ -272,7 +272,7 @@ void DistantViewMgr::calcView_(const rio::BaseVec2f& bg_screen_center, f32 bg_of
 
 void DistantViewMgr::calcModelMtx_()
 {
-    ModelNW* p_model = mpBasicModel->getModel();
+    ModelG3d* p_model = mpBasicModel->getModel();
 
     rio::Matrix34f model_mtx;
     mpCameraParam->getModelMtx(&model_mtx);
@@ -327,7 +327,7 @@ void DistantViewMgr::initialize(const std::string& dv_name, const std::string& d
 
     mModelRes.load(&mArchiveRes, dv_fname_c);
 
-    ModelNW* p_mdl = Model::createNW(mModelRes, dv_fname_c, 1, 1, 1, 2, 0, 0, Model::cBoundingMode_Enable);
+    ModelG3d* p_mdl = Model::createG3d(mModelRes, dv_fname_c, 1, 1, 1, 2, 0, 0, Model::cBoundingMode_Enable);
     BasicModel* p_basic_mdl = new BasicModel(p_mdl, 1, 1, 2, 0, 0);
     p_basic_mdl->init(&mModelRes);
     mpBasicModel = p_basic_mdl;

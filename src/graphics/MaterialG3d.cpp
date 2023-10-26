@@ -1,4 +1,4 @@
-#include <graphics/MaterialNW.h>
+#include <graphics/MaterialG3d.h>
 #include <math/Math.h>
 
 #include <misc/rio_MemUtil.h>
@@ -33,7 +33,7 @@ const char* sTevKColorStr[4] = {
 
 }
 
-void MaterialNW::setTexSrtMtx(s32 index, const rio::Vector2f& scale, const u32& rotate, const rio::Vector2f& translate)
+void MaterialG3d::setTexSrtMtx(s32 index, const rio::Vector2f& scale, const u32& rotate, const rio::Vector2f& translate)
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTexMtxStr[index]);
     if (param_index >= 0)
@@ -65,7 +65,7 @@ void MaterialNW::setTexSrtMtx(s32 index, const rio::Vector2f& scale, const u32& 
     }
 }
 
-void MaterialNW::setTexSrt(s32 index, const rio::Vector2f& scale, const u32& rotate, const rio::Vector2f& translate)
+void MaterialG3d::setTexSrt(s32 index, const rio::Vector2f& scale, const u32& rotate, const rio::Vector2f& translate)
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTexMtxStr[index]);
     if (param_index >= 0)
@@ -82,7 +82,7 @@ void MaterialNW::setTexSrt(s32 index, const rio::Vector2f& scale, const u32& rot
     }
 }
 
-void MaterialNW::getTexSrt(s32 index, rio::Vector2f* p_scale, u32* p_rotate, rio::Vector2f* p_translate) const
+void MaterialG3d::getTexSrt(s32 index, rio::Vector2f* p_scale, u32* p_rotate, rio::Vector2f* p_translate) const
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTexMtxStr[index]);
     if (param_index < 0 || mMaterialObj->GetResShaderParam(param_index)->GetOffset() < 0)
@@ -122,7 +122,7 @@ void MaterialNW::getTexSrt(s32 index, rio::Vector2f* p_scale, u32* p_rotate, rio
     }
 }
 
-void MaterialNW::setTevColor(s32 index, const rio::Color4f& color)
+void MaterialG3d::setTevColor(s32 index, const rio::Color4f& color)
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTevColorStr[index]);
     if (param_index >= 0)
@@ -136,7 +136,7 @@ void MaterialNW::setTevColor(s32 index, const rio::Color4f& color)
     }
 }
 
-void MaterialNW::getTevColor(s32 index, rio::Color4f& color) const
+void MaterialG3d::getTevColor(s32 index, rio::Color4f& color) const
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTevColorStr[index]);
     if (param_index >= 0)
@@ -150,7 +150,7 @@ void MaterialNW::getTevColor(s32 index, rio::Color4f& color) const
     }
 }
 
-void MaterialNW::setTevKColor(s32 index, const rio::Color4f& color)
+void MaterialG3d::setTevKColor(s32 index, const rio::Color4f& color)
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTevKColorStr[index]);
     if (param_index >= 0)
@@ -164,7 +164,7 @@ void MaterialNW::setTevKColor(s32 index, const rio::Color4f& color)
     }
 }
 
-void MaterialNW::getTevKColor(s32 index, rio::Color4f& color) const
+void MaterialG3d::getTevKColor(s32 index, rio::Color4f& color) const
 {
     s32 param_index = mMaterialObj->GetResource()->GetShaderParamIndex(sTevKColorStr[index]);
     if (param_index >= 0)

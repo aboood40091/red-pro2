@@ -1,5 +1,4 @@
 #include <graphics/BasicModel.h>
-#include <graphics/ModelNW.h>
 #include <graphics/Renderer.h>
 #include <graphics/RenderMgr.h>
 #include <graphics/RenderObjLayer.h>

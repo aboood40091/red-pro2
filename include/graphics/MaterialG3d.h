@@ -7,10 +7,10 @@
 
 #include <nw/g3d/g3d_MaterialObj.h>
 
-class MaterialNW final : public Material
+class MaterialG3d final : public Material
 {
 public:
-    MaterialNW(nw::g3d::MaterialObj* material)
+    MaterialG3d(nw::g3d::MaterialObj* material)
         : mMaterialObj(material)
     {
     }
@@ -30,4 +30,4 @@ private:
     nw::g3d::MaterialObj*           mMaterialObj;
     SafeArray<rio::Matrix34f, 8>    mTexSrtMtx;
 };
-static_assert(sizeof(MaterialNW) == 0x188);
+static_assert(sizeof(MaterialG3d) == 0x188);

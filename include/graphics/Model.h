@@ -8,7 +8,7 @@
 
 #include <string>
 
-class ModelNW;
+class ModelG3d;
 class ModelResource;
 
 class Model : public RenderObj
@@ -22,8 +22,8 @@ public:
     };
 
     // Why are these here... ?
-    static ModelNW* createNW(const ModelResource& res, const char* name, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode);
-    static ModelNW* createNW(const ModelResource& res, const char* name, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode);
+    static ModelG3d* createG3d(const ModelResource& res, const char* name, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode);
+    static ModelG3d* createG3d(const ModelResource& res, const char* name, s32 num_view, s32 num_skl_anim, s32 num_tex_anim, s32 num_shu_anim, s32 num_vis_anim, s32 num_sha_anim, BoundingMode bounding_mode);
 
 public:
     Model();

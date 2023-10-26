@@ -1,7 +1,7 @@
 #pragma once
 
 //#include <graphics/LightMapMgr.h>
-#include <graphics/MaterialNW.h>
+#include <graphics/MaterialG3d.h>
 #include <graphics/Model.h>
 #include <graphics/ShaderParamAnimation.h>
 #include <graphics/ShapeAnimation.h>
@@ -25,7 +25,7 @@
 
 class CullViewFrustum;
 
-class ModelNW : public Model
+class ModelG3d : public Model
 {
 public:
     struct ShaderAssign
@@ -213,8 +213,8 @@ public:
     }
 
 public:
-    ModelNW();
-    virtual ~ModelNW();
+    ModelG3d();
+    virtual ~ModelG3d();
 
     void updateAnimations() override;
     void updateModel() override;
@@ -401,7 +401,7 @@ private:
     PtrArray<ShapeRenderInfo>           mOpaShapeInfo;
     PtrArray<ShapeRenderInfo>           mXluShapeInfo;
     Buffer<ShaderAssign>                mShaderAssign;
-    Buffer<MaterialNW*>                 mpMaterial;
+    Buffer<MaterialG3d*>                mpMaterial;
     Buffer<Shape>                       mShape;
     rio::Matrix34f                      mMtxRT;
     rio::Vector3f                       mScale;
@@ -418,4 +418,4 @@ private:
     // Custom
     ShapeRenderInfo*    mShapeRenderInfo;
 };
-//static_assert(sizeof(ModelNW) == 0x1AC);
+//static_assert(sizeof(ModelG3d) == 0x1AC);

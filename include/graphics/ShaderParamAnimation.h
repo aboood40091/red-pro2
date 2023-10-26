@@ -6,7 +6,7 @@
 
 #include <nw/g3d/g3d_ShaderParamAnimObj.h>
 
-class ModelNW;
+class ModelG3d;
 class ModelResource;
 
 class ShaderParamAnimation : public Animation
@@ -15,11 +15,11 @@ public:
     ShaderParamAnimation();
     ~ShaderParamAnimation();
 
-    bool init(const ModelNW* p_model, const ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array);
+    bool init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array);
 
     bool isValid() const { return mpRes && mpModel; }
 
-    void bindModel(const ModelNW* p_model, s32 index);
+    void bindModel(const ModelG3d* p_model, s32 index);
     void unbindModel();
 
 private:
@@ -36,7 +36,7 @@ public:
 
     nw::g3d::res::ResShaderParamAnim* getResource() const { return mpRes; }
 
-    const ModelNW* getModel() const { return mpModel; }
+    const ModelG3d* getModel() const { return mpModel; }
     s32 getIndex() const { return mIndex; }
 
 private:
@@ -45,7 +45,7 @@ private:
 private:
     nw::g3d::ShaderParamAnimObj         mAnimObj;
     nw::g3d::res::ResShaderParamAnim*   mpRes;
-    const ModelNW*                      mpModel;
+    const ModelG3d*                     mpModel;
     s32                                 mIndex;
     void*                               mpBuffer;
 };
