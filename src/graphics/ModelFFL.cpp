@@ -233,12 +233,7 @@ void ModelFFL::drawOpaNormal_()
     render_state.setDepthEnable(true, true);
     render_state.setDepthFunc(rio::Graphics::COMPARE_FUNC_LEQUAL);
     render_state.applyDepthAndStencilTest();
-#if RIO_IS_CAFE
-    GX2SetAlphaTest(GX2_ENABLE, GX2_COMPARE_GREATER, 0.0f);
-#else
-  //render_state.setAlphaTestEnable(true);  // TODO: Does disabling this cause problems?
-  //render_state.applyAlphaTest();          // ^^^
-#endif // RIO_IS_CAFE
+    Mii::CentralMgr::instance()->getShader().applyAlphaTestEnable();
     render_state.setBlendEnable(false);
     render_state.setBlendFactor(rio::Graphics::BLEND_MODE_ONE, rio::Graphics::BLEND_MODE_ZERO);
     render_state.applyBlendAndFastZ();
@@ -264,12 +259,7 @@ void ModelFFL::drawXluNormal_()
     render_state.setDepthEnable(true, false);
     render_state.setDepthFunc(rio::Graphics::COMPARE_FUNC_LEQUAL);
     render_state.applyDepthAndStencilTest();
-#if RIO_IS_CAFE
-    GX2SetAlphaTest(GX2_ENABLE, GX2_COMPARE_GREATER, 0.0f);
-#else
-  //render_state.setAlphaTestEnable(true);  // TODO: Does disabling this cause problems?
-  //render_state.applyAlphaTest();          // ^^^
-#endif // RIO_IS_CAFE
+    Mii::CentralMgr::instance()->getShader().applyAlphaTestEnable();
     render_state.setBlendEnable(true);
     render_state.setBlendFactor(rio::Graphics::BLEND_MODE_SRC_ALPHA, rio::Graphics::BLEND_MODE_ONE_MINUS_SRC_ALPHA);
     render_state.applyBlendAndFastZ();
@@ -287,13 +277,10 @@ void ModelFFL::drawXluSpecial_()
         render_state.setBlendFactorSrcRGB(rio::Graphics::BLEND_MODE_SRC_ALPHA);
         render_state.setBlendFactorDstRGB(rio::Graphics::BLEND_MODE_ONE_MINUS_SRC_ALPHA);
         render_state.setBlendEquation(rio::Graphics::BLEND_FUNC_ADD);
-      //render_state.setAlphaTestEnable(true);  // TODO: Does disabling this cause problems?
         render_state.setColorMask(true, true, true, false);
         render_state.apply();
 
-#if RIO_IS_CAFE
-        GX2SetAlphaTest(GX2_ENABLE, GX2_COMPARE_GREATER, 0.0f);
-#endif // RIO_IS_CAFE
+        Mii::CentralMgr::instance()->getShader().applyAlphaTestEnable();
 
         FFLDrawXlu(&mCharModel);
     }
@@ -308,13 +295,10 @@ void ModelFFL::drawXluSpecial_()
         render_state.setBlendFactorSrcAlpha(rio::Graphics::BLEND_MODE_ONE);
         render_state.setBlendFactorDstAlpha(rio::Graphics::BLEND_MODE_ONE);
         render_state.setBlendEquation(rio::Graphics::BLEND_FUNC_ADD);
-      //render_state.setAlphaTestEnable(true);  // TODO: Does disabling this cause problems?
         render_state.setColorMask(true, true, true, true);
         render_state.apply();
 
-#if RIO_IS_CAFE
-        GX2SetAlphaTest(GX2_ENABLE, GX2_COMPARE_GREATER, 0.0f);
-#endif // RIO_IS_CAFE
+        Mii::CentralMgr::instance()->getShader().applyAlphaTestEnable();
 
         FFLDrawXlu(&mCharModel);
     }

@@ -89,6 +89,18 @@ public:
     // Address: 0x024EBB98
     void setFogUniform(RenderMgr* p_render_mgr) const;
 
+    void applyAlphaTestEnable() const
+    {
+        applyAlphaTest(true, rio::Graphics::COMPARE_FUNC_GREATER, 0.0f);
+    }
+
+    void applyAlphaTestDisable() const
+    {
+        applyAlphaTest(false, rio::Graphics::COMPARE_FUNC_ALWAYS, 0.0f);
+    }
+
+    void applyAlphaTest(bool enable, rio::Graphics::CompareFunc func, f32 ref) const;
+
     // Address: 0x024EA654
     static void setCulling(FFLCullMode mode);
 
@@ -102,6 +114,8 @@ private:
     void setMaterialUniform_(const FFLDrawParam& draw_param) const;
     // Address: 0x024EAB90
     void setRimUniform_() const;
+
+    static void applyAlphaTestCallback_(void* p_obj, bool enable, rio::Graphics::CompareFunc func, f32 ref);
 
     // Address: 0x024EAC74
     void draw_(const FFLDrawParam& draw_param);

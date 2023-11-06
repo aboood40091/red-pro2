@@ -205,6 +205,7 @@ void Shader::initialize()
 #if RIO_IS_CAFE
   //mCallback.pContextState = rio::Window::instance()->getNativeWindow().getContextState();
 #endif // RIO_IS_CAFE
+    mCallback.pApplyAlphaTestFunc = &Shader::applyAlphaTestCallback_;
     mCallback.pDrawFunc = &Shader::drawCallback_;
     mCallback.pSetMatrixFunc = &Shader::setMatrixCallback_;
 }
@@ -271,6 +272,19 @@ void Shader::setFogUniform(RenderMgr* p_render_mgr) const
 
     rio::BaseVec3f dir { 0.0f, 0.0f, -1.0f };
     mpShaderProgram->getUniformLocation(cUniform_FogDir).setVec3(dir);
+}
+
+void Shader::applyAlphaTest(bool enable, rio::Graphics::CompareFunc func, f32 ref) const
+{
+#if RIO_IS_CAFE
+    GX2SetAlphaTest(GX2Boolean(enable), GX2CompareFunction(func), ref);
+#elif RIO_IS_WIN
+    const rio::Shader* p_shader_rio = mpShaderProgram->getShaderRIO();
+    RIO_ASSERT(p_shader_rio);
+
+    p_shader_rio->setUniform(u32(func - GL_NEVER), u32(-1), p_shader_rio->getFragmentUniformLocation("PS_PUSH.alphaFunc"));
+    p_shader_rio->setUniform(ref,                  u32(-1), p_shader_rio->getFragmentUniformLocation("PS_PUSH.alphaRef"));
+#endif
 }
 
 void Shader::setCulling(FFLCullMode mode)
@@ -366,6 +380,11 @@ void Shader::setRimUniform_() const
 {
     mpShaderProgram->getUniformLocation(cUniform_RimColor).setVec4(getColorUniform(mRimParam.color));
     mpShaderProgram->getUniformLocation(cUniform_MaterialSpecularPower).setFloat(mRimParam.power);       // Nintendo set cUniform_MaterialSpecularPower instead of cUniform_RimPower
+}
+
+void Shader::applyAlphaTestCallback_(void* p_obj, bool enable, rio::Graphics::CompareFunc func, f32 ref)
+{
+    static_cast<Shader*>(p_obj)->applyAlphaTest(enable, func, ref);
 }
 
 void Shader::draw_(const FFLDrawParam& draw_param)
