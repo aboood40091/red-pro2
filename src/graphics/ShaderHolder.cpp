@@ -1,3 +1,5 @@
+#include <graphics/Mii_IconFacelineShader.h>
+#include <graphics/Mii_Shader.h>
 #include <graphics/ShaderHolder.h>
 
 #include <filedevice/rio_FileDevice.h>
@@ -105,18 +107,18 @@ void ShaderHolder::initialize(const std::string& arc_path)
         TexQuadMgr::initializeShader(p_archive);
         pushBackShaderArchive_("quad_cloud_shader", p_archive);
     }*/
-    /* mii_custom_shader
+    // mii_custom_shader
     {
         agl::ShaderProgramArchive* p_archive = createShaderArchive_("mii_custom_shader");
         Mii::Shader::initializeShader(p_archive);
         pushBackShaderArchive_("mii_custom_shader", p_archive);
-    }*/
-    /* mii_icon_faceline_shader
+    }
+    // mii_icon_faceline_shader
     {
         agl::ShaderProgramArchive* p_archive = createShaderArchive_("mii_icon_faceline_shader");
-        Mii::IconFaceline::initializeShader(p_archive);
+        Mii::IconFacelineShader::initializeShader(p_archive);
         pushBackShaderArchive_("mii_icon_faceline_shader", p_archive);
-    }*/
+    }
     /* mosaic_filter
     {
         agl::ShaderProgramArchive* p_archive = createShaderArchive_("mosaic_filter");
