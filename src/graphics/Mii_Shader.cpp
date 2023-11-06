@@ -195,15 +195,13 @@ void Shader::initialize()
     RIO_ASSERT(mVAOHandle != GL_NONE);
 #endif
 
-    mSampler.setWrap(agl::cTextureWrapType_Mirror, agl::cTextureWrapType_Mirror, agl::cTextureWrapType_Mirror);
-  //mSampler.setFilterMin(agl::cTextureFilterType_Linear); // <-- Already set
-  //mSampler.setFilterMag(agl::cTextureFilterType_Linear); // ^^^
+    GX2InitSampler(&mSampler, GX2_TEX_CLAMP_MIRROR, GX2_TEX_XY_FILTER_BILINEAR);
 
     initializeParam_();
 
     mCallback.pObj = this;
 #if RIO_IS_CAFE
-  //mCallback.pContextState = rio::Window::instance()->getNativeWindow().getContextState();
+    mCallback.pContextState = rio::Window::instance()->getNativeWindow().getContextState();
 #endif // RIO_IS_CAFE
     mCallback.pDrawFunc = &Shader::drawCallback_;
     mCallback.pSetMatrixFunc = &Shader::setMatrixCallback_;
@@ -395,10 +393,19 @@ void Shader::draw_(const FFLDrawParam& draw_param)
     setLightUniform_();
     setRimUniform_();
 
-    if (draw_param.modulateParam.pTextureData != nullptr)
+    if (draw_param.modulateParam.pGX2Texture != nullptr)
     {
-        mSampler.applyTextureData(*draw_param.modulateParam.pTextureData);
-        mSampler.activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Texture), cSampler_Texture);
+        const agl::SamplerLocation& location = mpShaderProgram->getSamplerLocationValidate(cSampler_Texture);
+        if (location.getVertexLocation() != -1)
+        {
+            GX2SetVertexTexture(draw_param.modulateParam.pGX2Texture, location.getVertexLocation());
+            GX2SetVertexSampler(&mSampler, location.getVertexLocation());
+        }
+        if (location.getFragmentLocation() != -1)
+        {
+            GX2SetPixelTexture(draw_param.modulateParam.pGX2Texture, location.getFragmentLocation());
+            GX2SetPixelSampler(&mSampler, location.getFragmentLocation());
+        }
     }
 
   //s32 lightmap_index = 4;
@@ -653,10 +660,11 @@ void Shader::draw_(const FFLDrawParam& draw_param)
         }
 #endif
 
-        rio::Drawer::DrawElements(
+        GX2DrawIndexed(
             draw_param.primitiveParam.primitiveType,
             draw_param.primitiveParam.indexCount,
-            (const u16*)draw_param.primitiveParam.pIndexBuffer
+            draw_param.primitiveParam.indexFormat,
+            draw_param.primitiveParam.pIndexBuffer
         );
     }
 }
@@ -666,19 +674,19 @@ void Shader::drawCallback_(void* p_obj, const FFLDrawParam& draw_param)
     static_cast<Shader*>(p_obj)->draw_(draw_param);
 }
 
-void Shader::setMatrix_(const rio::BaseMtx44f& matrix)
+void Shader::setMatrix_(const Mat44& matrix)
 {
     mpShaderProgram->getUniformLocationValidate(cUniform_MV).setMtx44(rio::Matrix44f::ident.a);
 
     mpShaderProgram->getUniformLocationValidate(cUniform_IT).setMtx43(rio::Matrix44f::ident.a);
 
     rio::Matrix44f proj;
-    proj.setTranspose(static_cast<const rio::Matrix44f&>(matrix));
+    proj.setTranspose(matrix.mtx);
 
     mpShaderProgram->getUniformLocationValidate(cUniform_Proj).setMtx44(proj.a);
 }
 
-void Shader::setMatrixCallback_(void* p_obj, const rio::BaseMtx44f& matrix)
+void Shader::setMatrixCallback_(void* p_obj, const Mat44& matrix)
 {
     static_cast<Shader*>(p_obj)->setMatrix_(matrix);
 }

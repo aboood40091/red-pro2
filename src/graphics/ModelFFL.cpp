@@ -18,7 +18,8 @@ static const rio::Color4f cExDarkRegColorDefault {
 }
 
 ModelFFL::ModelFFL()
-    : mCharModelDesc()
+    : mCharModelBuffer()
+    , mCharModelDesc()
     , mMtxRT(rio::Matrix34f::ident)
     , mScale { 1.0f, 1.0f, 1.0f }
     , mMtxSRT(rio::Matrix34f::ident)
@@ -36,6 +37,20 @@ void ModelFFL::initialize(const FFLCharModelDesc* p_desc, const rio::Vector3f& s
 {
     mCharModelDesc = *p_desc;
     mScale = scale;
+
+    u32 size = FFLGetBufferSizeCharModel(&mCharModelDesc);
+    void* p_buffer = rio::MemUtil::alloc(size, 4);
+    RIO_ASSERT(p_buffer);
+
+    mCharModelBuffer.pBuffer = p_buffer;
+    mCharModelBuffer.bufferSize = size;
+
+    size = FFLGetTempBufferSizeCharModel(&mCharModelDesc);
+    p_buffer = rio::MemUtil::alloc(size, 4);
+    RIO_ASSERT(p_buffer);
+
+    mCharModelBuffer.pTempBuffer = p_buffer;
+    mCharModelBuffer.tempBufferSize = size;
 }
 
 bool ModelFFL::initialize(Mii::DataSource source, const FFLCharModelDesc* p_desc, const rio::Vector3f& scale)
@@ -58,6 +73,18 @@ bool ModelFFL::initialize(Mii::DataSource source, const FFLCharModelDesc* p_desc
 void ModelFFL::destroy()
 {
     FFLDeleteCharModel(&mCharModel);
+
+    if (mCharModelBuffer.pBuffer != nullptr)
+    {
+        rio::MemUtil::free(mCharModelBuffer.pBuffer);
+        mCharModelBuffer.pBuffer = nullptr;
+    }
+
+    if (mCharModelBuffer.pTempBuffer != nullptr)
+    {
+        rio::MemUtil::free(mCharModelBuffer.pTempBuffer);
+        mCharModelBuffer.pTempBuffer = nullptr;
+    }
 }
 
 void ModelFFL::initExRegColor()
@@ -323,7 +350,7 @@ void ModelFFL::drawXluSpecial_()
 bool ModelFFL::initializeCpu_(const FFLCharModelSource* p_source, const FFLCharModelDesc* p_desc)
 {
     RIO_LOG("Well then...\n");
-    return FFLInitCharModelCPUStep(&mCharModel, p_source, p_desc) == FFL_RESULT_OK;
+    return FFLInitCharModelCPUStep(&mCharModel, p_source, p_desc, &mCharModelBuffer) == FFL_RESULT_OK;
 }
 
 void ModelFFL::initializeGpu_()

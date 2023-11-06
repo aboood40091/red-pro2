@@ -109,9 +109,9 @@ private:
     static void drawCallback_(void* p_obj, const FFLDrawParam& draw_param);
 
     // Address: 0x024EB308
-    void setMatrix_(const rio::BaseMtx44f& matrix);
+    void setMatrix_(const Mat44& matrix);
     // Address: 0x024EB444
-    static void setMatrixCallback_(void* p_obj, const rio::BaseMtx44f& matrix);
+    static void setMatrixCallback_(void* p_obj, const Mat44& matrix);
 
 private:
     struct LightParam
@@ -169,7 +169,7 @@ private:
     u32                                 mVAOHandle;
 #endif
     FFLShaderCallback                   mCallback;
-    agl::TextureSampler                 mSampler;
+    GX2Sampler                          mSampler;
     ModelFFL*                           mpModel;
     agl::TextureSampler                 mLightmap01p;
     agl::TextureSampler                 mLightmap02p;

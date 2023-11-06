@@ -24,7 +24,8 @@ namespace Mii {
 const std::string cFFLShaderFilename = "FFLShader.gsh";
 
 CafeResInitializer::CafeResInitializer(bool param)
-    : mpFFLShaderData(nullptr)
+    : mpWorkMemory(nullptr)
+    , mpFFLShaderData(nullptr)
     , _10(param)
 {
 }
@@ -32,11 +33,12 @@ CafeResInitializer::CafeResInitializer(bool param)
 bool CafeResInitializer::initialize()
 {
     FFLInitDesc init_desc;
-  //init_desc.pShaderData = nullptr;
-  //init_desc.pChangeParams = nullptr;
+    init_desc.pShaderData = nullptr;
+    init_desc.pChangeParams = nullptr;
     init_desc.fontRegion = FFL_FONT_REGION_0;
     init_desc._c = _10;
     init_desc._10 = true;
+    createHeaps_(&init_desc);
 
 #if RIO_IS_CAFE
     FSInit();
@@ -113,7 +115,7 @@ bool CafeResInitializer::initialize()
         }
     }
 
-    FFLResult result = FFLInitResEx(&init_desc, &res_desc);
+    FFLResult result = FFLInitResEx(mpWorkMemory, &init_desc, &res_desc);
     if (result != FFL_RESULT_OK)
     {
         RIO_LOG("CafeResInitializer::initialize(): FFLInitResEx() failed with result: %d\n", (s32)result);
@@ -146,7 +148,23 @@ bool CafeResInitializer::initialize()
 void CafeResInitializer::destroy()
 {
     unloadFFLShader_();
+    destroyHeaps_();
     FFLExit();
+}
+
+void CafeResInitializer::createHeaps_(const FFLInitDesc* p_init_desc)
+{
+    mpWorkMemory = rio::MemUtil::alloc(FFLGetWorkSize(p_init_desc), PPC_IO_BUFFER_ALIGN);
+    RIO_ASSERT(mpWorkMemory);
+}
+
+void CafeResInitializer::destroyHeaps_()
+{
+    if (mpWorkMemory != nullptr)
+    {
+        rio::MemUtil::free(mpWorkMemory);
+        mpWorkMemory = nullptr;
+    }
 }
 
 bool CafeResInitializer::loadFFLShader_()

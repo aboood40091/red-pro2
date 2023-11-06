@@ -156,6 +156,7 @@ private:
 
 private:
     FFLCharModel        mCharModel;
+    FFLCharModelBuffer  mCharModelBuffer;
     FFLCharModelDesc    mCharModelDesc;
     FFLCharModelSource  mCharModelSource;
     rio::Matrix34f      mMtxRT;
