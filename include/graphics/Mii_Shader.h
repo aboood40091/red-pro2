@@ -183,7 +183,7 @@ private:
     u32                                 mVAOHandle;
 #endif
     FFLShaderCallback                   mCallback;
-    agl::TextureSampler                 mSampler;
+    rio::TextureSampler2D               mSampler;
     ModelFFL*                           mpModel;
     agl::TextureSampler                 mLightmap01p;
     agl::TextureSampler                 mLightmap02p;

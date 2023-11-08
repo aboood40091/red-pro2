@@ -195,9 +195,9 @@ void Shader::initialize()
     RIO_ASSERT(mVAOHandle != GL_NONE);
 #endif
 
-    mSampler.setWrap(agl::cTextureWrapType_Mirror, agl::cTextureWrapType_Mirror, agl::cTextureWrapType_Mirror);
-  //mSampler.setFilterMin(agl::cTextureFilterType_Linear); // <-- Already set
-  //mSampler.setFilterMag(agl::cTextureFilterType_Linear); // ^^^
+    mSampler.setWrap(rio::TEX_WRAP_MODE_MIRROR, rio::TEX_WRAP_MODE_MIRROR, rio::TEX_WRAP_MODE_MIRROR);
+  //mSampler.setFilterMin(rio::TEX_XY_FILTER_MODE_LINEAR); // <-- Already set
+  //mSampler.setFilterMag(rio::TEX_XY_FILTER_MODE_LINEAR); // ^^^
 
     initializeParam_();
 
@@ -414,10 +414,11 @@ void Shader::draw_(const FFLDrawParam& draw_param)
     setLightUniform_();
     setRimUniform_();
 
-    if (draw_param.modulateParam.pTextureData != nullptr)
+    if (draw_param.modulateParam.pTexture2D != nullptr)
     {
-        mSampler.applyTextureData(*draw_param.modulateParam.pTextureData);
-        mSampler.activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Texture), cSampler_Texture);
+        mSampler.linkTexture2D(draw_param.modulateParam.pTexture2D);
+        const agl::SamplerLocation& location = mpShaderProgram->getSamplerLocationValidate(cSampler_Texture);
+        mSampler.tryBind(location.getVertexLocation(), location.getFragmentLocation(), cSampler_Texture);
     }
 
   //s32 lightmap_index = 4;
