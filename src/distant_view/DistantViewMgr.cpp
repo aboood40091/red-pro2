@@ -22,7 +22,6 @@
 #include <system/ResMgr.h>
 #include <tag/BgCenter.h>
 
-#include <common/aglRenderBuffer.h>
 #include <common/aglRenderTarget.h>
 #include <g3d/aglTextureDataInitializerG3D.h>
 #include <heap/seadFrameHeap.h>
@@ -148,7 +147,7 @@ void DistantViewMgr::drawParticle_(const agl::lyr::RenderInfo& render_info) cons
 
 void DistantViewMgr::applyDepthOfField_(const agl::lyr::RenderInfo& render_info) const
 {
-    const agl::RenderBuffer* p_render_buffer = static_cast<const agl::RenderBuffer*>(render_info.getFrameBuffer());
+    const agl::RenderBuffer* p_render_buffer = render_info.getRenderBuffer();
     if (!p_render_buffer)
         return;
 

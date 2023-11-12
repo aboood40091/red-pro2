@@ -101,7 +101,7 @@ void RenderMgr::drawOpa(s32 view_index, const agl::lyr::RenderInfo& render_info)
 {
     const ViewInfo& view_info = getViewInfo(view_index);
 
-    const agl::RenderBuffer* p_render_buffer = static_cast<const agl::RenderBuffer*>(render_info.getFrameBuffer());
+    const agl::RenderBuffer* p_render_buffer = render_info.getRenderBuffer();
     const sead::Viewport* p_viewport = render_info.getViewport();
 
     p_viewport->apply(*p_render_buffer);
@@ -123,7 +123,7 @@ void RenderMgr::drawXlu(s32 view_index, const agl::lyr::RenderInfo& render_info)
 {
     const ViewInfo& view_info = getViewInfo(view_index);
 
-    const agl::RenderBuffer* p_render_buffer = static_cast<const agl::RenderBuffer*>(render_info.getFrameBuffer());
+    const agl::RenderBuffer* p_render_buffer = render_info.getRenderBuffer();
     const sead::Viewport* p_viewport = render_info.getViewport();
 
     p_viewport->apply(*p_render_buffer);
