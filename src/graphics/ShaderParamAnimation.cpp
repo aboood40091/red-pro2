@@ -40,7 +40,7 @@ bool ShaderParamAnimation::init(const ModelG3d* p_model, const ModelResource* p_
     }
 
     size_t size = nw::g3d::ShaderParamAnimObj::CalcBufferSize(arg);
-    mpBuffer = rio::MemUtil::alloc(size, nw::g3d::ShaderParamAnimObj::BUFFER_ALIGNMENT);
+    mpBuffer = size ? rio::MemUtil::alloc(size, nw::g3d::ShaderParamAnimObj::BUFFER_ALIGNMENT) : nullptr;
     return mAnimObj.Init(arg, mpBuffer, size);
 }
 

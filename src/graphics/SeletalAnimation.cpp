@@ -39,7 +39,7 @@ bool SkeletalAnimation::init(const ModelG3d* p_model, const ModelResource* p_mdl
     }
 
     size_t size = nw::g3d::SkeletalAnimObj::CalcBufferSize(arg);
-    mpBuffer = rio::MemUtil::alloc(size, nw::g3d::SkeletalAnimObj::BUFFER_ALIGNMENT);
+    mpBuffer = size ? rio::MemUtil::alloc(size, nw::g3d::SkeletalAnimObj::BUFFER_ALIGNMENT) : nullptr;
     return mAnimObj.Init(arg, mpBuffer, size);
 }
 

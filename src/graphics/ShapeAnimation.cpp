@@ -40,7 +40,7 @@ bool ShapeAnimation::init(const ModelG3d* p_model, const ModelResource* p_mdl_re
     }
 
     size_t size = nw::g3d::ShapeAnimObj::CalcBufferSize(arg);
-    mpBuffer = rio::MemUtil::alloc(size, nw::g3d::ShapeAnimObj::BUFFER_ALIGNMENT);
+    mpBuffer = size ? rio::MemUtil::alloc(size, nw::g3d::ShapeAnimObj::BUFFER_ALIGNMENT) : nullptr;
     return mAnimObj.Init(arg, mpBuffer, size);
 }
 
