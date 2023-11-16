@@ -37,7 +37,7 @@ void ModelResource::destroy()
 }
 
 void ModelResource::load(
-    SharcArchiveRes* archive, const char* filename,
+    const SharcArchiveRes* archive, const char* filename,
     const nw::g3d::res::ResFile* tex_res_file
 )
 {
