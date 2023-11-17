@@ -42,9 +42,13 @@ void ModelEnvView::setUniformData(s32 view_index, const rio::Matrix34f& view_mtx
     rio::Matrix44f vp_mtx;
     vp_mtx.setMul(proj_mtx, view_mtx);
 
+    // Imagine you need an entire matrix just for camera z pos
+    static rio::Matrix34f camera_zpos_mtx = rio::Matrix34f::ident;
+    camera_zpos_mtx.m[2][3] = view_mtx.m[2][3];
+
     uniform_block.setVector4f(
         cMemberIndex_View,
-        &static_cast<const rio::Vector4f&>(view_mtx.v[0]),
+        &static_cast<const rio::Vector4f&>(camera_zpos_mtx.v[0]),
         3
     );
 
