@@ -287,7 +287,7 @@ void DistantViewMgr::applyDepthOfField()
     mDof.draw(0, mRenderBuffer, mProjection.getNear(), mProjection.getFar());
 }
 
-void DistantViewMgr::initialize(const std::string& dv_name, const std::string& dv_path, const rio::BaseVec2f& bg_pos, const rio::BaseVec2f& bg_screen_center, f32 bg_offset_area_bottom_to_screen_bottom, f32 bg_zoom)
+void DistantViewMgr::initialize(const std::string& dv_name, const std::string& dv_path, bool force_sharcfb, const rio::BaseVec2f& bg_pos, const rio::BaseVec2f& bg_screen_center, f32 bg_offset_area_bottom_to_screen_bottom, f32 bg_zoom)
 {
     destroy();
 
@@ -325,7 +325,7 @@ void DistantViewMgr::initialize(const std::string& dv_name, const std::string& d
 
     const char* const dv_fname_c = dv_fname.c_str();
 
-    mModelRes.load(&mArchiveRes, dv_fname_c);
+    mModelRes.load(&mArchiveRes, dv_fname_c, force_sharcfb);
 
     ModelG3d* p_mdl = Model::createG3d(mModelRes, dv_fname_c, 1, 1, 1, 2, 0, 0, Model::cBoundingMode_Enable);
     BasicModel* p_basic_mdl = new BasicModel(p_mdl, 1, 1, 2, 0, 0);

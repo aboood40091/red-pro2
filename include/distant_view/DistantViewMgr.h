@@ -49,6 +49,7 @@ public:
 
     void initialize(
         const std::string& dv_name = "Nohara", const std::string& dv_path = "",
+        bool force_sharcfb = false,
         const rio::BaseVec2f& bg_pos = { 0.0f, 0.0f },
         const rio::BaseVec2f& bg_screen_center = { 0.0f, 0.0f },
         f32 bg_offset_area_bottom_to_screen_bottom = 0.0f,

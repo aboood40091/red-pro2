@@ -16,7 +16,7 @@ public:
     void destroy();
 
     void load(
-        const SharcArchiveRes* archive, const char* filename,
+        const SharcArchiveRes* archive, const char* filename, bool force_sharcfb,
         const nw::g3d::res::ResFile* tex_res_file = nullptr
     );
 

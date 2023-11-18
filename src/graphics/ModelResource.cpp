@@ -37,7 +37,7 @@ void ModelResource::destroy()
 }
 
 void ModelResource::load(
-    const SharcArchiveRes* archive, const char* filename,
+    const SharcArchiveRes* archive, const char* filename, bool force_sharcfb,
     const nw::g3d::res::ResFile* tex_res_file
 )
 {
@@ -99,33 +99,36 @@ void ModelResource::load(
         }
         else
         {
+            const agl::ResShaderArchiveData* res_shader_archive = NULL;
+            const agl::ResBinaryShaderArchiveData* res_binary_shader_archive = NULL;
+
 #if RIO_IS_WIN
-            const agl::ResShaderArchiveData* res_shader_archive = static_cast<agl::ResShaderArchiveData*>(
-                archive->getFile(
-                    (std::string(model_name) + ".sharc").c_str() // <---- Uses model name
-                )
-            );
-#else
-            const agl::ResBinaryShaderArchiveData* res_binary_shader_archive = static_cast<agl::ResBinaryShaderArchiveData*>(
-                archive->getFile(
-                    (std::string(model_name) + ".sharcfb").c_str() // <---- Uses model name
-                )
-            );
+            if (force_sharcfb)
+#endif // RIO_IS_WIN
+            {
+                res_binary_shader_archive = static_cast<agl::ResBinaryShaderArchiveData*>(
+                    archive->getFile(
+                        (std::string(model_name) + ".sharcfb").c_str() // <---- Uses model name
+                    )
+                );
+            }
+#if RIO_IS_WIN
+            else
+            {
+                res_shader_archive = static_cast<agl::ResShaderArchiveData*>(
+                    archive->getFile(
+                        (std::string(model_name) + ".sharc").c_str() // <---- Uses model name
+                    )
+                );
+            }
 #endif // RIO_IS_WIN
 
             mModelShaderArchive[idx_model].obj = shader_program_archive;
 
-#if RIO_IS_WIN
-            mModelShaderArchive[idx_model].res_binary_archive = NULL;
+            mModelShaderArchive[idx_model].res_binary_archive = res_binary_shader_archive;
             mModelShaderArchive[idx_model].res_archive = res_shader_archive;
 
-            shader_program_archive->createWithOption(NULL, res_shader_archive, 0);
-#else
-            mModelShaderArchive[idx_model].res_binary_archive = res_binary_shader_archive;
-            mModelShaderArchive[idx_model].res_archive = NULL;
-
-            shader_program_archive->createWithOption(res_binary_shader_archive, NULL, 0);
-#endif // RIO_IS_WIN
+            shader_program_archive->createWithOption(res_binary_shader_archive, res_shader_archive, 0);
 
           //sead::Graphics::instance()->lockDrawContext();
             {
