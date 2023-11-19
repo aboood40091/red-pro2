@@ -40,7 +40,7 @@ void MaterialG3d::setTexSrtMtx(s32 index, const rio::Vector2f& scale, const u32&
     {
         if (mMaterialObj->GetResShaderParam(param_index)->GetOffset() >= 0)
         {
-            nw::g3d::res::TexSrtEx& srt = *mMaterialObj->EditShaderParam<nw::g3d::res::TexSrtEx>(param_index);
+            nw::g3d::res::TexSrtEx& srt = *static_cast<nw::g3d::res::TexSrtEx*>(mMaterialObj->EditShaderParam(param_index));
 
             f32 sin_r, cos_r;
             SinCosIdx(&sin_r, &cos_r, rotate);
@@ -72,7 +72,7 @@ void MaterialG3d::setTexSrt(s32 index, const rio::Vector2f& scale, const u32& ro
     {
         if (mMaterialObj->GetResShaderParam(param_index)->GetOffset() >= 0)
         {
-            nw::g3d::res::TexSrt& srt = mMaterialObj->EditShaderParam<nw::g3d::res::TexSrtEx>(param_index)->srt;
+            nw::g3d::res::TexSrt& srt = static_cast<nw::g3d::res::TexSrtEx*>(mMaterialObj->EditShaderParam(param_index))->srt;
             srt.sx = scale.x;
             srt.sy = scale.y;
             srt.r  = Idx2Rad(rotate);
@@ -104,7 +104,7 @@ void MaterialG3d::getTexSrt(s32 index, rio::Vector2f* p_scale, u32* p_rotate, ri
     }
     else
     {
-        const nw::g3d::res::TexSrt& srt = mMaterialObj->GetShaderParam<nw::g3d::res::TexSrtEx>(param_index)->srt;
+        const nw::g3d::res::TexSrt& srt = static_cast<const nw::g3d::res::TexSrtEx*>(mMaterialObj->GetShaderParam(param_index))->srt;
         if (p_scale)
         {
             p_scale->x = srt.sx;
@@ -129,7 +129,7 @@ void MaterialG3d::setTevColor(s32 index, const rio::Color4f& color)
     {
         if (mMaterialObj->GetResShaderParam(param_index)->GetOffset() >= 0)
         {
-            rio::MemUtil::copy(mMaterialObj->EditShaderParam<nw::g3d::math::Vec4>(param_index),
+            rio::MemUtil::copy(mMaterialObj->EditShaderParam(param_index),
                                &color.r,
                                sizeof(nw::g3d::math::Vec4));
         }
@@ -144,7 +144,7 @@ void MaterialG3d::getTevColor(s32 index, rio::Color4f& color) const
         if (mMaterialObj->GetResShaderParam(param_index)->GetOffset() >= 0)
         {
             rio::MemUtil::copy(&color.r,
-                               mMaterialObj->GetShaderParam<nw::g3d::math::Vec4>(param_index),
+                               mMaterialObj->GetShaderParam(param_index),
                                sizeof(nw::g3d::math::Vec4));
         }
     }
@@ -157,7 +157,7 @@ void MaterialG3d::setTevKColor(s32 index, const rio::Color4f& color)
     {
         if (mMaterialObj->GetResShaderParam(param_index)->GetOffset() >= 0)
         {
-            rio::MemUtil::copy(mMaterialObj->EditShaderParam<nw::g3d::math::Vec4>(param_index),
+            rio::MemUtil::copy(mMaterialObj->EditShaderParam(param_index),
                                &color.r,
                                sizeof(nw::g3d::math::Vec4));
         }
@@ -172,7 +172,7 @@ void MaterialG3d::getTevKColor(s32 index, rio::Color4f& color) const
         if (mMaterialObj->GetResShaderParam(param_index)->GetOffset() >= 0)
         {
             rio::MemUtil::copy(&color.r,
-                               mMaterialObj->GetShaderParam<nw::g3d::math::Vec4>(param_index),
+                               mMaterialObj->GetShaderParam(param_index),
                                sizeof(nw::g3d::math::Vec4));
         }
     }
