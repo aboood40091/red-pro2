@@ -234,10 +234,17 @@ void DistantViewMgr::calcView_(const rio::BaseVec2f& bg_screen_center, f32 bg_of
 
     if (proj_base_offs.x != 0.0f || proj_base_offs.y != 0.0f)
     {
-        f32 proj_offset_x = mProjection.offset().x + proj_base_offs.x / 1280;
-        f32 proj_offset_y = mProjection.offset().y + proj_base_offs.y / 720;
+        f32 proj_base_offs_x = proj_base_offs.x / 1280;
+        f32 proj_base_offs_y = proj_base_offs.y / 720;
 
-        proj_base_offs.set(proj_offset_x, proj_offset_y);
+        proj_base_offs_x *= s32(rio::Window::instance()->getWidth()) / 1280.0f;
+        proj_base_offs_y *= s32(rio::Window::instance()->getHeight()) / 720.0f;
+
+        proj_base_offs = mProjection.offset();
+
+        proj_base_offs.x += proj_base_offs_x;
+        proj_base_offs.y += proj_base_offs_y;
+
         mProjection.setOffset(proj_base_offs);
     }
 
@@ -245,6 +252,9 @@ void DistantViewMgr::calcView_(const rio::BaseVec2f& bg_screen_center, f32 bg_of
     {
         f32 flicker_proj_offs_x = (mFlickerOffset.x * 0.5f) / 1280;
         f32 flicker_proj_offs_y = (mFlickerOffset.y * 0.5f) / 720;
+
+        flicker_proj_offs_x *= s32(rio::Window::instance()->getWidth()) / 1280.0f;
+        flicker_proj_offs_y *= s32(rio::Window::instance()->getHeight()) / 720.0f;
 
         rio::Vector2f proj_offset = mProjection.offset();
 
