@@ -4,7 +4,6 @@
 #include <graphics/ModelResource.h>
 
 #include <common/aglRenderBuffer.h>
-#include <common/aglRenderTarget.h>
 #include <common/aglTextureData.h>
 #include <gfx/rio_Camera.h>
 #include <gfx/rio_Projection.h>
@@ -27,14 +26,14 @@ class TexturePatternAnimation;
 class DistantViewMgr
 {
 public:
-    static bool createSingleton();
+    static bool createSingleton(const agl::RenderBuffer& render_buffer);
     static void destroySingleton();
     static DistantViewMgr* instance() { return sInstance; }
 
 private:
     static DistantViewMgr* sInstance;
 
-    DistantViewMgr();
+    DistantViewMgr(const agl::RenderBuffer& render_buffer);
     ~DistantViewMgr();
 
     DistantViewMgr(const DistantViewMgr&);
@@ -45,6 +44,7 @@ private:
     void calcModelMtx_();
 
 public:
+    void onResizeRenderBuffer();
     void applyDepthOfField();
 
     void initialize(
@@ -134,11 +134,7 @@ private:
     SharcArchiveRes         mArchiveRes;
     ModelResource           mModelRes;
 
-    agl::RenderBuffer       mRenderBuffer;
-    agl::RenderTargetColor  mColorTarget;
-    agl::RenderTargetDepth  mDepthTarget;
-    agl::TextureData        mColorTextureData;
-    agl::TextureData        mDepthTextureData;
+    const agl::RenderBuffer&    mRenderBuffer;
 
     friend class DVCameraParam;
 };

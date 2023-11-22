@@ -5,7 +5,6 @@
 #include <graphics/Renderer.h>
 #include <graphics/RenderObjLayer.h>
 
-#include <common/aglTextureFormatInfo.h>
 #include <filedevice/rio_FileDeviceMgr.h>
 #include <g3d/aglTextureDataInitializerG3D.h>
 #include <gfx/rio_Graphics.h>
@@ -20,12 +19,12 @@
 
 DistantViewMgr* DistantViewMgr::sInstance = nullptr;
 
-bool DistantViewMgr::createSingleton()
+bool DistantViewMgr::createSingleton(const agl::RenderBuffer& render_buffer)
 {
     if (sInstance)
         return false;
 
-    sInstance = new DistantViewMgr();
+    sInstance = new DistantViewMgr(render_buffer);
     return true;
 }
 
@@ -38,7 +37,7 @@ void DistantViewMgr::destroySingleton()
     sInstance = nullptr;
 }
 
-DistantViewMgr::DistantViewMgr()
+DistantViewMgr::DistantViewMgr(const agl::RenderBuffer& render_buffer)
     : mNear(100.0f)
     , mFar(80000.0f)
     , mFovyDeg(20.0f)
@@ -48,7 +47,7 @@ DistantViewMgr::DistantViewMgr()
     , mCameraPos{0.0f, 0.0f, 0.0f}
     , mCameraAtOffset{0.0f, 0.0f, 0.0f}
     , mCamera()
-    , mProjection(mNear, mFar, rio::Mathf::deg2rad(mFovyDeg), f32(s32(rio::Window::instance()->getWidth())) / f32(s32(rio::Window::instance()->getHeight())))
+    , mProjection(mNear, mFar, rio::Mathf::deg2rad(mFovyDeg), f32(render_buffer.getSize().x) / f32(render_buffer.getSize().y))
     , mCull()
     , mpBasicModel(nullptr)
     , mpCameraParam(nullptr)
@@ -62,90 +61,14 @@ DistantViewMgr::DistantViewMgr()
     , mFlickerOffset{0.375f, 0.375f}
     // Custom
     , mpArchive(nullptr)
-    , mRenderBuffer(
-        rio::Vector2i{ s32(rio::Window::instance()->getWidth()), s32(rio::Window::instance()->getHeight()) }
-    )
+    , mRenderBuffer(render_buffer)
 {
-    mRenderBuffer.setRenderTargetColor(&mColorTarget);
-    mRenderBuffer.setRenderTargetDepth(&mDepthTarget);
-
-    const rio::NativeWindow& native_window = rio::Window::instance()->getNativeWindow();
-
-    [[maybe_unused]] const u32 width = rio::Window::instance()->getWidth();
-    [[maybe_unused]] const u32 height = rio::Window::instance()->getHeight();
-
-#if RIO_IS_CAFE
-
-    mColorTextureData.initializeFromSurface(native_window.getColorBuffer().surface);
-
-#elif RIO_IS_WIN
-
-    mColorTextureData.initialize(
-        agl::TextureFormatInfo::convFormatGX2ToAGL(
-            static_cast<GX2SurfaceFormat>(native_window.getColorBufferTextureFormat()),
-            true,
-            false
-        ),
-        width,
-        height,
-        1
-    );
-
-    mColorTextureData.setHandle(std::make_shared<agl::TextureHandle>(native_window.getColorBufferTextureHandle()));
-
-#endif
-
-    mColorTarget.applyTextureData(mColorTextureData);
-
-#if RIO_IS_CAFE
-
-    GX2Surface& depth_surface = const_cast<GX2Surface&>(rio::Window::instance()->getWindowDepthBufferTexture()->surface);
-    if (depth_surface.use & GX2_SURFACE_USE_DEPTH_BUFFER)
-    {
-        mDepthTextureData.initializeFromSurface(depth_surface);
-    }
-    else
-    {
-        depth_surface.use = GX2SurfaceUse(depth_surface.use | GX2_SURFACE_USE_DEPTH_BUFFER);
-        mDepthTextureData.initializeFromSurface(depth_surface);
-        depth_surface.use = GX2SurfaceUse(depth_surface.use & ~GX2_SURFACE_USE_DEPTH_BUFFER);
-    }
-
-#elif RIO_IS_WIN
-
-    mDepthTextureData.initialize(
-        agl::TextureFormatInfo::convFormatGX2ToAGL(
-            static_cast<GX2SurfaceFormat>(native_window.getDepthBufferTextureFormat()),
-            false,
-            true
-        ),
-        width,
-        height,
-        1
-    );
-
-    mDepthTextureData.setHandle(std::make_shared<agl::TextureHandle>(rio::Window::instance()->getWindowDepthBufferTexture()));
-
-#endif
-
-    mDepthTarget.applyTextureData(mDepthTextureData);
-
-#if RIO_IS_WIN
-    mRenderBuffer.bind();
-
-    // Check Frame Buffer completeness
-    GLenum framebuffer_status;
-    RIO_GL_CALL(framebuffer_status = glCheckFramebufferStatus(GL_FRAMEBUFFER));
-    if (framebuffer_status != GL_FRAMEBUFFER_COMPLETE)
-    {
-        RIO_LOG("Frame Buffer incomplete! Status 0x%08X\n", framebuffer_status);
-        RIO_ASSERT(false);
-    }
-#endif // RIO_IS_WIN
-
-    rio::Window::instance()->makeContextCurrent();
-
     mDof.initialize();
+}
+
+void DistantViewMgr::onResizeRenderBuffer()
+{
+    mProjection.setAspect(f32(mRenderBuffer.getSize().x) / f32(mRenderBuffer.getSize().y));
 }
 
 DistantViewMgr::~DistantViewMgr()
@@ -237,8 +160,8 @@ void DistantViewMgr::calcView_(const rio::BaseVec2f& bg_screen_center, f32 bg_of
         f32 proj_base_offs_x = proj_base_offs.x / 1280;
         f32 proj_base_offs_y = proj_base_offs.y / 720;
 
-        proj_base_offs_x *= s32(rio::Window::instance()->getWidth()) / 1280.0f;
-        proj_base_offs_y *= s32(rio::Window::instance()->getHeight()) / 720.0f;
+        proj_base_offs_x *= mRenderBuffer.getSize().x / 1280.0f;
+        proj_base_offs_y *= mRenderBuffer.getSize().y / 720.0f;
 
         proj_base_offs = mProjection.offset();
 
@@ -253,8 +176,8 @@ void DistantViewMgr::calcView_(const rio::BaseVec2f& bg_screen_center, f32 bg_of
         f32 flicker_proj_offs_x = (mFlickerOffset.x * 0.5f) / 1280;
         f32 flicker_proj_offs_y = (mFlickerOffset.y * 0.5f) / 720;
 
-        flicker_proj_offs_x *= s32(rio::Window::instance()->getWidth()) / 1280.0f;
-        flicker_proj_offs_y *= s32(rio::Window::instance()->getHeight()) / 720.0f;
+        flicker_proj_offs_x *= mRenderBuffer.getSize().x / 1280.0f;
+        flicker_proj_offs_y *= mRenderBuffer.getSize().y / 720.0f;
 
         rio::Vector2f proj_offset = mProjection.offset();
 
@@ -292,8 +215,6 @@ void DistantViewMgr::calcModelMtx_()
 
 void DistantViewMgr::applyDepthOfField()
 {
-    rio::Window::instance()->updateDepthBufferTexture();
-
     mDof.draw(0, mRenderBuffer, mProjection.getNear(), mProjection.getFar());
 }
 
