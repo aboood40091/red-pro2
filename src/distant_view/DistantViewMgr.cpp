@@ -48,7 +48,7 @@ DistantViewMgr::DistantViewMgr()
     , mCameraPos{0.0f, 0.0f, 0.0f}
     , mCameraAtOffset{0.0f, 0.0f, 0.0f}
     , mCamera()
-    , mProjection(mNear, mFar, rio::Mathf::deg2rad(mFovyDeg), 16.f / 9.f)
+    , mProjection(mNear, mFar, rio::Mathf::deg2rad(mFovyDeg), f32(s32(rio::Window::instance()->getWidth())) / f32(s32(rio::Window::instance()->getHeight())))
     , mCull()
     , mpBasicModel(nullptr)
     , mpCameraParam(nullptr)
