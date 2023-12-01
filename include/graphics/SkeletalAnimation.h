@@ -13,7 +13,7 @@ class SkeletalAnimation : public Animation
 {
 public:
     SkeletalAnimation();
-    ~SkeletalAnimation();
+    virtual ~SkeletalAnimation();
 
     bool init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array);
 

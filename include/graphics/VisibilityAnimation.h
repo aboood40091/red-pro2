@@ -13,7 +13,7 @@ class VisibilityAnimation : public Animation
 {
 public:
     VisibilityAnimation();
-    ~VisibilityAnimation();
+    virtual ~VisibilityAnimation();
 
     bool init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array);
 

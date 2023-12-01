@@ -6,6 +6,7 @@ class Animation
 {
 public:
     Animation();
+    virtual ~Animation() { }
     virtual void calc() = 0;
 
     void update();
