@@ -42,6 +42,8 @@ ModelG3d::ModelG3d()
 
 ModelG3d::~ModelG3d()
 {
+    mModelEx.destroyEx();
+
     if (mShapeRenderInfo)
     {
         delete[] mShapeRenderInfo;
