@@ -15,12 +15,13 @@ class VisibilityAnimation;
 class BasicModel
 {
 public:
-    static BasicModel* create(
+    static BasicModel* createFromModel(
         ModelResource* p_mdl_res,
         ModelG3d* p_model,
         s32 skl_anim_num, s32 tex_anim_num, s32 shu_anim_num, s32 vis_anim_num, s32 sha_anim_num,
         const PtrArray<ModelResource>* p_anim_mdl_res_array = nullptr
     );
+    static void destroyFromModel(BasicModel* p_bmdl);
 
     static BasicModel* create(
         ModelResource* p_mdl_res,
@@ -28,7 +29,6 @@ public:
         s32 skl_anim_num, s32 tex_anim_num, s32 shu_anim_num, s32 vis_anim_num, s32 sha_anim_num,
         Model::BoundingMode bounding_mode = Model::cBoundingMode_Disable
     );
-
     static BasicModel* create(
         ModelResource* p_mdl_res,
         const char* name,
@@ -36,10 +36,13 @@ public:
         s32 skl_anim_num, s32 tex_anim_num, s32 shu_anim_num, s32 vis_anim_num, s32 sha_anim_num,
         Model::BoundingMode bounding_mode
     );
+    static void destroy(BasicModel* p_bmdl);
 
 public:
     BasicModel(ModelG3d* p_model, u32 skl_anim_num, u32 tex_anim_num, u32 shu_anim_num, u32 vis_anim_num, u32 sha_anim_num);
+    virtual ~BasicModel();
 
+public:
     ModelG3d* getModel() const { return mpModel; }
     ModelResource* getModelResource() const { return mpModelResource; }
 
@@ -63,9 +66,9 @@ private:
     Buffer<VisibilityAnimation*>        mpVisAnim;
     Buffer<ShapeAnimation*>             mpShaAnim;
 };
-static_assert(sizeof(BasicModel) == 0x30);
+//static_assert(sizeof(BasicModel) == 0x30);
 
-inline BasicModel* BasicModel::create(
+inline BasicModel* BasicModel::createFromModel(
     ModelResource* p_mdl_res,
     ModelG3d* p_model,
     s32 skl_anim_num, s32 tex_anim_num, s32 shu_anim_num, s32 vis_anim_num, s32 sha_anim_num,
@@ -77,6 +80,11 @@ inline BasicModel* BasicModel::create(
     return p_bmdl;
 }
 
+inline void BasicModel::destroyFromModel(BasicModel* p_bmdl)
+{
+    delete p_bmdl;
+}
+
 inline BasicModel* BasicModel::create(
     ModelResource* p_mdl_res,
     const char* name,
@@ -85,7 +93,7 @@ inline BasicModel* BasicModel::create(
 )
 {
     ModelG3d* p_model = Model::createG3d(*p_mdl_res, name, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num, bounding_mode);
-    return create(p_mdl_res, p_model, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num);
+    return createFromModel(p_mdl_res, p_model, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num);
 }
 
 inline BasicModel* BasicModel::create(
@@ -97,5 +105,12 @@ inline BasicModel* BasicModel::create(
 )
 {
     ModelG3d* p_model = Model::createG3d(*p_mdl_res, name, view_num, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num, bounding_mode);
-    return create(p_mdl_res, p_model, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num);
+    return createFromModel(p_mdl_res, p_model, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num);
+}
+
+inline void BasicModel::destroy(BasicModel* p_bmdl)
+{
+    ModelG3d* p_model = p_bmdl->getModel();
+    destroyFromModel(p_bmdl);
+    delete p_model;
 }

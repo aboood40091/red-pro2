@@ -96,14 +96,7 @@ void DistantViewMgr::destroy()
 
     if (mpBasicModel)
     {
-        ModelG3d* p_mdl = mpBasicModel->getModel();
-        if (p_mdl)
-        {
-            delete p_mdl;
-            p_mdl = nullptr;
-        }
-
-        delete mpBasicModel;
+        BasicModel::destroy(mpBasicModel);
         mpBasicModel = nullptr;
     }
 

@@ -1,5 +1,4 @@
 #include <graphics/BasicModel.h>
-#include <graphics/ModelG3d.h>
 
 BasicModel::BasicModel(ModelG3d* p_model, u32 skl_anim_num, u32 tex_anim_num, u32 shu_anim_num, u32 vis_anim_num, u32 sha_anim_num)
     : mpModel(p_model)
@@ -19,6 +18,74 @@ BasicModel::BasicModel(ModelG3d* p_model, u32 skl_anim_num, u32 tex_anim_num, u3
 
     if (sha_anim_num > 0)
         mpShaAnim.setBuffer(sha_anim_num, p_model->getShaAnimBuffer());
+}
+
+BasicModel::~BasicModel()
+{
+    if (mpSklAnim.isBufferReady())
+    {
+        for (Buffer<SkeletalAnimation*>::iterator itr_anim = mpSklAnim.begin(), itr_anim_end = mpSklAnim.end(); itr_anim != itr_anim_end; ++itr_anim)
+        {
+            SkeletalAnimation*& anim = *itr_anim;
+            if (anim != nullptr)
+            {
+                delete anim;
+                anim = nullptr;
+            }
+        }
+    }
+
+    if (mpTexAnim.isBufferReady())
+    {
+        for (Buffer<TexturePatternAnimation*>::iterator itr_anim = mpTexAnim.begin(), itr_anim_end = mpTexAnim.end(); itr_anim != itr_anim_end; ++itr_anim)
+        {
+            TexturePatternAnimation*& anim = *itr_anim;
+            if (anim != nullptr)
+            {
+                delete anim;
+                anim = nullptr;
+            }
+        }
+    }
+
+    if (mpShuAnim.isBufferReady())
+    {
+        for (Buffer<ShaderParamAnimation*>::iterator itr_anim = mpShuAnim.begin(), itr_anim_end = mpShuAnim.end(); itr_anim != itr_anim_end; ++itr_anim)
+        {
+            ShaderParamAnimation*& anim = *itr_anim;
+            if (anim != nullptr)
+            {
+                delete anim;
+                anim = nullptr;
+            }
+        }
+    }
+
+    if (mpVisAnim.isBufferReady())
+    {
+        for (Buffer<VisibilityAnimation*>::iterator itr_anim = mpVisAnim.begin(), itr_anim_end = mpVisAnim.end(); itr_anim != itr_anim_end; ++itr_anim)
+        {
+            VisibilityAnimation*& anim = *itr_anim;
+            if (anim != nullptr)
+            {
+                delete anim;
+                anim = nullptr;
+            }
+        }
+    }
+
+    if (mpShaAnim.isBufferReady())
+    {
+        for (Buffer<ShapeAnimation*>::iterator itr_anim = mpShaAnim.begin(), itr_anim_end = mpShaAnim.end(); itr_anim != itr_anim_end; ++itr_anim)
+        {
+            ShapeAnimation*& anim = *itr_anim;
+            if (anim != nullptr)
+            {
+                delete anim;
+                anim = nullptr;
+            }
+        }
+    }
 }
 
 void BasicModel::init(ModelResource* p_mdl_res, const PtrArray<ModelResource>* p_anim_mdl_res_array)
