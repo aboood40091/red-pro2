@@ -206,7 +206,7 @@ void Shader::setLightmapEnableUniform(bool enable) const
 
 void Shader::setFogUniform(RenderMgr* p_render_mgr) const
 {
-    const agl::env::Fog* p_fog = p_render_mgr->getEnvObjMgr().get<agl::env::Fog>();
+    const agl::env::Fog* p_fog = p_render_mgr->getEnvObjMgr().getEnvObj<agl::env::Fog>(1);
     if (p_fog != nullptr)
     {
         const sead::Color4f& color = p_fog->getColor();
