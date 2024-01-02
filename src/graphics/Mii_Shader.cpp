@@ -360,11 +360,11 @@ void Shader::draw_(const FFLDrawParam& draw_param)
         }
     }
 
-    s32 lightmap_index = 4;
-    if (mpModel != nullptr && mpModel->getLightMapType() == ModelFFL::cLightmapType_LightMapMgr_Index_0)
-        lightmap_index = 0;
+    LightMapMgr::EnvTypeCourse lightmap_index = LightMapMgr::cEnvTypeCourse_Player;
+    if (mpModel != nullptr && mpModel->getLightMapType() == ModelFFL::cLightmapType_Enemy)
+        lightmap_index = LightMapMgr::cEnvTypeCourse_Enemy;
 
-    LightMapMgr::instance()->getLightmap01p(lightmap_index).activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap01p));
+    LightMapMgr::instance()->getLightmap1(lightmap_index).activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap01p));
 
     if (mpModel != nullptr)
     {
@@ -379,13 +379,13 @@ void Shader::draw_(const FFLDrawParam& draw_param)
             mLightmap02p_1.activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap02p));
             break;
         default:
-            LightMapMgr::instance()->getLightmap02p(lightmap_index).activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap02p));
+            LightMapMgr::instance()->getLightmap2(lightmap_index).activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap02p));
             break;
         }
     }
     else
     {
-        LightMapMgr::instance()->getLightmap02p(lightmap_index).activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap02p));
+        LightMapMgr::instance()->getLightmap2(lightmap_index).activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap02p));
     }
 
     if (draw_param.primitiveParam.pIndexBuffer != nullptr)

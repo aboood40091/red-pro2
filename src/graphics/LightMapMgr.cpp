@@ -5,7 +5,7 @@ SEAD_TASK_SINGLETON_DISPOSER_IMPL(LightMapMgr)
 
 void LightMapMgr::setModelLightMap(ModelG3d* p_model, bool set_mdl_dl_dirty) const
 {
-    if (!mIsInitialized)
+    if (!mEnable)
         return;
 
     agl::g3d::ModelEx& model = p_model->getModelEx();
