@@ -452,7 +452,7 @@ void ModelG3d::activateMaterial(const agl::g3d::ModelShaderAssign& shader_assign
 
                 LightMapMgr::instance()->getLightMapMgr()
                     .getLightMap(idx_lghtmap)
-                        .getTextureSampler()
+                        ->getTextureSampler()
                             .activate(location, cSamplerSlot_LightMap_0 + i);
             }
         }
