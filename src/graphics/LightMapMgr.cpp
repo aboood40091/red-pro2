@@ -570,3 +570,8 @@ void LightMapMgr::drawReflection_(const agl::lyr::RenderInfo& render_info);
 
 void LightMapMgr::drawReflectionDRC_(const agl::lyr::RenderInfo& render_info);
 */
+
+void LightMapMgr::CalcObj::calc()
+{
+    mpLightMapMgr->updateGPU();
+}
