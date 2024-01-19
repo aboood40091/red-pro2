@@ -132,7 +132,7 @@ sead::ArchiveRes* ResMgr::loadArchiveResImpl_(const sead::SafeString& archive_pa
         return nullptr;
 
     sead::ArchiveRes* archive = sead::DynamicCast<sead::ArchiveRes>(resource);
-    DCFlushRangeNoSync(archive->mRawData, archive->mRawSize);
+    DCFlushRangeNoSync(archive->getData(), archive->getSize());
     return archive;
 }
 
