@@ -229,7 +229,7 @@ void Shader::setFogUniform(RenderMgr* p_render_mgr) const
 
         mpShaderProgram->getUniformLocation(cUniform_FogStartEndInv).setFloat(1000000.0f);
 
-        sead::Vector3f dir = sead::Vector3f(-sead::Vector3f::ez.x, -sead::Vector3f::ez.y, -sead::Vector3f::ez.z);   // TODO: sead::Vector3f::operator-
+        sead::Vector3f dir = -sead::Vector3f::ez;
         mpShaderProgram->getUniformLocation(cUniform_FogDir).setVec3(dir);
     }
 }

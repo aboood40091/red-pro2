@@ -443,9 +443,18 @@ void LightMapMgr::getAmbColor(sead::Color4f* p_color, AmbColorType type) const
 {
     s32 index = mAmbientLightTypeIndex[type];
     if (index >= 0)
-        *p_color = mEnvObjMgr.getEnvObj<agl::env::AmbientLight>(index)->getColor();
+    {
+        const agl::env::AmbientLight* p_env_obj = mEnvObjMgr.getEnvObj<agl::env::AmbientLight>(index);
+        {
+            f32 intensity = p_env_obj->getIntensity();
+            sead::Color4f color_intensity(intensity, intensity, intensity, intensity);
+            *p_color = p_env_obj->getColor() * color_intensity;
+        }
+    }
     else
+    {
         p_color->setf(1.0f, 1.0f, 1.0f, 1.0f);
+    }
 }
 
 void LightMapMgr::setModelLightMapWithName_(ModelG3d* p_model, const sead::SafeString& name, s32 idx_lghtmap, s32 model_light_map_index) const
