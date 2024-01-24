@@ -43,6 +43,26 @@ void PtclMgr::cleanUp()
     }
 }
 
+void PtclMgr::updateAmbientLight(bool update_emitter)
+{
+    if (!mpEmitterColorMgr->updateAmbientLight(update_emitter))
+        return;
+
+    for (u8 i = 0; i < 8; i++)
+        for (nw::eft::EmitterSet* p_emitter_set = mpPtclSystem->GetEmitterSetHead(i); p_emitter_set; p_emitter_set = p_emitter_set->GetNext())
+            setEmitterColor_(p_emitter_set);
+}
+
+void PtclMgr::setEmitterColor_(nw::eft::EmitterSet* p_emitter_set)
+{
+    for (s32 i = 0, n = p_emitter_set->GetNumEmitter(); i < n; ++i)
+    {
+        const nw::eft::EmitterInstance* p_emitter = p_emitter_set->GetAliveEmitter(i);
+        if (p_emitter != nullptr)
+            mpEmitterColorMgr->setEmitterColor(p_emitter->controller, p_emitter->GetSimpleEmitterData()->userData >> 16);
+    }
+}
+
 void PtclMgr::draw(const agl::lyr::RenderInfo& render_info, u32 type, const sead::PtrArray<nw::eft::EmitterInstance>* p_emitters)
 {
     if (mIsDrawDisable)
