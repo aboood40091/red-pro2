@@ -9,6 +9,6 @@ void Enemy::changeState(const StateID& state_id)
     }
     else
     {
-        mStateMgr.getStateMethod().changeStateMethod(state_id);
+        mStateMgr.changeState(state_id);
     }
 }
