@@ -2,10 +2,10 @@
 
 void Enemy::changeState(const StateID& state_id)
 {
-    if (mStateMgr.getStateMethod().isSubStateMethod())
+    if (mStateMgr.isSubState())
     {
-        mStateMgr.getStateMethod().returnToMainStateMethod();
-        mStateMgr.getStateMethod().replaceStateMethod(state_id);
+        mStateMgr.returnState();
+        mStateMgr.replaceState(state_id);
     }
     else
     {
