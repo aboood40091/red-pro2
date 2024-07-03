@@ -1,4 +1,4 @@
-#include <state/StateMethodMulti.h>
+#include <state/StateStateMethod.h>
 
 const StateID StateID::cNull(StateID::cNullNumber);
 
@@ -36,7 +36,7 @@ const StateID* StateMethod::getStateID() const
     return mpState->getStateID();
 }
 
-void StateMethodMulti::changeToSubStateMethod(const StateID& state_id)
+void StateStateMethod::changeToSubStateMethod(const StateID& state_id)
 {
     mMain.set(getStateID());
     mpOldStateID = mpState->getStateID();
