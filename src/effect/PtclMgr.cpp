@@ -36,9 +36,9 @@ void PtclMgr::cleanUp()
     for (u8 group = 0; group < 8; group++)
         mpPtclSystem->KillEmitterGroup(group);
 
-    for (sead::TList<LevelEffect*>::iterator itr = mEffects.begin(); itr != mEffects.end(); )
+    for (sead::TList<EffectDisposableBase*>::iterator itr = mEffects.begin(); itr != mEffects.end(); )
     {
-        sead::TListNode<LevelEffect*>& node = itr.getNode(); ++itr;
+        sead::TListNode<EffectDisposableBase*>& node = itr.getNode(); ++itr;
         node.erase();
     }
 }
