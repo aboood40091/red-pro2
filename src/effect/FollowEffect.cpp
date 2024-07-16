@@ -1,9 +1,8 @@
 #include <effect/FollowEffect.h>
 
-
 bool FollowEffect::createEffect(EffectID id, const sead::Vector3f* p_trans, const Angle3* p_angle, const sead::Vector3f* p_scale)
 {
-    fadeAndKill();
+    fade();
 
     if (Effect::createEffect(id))
         return follow(p_trans, p_angle, p_scale);
@@ -13,7 +12,7 @@ bool FollowEffect::createEffect(EffectID id, const sead::Vector3f* p_trans, cons
 
 bool FollowEffect::createEffect(EffectID id, const sead::Matrixf* p_mtx, bool mtx_has_scale)
 {
-    fadeAndKill();
+    fade();
 
     if (Effect::createEffect(id))
         return follow(p_mtx, mtx_has_scale);

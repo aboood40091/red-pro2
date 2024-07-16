@@ -2,7 +2,7 @@
 
 void EffectDisposableBase::cleanup()
 {
-    fadeAndKill();
+    fade();
 
     if (mNode.isLinked())
         mNode.erase();

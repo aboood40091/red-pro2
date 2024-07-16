@@ -50,7 +50,7 @@ bool Effect::isAlive() const
     return false;
 }
 
-void Effect::fade()
+void Effect::followFade()
 {
     if (mHandle.IsValid())
     {
@@ -60,9 +60,9 @@ void Effect::fade()
     }
 }
 
-void Effect::fadeAndKill()
+void Effect::fade()
 {
-    fade();
+    followFade();
     mHandle.Invalidate();
 }
 
@@ -134,7 +134,7 @@ void Effect::setRandomSeed(u32 seed)
         set->SetRandomSeed(seed);
 }
 
-void Effect::updateMtx_()
+void Effect::update_()
 {
     if (mHandle.IsValid())
     {
@@ -193,7 +193,7 @@ bool Effect::follow(const sead::Vector3f* p_trans, const Angle3* p_angle, const 
 
         mMtx.setTranslation(translate);
 
-        updateMtx_();
+        update_();
         return true;
     }
 
@@ -218,7 +218,7 @@ bool Effect::follow(const sead::Matrixf& mtx, bool mtx_has_scale)
             mMtx.multTranslationWorld(mpParam->transX, mpParam->transY, mpParam->transZ);
         }
 
-        updateMtx_();
+        update_();
         return true;
     }
 
