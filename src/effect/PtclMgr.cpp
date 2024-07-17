@@ -36,11 +36,7 @@ void PtclMgr::cleanUp()
     for (u8 group = 0; group < 8; group++)
         mpPtclSystem->KillEmitterGroup(group);
 
-    for (sead::TList<EffectDisposableBase*>::iterator itr = mEffects.begin(); itr != mEffects.end(); )
-    {
-        sead::TListNode<EffectDisposableBase*>& node = itr.getNode(); ++itr;
-        node.erase();
-    }
+    mEffects.clear();
 }
 
 void PtclMgr::updateAmbientLight(bool update_emitter)
