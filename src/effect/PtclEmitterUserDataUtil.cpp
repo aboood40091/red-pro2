@@ -57,7 +57,7 @@ u32 PtclEmitterUserDataUtil::getEmitterUserType(u16 user_data_bit)
     return 9;
 }
 
-u32 PtclEmitterUserDataUtil::getEmitterColorType(u16 user_data_bit)
+s32 PtclEmitterUserDataUtil::getEmitterColorType(u16 user_data_bit)
 {
     if (user_data_bit & 0x2000)
         return 1;
