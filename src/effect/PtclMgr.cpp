@@ -59,6 +59,14 @@ void PtclMgr::setEmitterColor_(nw::eft::EmitterSet* p_emitter_set)
     }
 }
 
+s32 PtclMgr::compare(const nw::eft::EmitterInstance* a, const nw::eft::EmitterInstance* b)
+{
+    f32 dist = a->emitterRT.m[2][3] - b->emitterRT.m[2][3];
+    if (dist < 0.0f)
+        return -1;
+    return dist > 0.0f;
+}
+
 void PtclMgr::draw(const agl::lyr::RenderInfo& render_info, u32 type, const sead::PtrArray<nw::eft::EmitterInstance>* p_emitters)
 {
     if (mIsDrawDisable)
