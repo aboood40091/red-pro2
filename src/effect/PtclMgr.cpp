@@ -33,7 +33,7 @@ PtclMgr::~PtclMgr()
 
 void PtclMgr::cleanUp()
 {
-    for (u8 group = 0; group < 8; group++)
+    for (u8 group = 0; group < sead::ptcl::cEftMaxGroup; group++)
         mpPtclSystem->KillEmitterGroup(group);
 
     mEffects.clear();
@@ -44,8 +44,8 @@ void PtclMgr::updateAmbientLight(bool update_emitter)
     if (!mpEmitterColorMgr->updateAmbientLight(update_emitter))
         return;
 
-    for (u8 i = 0; i < 8; i++)
-        for (nw::eft::EmitterSet* p_emitter_set = mpPtclSystem->GetEmitterSetHead(i); p_emitter_set; p_emitter_set = p_emitter_set->GetNext())
+    for (u8 group = 0; group < sead::ptcl::cEftMaxGroup; group++)
+        for (nw::eft::EmitterSet* p_emitter_set = mpPtclSystem->GetEmitterSetHead(group); p_emitter_set; p_emitter_set = p_emitter_set->GetNext())
             setEmitterColor_(p_emitter_set);
 }
 
@@ -121,9 +121,9 @@ void PtclMgr::draw(const agl::lyr::RenderInfo& render_info, u32 type, const sead
     }
     else
     {
-        for (s32 i = 0; i < 8; i++)
+        for (s32 group = 0; group < sead::ptcl::cEftMaxGroup; group++)
         {
-            nw::eft::EmitterInstance* p_emitter = mpPtclSystem->GetEmitterHead(i);
+            nw::eft::EmitterInstance* p_emitter = mpPtclSystem->GetEmitterHead(group);
             while (p_emitter)
             {
                 if (PtclEmitterUserDataUtil::getEmitterUserType(p_emitter->GetSimpleEmitterData()->userData >> 16) == type)
