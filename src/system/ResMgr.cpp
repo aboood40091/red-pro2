@@ -197,6 +197,12 @@ void* ResMgr::getFileFromArchiveResImpl_(sead::ArchiveRes* archive, const sead::
     return data;
 }
 
+void ResMgr::remove(const sead::SafeString& key)
+{
+    if (mResHolderTreeMap.contains(key))
+        mResHolderTreeMap.erase(key);
+}
+
 ResMgr::ResHolder::ResHolder(const sead::SafeString& key, sead::ArchiveRes* archive)
     : mpArchiveRes(archive)
 {
