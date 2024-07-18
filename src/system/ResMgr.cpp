@@ -90,7 +90,7 @@ bool ResMgr::loadArchiveRes(const sead::SafeString& key, const sead::SafeString&
         if (ChallengeResCacheMgr::instance()->isEnableCacheHeap())
             heap = ChallengeResCacheMgr::instance()->getCacheHeap();
 
-    if (mResHolderTreeMap.find(key))
+    if (mResHolderTreeMap.contains(key))
         return true;
 
     sead::ArchiveRes* archive;
@@ -165,7 +165,7 @@ sead::ArchiveRes* ResMgr::loadArchiveResImpl_(const sead::SafeString& archive_pa
 
 bool ResMgr::isArchiveResLoaded(const sead::SafeString& key) const
 {
-    return mResHolderTreeMap.find(key) != nullptr;
+    return mResHolderTreeMap.contains(key);
 }
 
 sead::ArchiveRes* ResMgr::getArchiveRes(const sead::SafeString& key) const
