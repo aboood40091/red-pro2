@@ -174,7 +174,7 @@ void PtclMgr::enterScene(sead::Heap* heap)
             arg.alignment = nw::eft::EFT_PTCL_BINARY_ALIGNMENT;
             arg.path = sead::FormatFixedSafeString<128>("CAFE/effect/%s_Cafe.ptcl", cPtclBaseFname.cstr()).cstr();
         }
-        void* resource = device.tryLoad(arg);
+        void* resource = device.load(arg);
         mpPtclSystem->entryResource(heap, resource, 0);
     }
 
