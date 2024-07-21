@@ -318,7 +318,7 @@ bool PtclMgr::createEmitterSet(nw::eft::Handle* p_handle, const sead::Matrix34f&
 
 const PtclParam* PtclMgr::getParam(EffectID id) const
 {
-    if (id < cEffectID_Num)
+    if (id < cEffectID_NumOriginal)
         return mpParamMgr->getParam(id);
     else
         return nullptr;
