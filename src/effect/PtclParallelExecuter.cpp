@@ -6,7 +6,7 @@
 #include <mc/seadCoreInfo.h>
 #include <prim/seadDelegate.h>
 
-static const s32 cPriority = ThreadUtil::getPriority(ThreadUtil::cSeadPriority_ParallelExecuter);
+static const s32 cPriority = THREAD_PRIORITY(ParallelExecuter);
 static const sead::CoreId cExecuterCore[PtclParallelExecuter::cExecuterNum] = {
     sead::CoreId::cMain,
     sead::CoreId::cSub2
