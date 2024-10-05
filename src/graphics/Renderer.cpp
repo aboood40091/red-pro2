@@ -7,7 +7,6 @@
 #include <map/BgRenderer.h>
 #include <map/LayerID.h>
 #include <map/UnitID.h>
-#include <utility/Angle.h>
 
 #include <layer/aglRenderer.h>
 
@@ -184,7 +183,7 @@ void Renderer::drawActorBgUnit(UnitID unit, const sead::Vector3f& pos, Angle ang
                   : cLayerID_Layer0_Actor)),
         unit,
         pos,
-        sead::Vector3u(0, 0, angle),
+        Angle3(0, 0, angle),
         scale
     );
 }
@@ -195,7 +194,7 @@ void Renderer::drawActorBgUnitLayer0(UnitID unit, const sead::Vector3f& pos, Ang
         cLayerID_Layer0_Actor,
         unit,
         pos,
-        sead::Vector3u(0, 0, angle),
+        Angle3(0, 0, angle),
         scale
     );
 }
