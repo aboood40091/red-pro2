@@ -1,5 +1,5 @@
 #include <graphics/LayerMgr.h>
-#include <input/SeadControllerMgr.h>
+#include <input/SysControllerMgr.h>
 #include <sound/SndSceneMgr.h>
 #include <system/ApplicationFramework.h>
 #include <system/CommentMgr.h>
@@ -211,7 +211,7 @@ void ApplicationFramework::swapBuffer_()
 
         setDimEnable(true);
 
-        SeadControllerMgr::instance()->enterHBM();
+        SysControllerMgr::instance()->enterHBM();
 
         ProcUIDrawDoneRelease();
 
@@ -260,7 +260,7 @@ void ApplicationFramework::swapBuffer_()
                 SndSceneMgr::instance()->exitHBM();
 
             {
-                SeadControllerMgr::instance()->exitHBM();
+                SysControllerMgr::instance()->exitHBM();
 
                 for (s32 i = 0; i < 4; i++)
                     KPADDisableDPD(i);
