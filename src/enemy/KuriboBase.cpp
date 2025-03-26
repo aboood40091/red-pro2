@@ -1,0 +1,28 @@
+#include <enemy/KuriboBase.h>
+
+KuriboBase::KuriboBase(const ActorCreateParam& param)
+    : Enemy(param)
+    , mpModelResource(nullptr)
+    , mpBlendModel(nullptr)
+    , mpTexAnim(nullptr)
+    , mCalcRatio(11)
+    , mpParentMiddleKuribo(nullptr)
+    , mWalkAnmRate(1.0f)
+    , mZOffset(0.0f)
+    , _1a00(1.0f)
+    , _1a04(0)
+    , _1a08(1)
+    , _1a09(0)
+    , mAllowDrcTouchInAir(false)
+    , _1a0b(0)
+    , _1a0c(0)
+    , mIsKakibo(false)
+    , mType(0)
+    , _1a0f(0)
+    , _1a10(0)
+    , _1a14(0.0f)
+    , mEatData(mActorUniqueID)
+    , mChibiYoshiEatData(mActorUniqueID)
+    , mScaler(this)
+{
+}
