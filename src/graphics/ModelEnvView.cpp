@@ -9,7 +9,7 @@ const ModelEnvView::Member ModelEnvView::cMember[] = {
     { agl::UniformBlock::cType_vec3,    cFogMax },      // vec3     cFogColor[ FOG_MAX ];
     { agl::UniformBlock::cType_float,   cFogMax },      // float    cFogStart[ FOG_MAX ];
     { agl::UniformBlock::cType_float,   cFogMax },      // float    cFogStartEndInv[ FOG_MAX ];
-    { agl::UniformBlock::cType_vec4,    4 },            // vec4     cDepthShadow [ 4 ];
-    { agl::UniformBlock::cType_vec3,    cFogMax },      // vec3     ??? [ FOG_MAX ];                    (Name in shader unknown, but it's set to agl::env::Fog::mDirection)
-    { agl::UniformBlock::cType_vec4,    4 },            // vec4     ??? [ 4 ];                          (Name in shader unknown, but it's set to agl::env::Projector::mProjectionViewMatrix)
+    { agl::UniformBlock::cType_vec4,    4 },            // vec4     cShadowMtx[ 4 ];
+    { agl::UniformBlock::cType_vec3,    cFogMax },      // vec3     cFogDir[ FOG_MAX ];
+    { agl::UniformBlock::cType_vec4,    4 },            // vec4     cTexProjMtx[ 4 ];
 };
