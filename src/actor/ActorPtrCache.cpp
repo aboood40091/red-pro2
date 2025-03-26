@@ -18,19 +18,19 @@ ActorPtrCache::iterator ActorPtrCache::find(ActorFindFunc* io_find_func, iterato
         return getActorEnd();
     }
 
-    iterator it_actor = it_start;
+    iterator it = it_start;
 
-    for (; it_actor != getActorEnd(); ++it_actor)
+    for (; it != getActorEnd(); ++it)
     {
-        if (*it_actor == nullptr)
+        if (*it == nullptr)
         {
-            // SEAD_ASSERT_MSG(false, "it must be valid(%08x).", uintptr(*it_actor));
+            // SEAD_ASSERT_MSG(false, "it must be valid(%08x).", uintptr(*it));
             continue;
         }
 
-        if (!(*it_actor)->isDeleted() && (*io_find_func)(**it_actor))
+        if (!(*it)->isDeleted() && (*io_find_func)(**it))
             break;
     }
 
-    return it_actor;
+    return it;
 }
