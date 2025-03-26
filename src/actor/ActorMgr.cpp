@@ -4,7 +4,7 @@
 #include <actor/ProfileID.h>
 #include <item/ItemBase.h>
 #include <player/ChibiYoshi.h>
-#include <player/YoshiObject.h>
+#include <player/Yoshi.h>
 
 #include <heap/seadFrameHeap.h>
 #include <heap/seadUnitHeap.h>
@@ -281,7 +281,7 @@ void RequestDeleteNotPlayerYoshiItem(ActorBase* p_actor, u32)
 
     if (p_actor->getProfileID() == ProfileID::cYoshi)
     {
-        YoshiObject* p_yoshi = sead::DynamicCast<YoshiObject>(p_actor);
+        Yoshi* p_yoshi = sead::DynamicCast<Yoshi>(p_actor);
         if (p_yoshi != nullptr && p_yoshi->getPlayerNo() != -1)
             return;
     }

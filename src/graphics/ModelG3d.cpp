@@ -566,7 +566,7 @@ void ModelG3d::applyBlendWeight_(s32 shape_index)
     for (s32 idx_attrib = 0; idx_attrib < p_shape->GetTargetAttribCount(); idx_attrib++)
     {
         const nw::g3d::res::ResKeyShape* p_base_res_key_shape = p_shape->GetResKeyShape(0);
-        const nw::g3d::res::ResVtxAttrib* p_base_res_vtx_attrib = p_shape->GetResVtxAttrib(p_base_res_key_shape->ref().targetAttribIndices[idx_attrib]);
+        const nw::g3d::res::ResVtxAttrib* p_base_res_vtx_attrib = p_shape->GetResVtxAttrib(p_base_res_key_shape->ref().targetAttribIndex[idx_attrib]);
 
         if (p_base_res_vtx_attrib->GetFormat() != GX2_ATTRIB_FORMAT_32_32_32_FLOAT)
             return;
@@ -577,7 +577,7 @@ void ModelG3d::applyBlendWeight_(s32 shape_index)
         for (s32 idx_key_shape = 0; idx_key_shape < num_key_shape; idx_key_shape++)
         {
             const nw::g3d::res::ResKeyShape* p_res_key_shape = p_shape->GetResKeyShape(idx_key_shape);
-            const nw::g3d::res::ResVtxAttrib* p_res_vtx_attrib = p_shape->GetResVtxAttrib(p_res_key_shape->ref().targetAttribIndices[idx_attrib]);
+            const nw::g3d::res::ResVtxAttrib* p_res_vtx_attrib = p_shape->GetResVtxAttrib(p_res_key_shape->ref().targetAttribIndex[idx_attrib]);
 
             const nw::g3d::fnd::GfxBuffer& buffer = p_shape->GetVertexBuffer(p_res_vtx_attrib->GetBufferIndex());
             v_data_array[idx_key_shape] = static_cast<const u8*>(buffer.GetData()) + p_res_vtx_attrib->GetOffset();

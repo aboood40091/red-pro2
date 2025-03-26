@@ -52,7 +52,7 @@ enum DrawPriority
     cDrawPriority_IceBallPakkun                             =  13,
     cDrawPriority_FireBallPlayer                            =  14,
     cDrawPriority_FireBallPakkun                            =  15,
-    cDrawPriority_1DE                                       =  16,
+    cDrawPriority_YoshiFire                                 =  16,
     cDrawPriority_1DF                                       =  17,
     cDrawPriority_1E0                                       =  18,
     cDrawPriority_1E1                                       =  19,
@@ -123,7 +123,7 @@ enum DrawPriority
     cDrawPriority_091                                       =  84,
     cDrawPriority_092                                       =  85,
     cDrawPriority_1FF                                       =  86,
-    cDrawPriority_200                                       =  87,
+    cDrawPriority_Nokonoko                                  =  87,
     cDrawPriority_201                                       =  88,
     cDrawPriority_202                                       =  89,
     cDrawPriority_203                                       =  90,
@@ -137,7 +137,7 @@ enum DrawPriority
     cDrawPriority_209                                       =  98,
     cDrawPriority_20A                                       =  99,
     cDrawPriority_20B                                       = 100,
-    cDrawPriority_20C                                       = 101,
+    cDrawPriority_MechaKoopa                                = 101,
     cDrawPriority_20D                                       = 102,
     cDrawPriority_20E                                       = 103,
     cDrawPriority_16A                                       = 104,
@@ -177,7 +177,7 @@ enum DrawPriority
     cDrawPriority_22D                                       = 138,
     cDrawPriority_FireBallKeronpa                           = 139,
     cDrawPriority_FireBallKeronpaRDash                      = 140,
-    cDrawPriority_231                                       = 141,
+    cDrawPriority_FireSnake                                 = 141,
     cDrawPriority_27D                                       = 142,
     cDrawPriority_27E                                       = 143,
     cDrawPriority_27F                                       = 144,
@@ -199,7 +199,7 @@ enum DrawPriority
     cDrawPriority_23B                                       = 160,
     cDrawPriority_23C                                       = 161,
     cDrawPriority_23D                                       = 162,
-    cDrawPriority_23E                                       = 163,
+    cDrawPriority_Kazandan                                  = 163,
     cDrawPriority_Bun                                       = 164,
     cDrawPriority_BunW2                                     = 165,
     cDrawPriority_BunW3                                     = 166,
@@ -390,7 +390,7 @@ enum DrawPriority
     cDrawPriority_301                                       = 351,
     cDrawPriority_121                                       = 352,
     cDrawPriority_122                                       = 353,
-    cDrawPriority_123                                       = 354,
+    cDrawPriority_ActorBlockRenga                           = 354,
     cDrawPriority_124                                       = 355,
     cDrawPriority_125                                       = 356,
     cDrawPriority_126                                       = 357,
@@ -430,7 +430,7 @@ enum DrawPriority
     cDrawPriority_142                                       = 391,
     cDrawPriority_143                                       = 392,
     cDrawPriority_14B                                       = 393,
-    cDrawPriority_18B                                       = 394,
+    cDrawPriority_ActorCoin                                 = 394,
     cDrawPriority_18C                                       = 395,
     cDrawPriority_18D                                       = 396,
     cDrawPriority_18E                                       = 397,
@@ -461,7 +461,7 @@ enum DrawPriority
     cDrawPriority_1A6                                       = 422,
     cDrawPriority_1A7                                       = 423,
     cDrawPriority_1A8                                       = 424,
-    cDrawPriority_1A9                                       = 425,
+    cDrawPriority_BlueCoin                                  = 425,
     cDrawPriority_264                                       = 426,
     cDrawPriority_1F9                                       = 427,
     cDrawPriority_1FA                                       = 428,
@@ -476,17 +476,17 @@ enum DrawPriority
     cDrawPriority_0C5                                       = 437,
     cDrawPriority_0C6                                       = 438,
     cDrawPriority_265                                       = 439,
-    cDrawPriority_065                                       = 440,
-    cDrawPriority_066                                       = 441,
-    cDrawPriority_067                                       = 442,
-    cDrawPriority_068                                       = 443,
-    cDrawPriority_069                                       = 444,
-    cDrawPriority_06A                                       = 445,
-    cDrawPriority_06B                                       = 446,
-    cDrawPriority_06C                                       = 447,
-    cDrawPriority_06D                                       = 448,
-    cDrawPriority_06E                                       = 449,
-    cDrawPriority_06F                                       = 450,
+    cDrawPriority_KillerHoudai                              = 440,
+    cDrawPriority_StretchKillerHoudai                       = 441,
+    cDrawPriority_MagnumKillerHoudai                        = 442,
+    cDrawPriority_MagnumKillerHoudaiDown                    = 443,
+    cDrawPriority_SearchKillerHoudai                        = 444,
+    cDrawPriority_SearchMagnumKillerHoudai                  = 445,
+    cDrawPriority_SearchMagnumKillerHoudaiDown              = 446,
+    cDrawPriority_MagnumKillerHoudaiRDash                   = 447,
+    cDrawPriority_MagnumKillerHoudaiDownRDash               = 448,
+    cDrawPriority_SearchMagnumKillerHoudaiRDash             = 449,
+    cDrawPriority_SearchMagnumKillerHoudaiDownRDash         = 450,
     cDrawPriority_070                                       = 451,
     cDrawPriority_071                                       = 452,
     cDrawPriority_072                                       = 453,
@@ -496,16 +496,16 @@ enum DrawPriority
     cDrawPriority_075                                       = 457,
     cDrawPriority_274                                       = 458,
     cDrawPriority_275                                       = 459,
-    cDrawPriority_276                                       = 460,
+    cDrawPriority_SearchKiller                              = 460,
     cDrawPriority_277                                       = 461,
     cDrawPriority_278                                       = 462,
     cDrawPriority_279                                       = 463,
     cDrawPriority_27B                                       = 464,
     cDrawPriority_27C                                       = 465,
-    cDrawPriority_158                                       = 466,
-    cDrawPriority_159                                       = 467,
-    cDrawPriority_15A                                       = 468,
-    cDrawPriority_15B                                       = 469,
+    cDrawPriority_SwitchHatenaButton                        = 466,
+    cDrawPriority_SwitchPbutton                             = 467,
+    cDrawPriority_SwitchPbuttonRDash                        = 468,
+    cDrawPriority_SwitchPbuttonNoWallKick                   = 469,
     cDrawPriority_15C                                       = 470,
     cDrawPriority_15D                                       = 471,
     cDrawPriority_313                                       = 472,
@@ -539,8 +539,8 @@ enum DrawPriority
     cDrawPriority_07D                                       = 500,
     cDrawPriority_07E                                       = 501,
     cDrawPriority_07F                                       = 502,
-    cDrawPriority_080                                       = 503,
-    cDrawPriority_28A                                       = 504,
+    cDrawPriority_YoganIntermittent                         = 503,
+    cDrawPriority_Woochan                                   = 504,
     cDrawPriority_268                                       = 505,
     cDrawPriority_Spanner                                   = 506,
     cDrawPriority_26A                                       = 507,
@@ -659,10 +659,10 @@ enum DrawPriority
     cDrawPriority_0CD                                       = 620,
     cDrawPriority_0CE                                       = 621,
     cDrawPriority_0CF                                       = 622,
-    cDrawPriority_28E                                       = 623,
-    cDrawPriority_28F                                       = 624,
-    cDrawPriority_290                                       = 625,
-    cDrawPriority_291                                       = 626,
+    cDrawPriority_Bubble                                    = 623,
+    cDrawPriority_BubbleSync                                = 624,
+    cDrawPriority_BubbleRDash                               = 625,
+    cDrawPriority_BubbleSyncRDash                           = 626,
     cDrawPriority_292                                       = 627,
     cDrawPriority_293                                       = 628,
     cDrawPriority_294                                       = 629,
@@ -1055,17 +1055,17 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_062,                                      // ProfileID::c062
     cDrawPriority_063,                                      // ProfileID::c063
     cDrawPriority_064,                                      // ProfileID::c064
-    cDrawPriority_065,                                      // ProfileID::c065
-    cDrawPriority_066,                                      // ProfileID::c066
-    cDrawPriority_067,                                      // ProfileID::c067
-    cDrawPriority_068,                                      // ProfileID::c068
-    cDrawPriority_069,                                      // ProfileID::c069
-    cDrawPriority_06A,                                      // ProfileID::c06A
-    cDrawPriority_06B,                                      // ProfileID::c06B
-    cDrawPriority_06C,                                      // ProfileID::c06C
-    cDrawPriority_06D,                                      // ProfileID::c06D
-    cDrawPriority_06E,                                      // ProfileID::c06E
-    cDrawPriority_06F,                                      // ProfileID::c06F
+    cDrawPriority_KillerHoudai,                             // ProfileID::cKillerHoudai
+    cDrawPriority_StretchKillerHoudai,                      // ProfileID::cStretchKillerHoudai
+    cDrawPriority_MagnumKillerHoudai,                       // ProfileID::cMagnumKillerHoudai
+    cDrawPriority_MagnumKillerHoudaiDown,                   // ProfileID::cMagnumKillerHoudaiDown
+    cDrawPriority_SearchKillerHoudai,                       // ProfileID::cSearchKillerHoudai
+    cDrawPriority_SearchMagnumKillerHoudai,                 // ProfileID::cSearchMagnumKillerHoudai
+    cDrawPriority_SearchMagnumKillerHoudaiDown,             // ProfileID::cSearchMagnumKillerHoudaiDown
+    cDrawPriority_MagnumKillerHoudaiRDash,                  // ProfileID::cMagnumKillerHoudaiRDash
+    cDrawPriority_MagnumKillerHoudaiDownRDash,              // ProfileID::cMagnumKillerHoudaiDownRDash
+    cDrawPriority_SearchMagnumKillerHoudaiRDash,            // ProfileID::cSearchMagnumKillerHoudaiRDash
+    cDrawPriority_SearchMagnumKillerHoudaiDownRDash,        // ProfileID::cSearchMagnumKillerHoudaiDownRDash
     cDrawPriority_070,                                      // ProfileID::c070
     cDrawPriority_071,                                      // ProfileID::c071
     cDrawPriority_072,                                      // ProfileID::c072
@@ -1082,7 +1082,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_07D,                                      // ProfileID::c07D
     cDrawPriority_07E,                                      // ProfileID::c07E
     cDrawPriority_07F,                                      // ProfileID::c07F
-    cDrawPriority_080,                                      // ProfileID::c080
+    cDrawPriority_YoganIntermittent,                        // ProfileID::cYoganIntermittent
     cDrawPriority_081,                                      // ProfileID::c081
     cDrawPriority_082,                                      // ProfileID::c082
     cDrawPriority_083,                                      // ProfileID::c083
@@ -1245,7 +1245,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_120,                                      // ProfileID::c120
     cDrawPriority_121,                                      // ProfileID::c121
     cDrawPriority_122,                                      // ProfileID::c122
-    cDrawPriority_123,                                      // ProfileID::c123
+    cDrawPriority_ActorBlockRenga,                          // ProfileID::cActorBlockRenga
     cDrawPriority_124,                                      // ProfileID::c124
     cDrawPriority_125,                                      // ProfileID::c125
     cDrawPriority_126,                                      // ProfileID::c126
@@ -1298,10 +1298,10 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_155,                                      // ProfileID::c155
     cDrawPriority_156,                                      // ProfileID::c156
     cDrawPriority_157,                                      // ProfileID::c157
-    cDrawPriority_158,                                      // ProfileID::c158
-    cDrawPriority_159,                                      // ProfileID::c159
-    cDrawPriority_15A,                                      // ProfileID::c15A
-    cDrawPriority_15B,                                      // ProfileID::c15B
+    cDrawPriority_SwitchHatenaButton,                       // ProfileID::cSwitchHatenaButton
+    cDrawPriority_SwitchPbutton,                            // ProfileID::cSwitchPbutton
+    cDrawPriority_SwitchPbuttonRDash,                       // ProfileID::cSwitchPbuttonRDash
+    cDrawPriority_SwitchPbuttonNoWallKick,                  // ProfileID::cSwitchPbuttonNoWallKick
     cDrawPriority_15C,                                      // ProfileID::c15C
     cDrawPriority_15D,                                      // ProfileID::c15D
     cDrawPriority_15E,                                      // ProfileID::c15E
@@ -1349,7 +1349,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_188,                                      // ProfileID::c188
     cDrawPriority_189,                                      // ProfileID::c189
     cDrawPriority_18A,                                      // ProfileID::c18A
-    cDrawPriority_18B,                                      // ProfileID::c18B
+    cDrawPriority_ActorCoin,                                // ProfileID::cActorCoin
     cDrawPriority_18C,                                      // ProfileID::c18C
     cDrawPriority_18D,                                      // ProfileID::c18D
     cDrawPriority_18E,                                      // ProfileID::c18E
@@ -1379,7 +1379,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_1A6,                                      // ProfileID::c1A6
     cDrawPriority_1A7,                                      // ProfileID::c1A7
     cDrawPriority_1A8,                                      // ProfileID::c1A8
-    cDrawPriority_1A9,                                      // ProfileID::c1A9
+    cDrawPriority_BlueCoin,                                 // ProfileID::cBlueCoin
     cDrawPriority_1AA,                                      // ProfileID::c1AA
     cDrawPriority_1AB,                                      // ProfileID::c1AB
     cDrawPriority_1AC,                                      // ProfileID::c1AC
@@ -1432,7 +1432,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_IceBallPakkun,                            // ProfileID::cIceBallPakkun
     cDrawPriority_FireBallPlayer,                           // ProfileID::cFireBallPlayer
     cDrawPriority_FireBallPakkun,                           // ProfileID::cFireBallPakkun
-    cDrawPriority_1DE,                                      // ProfileID::c1DE
+    cDrawPriority_YoshiFire,                                // ProfileID::cYoshiFire
     cDrawPriority_1DF,                                      // ProfileID::c1DF
     cDrawPriority_1E0,                                      // ProfileID::c1E0
     cDrawPriority_1E1,                                      // ProfileID::c1E1
@@ -1466,7 +1466,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_1FD,                                      // ProfileID::c1FD
     cDrawPriority_1FE,                                      // ProfileID::c1FE
     cDrawPriority_1FF,                                      // ProfileID::c1FF
-    cDrawPriority_200,                                      // ProfileID::c200
+    cDrawPriority_Nokonoko,                                 // ProfileID::cNokonoko
     cDrawPriority_201,                                      // ProfileID::c201
     cDrawPriority_202,                                      // ProfileID::c202
     cDrawPriority_203,                                      // ProfileID::c203
@@ -1478,7 +1478,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_209,                                      // ProfileID::c209
     cDrawPriority_20A,                                      // ProfileID::c20A
     cDrawPriority_20B,                                      // ProfileID::c20B
-    cDrawPriority_20C,                                      // ProfileID::c20C
+    cDrawPriority_MechaKoopa,                               // ProfileID::cMechaKoopa
     cDrawPriority_20D,                                      // ProfileID::c20D
     cDrawPriority_20E,                                      // ProfileID::c20E
     cDrawPriority_20F,                                      // ProfileID::c20F
@@ -1515,7 +1515,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_FireBallKeronpa,                          // ProfileID::cFireBallKeronpa
     cDrawPriority_FireBallKeronpaRDash,                     // ProfileID::cFireBallKeronpaRDash
     cDrawPriority_230,                                      // ProfileID::c230
-    cDrawPriority_231,                                      // ProfileID::c231
+    cDrawPriority_FireSnake,                                // ProfileID::cFireSnake
     cDrawPriority_232,                                      // ProfileID::c232
     cDrawPriority_233,                                      // ProfileID::c233
     cDrawPriority_234,                                      // ProfileID::c234
@@ -1528,7 +1528,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_23B,                                      // ProfileID::c23B
     cDrawPriority_23C,                                      // ProfileID::c23C
     cDrawPriority_23D,                                      // ProfileID::c23D
-    cDrawPriority_23E,                                      // ProfileID::c23E
+    cDrawPriority_Kazandan,                                 // ProfileID::cKazandan
     cDrawPriority_23F,                                      // ProfileID::c23F
     cDrawPriority_240,                                      // ProfileID::c240
     cDrawPriority_241,                                      // ProfileID::c241
@@ -1584,7 +1584,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_273,                                      // ProfileID::c273
     cDrawPriority_274,                                      // ProfileID::c274
     cDrawPriority_275,                                      // ProfileID::c275
-    cDrawPriority_276,                                      // ProfileID::c276
+    cDrawPriority_SearchKiller,                             // ProfileID::cSearchKiller
     cDrawPriority_277,                                      // ProfileID::c277
     cDrawPriority_278,                                      // ProfileID::c278
     cDrawPriority_279,                                      // ProfileID::c279
@@ -1604,14 +1604,14 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_287,                                      // ProfileID::c287
     cDrawPriority_288,                                      // ProfileID::c288
     cDrawPriority_289,                                      // ProfileID::c289
-    cDrawPriority_28A,                                      // ProfileID::c28A
+    cDrawPriority_Woochan,                                  // ProfileID::cWoochan
     cDrawPriority_28B,                                      // ProfileID::c28B
     cDrawPriority_28C,                                      // ProfileID::c28C
     cDrawPriority_28D,                                      // ProfileID::c28D
-    cDrawPriority_28E,                                      // ProfileID::c28E
-    cDrawPriority_28F,                                      // ProfileID::c28F
-    cDrawPriority_290,                                      // ProfileID::c290
-    cDrawPriority_291,                                      // ProfileID::c291
+    cDrawPriority_Bubble,                                   // ProfileID::cBubble
+    cDrawPriority_BubbleSync,                               // ProfileID::cBubbleSync
+    cDrawPriority_BubbleRDash,                              // ProfileID::cBubbleRDash
+    cDrawPriority_BubbleSyncRDash,                          // ProfileID::cBubbleSyncRDash
     cDrawPriority_292,                                      // ProfileID::c292
     cDrawPriority_293,                                      // ProfileID::c293
     cDrawPriority_294,                                      // ProfileID::c294
@@ -1973,17 +1973,17 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c062
     Profile::cResType_Course,       // ProfileID::c063
     Profile::cResType_Course,       // ProfileID::c064
-    Profile::cResType_Course,       // ProfileID::c065
-    Profile::cResType_Course,       // ProfileID::c066
-    Profile::cResType_Course,       // ProfileID::c067
-    Profile::cResType_Course,       // ProfileID::c068
-    Profile::cResType_Course,       // ProfileID::c069
-    Profile::cResType_Course,       // ProfileID::c06A
-    Profile::cResType_Course,       // ProfileID::c06B
-    Profile::cResType_Course,       // ProfileID::c06C
-    Profile::cResType_Course,       // ProfileID::c06D
-    Profile::cResType_Course,       // ProfileID::c06E
-    Profile::cResType_Course,       // ProfileID::c06F
+    Profile::cResType_Course,       // ProfileID::cKillerHoudai
+    Profile::cResType_Course,       // ProfileID::cStretchKillerHoudai
+    Profile::cResType_Course,       // ProfileID::cMagnumKillerHoudai
+    Profile::cResType_Course,       // ProfileID::cMagnumKillerHoudaiDown
+    Profile::cResType_Course,       // ProfileID::cSearchKillerHoudai
+    Profile::cResType_Course,       // ProfileID::cSearchMagnumKillerHoudai
+    Profile::cResType_Course,       // ProfileID::cSearchMagnumKillerHoudaiDown
+    Profile::cResType_Course,       // ProfileID::cMagnumKillerHoudaiRDash
+    Profile::cResType_Course,       // ProfileID::cMagnumKillerHoudaiDownRDash
+    Profile::cResType_Course,       // ProfileID::cSearchMagnumKillerHoudaiRDash
+    Profile::cResType_Course,       // ProfileID::cSearchMagnumKillerHoudaiDownRDash
     Profile::cResType_Course,       // ProfileID::c070
     Profile::cResType_Course,       // ProfileID::c071
     Profile::cResType_Course,       // ProfileID::c072
@@ -2000,7 +2000,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c07D
     Profile::cResType_Course,       // ProfileID::c07E
     Profile::cResType_Course,       // ProfileID::c07F
-    Profile::cResType_Course,       // ProfileID::c080
+    Profile::cResType_Course,       // ProfileID::cYoganIntermittent
     Profile::cResType_Course,       // ProfileID::c081
     Profile::cResType_Course,       // ProfileID::c082
     Profile::cResType_Course,       // ProfileID::c083
@@ -2163,7 +2163,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c120
     Profile::cResType_Boot,         // ProfileID::c121
     Profile::cResType_Boot,         // ProfileID::c122
-    Profile::cResType_Boot,         // ProfileID::c123
+    Profile::cResType_Boot,         // ProfileID::cActorBlockRenga
     Profile::cResType_Boot,         // ProfileID::c124
     Profile::cResType_Boot,         // ProfileID::c125
     Profile::cResType_Boot,         // ProfileID::c126
@@ -2216,10 +2216,10 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c155
     Profile::cResType_Course,       // ProfileID::c156
     Profile::cResType_Course,       // ProfileID::c157
-    Profile::cResType_Course,       // ProfileID::c158
-    Profile::cResType_Course,       // ProfileID::c159
-    Profile::cResType_Course,       // ProfileID::c15A
-    Profile::cResType_Course,       // ProfileID::c15B
+    Profile::cResType_Course,       // ProfileID::cSwitchHatenaButton
+    Profile::cResType_Course,       // ProfileID::cSwitchPbutton
+    Profile::cResType_Course,       // ProfileID::cSwitchPbuttonRDash
+    Profile::cResType_Course,       // ProfileID::cSwitchPbuttonNoWallKick
     Profile::cResType_Course,       // ProfileID::c15C
     Profile::cResType_Course,       // ProfileID::c15D
     Profile::cResType_Course,       // ProfileID::c15E
@@ -2267,7 +2267,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c188
     Profile::cResType_Boot,         // ProfileID::c189
     Profile::cResType_Boot,         // ProfileID::c18A
-    Profile::cResType_Boot,         // ProfileID::c18B
+    Profile::cResType_Boot,         // ProfileID::cActorCoin
     Profile::cResType_Boot,         // ProfileID::c18C
     Profile::cResType_Course,       // ProfileID::c18D
     Profile::cResType_Boot,         // ProfileID::c18E
@@ -2297,7 +2297,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c1A6
     Profile::cResType_Boot,         // ProfileID::c1A7
     Profile::cResType_Boot,         // ProfileID::c1A8
-    Profile::cResType_Boot,         // ProfileID::c1A9
+    Profile::cResType_Boot,         // ProfileID::cBlueCoin
     Profile::cResType_Course,       // ProfileID::c1AA
     Profile::cResType_Course,       // ProfileID::c1AB
     Profile::cResType_Course,       // ProfileID::c1AC
@@ -2350,7 +2350,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::cIceBallPakkun
     Profile::cResType_Boot,         // ProfileID::cFireBallPlayer
     Profile::cResType_Boot,         // ProfileID::cFireBallPakkun
-    Profile::cResType_Boot,         // ProfileID::c1DE
+    Profile::cResType_Boot,         // ProfileID::cYoshiFire
     Profile::cResType_Course,       // ProfileID::c1DF
     Profile::cResType_Course,       // ProfileID::c1E0
     Profile::cResType_Course,       // ProfileID::c1E1
@@ -2384,7 +2384,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c1FD
     Profile::cResType_Course,       // ProfileID::c1FE
     Profile::cResType_Boot,         // ProfileID::c1FF
-    Profile::cResType_Course,       // ProfileID::c200
+    Profile::cResType_Course,       // ProfileID::cNokonoko
     Profile::cResType_Course,       // ProfileID::c201
     Profile::cResType_Course,       // ProfileID::c202
     Profile::cResType_Course,       // ProfileID::c203
@@ -2396,7 +2396,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c209
     Profile::cResType_Course,       // ProfileID::c20A
     Profile::cResType_Course,       // ProfileID::c20B
-    Profile::cResType_Course,       // ProfileID::c20C
+    Profile::cResType_Course,       // ProfileID::cMechaKoopa
     Profile::cResType_Course,       // ProfileID::c20D
     Profile::cResType_Course,       // ProfileID::c20E
     Profile::cResType_Course,       // ProfileID::c20F
@@ -2433,7 +2433,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::cFireBallKeronpa
     Profile::cResType_Course,       // ProfileID::cFireBallKeronpaRDash
     Profile::cResType_Course,       // ProfileID::c230
-    Profile::cResType_Course,       // ProfileID::c231
+    Profile::cResType_Course,       // ProfileID::cFireSnake
     Profile::cResType_Course,       // ProfileID::c232
     Profile::cResType_Course,       // ProfileID::c233
     Profile::cResType_Course,       // ProfileID::c234
@@ -2446,7 +2446,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c23B
     Profile::cResType_Course,       // ProfileID::c23C
     Profile::cResType_Course,       // ProfileID::c23D
-    Profile::cResType_Course,       // ProfileID::c23E
+    Profile::cResType_Course,       // ProfileID::cKazandan
     Profile::cResType_Boot,         // ProfileID::c23F
     Profile::cResType_Boot,         // ProfileID::c240
     Profile::cResType_Boot,         // ProfileID::c241
@@ -2502,7 +2502,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c273
     Profile::cResType_Boot,         // ProfileID::c274
     Profile::cResType_Boot,         // ProfileID::c275
-    Profile::cResType_Boot,         // ProfileID::c276
+    Profile::cResType_Boot,         // ProfileID::cSearchKiller
     Profile::cResType_Boot,         // ProfileID::c277
     Profile::cResType_Course,       // ProfileID::c278
     Profile::cResType_Course,       // ProfileID::c279
@@ -2522,14 +2522,14 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c287
     Profile::cResType_Course,       // ProfileID::c288
     Profile::cResType_Course,       // ProfileID::c289
-    Profile::cResType_Course,       // ProfileID::c28A
+    Profile::cResType_Course,       // ProfileID::cWoochan
     Profile::cResType_Course,       // ProfileID::c28B
     Profile::cResType_Course,       // ProfileID::c28C
     Profile::cResType_Course,       // ProfileID::c28D
-    Profile::cResType_Course,       // ProfileID::c28E
-    Profile::cResType_Course,       // ProfileID::c28F
-    Profile::cResType_Course,       // ProfileID::c290
-    Profile::cResType_Course,       // ProfileID::c291
+    Profile::cResType_Course,       // ProfileID::cBubble
+    Profile::cResType_Course,       // ProfileID::cBubbleSync
+    Profile::cResType_Course,       // ProfileID::cBubbleRDash
+    Profile::cResType_Course,       // ProfileID::cBubbleSyncRDash
     Profile::cResType_Course,       // ProfileID::c292
     Profile::cResType_Course,       // ProfileID::c293
     Profile::cResType_Course,       // ProfileID::c294
@@ -3075,57 +3075,57 @@ static const sead::SafeString cRes_064[]  = {
     "test_lift"
 };
 
-static const sead::SafeString cRes_065[]  = {
+static const sead::SafeString cRes_KillerHoudai[]  = {
     "killer_houdai",
     "killer"
 };
 
-static const sead::SafeString cRes_066[]  = {
+static const sead::SafeString cRes_StretchKillerHoudai[]  = {
     "killer_houdai",
     "killer"
 };
 
-static const sead::SafeString cRes_067[]  = {
+static const sead::SafeString cRes_MagnumKillerHoudai[]  = {
     "killer_mag_houdai",
     "killer_mag"
 };
 
-static const sead::SafeString cRes_068[]  = {
+static const sead::SafeString cRes_MagnumKillerHoudaiDown[]  = {
     "killer_mag_houdai",
     "killer_mag"
 };
 
-static const sead::SafeString cRes_069[]  = {
+static const sead::SafeString cRes_SearchKillerHoudai[]  = {
     "killer_houdai",
     "killer"
 };
 
-static const sead::SafeString cRes_06A[]  = {
+static const sead::SafeString cRes_SearchMagnumKillerHoudai[]  = {
     "killer_mag_houdai",
     "killer_mag"
 };
 
-static const sead::SafeString cRes_06B[]  = {
+static const sead::SafeString cRes_SearchMagnumKillerHoudaiDown[]  = {
     "killer_mag_houdai",
     "killer_mag"
 };
 
-static const sead::SafeString cRes_06C[]  = {
+static const sead::SafeString cRes_MagnumKillerHoudaiRDash[]  = {
     "R_killer_mag_houdai",
     "killer_mag"
 };
 
-static const sead::SafeString cRes_06D[]  = {
+static const sead::SafeString cRes_MagnumKillerHoudaiDownRDash[]  = {
     "R_killer_mag_houdai",
     "killer_mag"
 };
 
-static const sead::SafeString cRes_06E[]  = {
+static const sead::SafeString cRes_SearchMagnumKillerHoudaiRDash[]  = {
     "R_killer_mag_houdai",
     "killer_mag"
 };
 
-static const sead::SafeString cRes_06F[]  = {
+static const sead::SafeString cRes_SearchMagnumKillerHoudaiDownRDash[]  = {
     "R_killer_mag_houdai",
     "killer_mag"
 };
@@ -3197,7 +3197,7 @@ static const sead::SafeString cRes_07F[]  = {
     "waterpillar"
 };
 
-static const sead::SafeString cRes_080[]  = {
+static const sead::SafeString cRes_YoganIntermittent[]  = {
     "firepillar"
 };
 
@@ -4016,19 +4016,19 @@ static const sead::SafeString cRes_157[]  = {
     "obj_dokan_kaiga"
 };
 
-static const sead::SafeString cRes_158[]  = {
+static const sead::SafeString cRes_SwitchHatenaButton[]  = {
     "switch"
 };
 
-static const sead::SafeString cRes_159[]  = {
+static const sead::SafeString cRes_SwitchPbutton[]  = {
     "switch"
 };
 
-static const sead::SafeString cRes_15A[]  = {
+static const sead::SafeString cRes_SwitchPbuttonRDash[]  = {
     "switch"
 };
 
-static const sead::SafeString cRes_15B[]  = {
+static const sead::SafeString cRes_SwitchPbuttonNoWallKick[]  = {
     "switch"
 };
 
@@ -4226,7 +4226,7 @@ static const sead::SafeString cRes_18A[]  = {
     "obj_coin"
 };
 
-static const sead::SafeString cRes_18B[]  = {
+static const sead::SafeString cRes_ActorCoin[]  = {
     "obj_coin"
 };
 
@@ -4335,7 +4335,7 @@ static const sead::SafeString cRes_1A8[]  = {
     "obj_coin"
 };
 
-static const sead::SafeString cRes_1A9[]  = {
+static const sead::SafeString cRes_BlueCoin[]  = {
     "obj_coin"
 };
 
@@ -4666,7 +4666,7 @@ static const sead::SafeString cRes_1FE[]  = {
     "hanachan_big"
 };
 
-static const sead::SafeString cRes_200[]  = {
+static const sead::SafeString cRes_Nokonoko[]  = {
     "nokonokoA"
 };
 
@@ -4718,7 +4718,7 @@ static const sead::SafeString cRes_20B[]  = {
     "bombhei"
 };
 
-static const sead::SafeString cRes_20C[]  = {
+static const sead::SafeString cRes_MechaKoopa[]  = {
     "mecha_koopa"
 };
 
@@ -4859,7 +4859,7 @@ static const sead::SafeString cRes_230[]  = {
     "keronpa"
 };
 
-static const sead::SafeString cRes_231[]  = {
+static const sead::SafeString cRes_FireSnake[]  = {
     "fire_snake"
 };
 
@@ -4911,7 +4911,7 @@ static const sead::SafeString cRes_23D[]  = {
     "kazan_rock"
 };
 
-static const sead::SafeString cRes_23E[]  = {
+static const sead::SafeString cRes_Kazandan[]  = {
     "kazan_rock"
 };
 
@@ -5161,7 +5161,7 @@ static const sead::SafeString cRes_289[]  = {
     "karon"
 };
 
-static const sead::SafeString cRes_28A[]  = {
+static const sead::SafeString cRes_Woochan[]  = {
     "woochan"
 };
 
@@ -5177,19 +5177,19 @@ static const sead::SafeString cRes_28D[]  = {
     "chorobon"
 };
 
-static const sead::SafeString cRes_28E[]  = {
+static const sead::SafeString cRes_Bubble[]  = {
     "bubble"
 };
 
-static const sead::SafeString cRes_28F[]  = {
+static const sead::SafeString cRes_BubbleSync[]  = {
     "bubble"
 };
 
-static const sead::SafeString cRes_290[]  = {
+static const sead::SafeString cRes_BubbleRDash[]  = {
     "bubble"
 };
 
-static const sead::SafeString cRes_291[]  = {
+static const sead::SafeString cRes_BubbleSyncRDash[]  = {
     "bubble"
 };
 
@@ -6259,17 +6259,17 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_062),                                        // ProfileID::c062
     GetResNum(cRes_063),                                        // ProfileID::c063
     GetResNum(cRes_064),                                        // ProfileID::c064
-    GetResNum(cRes_065),                                        // ProfileID::c065
-    GetResNum(cRes_066),                                        // ProfileID::c066
-    GetResNum(cRes_067),                                        // ProfileID::c067
-    GetResNum(cRes_068),                                        // ProfileID::c068
-    GetResNum(cRes_069),                                        // ProfileID::c069
-    GetResNum(cRes_06A),                                        // ProfileID::c06A
-    GetResNum(cRes_06B),                                        // ProfileID::c06B
-    GetResNum(cRes_06C),                                        // ProfileID::c06C
-    GetResNum(cRes_06D),                                        // ProfileID::c06D
-    GetResNum(cRes_06E),                                        // ProfileID::c06E
-    GetResNum(cRes_06F),                                        // ProfileID::c06F
+    GetResNum(cRes_KillerHoudai),                               // ProfileID::cKillerHoudai
+    GetResNum(cRes_StretchKillerHoudai),                        // ProfileID::cStretchKillerHoudai
+    GetResNum(cRes_MagnumKillerHoudai),                         // ProfileID::cMagnumKillerHoudai
+    GetResNum(cRes_MagnumKillerHoudaiDown),                     // ProfileID::cMagnumKillerHoudaiDown
+    GetResNum(cRes_SearchKillerHoudai),                         // ProfileID::cSearchKillerHoudai
+    GetResNum(cRes_SearchMagnumKillerHoudai),                   // ProfileID::cSearchMagnumKillerHoudai
+    GetResNum(cRes_SearchMagnumKillerHoudaiDown),               // ProfileID::cSearchMagnumKillerHoudaiDown
+    GetResNum(cRes_MagnumKillerHoudaiRDash),                    // ProfileID::cMagnumKillerHoudaiRDash
+    GetResNum(cRes_MagnumKillerHoudaiDownRDash),                // ProfileID::cMagnumKillerHoudaiDownRDash
+    GetResNum(cRes_SearchMagnumKillerHoudaiRDash),              // ProfileID::cSearchMagnumKillerHoudaiRDash
+    GetResNum(cRes_SearchMagnumKillerHoudaiDownRDash),          // ProfileID::cSearchMagnumKillerHoudaiDownRDash
     GetResNum(cRes_070),                                        // ProfileID::c070
     GetResNum(cRes_071),                                        // ProfileID::c071
     GetResNum(cRes_072),                                        // ProfileID::c072
@@ -6286,7 +6286,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_07D),                                        // ProfileID::c07D
     GetResNum(cRes_07E),                                        // ProfileID::c07E
     GetResNum(cRes_07F),                                        // ProfileID::c07F
-    GetResNum(cRes_080),                                        // ProfileID::c080
+    GetResNum(cRes_YoganIntermittent),                          // ProfileID::cYoganIntermittent
     GetResNum(cRes_081),                                        // ProfileID::c081
     GetResNum(cRes_082),                                        // ProfileID::c082
     GetResNum(cRes_083),                                        // ProfileID::c083
@@ -6449,7 +6449,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                                          // ProfileID::c120
     0,                                                          // ProfileID::c121
     0,                                                          // ProfileID::c122
-    0,                                                          // ProfileID::c123
+    0,                                                          // ProfileID::cActorBlockRenga
     0,                                                          // ProfileID::c124
     0,                                                          // ProfileID::c125
     0,                                                          // ProfileID::c126
@@ -6502,10 +6502,10 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_155),                                        // ProfileID::c155
     GetResNum(cRes_156),                                        // ProfileID::c156
     GetResNum(cRes_157),                                        // ProfileID::c157
-    GetResNum(cRes_158),                                        // ProfileID::c158
-    GetResNum(cRes_159),                                        // ProfileID::c159
-    GetResNum(cRes_15A),                                        // ProfileID::c15A
-    GetResNum(cRes_15B),                                        // ProfileID::c15B
+    GetResNum(cRes_SwitchHatenaButton),                         // ProfileID::cSwitchHatenaButton
+    GetResNum(cRes_SwitchPbutton),                              // ProfileID::cSwitchPbutton
+    GetResNum(cRes_SwitchPbuttonRDash),                         // ProfileID::cSwitchPbuttonRDash
+    GetResNum(cRes_SwitchPbuttonNoWallKick),                    // ProfileID::cSwitchPbuttonNoWallKick
     0,                                                          // ProfileID::c15C
     GetResNum(cRes_15D),                                        // ProfileID::c15D
     GetResNum(cRes_15E),                                        // ProfileID::c15E
@@ -6553,7 +6553,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_188),                                        // ProfileID::c188
     GetResNum(cRes_189),                                        // ProfileID::c189
     GetResNum(cRes_18A),                                        // ProfileID::c18A
-    GetResNum(cRes_18B),                                        // ProfileID::c18B
+    GetResNum(cRes_ActorCoin),                                  // ProfileID::cActorCoin
     GetResNum(cRes_18C),                                        // ProfileID::c18C
     GetResNum(cRes_18D),                                        // ProfileID::c18D
     GetResNum(cRes_18E),                                        // ProfileID::c18E
@@ -6583,7 +6583,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_1A6),                                        // ProfileID::c1A6
     GetResNum(cRes_1A7),                                        // ProfileID::c1A7
     GetResNum(cRes_1A8),                                        // ProfileID::c1A8
-    GetResNum(cRes_1A9),                                        // ProfileID::c1A9
+    GetResNum(cRes_BlueCoin),                                   // ProfileID::cBlueCoin
     GetResNum(cRes_1AA),                                        // ProfileID::c1AA
     GetResNum(cRes_1AB),                                        // ProfileID::c1AB
     GetResNum(cRes_1AC),                                        // ProfileID::c1AC
@@ -6636,7 +6636,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                                          // ProfileID::cIceBallPakkun
     0,                                                          // ProfileID::cFireBallPlayer
     0,                                                          // ProfileID::cFireBallPakkun
-    0,                                                          // ProfileID::c1DE
+    0,                                                          // ProfileID::cYoshiFire
     GetResNum(cRes_1DF),                                        // ProfileID::c1DF
     GetResNum(cRes_1E0),                                        // ProfileID::c1E0
     GetResNum(cRes_1E1),                                        // ProfileID::c1E1
@@ -6670,7 +6670,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_1FD),                                        // ProfileID::c1FD
     GetResNum(cRes_1FE),                                        // ProfileID::c1FE
     0,                                                          // ProfileID::c1FF
-    GetResNum(cRes_200),                                        // ProfileID::c200
+    GetResNum(cRes_Nokonoko),                                   // ProfileID::cNokonoko
     GetResNum(cRes_201),                                        // ProfileID::c201
     GetResNum(cRes_202),                                        // ProfileID::c202
     GetResNum(cRes_203),                                        // ProfileID::c203
@@ -6682,7 +6682,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_209),                                        // ProfileID::c209
     GetResNum(cRes_20A),                                        // ProfileID::c20A
     GetResNum(cRes_20B),                                        // ProfileID::c20B
-    GetResNum(cRes_20C),                                        // ProfileID::c20C
+    GetResNum(cRes_MechaKoopa),                                 // ProfileID::cMechaKoopa
     GetResNum(cRes_20D),                                        // ProfileID::c20D
     GetResNum(cRes_20E),                                        // ProfileID::c20E
     GetResNum(cRes_20F),                                        // ProfileID::c20F
@@ -6719,7 +6719,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                                          // ProfileID::cFireBallKeronpa
     0,                                                          // ProfileID::cFireBallKeronpaRDash
     GetResNum(cRes_230),                                        // ProfileID::c230
-    GetResNum(cRes_231),                                        // ProfileID::c231
+    GetResNum(cRes_FireSnake),                                  // ProfileID::cFireSnake
     GetResNum(cRes_232),                                        // ProfileID::c232
     GetResNum(cRes_233),                                        // ProfileID::c233
     GetResNum(cRes_234),                                        // ProfileID::c234
@@ -6732,7 +6732,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_23B),                                        // ProfileID::c23B
     GetResNum(cRes_23C),                                        // ProfileID::c23C
     GetResNum(cRes_23D),                                        // ProfileID::c23D
-    GetResNum(cRes_23E),                                        // ProfileID::c23E
+    GetResNum(cRes_Kazandan),                                   // ProfileID::cKazandan
     0,                                                          // ProfileID::c23F
     0,                                                          // ProfileID::c240
     0,                                                          // ProfileID::c241
@@ -6788,7 +6788,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                                          // ProfileID::c273
     0,                                                          // ProfileID::c274
     0,                                                          // ProfileID::c275
-    0,                                                          // ProfileID::c276
+    0,                                                          // ProfileID::cSearchKiller
     0,                                                          // ProfileID::c277
     GetResNum(cRes_278),                                        // ProfileID::c278
     GetResNum(cRes_279),                                        // ProfileID::c279
@@ -6808,14 +6808,14 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_287),                                        // ProfileID::c287
     GetResNum(cRes_288),                                        // ProfileID::c288
     GetResNum(cRes_289),                                        // ProfileID::c289
-    GetResNum(cRes_28A),                                        // ProfileID::c28A
+    GetResNum(cRes_Woochan),                                    // ProfileID::cWoochan
     GetResNum(cRes_28B),                                        // ProfileID::c28B
     GetResNum(cRes_28C),                                        // ProfileID::c28C
     GetResNum(cRes_28D),                                        // ProfileID::c28D
-    GetResNum(cRes_28E),                                        // ProfileID::c28E
-    GetResNum(cRes_28F),                                        // ProfileID::c28F
-    GetResNum(cRes_290),                                        // ProfileID::c290
-    GetResNum(cRes_291),                                        // ProfileID::c291
+    GetResNum(cRes_Bubble),                                     // ProfileID::cBubble
+    GetResNum(cRes_BubbleSync),                                 // ProfileID::cBubbleSync
+    GetResNum(cRes_BubbleRDash),                                // ProfileID::cBubbleRDash
+    GetResNum(cRes_BubbleSyncRDash),                            // ProfileID::cBubbleSyncRDash
     GetResNum(cRes_292),                                        // ProfileID::c292
     GetResNum(cRes_293),                                        // ProfileID::c293
     GetResNum(cRes_294),                                        // ProfileID::c294
@@ -7177,17 +7177,17 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_062,                                       // ProfileID::c062
     cRes_063,                                       // ProfileID::c063
     cRes_064,                                       // ProfileID::c064
-    cRes_065,                                       // ProfileID::c065
-    cRes_066,                                       // ProfileID::c066
-    cRes_067,                                       // ProfileID::c067
-    cRes_068,                                       // ProfileID::c068
-    cRes_069,                                       // ProfileID::c069
-    cRes_06A,                                       // ProfileID::c06A
-    cRes_06B,                                       // ProfileID::c06B
-    cRes_06C,                                       // ProfileID::c06C
-    cRes_06D,                                       // ProfileID::c06D
-    cRes_06E,                                       // ProfileID::c06E
-    cRes_06F,                                       // ProfileID::c06F
+    cRes_KillerHoudai,                              // ProfileID::cKillerHoudai
+    cRes_StretchKillerHoudai,                       // ProfileID::cStretchKillerHoudai
+    cRes_MagnumKillerHoudai,                        // ProfileID::cMagnumKillerHoudai
+    cRes_MagnumKillerHoudaiDown,                    // ProfileID::cMagnumKillerHoudaiDown
+    cRes_SearchKillerHoudai,                        // ProfileID::cSearchKillerHoudai
+    cRes_SearchMagnumKillerHoudai,                  // ProfileID::cSearchMagnumKillerHoudai
+    cRes_SearchMagnumKillerHoudaiDown,              // ProfileID::cSearchMagnumKillerHoudaiDown
+    cRes_MagnumKillerHoudaiRDash,                   // ProfileID::cMagnumKillerHoudaiRDash
+    cRes_MagnumKillerHoudaiDownRDash,               // ProfileID::cMagnumKillerHoudaiDownRDash
+    cRes_SearchMagnumKillerHoudaiRDash,             // ProfileID::cSearchMagnumKillerHoudaiRDash
+    cRes_SearchMagnumKillerHoudaiDownRDash,         // ProfileID::cSearchMagnumKillerHoudaiDownRDash
     cRes_070,                                       // ProfileID::c070
     cRes_071,                                       // ProfileID::c071
     cRes_072,                                       // ProfileID::c072
@@ -7204,7 +7204,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_07D,                                       // ProfileID::c07D
     cRes_07E,                                       // ProfileID::c07E
     cRes_07F,                                       // ProfileID::c07F
-    cRes_080,                                       // ProfileID::c080
+    cRes_YoganIntermittent,                         // ProfileID::cYoganIntermittent
     cRes_081,                                       // ProfileID::c081
     cRes_082,                                       // ProfileID::c082
     cRes_083,                                       // ProfileID::c083
@@ -7367,7 +7367,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     nullptr,                                        // ProfileID::c120
     nullptr,                                        // ProfileID::c121
     nullptr,                                        // ProfileID::c122
-    nullptr,                                        // ProfileID::c123
+    nullptr,                                        // ProfileID::cActorBlockRenga
     nullptr,                                        // ProfileID::c124
     nullptr,                                        // ProfileID::c125
     nullptr,                                        // ProfileID::c126
@@ -7420,10 +7420,10 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_155,                                       // ProfileID::c155
     cRes_156,                                       // ProfileID::c156
     cRes_157,                                       // ProfileID::c157
-    cRes_158,                                       // ProfileID::c158
-    cRes_159,                                       // ProfileID::c159
-    cRes_15A,                                       // ProfileID::c15A
-    cRes_15B,                                       // ProfileID::c15B
+    cRes_SwitchHatenaButton,                        // ProfileID::cSwitchHatenaButton
+    cRes_SwitchPbutton,                             // ProfileID::cSwitchPbutton
+    cRes_SwitchPbuttonRDash,                        // ProfileID::cSwitchPbuttonRDash
+    cRes_SwitchPbuttonNoWallKick,                   // ProfileID::cSwitchPbuttonNoWallKick
     nullptr,                                        // ProfileID::c15C
     cRes_15D,                                       // ProfileID::c15D
     cRes_15E,                                       // ProfileID::c15E
@@ -7471,7 +7471,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_188,                                       // ProfileID::c188
     cRes_189,                                       // ProfileID::c189
     cRes_18A,                                       // ProfileID::c18A
-    cRes_18B,                                       // ProfileID::c18B
+    cRes_ActorCoin,                                 // ProfileID::cActorCoin
     cRes_18C,                                       // ProfileID::c18C
     cRes_18D,                                       // ProfileID::c18D
     cRes_18E,                                       // ProfileID::c18E
@@ -7501,7 +7501,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_1A6,                                       // ProfileID::c1A6
     cRes_1A7,                                       // ProfileID::c1A7
     cRes_1A8,                                       // ProfileID::c1A8
-    cRes_1A9,                                       // ProfileID::c1A9
+    cRes_BlueCoin,                                  // ProfileID::cBlueCoin
     cRes_1AA,                                       // ProfileID::c1AA
     cRes_1AB,                                       // ProfileID::c1AB
     cRes_1AC,                                       // ProfileID::c1AC
@@ -7554,7 +7554,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     nullptr,                                        // ProfileID::cIceBallPakkun
     nullptr,                                        // ProfileID::cFireBallPlayer
     nullptr,                                        // ProfileID::cFireBallPakkun
-    nullptr,                                        // ProfileID::c1DE
+    nullptr,                                        // ProfileID::cYoshiFire
     cRes_1DF,                                       // ProfileID::c1DF
     cRes_1E0,                                       // ProfileID::c1E0
     cRes_1E1,                                       // ProfileID::c1E1
@@ -7588,7 +7588,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_1FD,                                       // ProfileID::c1FD
     cRes_1FE,                                       // ProfileID::c1FE
     nullptr,                                        // ProfileID::c1FF
-    cRes_200,                                       // ProfileID::c200
+    cRes_Nokonoko,                                  // ProfileID::cNokonoko
     cRes_201,                                       // ProfileID::c201
     cRes_202,                                       // ProfileID::c202
     cRes_203,                                       // ProfileID::c203
@@ -7600,7 +7600,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_209,                                       // ProfileID::c209
     cRes_20A,                                       // ProfileID::c20A
     cRes_20B,                                       // ProfileID::c20B
-    cRes_20C,                                       // ProfileID::c20C
+    cRes_MechaKoopa,                                // ProfileID::cMechaKoopa
     cRes_20D,                                       // ProfileID::c20D
     cRes_20E,                                       // ProfileID::c20E
     cRes_20F,                                       // ProfileID::c20F
@@ -7637,7 +7637,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     nullptr,                                        // ProfileID::cFireBallKeronpa
     nullptr,                                        // ProfileID::cFireBallKeronpaRDash
     cRes_230,                                       // ProfileID::c230
-    cRes_231,                                       // ProfileID::c231
+    cRes_FireSnake,                                 // ProfileID::cFireSnake
     cRes_232,                                       // ProfileID::c232
     cRes_233,                                       // ProfileID::c233
     cRes_234,                                       // ProfileID::c234
@@ -7650,7 +7650,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_23B,                                       // ProfileID::c23B
     cRes_23C,                                       // ProfileID::c23C
     cRes_23D,                                       // ProfileID::c23D
-    cRes_23E,                                       // ProfileID::c23E
+    cRes_Kazandan,                                  // ProfileID::cKazandan
     nullptr,                                        // ProfileID::c23F
     nullptr,                                        // ProfileID::c240
     nullptr,                                        // ProfileID::c241
@@ -7706,7 +7706,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     nullptr,                                        // ProfileID::c273
     nullptr,                                        // ProfileID::c274
     nullptr,                                        // ProfileID::c275
-    nullptr,                                        // ProfileID::c276
+    nullptr,                                        // ProfileID::cSearchKiller
     nullptr,                                        // ProfileID::c277
     cRes_278,                                       // ProfileID::c278
     cRes_279,                                       // ProfileID::c279
@@ -7726,14 +7726,14 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_287,                                       // ProfileID::c287
     cRes_288,                                       // ProfileID::c288
     cRes_289,                                       // ProfileID::c289
-    cRes_28A,                                       // ProfileID::c28A
+    cRes_Woochan,                                   // ProfileID::cWoochan
     cRes_28B,                                       // ProfileID::c28B
     cRes_28C,                                       // ProfileID::c28C
     cRes_28D,                                       // ProfileID::c28D
-    cRes_28E,                                       // ProfileID::c28E
-    cRes_28F,                                       // ProfileID::c28F
-    cRes_290,                                       // ProfileID::c290
-    cRes_291,                                       // ProfileID::c291
+    cRes_Bubble,                                    // ProfileID::cBubble
+    cRes_BubbleSync,                                // ProfileID::cBubbleSync
+    cRes_BubbleRDash,                               // ProfileID::cBubbleRDash
+    cRes_BubbleSyncRDash,                           // ProfileID::cBubbleSyncRDash
     cRes_292,                                       // ProfileID::c292
     cRes_293,                                       // ProfileID::c293
     cRes_294,                                       // ProfileID::c294

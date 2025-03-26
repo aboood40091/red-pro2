@@ -55,12 +55,12 @@ int RenderMgr::compare_(const RenderObj* a, const RenderObj* b)
     return z > 0;
 }
 
-void RenderMgr::calcView(s32 view_index, const sead::Camera& camera, const sead::Projection& projection, const sead::Matrix44f* param_4, const CullViewFrustum* p_cull, void* param_6)
+void RenderMgr::calcView(s32 view_index, const sead::Camera& camera, const sead::Projection& projection, const sead::Matrix44f* p_depth_shadow_mtx, const CullViewFrustum* p_cull, void* param_6)
 {
     ViewInfo& view_info = getViewInfo(view_index);
     view_info.view_mtx = camera.getViewMatrix();
     view_info.proj_mtx = projection.getDeviceProjectionMatrix();
-    view_info._74 = param_4;
+    view_info.p_depth_shadow_mtx = p_depth_shadow_mtx;
     view_info.p_cull = p_cull;
     view_info._7c = param_6;
 
@@ -89,9 +89,9 @@ void RenderMgr::calcGPU(s32 view_index)
 
     ViewInfo& view_info = getViewInfo(view_index);
 
-    mModelEnvView.setUniformData(view_index, view_info.view_mtx, view_info.proj_mtx, view_info._74, &mEnvObjMgr.getEnvObjSet(), view_info._7c);
+    mModelEnvView.setUniformData(view_index, view_info.view_mtx, view_info.proj_mtx, view_info.p_depth_shadow_mtx, &mEnvObjMgr.getEnvObjSet(), view_info._7c);
 
-    view_info._74 = nullptr;
+    view_info.p_depth_shadow_mtx = nullptr;
 
     for (sead::PtrArray<RenderObj>::iterator itr = mRenderObj.begin(), itr_end = mRenderObj.end(); itr != itr_end; ++itr)
         itr->calcGPU(view_index, view_info.view_mtx, view_info.proj_mtx, this);

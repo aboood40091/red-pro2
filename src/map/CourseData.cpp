@@ -1,24 +1,24 @@
 #include <map/CourseData.h>
 
-const DistantViewData* CourseDataFile::getBg2Data(u8 index) const
+const DistantViewData* CourseDataFile::getBg2Data(u16 id) const
 {
     const DistantViewData* dv_data = static_cast<const DistantViewData*>(mBlock[cBlock_DistantViewData]);
     s32 dv_data_num = mBlockEntryNum[cBlock_DistantViewData];
 
     for (s32 i = 0; i < dv_data_num; i++)
-        if (dv_data[i].id == index)
+        if (dv_data[i].id == id)
             return &(dv_data[i]);
 
     return nullptr;
 }
 
-const AreaData* CourseDataFile::getAreaData(u8 index, sead::BoundBox2f* p_box) const
+const AreaData* CourseDataFile::getAreaData(u8 id, sead::BoundBox2f* p_box) const
 {
     const AreaData* area_data = static_cast<const AreaData*>(mBlock[cBlock_AreaData]);
 
     for (u32 i = 0; i < mBlockEntryNum[cBlock_AreaData]; i++)
     {
-        if (area_data[i].id == index)
+        if (area_data[i].id == id)
         {
             if (p_box != nullptr)
                 getAreaBox_(p_box, area_data[i]);
