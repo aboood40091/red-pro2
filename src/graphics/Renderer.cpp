@@ -1,5 +1,5 @@
 #include <game/AreaLayerMgr.h>
-#include <graphics/BasicModel.h>
+#include <graphics/AnimModel.h>
 #include <graphics/ModelG3d.h>
 #include <graphics/Renderer.h>
 #include <graphics/RenderMgr.h>
@@ -147,7 +147,7 @@ void Renderer::drawModel(Model* p_model)
     mpLayer->getRenderMgr()->pushBackRenderObj(p_model, opa_buffer_idx, xlu_buffer_idx);
 }
 
-void Renderer::drawModel(const BasicModel* p_model)
+void Renderer::drawModel(const AnimModel* p_model)
 {
     drawModel(p_model->getModel());
 }

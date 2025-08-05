@@ -7,7 +7,7 @@ FrameCtrl::FrameCtrl()
     , mFrameMax(1.0f)
     , mFrame(0.0f)
     , mRate(1.0f)
-    , mFlag(cFlag_Repeat | cFlag_Unk1)
+    , mFlag(cFlag_Repeat | cFlag_StartFrame)
 {
 }
 
@@ -18,8 +18,8 @@ void FrameCtrl::reset()
     else
         mFrame = mFrameEnd;
 
-    mFlag.reset(cFlag_Unk2 | cFlag_Unk3 | cFlag_Unk4 | cFlag_IsStop);
-    mFlag.set(cFlag_Unk1);
+    mFlag.reset(cFlag_LoopFrame | cFlag_HasLooped | cFlag_EndFrame | cFlag_IsStop);
+    mFlag.set(cFlag_StartFrame);
 }
 
 void FrameCtrl::setPlayMode(PlayMode mode)
@@ -46,11 +46,11 @@ void FrameCtrl::play()
 
         mFrame = frame;
     }
-    mFlag.reset(cFlag_Unk2 | cFlag_Unk4);
+    mFlag.reset(cFlag_LoopFrame | cFlag_EndFrame);
 
-    if (mFlag.isOn(cFlag_Unk1))
+    if (mFlag.isOn(cFlag_StartFrame))
     {
-        mFlag.reset(cFlag_Unk1);
+        mFlag.reset(cFlag_StartFrame);
         return;
     }
 
@@ -60,10 +60,10 @@ void FrameCtrl::play()
     if (mFrameStart == mFrameEnd)
     {
         if (mFlag.isOn(cFlag_Repeat))
-            mFlag.set(cFlag_Unk2 | cFlag_Unk3);
+            mFlag.set(cFlag_LoopFrame | cFlag_HasLooped);
 
         else
-            mFlag.set(cFlag_Unk4 | cFlag_IsStop);
+            mFlag.set(cFlag_EndFrame | cFlag_IsStop);
 
         return;
     }
@@ -81,7 +81,7 @@ void FrameCtrl::play()
             {
                 f32 frame_end = mFrameEnd;
                 f32 frame_step = frame_end - mFrameMin;
-                mFlag.set(cFlag_Unk2 | cFlag_Unk3);
+                mFlag.set(cFlag_LoopFrame | cFlag_HasLooped);
 
                 if (frame_step <= 0.0f)
                     mFrame = frame_end;
@@ -103,7 +103,7 @@ void FrameCtrl::play()
             {
                 f32 frame_start = mFrameStart;
                 f32 frame_step = mFrameMax - frame_start;
-                mFlag.set(cFlag_Unk2 | cFlag_Unk3);
+                mFlag.set(cFlag_LoopFrame | cFlag_HasLooped);
 
                 if (frame_step <= 0.0f)
                     mFrame = frame_start;
@@ -125,12 +125,12 @@ void FrameCtrl::play()
         if (mFrame >= mFrameEnd)
         {
             mFrame = mFrameEnd;
-            mFlag.set(cFlag_Unk4 | cFlag_IsStop);
+            mFlag.set(cFlag_EndFrame | cFlag_IsStop);
         }
         else if (mFrame <= mFrameStart)
         {
             mFrame = mFrameStart;
-            mFlag.set(cFlag_Unk4 | cFlag_IsStop);
+            mFlag.set(cFlag_EndFrame | cFlag_IsStop);
         }
     }
 }

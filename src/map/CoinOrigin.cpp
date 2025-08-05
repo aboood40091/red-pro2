@@ -1,6 +1,6 @@
 #include <event/EventMgr.h>
 #include <game/AreaLayerMgr.h>
-#include <graphics/ModelG3d.h>
+#include <graphics/Model.h>
 #include <graphics/ModelResourceMgr.h>
 #include <graphics/RenderMgr.h>
 #include <map/BgTexMgr.h>

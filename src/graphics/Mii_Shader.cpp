@@ -368,15 +368,15 @@ void Shader::draw_(const FFLDrawParam& draw_param)
 
     if (mpModel != nullptr)
     {
-        switch (mpModel->getLightmap02pType())
+        switch (mpModel->getEnvType())
         {
-        case ModelFFL::cLightmap02pType_0:
-            mLightmap02p_0.applyTextureData(*mpModel->getLightmap02p_0());
-            mLightmap02p_0.activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap02p));
+        case ModelFFL::cEnvType_Star:
+            mEnvSampler_Star.applyTextureData(*mpModel->getEnvTexture_Star());
+            mEnvSampler_Star.activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap02p));
             break;
-        case ModelFFL::cLightmap02pType_1:
-            mLightmap02p_1.applyTextureData(*mpModel->getLightmap02p_1());
-            mLightmap02p_1.activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap02p));
+        case ModelFFL::cEnvType_P:
+            mEnvSampler_P.applyTextureData(*mpModel->getEnvTexture_P());
+            mEnvSampler_P.activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap02p));
             break;
         default:
             LightMapMgr::instance()->getLightmap2(lightmap_index).activate(mpShaderProgram->getSamplerLocationValidate(cSampler_Lightmap02p));

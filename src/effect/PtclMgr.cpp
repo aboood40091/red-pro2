@@ -1,5 +1,5 @@
 #include <boss/FinalKoopa.h>
-#include <effect/EffectDisposableBase.h>
+#include <effect/EffectObjBase.h>
 #include <effect/EffectGroupID.h>
 #include <effect/PtclCalcCallback.h>
 #include <effect/PtclEmitterColorMgr.h>
@@ -239,9 +239,9 @@ void PtclMgr::execute()
     for (u8 group = 0; group < cEffectGroupID_Num; group++)
         calc_group[group] = PtclEmitterUserDataUtil::isCalcGroup(group);
 
-    for (sead::TList<EffectDisposableBase*>::robustIterator itr = mEffects.robustBegin(); itr != mEffects.robustEnd(); ++itr)
+    for (sead::TList<EffectObjBase*>::robustIterator itr = mEffects.robustBegin(); itr != mEffects.robustEnd(); ++itr)
     {
-        EffectDisposableBase* effect = itr->mData;
+        EffectObjBase* effect = itr->mData;
 
         bool calc = true;
         s32 group_id = effect->getGroupID();

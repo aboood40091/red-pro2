@@ -164,11 +164,11 @@ enum DrawPriority
     cDrawPriority_226                                       = 125,
     cDrawPriority_229                                       = 126,
     cDrawPriority_22A                                       = 127,
-    cDrawPriority_177                                       = 128,
-    cDrawPriority_178                                       = 129,
+    cDrawPriority_FireBar                                   = 128,
+    cDrawPriority_FireBarSync                               = 129,
     cDrawPriority_179                                       = 130,
     cDrawPriority_17A                                       = 131,
-    cDrawPriority_0E0                                       = 132,
+    cDrawPriority_Burner                                    = 132,
     cDrawPriority_0E1                                       = 133,
     cDrawPriority_0E2                                       = 134,
     cDrawPriority_0E3                                       = 135,
@@ -251,8 +251,8 @@ enum DrawPriority
     cDrawPriority_FinalKoopaJrClown                         = 212,
     cDrawPriority_FinalKoopaJrFire                          = 213,
     cDrawPriority_FinalBomhei                               = 214,
-    cDrawPriority_04D                                       = 215,
-    cDrawPriority_04E                                       = 216,
+    cDrawPriority_KinokoLift                                = 215,
+    cDrawPriority_KinokoLiftColor                           = 216,
     cDrawPriority_04F                                       = 217,
     cDrawPriority_033                                       = 218,
     cDrawPriority_0AD                                       = 219,
@@ -265,7 +265,7 @@ enum DrawPriority
     cDrawPriority_051                                       = 226,
     cDrawPriority_235                                       = 227,
     cDrawPriority_16D                                       = 228,
-    cDrawPriority_11F                                       = 229,
+    cDrawPriority_Block                                     = 229,
     cDrawPriority_1BE                                       = 230,
     cDrawPriority_1BF                                       = 231,
     cDrawPriority_1C4                                       = 232,
@@ -309,7 +309,7 @@ enum DrawPriority
     cDrawPriority_039                                       = 270,
     cDrawPriority_03A                                       = 271,
     cDrawPriority_03B                                       = 272,
-    cDrawPriority_03C                                       = 273,
+    cDrawPriority_PairObjChild                              = 273,
     cDrawPriority_03D                                       = 274,
     cDrawPriority_03E                                       = 275,
     cDrawPriority_03F                                       = 276,
@@ -515,10 +515,10 @@ enum DrawPriority
     cDrawPriority_317                                       = 476,
     cDrawPriority_318                                       = 477,
     cDrawPriority_319                                       = 478,
-    cDrawPriority_0EE                                       = 479,
+    cDrawPriority_TarzanIvy                                 = 479,
     cDrawPriority_0EF                                       = 480,
     cDrawPriority_0F0                                       = 481,
-    cDrawPriority_0C2                                       = 482,
+    cDrawPriority_SnakeBlock                                = 482,
     cDrawPriority_0C3                                       = 483,
     cDrawPriority_0C4                                       = 484,
     cDrawPriority_0C8                                       = 485,
@@ -569,7 +569,7 @@ enum DrawPriority
     cDrawPriority_094                                       = 530,
     cDrawPriority_095                                       = 531,
     cDrawPriority_096                                       = 532,
-    cDrawPriority_034                                       = 533,
+    cDrawPriority_ElasticKinokoParent                       = 533,
     cDrawPriority_0CB                                       = 534,
     cDrawPriority_0CC                                       = 535,
     cDrawPriority_0E7                                       = 536,
@@ -649,7 +649,7 @@ enum DrawPriority
     cDrawPriority_0DE                                       = 610,
     cDrawPriority_0DF                                       = 611,
     cDrawPriority_0EC                                       = 612,
-    cDrawPriority_035                                       = 613,
+    cDrawPriority_FloorGyration                             = 613,
     cDrawPriority_FloorHoleDokan                            = 614,
     cDrawPriority_0D0                                       = 615,
     cDrawPriority_0D1                                       = 616,
@@ -1006,15 +1006,15 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_031,                                      // ProfileID::c031
     cDrawPriority_032,                                      // ProfileID::c032
     cDrawPriority_033,                                      // ProfileID::c033
-    cDrawPriority_034,                                      // ProfileID::c034
-    cDrawPriority_035,                                      // ProfileID::c035
+    cDrawPriority_ElasticKinokoParent,                      // ProfileID::cElasticKinokoParent
+    cDrawPriority_FloorGyration,                            // ProfileID::cFloorGyration
     cDrawPriority_036,                                      // ProfileID::c036
     cDrawPriority_037,                                      // ProfileID::c037
     cDrawPriority_038,                                      // ProfileID::c038
     cDrawPriority_039,                                      // ProfileID::c039
     cDrawPriority_03A,                                      // ProfileID::c03A
     cDrawPriority_03B,                                      // ProfileID::c03B
-    cDrawPriority_03C,                                      // ProfileID::c03C
+    cDrawPriority_PairObjChild,                             // ProfileID::cPairObjChild
     cDrawPriority_03D,                                      // ProfileID::c03D
     cDrawPriority_03E,                                      // ProfileID::c03E
     cDrawPriority_03F,                                      // ProfileID::c03F
@@ -1031,8 +1031,8 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_04A,                                      // ProfileID::c04A
     cDrawPriority_04B,                                      // ProfileID::c04B
     cDrawPriority_04C,                                      // ProfileID::c04C
-    cDrawPriority_04D,                                      // ProfileID::c04D
-    cDrawPriority_04E,                                      // ProfileID::c04E
+    cDrawPriority_KinokoLift,                               // ProfileID::cKinokoLift
+    cDrawPriority_KinokoLiftColor,                          // ProfileID::cKinokoLiftColor
     cDrawPriority_04F,                                      // ProfileID::c04F
     cDrawPriority_050,                                      // ProfileID::c050
     cDrawPriority_051,                                      // ProfileID::c051
@@ -1148,7 +1148,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_0BF,                                      // ProfileID::c0BF
     cDrawPriority_0C0,                                      // ProfileID::c0C0
     cDrawPriority_0C1,                                      // ProfileID::c0C1
-    cDrawPriority_0C2,                                      // ProfileID::c0C2
+    cDrawPriority_SnakeBlock,                               // ProfileID::cSnakeBlock
     cDrawPriority_0C3,                                      // ProfileID::c0C3
     cDrawPriority_0C4,                                      // ProfileID::c0C4
     cDrawPriority_0C5,                                      // ProfileID::c0C5
@@ -1178,7 +1178,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_0DD,                                      // ProfileID::c0DD
     cDrawPriority_0DE,                                      // ProfileID::c0DE
     cDrawPriority_0DF,                                      // ProfileID::c0DF
-    cDrawPriority_0E0,                                      // ProfileID::c0E0
+    cDrawPriority_Burner,                                   // ProfileID::cBurner
     cDrawPriority_0E1,                                      // ProfileID::c0E1
     cDrawPriority_0E2,                                      // ProfileID::c0E2
     cDrawPriority_0E3,                                      // ProfileID::c0E3
@@ -1192,7 +1192,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_0EB,                                      // ProfileID::c0EB
     cDrawPriority_0EC,                                      // ProfileID::c0EC
     cDrawPriority_0ED,                                      // ProfileID::c0ED
-    cDrawPriority_0EE,                                      // ProfileID::c0EE
+    cDrawPriority_TarzanIvy,                                // ProfileID::cTarzanIvy
     cDrawPriority_0EF,                                      // ProfileID::c0EF
     cDrawPriority_0F0,                                      // ProfileID::c0F0
     cDrawPriority_0F1,                                      // ProfileID::c0F1
@@ -1241,7 +1241,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_11C,                                      // ProfileID::c11C
     cDrawPriority_11D,                                      // ProfileID::c11D
     cDrawPriority_11E,                                      // ProfileID::c11E
-    cDrawPriority_11F,                                      // ProfileID::c11F
+    cDrawPriority_Block,                                    // ProfileID::cBlock
     cDrawPriority_120,                                      // ProfileID::c120
     cDrawPriority_121,                                      // ProfileID::c121
     cDrawPriority_122,                                      // ProfileID::c122
@@ -1329,8 +1329,8 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_174,                                      // ProfileID::c174
     cDrawPriority_FinalKoopaJrClown,                        // ProfileID::cFinalKoopaJrClown
     cDrawPriority_FinalKoopa,                               // ProfileID::cFinalKoopa
-    cDrawPriority_177,                                      // ProfileID::c177
-    cDrawPriority_178,                                      // ProfileID::c178
+    cDrawPriority_FireBar,                                  // ProfileID::cFireBar
+    cDrawPriority_FireBarSync,                              // ProfileID::cFireBarSync
     cDrawPriority_179,                                      // ProfileID::c179
     cDrawPriority_17A,                                      // ProfileID::c17A
     cDrawPriority_17B,                                      // ProfileID::c17B
@@ -1924,15 +1924,15 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c031
     Profile::cResType_Course,       // ProfileID::c032
     Profile::cResType_Course,       // ProfileID::c033
-    Profile::cResType_Course,       // ProfileID::c034
-    Profile::cResType_Course,       // ProfileID::c035
+    Profile::cResType_Course,       // ProfileID::cElasticKinokoParent
+    Profile::cResType_Course,       // ProfileID::cFloorGyration
     Profile::cResType_Course,       // ProfileID::c036
     Profile::cResType_Course,       // ProfileID::c037
     Profile::cResType_Course,       // ProfileID::c038
     Profile::cResType_Course,       // ProfileID::c039
     Profile::cResType_Course,       // ProfileID::c03A
     Profile::cResType_Course,       // ProfileID::c03B
-    Profile::cResType_Course,       // ProfileID::c03C
+    Profile::cResType_Course,       // ProfileID::cPairObjChild
     Profile::cResType_Course,       // ProfileID::c03D
     Profile::cResType_Course,       // ProfileID::c03E
     Profile::cResType_Course,       // ProfileID::c03F
@@ -1949,8 +1949,8 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c04A
     Profile::cResType_Course,       // ProfileID::c04B
     Profile::cResType_Course,       // ProfileID::c04C
-    Profile::cResType_Course,       // ProfileID::c04D
-    Profile::cResType_Course,       // ProfileID::c04E
+    Profile::cResType_Course,       // ProfileID::cKinokoLift
+    Profile::cResType_Course,       // ProfileID::cKinokoLiftColor
     Profile::cResType_Course,       // ProfileID::c04F
     Profile::cResType_Course,       // ProfileID::c050
     Profile::cResType_Course,       // ProfileID::c051
@@ -2066,7 +2066,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c0BF
     Profile::cResType_Course,       // ProfileID::c0C0
     Profile::cResType_Course,       // ProfileID::c0C1
-    Profile::cResType_Course,       // ProfileID::c0C2
+    Profile::cResType_Course,       // ProfileID::cSnakeBlock
     Profile::cResType_Course,       // ProfileID::c0C3
     Profile::cResType_Course,       // ProfileID::c0C4
     Profile::cResType_Course,       // ProfileID::c0C5
@@ -2096,7 +2096,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c0DD
     Profile::cResType_Course,       // ProfileID::c0DE
     Profile::cResType_Course,       // ProfileID::c0DF
-    Profile::cResType_Course,       // ProfileID::c0E0
+    Profile::cResType_Course,       // ProfileID::cBurner
     Profile::cResType_Course,       // ProfileID::c0E1
     Profile::cResType_Course,       // ProfileID::c0E2
     Profile::cResType_Course,       // ProfileID::c0E3
@@ -2110,7 +2110,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c0EB
     Profile::cResType_Course,       // ProfileID::c0EC
     Profile::cResType_Boot,         // ProfileID::c0ED
-    Profile::cResType_Course,       // ProfileID::c0EE
+    Profile::cResType_Course,       // ProfileID::cTarzanIvy
     Profile::cResType_Course,       // ProfileID::c0EF
     Profile::cResType_Course,       // ProfileID::c0F0
     Profile::cResType_Course,       // ProfileID::c0F1
@@ -2159,7 +2159,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c11C
     Profile::cResType_Course,       // ProfileID::c11D
     Profile::cResType_Course,       // ProfileID::c11E
-    Profile::cResType_Boot,         // ProfileID::c11F
+    Profile::cResType_Boot,         // ProfileID::cBlock
     Profile::cResType_Boot,         // ProfileID::c120
     Profile::cResType_Boot,         // ProfileID::c121
     Profile::cResType_Boot,         // ProfileID::c122
@@ -2247,8 +2247,8 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c174
     Profile::cResType_Course,       // ProfileID::cFinalKoopaJrClown
     Profile::cResType_Course,       // ProfileID::cFinalKoopa
-    Profile::cResType_Course,       // ProfileID::c177
-    Profile::cResType_Course,       // ProfileID::c178
+    Profile::cResType_Course,       // ProfileID::cFireBar
+    Profile::cResType_Course,       // ProfileID::cFireBarSync
     Profile::cResType_Course,       // ProfileID::c179
     Profile::cResType_Course,       // ProfileID::c17A
     Profile::cResType_Course,       // ProfileID::c17B
@@ -2881,7 +2881,7 @@ static const sead::SafeString cRes_033[]  = {
     "bolt_pyramid"
 };
 
-static const sead::SafeString cRes_035[]  = {
+static const sead::SafeString cRes_FloorGyration[]  = {
     "circle_ground",
     "circle_ground_sabaku",
     "circle_ground_kori"
@@ -2911,7 +2911,7 @@ static const sead::SafeString cRes_03B[]  = {
     "lift_zen_kaihei"
 };
 
-static const sead::SafeString cRes_03C[]  = {
+static const sead::SafeString cRes_PairObjChild[]  = {
     "lift_zen_toride_iron"
 };
 
@@ -2980,11 +2980,11 @@ static const sead::SafeString cRes_04C[]  = {
     "obj_kinoko"
 };
 
-static const sead::SafeString cRes_04D[]  = {
+static const sead::SafeString cRes_KinokoLift[]  = {
     "lift_kinoko_sora"
 };
 
-static const sead::SafeString cRes_04E[]  = {
+static const sead::SafeString cRes_KinokoLiftColor[]  = {
     "lift_kinoko_sora"
 };
 
@@ -3472,7 +3472,7 @@ static const sead::SafeString cRes_0C1[]  = {
     "gorogoro"
 };
 
-static const sead::SafeString cRes_0C2[]  = {
+static const sead::SafeString cRes_SnakeBlock[]  = {
     "block_snake",
     "block_snake_ice"
 };
@@ -3632,7 +3632,7 @@ static const sead::SafeString cRes_0DF[]  = {
     "lift_taru"
 };
 
-static const sead::SafeString cRes_0E0[]  = {
+static const sead::SafeString cRes_Burner[]  = {
     "fire_cannon"
 };
 
@@ -3692,7 +3692,7 @@ static const sead::SafeString cRes_0ED[]  = {
     "ice"
 };
 
-static const sead::SafeString cRes_0EE[]  = {
+static const sead::SafeString cRes_TarzanIvy[]  = {
     "tarzantsuta"
 };
 
@@ -4145,12 +4145,12 @@ static const sead::SafeString cRes_FinalKoopa[]  = {
     "boss_shutter_peach"
 };
 
-static const sead::SafeString cRes_177[]  = {
+static const sead::SafeString cRes_FireBar[]  = {
     "center_firebar",
     "firebar_L"
 };
 
-static const sead::SafeString cRes_178[]  = {
+static const sead::SafeString cRes_FireBarSync[]  = {
     "center_firebar",
     "firebar_L"
 };
@@ -6210,15 +6210,15 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                                          // ProfileID::c031
     GetResNum(cRes_032),                                        // ProfileID::c032
     GetResNum(cRes_033),                                        // ProfileID::c033
-    0,                                                          // ProfileID::c034
-    GetResNum(cRes_035),                                        // ProfileID::c035
+    0,                                                          // ProfileID::cElasticKinokoParent
+    GetResNum(cRes_FloorGyration),                              // ProfileID::cFloorGyration
     GetResNum(cRes_036),                                        // ProfileID::c036
     GetResNum(cRes_037),                                        // ProfileID::c037
     GetResNum(cRes_038),                                        // ProfileID::c038
     GetResNum(cRes_039),                                        // ProfileID::c039
     GetResNum(cRes_03A),                                        // ProfileID::c03A
     GetResNum(cRes_03B),                                        // ProfileID::c03B
-    GetResNum(cRes_03C),                                        // ProfileID::c03C
+    GetResNum(cRes_PairObjChild),                               // ProfileID::cPairObjChild
     GetResNum(cRes_03D),                                        // ProfileID::c03D
     GetResNum(cRes_03E),                                        // ProfileID::c03E
     GetResNum(cRes_03F),                                        // ProfileID::c03F
@@ -6235,8 +6235,8 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_04A),                                        // ProfileID::c04A
     GetResNum(cRes_04B),                                        // ProfileID::c04B
     GetResNum(cRes_04C),                                        // ProfileID::c04C
-    GetResNum(cRes_04D),                                        // ProfileID::c04D
-    GetResNum(cRes_04E),                                        // ProfileID::c04E
+    GetResNum(cRes_KinokoLift),                                 // ProfileID::cKinokoLift
+    GetResNum(cRes_KinokoLiftColor),                            // ProfileID::cKinokoLiftColor
     GetResNum(cRes_04F),                                        // ProfileID::c04F
     GetResNum(cRes_050),                                        // ProfileID::c050
     GetResNum(cRes_051),                                        // ProfileID::c051
@@ -6352,7 +6352,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_0BF),                                        // ProfileID::c0BF
     GetResNum(cRes_0C0),                                        // ProfileID::c0C0
     GetResNum(cRes_0C1),                                        // ProfileID::c0C1
-    GetResNum(cRes_0C2),                                        // ProfileID::c0C2
+    GetResNum(cRes_SnakeBlock),                                 // ProfileID::cSnakeBlock
     GetResNum(cRes_0C3),                                        // ProfileID::c0C3
     GetResNum(cRes_0C4),                                        // ProfileID::c0C4
     GetResNum(cRes_0C5),                                        // ProfileID::c0C5
@@ -6382,7 +6382,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_0DD),                                        // ProfileID::c0DD
     GetResNum(cRes_0DE),                                        // ProfileID::c0DE
     GetResNum(cRes_0DF),                                        // ProfileID::c0DF
-    GetResNum(cRes_0E0),                                        // ProfileID::c0E0
+    GetResNum(cRes_Burner),                                     // ProfileID::cBurner
     GetResNum(cRes_0E1),                                        // ProfileID::c0E1
     GetResNum(cRes_0E2),                                        // ProfileID::c0E2
     GetResNum(cRes_0E3),                                        // ProfileID::c0E3
@@ -6396,7 +6396,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_0EB),                                        // ProfileID::c0EB
     GetResNum(cRes_0EC),                                        // ProfileID::c0EC
     GetResNum(cRes_0ED),                                        // ProfileID::c0ED
-    GetResNum(cRes_0EE),                                        // ProfileID::c0EE
+    GetResNum(cRes_TarzanIvy),                                  // ProfileID::cTarzanIvy
     GetResNum(cRes_0EF),                                        // ProfileID::c0EF
     GetResNum(cRes_0F0),                                        // ProfileID::c0F0
     GetResNum(cRes_0F1),                                        // ProfileID::c0F1
@@ -6445,7 +6445,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                                          // ProfileID::c11C
     GetResNum(cRes_11D),                                        // ProfileID::c11D
     GetResNum(cRes_11E),                                        // ProfileID::c11E
-    0,                                                          // ProfileID::c11F
+    0,                                                          // ProfileID::cBlock
     0,                                                          // ProfileID::c120
     0,                                                          // ProfileID::c121
     0,                                                          // ProfileID::c122
@@ -6533,8 +6533,8 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_174),                                        // ProfileID::c174
     GetResNum(cRes_FinalKoopaJrClown),                          // ProfileID::cFinalKoopaJrClown
     GetResNum(cRes_FinalKoopa),                                 // ProfileID::cFinalKoopa
-    GetResNum(cRes_177),                                        // ProfileID::c177
-    GetResNum(cRes_178),                                        // ProfileID::c178
+    GetResNum(cRes_FireBar),                                    // ProfileID::cFireBar
+    GetResNum(cRes_FireBarSync),                                // ProfileID::cFireBarSync
     GetResNum(cRes_179),                                        // ProfileID::c179
     GetResNum(cRes_17A),                                        // ProfileID::c17A
     GetResNum(cRes_17B),                                        // ProfileID::c17B
@@ -7128,15 +7128,15 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     nullptr,                                        // ProfileID::c031
     cRes_032,                                       // ProfileID::c032
     cRes_033,                                       // ProfileID::c033
-    nullptr,                                        // ProfileID::c034
-    cRes_035,                                       // ProfileID::c035
+    nullptr,                                        // ProfileID::cElasticKinokoParent
+    cRes_FloorGyration,                             // ProfileID::cFloorGyration
     cRes_036,                                       // ProfileID::c036
     cRes_037,                                       // ProfileID::c037
     cRes_038,                                       // ProfileID::c038
     cRes_039,                                       // ProfileID::c039
     cRes_03A,                                       // ProfileID::c03A
     cRes_03B,                                       // ProfileID::c03B
-    cRes_03C,                                       // ProfileID::c03C
+    cRes_PairObjChild,                              // ProfileID::cPairObjChild
     cRes_03D,                                       // ProfileID::c03D
     cRes_03E,                                       // ProfileID::c03E
     cRes_03F,                                       // ProfileID::c03F
@@ -7153,8 +7153,8 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_04A,                                       // ProfileID::c04A
     cRes_04B,                                       // ProfileID::c04B
     cRes_04C,                                       // ProfileID::c04C
-    cRes_04D,                                       // ProfileID::c04D
-    cRes_04E,                                       // ProfileID::c04E
+    cRes_KinokoLift,                                // ProfileID::cKinokoLift
+    cRes_KinokoLiftColor,                           // ProfileID::cKinokoLiftColor
     cRes_04F,                                       // ProfileID::c04F
     cRes_050,                                       // ProfileID::c050
     cRes_051,                                       // ProfileID::c051
@@ -7270,7 +7270,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_0BF,                                       // ProfileID::c0BF
     cRes_0C0,                                       // ProfileID::c0C0
     cRes_0C1,                                       // ProfileID::c0C1
-    cRes_0C2,                                       // ProfileID::c0C2
+    cRes_SnakeBlock,                                // ProfileID::cSnakeBlock
     cRes_0C3,                                       // ProfileID::c0C3
     cRes_0C4,                                       // ProfileID::c0C4
     cRes_0C5,                                       // ProfileID::c0C5
@@ -7300,7 +7300,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_0DD,                                       // ProfileID::c0DD
     cRes_0DE,                                       // ProfileID::c0DE
     cRes_0DF,                                       // ProfileID::c0DF
-    cRes_0E0,                                       // ProfileID::c0E0
+    cRes_Burner,                                    // ProfileID::cBurner
     cRes_0E1,                                       // ProfileID::c0E1
     cRes_0E2,                                       // ProfileID::c0E2
     cRes_0E3,                                       // ProfileID::c0E3
@@ -7314,7 +7314,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_0EB,                                       // ProfileID::c0EB
     cRes_0EC,                                       // ProfileID::c0EC
     cRes_0ED,                                       // ProfileID::c0ED
-    cRes_0EE,                                       // ProfileID::c0EE
+    cRes_TarzanIvy,                                 // ProfileID::cTarzanIvy
     cRes_0EF,                                       // ProfileID::c0EF
     cRes_0F0,                                       // ProfileID::c0F0
     cRes_0F1,                                       // ProfileID::c0F1
@@ -7363,7 +7363,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     nullptr,                                        // ProfileID::c11C
     cRes_11D,                                       // ProfileID::c11D
     cRes_11E,                                       // ProfileID::c11E
-    nullptr,                                        // ProfileID::c11F
+    nullptr,                                        // ProfileID::cBlock
     nullptr,                                        // ProfileID::c120
     nullptr,                                        // ProfileID::c121
     nullptr,                                        // ProfileID::c122
@@ -7451,8 +7451,8 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_174,                                       // ProfileID::c174
     cRes_FinalKoopaJrClown,                         // ProfileID::cFinalKoopaJrClown
     cRes_FinalKoopa,                                // ProfileID::cFinalKoopa
-    cRes_177,                                       // ProfileID::c177
-    cRes_178,                                       // ProfileID::c178
+    cRes_FireBar,                                   // ProfileID::cFireBar
+    cRes_FireBarSync,                               // ProfileID::cFireBarSync
     cRes_179,                                       // ProfileID::c179
     cRes_17A,                                       // ProfileID::c17A
     cRes_17B,                                       // ProfileID::c17B

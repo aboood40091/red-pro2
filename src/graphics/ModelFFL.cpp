@@ -25,9 +25,9 @@ ModelFFL::ModelFFL(s32 opa_buffer_idx, s32 xlu_buffer_idx)
     , mMtxRT(sead::Matrix34f::ident)
     , mScale(sead::Vector3f::ones)
     , mMtxSRT(sead::Matrix34f::ident)
-    , mLightmap02p_0(nullptr)
-    , mLightmap02p_1(nullptr)
-    , mLightmap02pType(cLightmap02pType_LightMapMgr)
+    , mEnvTexture_Star(nullptr)
+    , mEnvTexture_P(nullptr)
+    , mEnvType(cEnvType_Normal)
     , mLightMapType(cLightmapType_Player)
     , mDrawOpaWithXlu(0)
     , mInitializeStep(cInitializeStep_NeedInitializeCpu)
@@ -55,12 +55,12 @@ bool ModelFFL::initialize(const FFLCharModelDesc* p_desc, const sead::Vector3f& 
     return allocBuffer_();
 }
 
-bool ModelFFL::initialize(Mii::DataSource source, const FFLCharModelDesc* p_desc, const sead::Vector3f& scale, sead::Heap* heap, sead::Heap* heap_tmp)
+bool ModelFFL::initialize(Mii::SlotID slot_id, const FFLCharModelDesc* p_desc, const sead::Vector3f& scale, sead::Heap* heap, sead::Heap* heap_tmp)
 {
-    mDataSource = source;
+    mSlotID = slot_id;
 
     FFLStoreData store_data;
-    if (!Mii::SlotMgr::getStoreData(&store_data, mDataSource))
+    if (!Mii::SlotMgr::getStoreData(&store_data, mSlotID))
         return false;
 
     InitArgStoreData arg;
@@ -160,12 +160,12 @@ bool ModelFFL::getAdditionalInfo(FFLAdditionalInfo* p_additional_info, BOOL chec
 
     FFLStoreData store_data;
 
-    switch (mDataSource.getType())
+    switch (mSlotID.getSource())
     {
-    case Mii::DataSource::cType_StoreData_Save:
-    case Mii::DataSource::cType_StoreData_Custom:
-    case Mii::DataSource::cType_StoreData_Account:
-        if (!Mii::SlotMgr::getStoreData(&store_data, mDataSource))
+    case Mii::SlotID::cSource_StoreData_Save:
+    case Mii::SlotID::cSource_StoreData_Custom:
+    case Mii::SlotID::cSource_StoreData_Account:
+        if (!Mii::SlotMgr::getStoreData(&store_data, mSlotID))
             return false;
 
         source = FFL_DATA_SOURCE_STORE_DATA;
@@ -376,17 +376,17 @@ void ModelFFL::initializeGpu_()
 
 bool ModelFFL::setCharModelSource_(const FFLStoreData* p_store_data, u16)
 {
-    switch (mDataSource.getType())
+    switch (mSlotID.getSource())
     {
-    case Mii::DataSource::cType_Database_Default:
+    case Mii::SlotID::cSource_Database_Default:
         mCharModelSource.dataSource = FFL_DATA_SOURCE_DEFAULT;
         mCharModelSource.pBuffer = nullptr;
-        mCharModelSource.index = mDataSource.getIndex();
+        mCharModelSource.index = mSlotID.getIndex();
         break;
-    case Mii::DataSource::cType_Database_Official:
+    case Mii::SlotID::cSource_Database_Official:
         mCharModelSource.dataSource = FFL_DATA_SOURCE_OFFICIAL;
         mCharModelSource.pBuffer = NULL;
-        mCharModelSource.index = mDataSource.getIndex();
+        mCharModelSource.index = mSlotID.getIndex();
         break;
     default:
         mCharModelSource.dataSource = FFL_DATA_SOURCE_STORE_DATA;

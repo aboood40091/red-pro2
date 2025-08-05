@@ -1,7 +1,7 @@
-#include <effect/EffectDisposable.h>
+#include <effect/EffectObj.h>
 #include <effect/PtclMgr.h>
 
-bool EffectDisposable::createEffect(EffectID id, const sead::Vector3f* p_trans, const Angle3* p_angle, const sead::Vector3f* p_scale)
+bool EffectObj::createEffect(EffectID id, const sead::Vector3f* p_trans, const Angle3* p_angle, const sead::Vector3f* p_scale)
 {
     if (PtclMgr::instance() != nullptr)
     {
@@ -23,7 +23,7 @@ bool EffectDisposable::createEffect(EffectID id, const sead::Vector3f* p_trans, 
     return false;
 }
 
-bool EffectDisposable::createEffect(EffectID id, const sead::Matrixf* p_mtx, bool mtx_has_scale)
+bool EffectObj::createEffect(EffectID id, const sead::Matrixf* p_mtx, bool mtx_has_scale)
 {
     if (PtclMgr::instance() != nullptr)
     {
@@ -45,7 +45,7 @@ bool EffectDisposable::createEffect(EffectID id, const sead::Matrixf* p_mtx, boo
     return false;
 }
 
-bool EffectDisposable::follow(const sead::Vector3f* p_trans, const Angle3* p_angle, const sead::Vector3f* p_scale)
+bool EffectObj::follow(const sead::Vector3f* p_trans, const Angle3* p_angle, const sead::Vector3f* p_scale)
 {
     if (PtclMgr::instance() != nullptr && Effect::follow(p_trans, p_angle, p_scale))
     {
@@ -59,7 +59,7 @@ bool EffectDisposable::follow(const sead::Vector3f* p_trans, const Angle3* p_ang
     return false;
 }
 
-bool EffectDisposable::follow(const sead::Matrixf& mtx, bool mtx_has_scale)
+bool EffectObj::follow(const sead::Matrixf& mtx, bool mtx_has_scale)
 {
     if (PtclMgr::instance() != nullptr && Effect::follow(mtx, mtx_has_scale))
     {

@@ -6,10 +6,9 @@
 #include <game/AreaLayerMgr.h>
 #include <game/AreaTask.h>
 #include <game/Quake.h>
-#include <graphics/BasicModel.h>
+#include <graphics/AnimModel.h>
 #include <graphics/EnvSetReader.h>
 #include <graphics/GfxParameter.h>
-#include <graphics/ModelG3d.h>
 #include <graphics/ModelResource.h>
 #include <graphics/ModelResourceMgr.h>
 #include <graphics/RenderMgr.h>
@@ -43,7 +42,7 @@ DistantViewMgr::DistantViewMgr()
     , mCamera()
     , mProjection(mNear, mFar, sead::Mathf::deg2rad(mFovyDeg), 16.f / 9.f)
     , mCull()
-    , mpBasicModel(nullptr)
+    , mpAnimModel(nullptr)
     , mEnvTagMgr(this)
     , mpCameraParam(nullptr)
     , mpEffectMgr(nullptr)
@@ -132,7 +131,7 @@ void DistantViewMgr::calcView_()
 
 void DistantViewMgr::calcModelMtx_()
 {
-    ModelG3d* p_model = mpBasicModel->getModel();
+    Model* p_model = mpAnimModel->getModel();
 
     sead::Matrix34f model_mtx;
     mpCameraParam->getModelMtx(&model_mtx);
@@ -229,28 +228,26 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
     ModelResourceMgr::instance()->loadResFile(dv_fname, dv_fname);
 
     ModelResource* p_mdl_res = ModelResourceMgr::instance()->getResource(dv_fname);
-    ModelG3d* p_mdl = Model::createG3d(*p_mdl_res, dv_fname, 1, 1, 1, 2, 0, 0, Model::cBoundingMode_Enable, nullptr);
-    BasicModel* p_basic_mdl = new (nullptr, 4) BasicModel(p_mdl, 1, 1, 2, 0, 0);
-    p_basic_mdl->init(p_mdl_res);
-    mpBasicModel = p_basic_mdl;
+    AnimModel* p_anm_mdl = AnimModel::create(p_mdl_res, dv_fname, 1, 1, 1, 2, 0, 0, Model::cBoundingMode_Enable);
+    mpAnimModel = p_anm_mdl;
 
-    mpBasicModel->getModel()->setOpaBufferIdx(0);
-    mpBasicModel->getModel()->setXluBufferIdx(0);
+    mpAnimModel->getModel()->setOpaBufferIdx(0);
+    mpAnimModel->getModel()->setXluBufferIdx(0);
 
-    // TODO: mpEffectMgr = new DistantViewEffectMgr(sead::HeapMgr::instance()->getCurrentHeap(), mpBasicModel->getModel(), this);
+    // TODO: mpEffectMgr = new DistantViewEffectMgr(sead::HeapMgr::instance()->getCurrentHeap(), mpAnimModel->getModel(), this);
     // TODO: mpFFLMgr = ...
 
     if (p_mdl_res->getResFile()->GetSkeletalAnimCount() > 0)
-        mpBasicModel->getSklAnim(0)->play(p_mdl_res, dv_fname);
+        mpAnimModel->getSklAnim(0)->play(p_mdl_res, dv_fname);
 
     if (p_mdl_res->getResFile()->GetTexSrtAnimCount() > 0)
-        mpBasicModel->getShuAnim(0)->playTexSrtAnim(p_mdl_res, dv_fname);
+        mpAnimModel->getShuAnim(0)->playTexSrtAnim(p_mdl_res, dv_fname);
 
     if (p_mdl_res->getResFile()->GetColorAnimCount() > 0)
-        mpBasicModel->getShuAnim(1)->playColorAnim(p_mdl_res, dv_fname);
+        mpAnimModel->getShuAnim(1)->playColorAnim(p_mdl_res, dv_fname);
 
     if (p_mdl_res->getResFile()->GetTexPatternAnimCount() > 0)
-        mpBasicModel->getTexAnim(0)->play(p_mdl_res, dv_fname);
+        mpAnimModel->getTexAnim(0)->play(p_mdl_res, dv_fname);
 
     sead::SafeString dof_ind_name = "dof_indirect";
     s32 idx_dof_ind = p_mdl_res->getResFile()->GetTextureIndex(dof_ind_name.cstr());
@@ -272,29 +269,29 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
     calcView_();
     calcModelMtx_();
 
-    mpBasicModel->calcMdl();
+    mpAnimModel->calcMdl();
 
     // TODO: mpEffectMgr
     mIsDrawParticle = true;
 
     // TODO: mpFFLMgr calc view
 
-    // TODO: DistantViewEndMgr::processModel(mpBasicModel->getModel());
+    // TODO: DistantViewEndMgr::processModel(mpAnimModel->getModel());
 }
 
 void DistantViewMgr::resetAnim()
 {
-    SkeletalAnimation* const p_skl_anim = mpBasicModel->getSklAnim(0);
+    SkeletalAnimation* const p_skl_anim = mpAnimModel->getSklAnim(0);
     if (p_skl_anim)
         p_skl_anim->getFrameCtrl().reset();
 
-    TexturePatternAnimation* const p_tex_anim = mpBasicModel->getTexAnim(0);
+    TexturePatternAnimation* const p_tex_anim = mpAnimModel->getTexAnim(0);
     if (p_tex_anim)
         p_tex_anim->getFrameCtrl().reset();
 
     for (s32 i = 0; i < 2; i++)
     {
-        ShaderParamAnimation* const p_shu_anim = mpBasicModel->getShuAnim(i);
+        ShaderParamAnimation* const p_shu_anim = mpAnimModel->getShuAnim(i);
         if (p_shu_anim)
             p_shu_anim->getFrameCtrl().reset();
     }
@@ -302,22 +299,22 @@ void DistantViewMgr::resetAnim()
 
 SkeletalAnimation* DistantViewMgr::getSklAnim() const
 {
-    return mpBasicModel->getSklAnim(0);
+    return mpAnimModel->getSklAnim(0);
 }
 
 TexturePatternAnimation* DistantViewMgr::getTexAnim() const
 {
-    return mpBasicModel->getTexAnim(0);
+    return mpAnimModel->getTexAnim(0);
 }
 
 ShaderParamAnimation* DistantViewMgr::getShuTexSrtAnim() const
 {
-    return mpBasicModel->getShuAnim(0);
+    return mpAnimModel->getShuAnim(0);
 }
 
 ShaderParamAnimation* DistantViewMgr::getShuColorAnim() const
 {
-    return mpBasicModel->getShuAnim(1);
+    return mpAnimModel->getShuAnim(1);
 }
 
 void DistantViewMgr::pushBackDrawMethod()

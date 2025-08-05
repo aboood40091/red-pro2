@@ -1,6 +1,6 @@
-#include <effect/EffectDisposableBase.h>
+#include <effect/EffectObjBase.h>
 
-void EffectDisposableBase::cleanup()
+void EffectObjBase::cleanup()
 {
     fade();
 
@@ -11,7 +11,7 @@ void EffectDisposableBase::cleanup()
     mIsActive = false;
 }
 
-EffectDisposableBase::EffectDisposableBase()
+EffectObjBase::EffectObjBase()
     : mNode(this)
     , mEffectID(cEffectID_None)
     , mIsActive(false)

@@ -1,8 +1,8 @@
 #include <graphics/BlendModel.h>
-#include <graphics/ModelG3d.h>
+#include <graphics/SkeletalAnimation.h>
 
-BlendModel::BlendModel(ModelG3d* p_model, u32 skl_anim_num, u32 tex_anim_num, u32 shu_anim_num, u32 vis_anim_num, u32 sha_anim_num)
-    : BasicModel(p_model, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num)
+BlendModel::BlendModel(Model* p_model, u32 skl_anim_num, u32 tex_anim_num, u32 shu_anim_num, u32 vis_anim_num, u32 sha_anim_num)
+    : AnimModel(p_model, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num)
     , mCurAnmIdx(0)
 {
     // Need to assert that skl_anim_num <= 2
@@ -10,18 +10,18 @@ BlendModel::BlendModel(ModelG3d* p_model, u32 skl_anim_num, u32 tex_anim_num, u3
 
 void BlendModel::init(ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
 {
-    BasicModel::init(p_mdl_res, p_anim_mdl_res_array, heap);
+    AnimModel::init(p_mdl_res, p_anim_mdl_res_array, heap);
 }
 
 void BlendModel::playAnmFrameCtrl()
 {
-    BasicModel::playAnmFrameCtrl();
+    AnimModel::playAnmFrameCtrl();
 }
 
 void BlendModel::calcMdl()
 {
     calcBlend();
-    BasicModel::calcMdl();
+    AnimModel::calcMdl();
 }
 
 void BlendModel::calcBlend()
@@ -30,7 +30,7 @@ void BlendModel::calcBlend()
     {
         mCalcRatio.calc();
 
-        ModelG3d* p_model = getModel();
+        Model* p_model = getModel();
         p_model->setSklAnimBlendWeight(mCurAnmIdx,      mCalcRatio.ratioB());   // Target animation
         p_model->setSklAnimBlendWeight(mCurAnmIdx ^ 1,  mCalcRatio.ratioA());   // Source animation
     }
@@ -81,7 +81,7 @@ void BlendModel::setAnm_(
     {
         mCalcRatio.reset();
 
-        ModelG3d* p_model = getModel();
+        Model* p_model = getModel();
         p_model->setSklAnimBlendWeight(mCurAnmIdx,      1.0f);  // Target animation
         p_model->setSklAnimBlendWeight(mCurAnmIdx ^ 1,  0.0f);  // Source animation
     }
@@ -91,7 +91,7 @@ void BlendModel::setAnm_(
 
         mCalcRatio.set(blend_duration);
 
-        ModelG3d* p_model = getModel();
+        Model* p_model = getModel();
         p_model->setSklAnimBlendWeight(mCurAnmIdx,      0.0f);  // Target animation
         p_model->setSklAnimBlendWeight(mCurAnmIdx ^ 1,  1.0f);  // Source animation
     }

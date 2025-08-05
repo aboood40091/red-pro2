@@ -1,5 +1,5 @@
 #include <effect/EffectCreateUtil.h>
-#include <effect/EffectDisposable.h>
+#include <effect/EffectObj.h>
 #include <effect/FollowEffect.h>
 #include <effect/PtclMgr.h>
 #include <game/Info.h>
@@ -31,13 +31,13 @@ bool EffectCreateUtil::createPlayerEffect(s32 player_no, EffectID id, const sead
     return createEffect(id, mtx, mtx_has_scale);
 }
 
-bool EffectCreateUtil::createPlayerEffect(s32 player_no, EffectDisposable* p_effect, EffectID id, const sead::Vector3f* p_trans, const Angle3* p_angle, const sead::Vector3f* p_scale)
+bool EffectCreateUtil::createPlayerEffect(s32 player_no, EffectObj* p_effect, EffectID id, const sead::Vector3f* p_trans, const Angle3* p_angle, const sead::Vector3f* p_scale)
 {
     PtclMgr::PlayerNoSetter setter(player_no);
     return p_effect->createEffect(id, p_trans, p_angle, p_scale);
 }
 
-bool EffectCreateUtil::createPlayerEffect(s32 player_no, EffectDisposable* p_effect, EffectID id, const sead::Matrixf& mtx, bool mtx_has_scale)
+bool EffectCreateUtil::createPlayerEffect(s32 player_no, EffectObj* p_effect, EffectID id, const sead::Matrixf& mtx, bool mtx_has_scale)
 {
     PtclMgr::PlayerNoSetter setter(player_no);
     return p_effect->createEffect(id, mtx, mtx_has_scale);
