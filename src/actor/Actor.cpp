@@ -45,3 +45,30 @@ void Actor::incComboCnt()
     SubjectMgr::instance()->onComboCntInc(mComboCnt, SubjectMgr::cComoType_AcCombo);
 }
 
+void Actor::slideComboSE(s32 combo_cnt, bool combo_type_2)
+{
+    static const GameAudio::SoundID cs_combo_se[] = {
+        "SE_EMY_KAME_HIT_1",
+        "SE_EMY_KAME_HIT_2",
+        "SE_EMY_KAME_HIT_3",
+        "SE_EMY_KAME_HIT_4",
+        "SE_EMY_KAME_HIT_5",
+        "SE_EMY_KAME_HIT_6",
+        "SE_EMY_KAME_HIT_7",
+        "SE_EMY_KAME_HIT_7",
+        "SE_EMY_KAME_HIT_7"
+    };
+    static_assert((sizeof(cs_combo_se) / sizeof(GameAudio::SoundID)) == COMBO_CNT_MAX);
+
+    if (!(0 <= mPlayerNo && mPlayerNo < 4))
+        return;
+
+    if (combo_cnt >= COMBO_CNT_MAX)
+        combo_cnt = COMBO_CNT_MAX - 1;
+
+    s32 clap_combo = combo_type_2 ? 4 : 7;
+    if (combo_cnt >= clap_combo)
+        GameAudio::setClapSE();
+
+    cs_combo_se[combo_cnt].startSoundEmy(getCenterPos(), GameAudio::getRemotePlayer(mPlayerNo));
+}
