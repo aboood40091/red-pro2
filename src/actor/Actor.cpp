@@ -1,8 +1,10 @@
 #include <actor/Actor.h>
+#include <actor/ActorUtil.h>
 #include <collision/ActorCollisionCheckMgr.h>
 #include <game/SubjectMgr.h>
 #include <player/PlayerMgr.h>
 #include <player/PlayerObject.h>
+#include <scroll/BgScrollMgr.h>
 
 #define COMBO_CNT_MAX 9
 
@@ -71,4 +73,50 @@ void Actor::slideComboSE(s32 combo_cnt, bool combo_type_2)
         GameAudio::setClapSE();
 
     cs_combo_se[combo_cnt].startSoundEmy(getCenterPos(), GameAudio::getRemotePlayer(mPlayerNo));
+}
+
+s32 Actor::searchNearPlayer(sead::Vector2f& out)
+{
+    return ActorUtil::searchNearPlayer_Main(out, getCenterPos());
+}
+
+u32 Actor::directionToPlayerH(const sead::Vector3f& position)
+{
+    sead::Vector2f pl_position;
+    s32 player_no = ActorUtil::searchNearPlayer_Main(pl_position, position);
+
+    if (0 <= player_no && player_no < 4)
+    {
+        if (pl_position.x < 0.0)
+            return DIRECTION_LEFT;
+        else
+            return DIRECTION_RIGHT;
+    }
+    else
+    {
+        if (mPos.x > BgScrollMgr::instance()->getScreenCenterX() + 96.0f)
+            return DIRECTION_LEFT;
+        else if (mPos.x < BgScrollMgr::instance()->getScreenCenterX() - 96.0f)
+            return DIRECTION_RIGHT;
+        else
+            return mDirection;
+    }
+}
+
+u32 Actor::directionToPlayerV(const sead::Vector3f& position)
+{
+    sead::Vector2f pl_position;
+    s32 player_no = ActorUtil::searchNearPlayer_Main(pl_position, position);
+
+    if (0 <= player_no && player_no < 4)
+    {
+        if (pl_position.y < 0.0)
+            return DIRECTION_DOWN;
+        else
+            return DIRECTION_UP;
+    }
+    else
+    {
+        return DIRECTION_UP;
+    }
 }
