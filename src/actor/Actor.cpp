@@ -141,7 +141,7 @@ bool Actor::screenOutCheck(u16 flag)
     if (!(flag & 8))
     {
         ActorBgCollisionCheck* p_bc = getBgCheck();
-        if (p_bc != nullptr && p_bc->getOutput().isOnBit(2))
+        if (p_bc != nullptr && p_bc->checkRide())
             return false;
     }
 
