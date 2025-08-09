@@ -229,6 +229,17 @@ f32 Actor::getEffectZPos() const
     }
 }
 
+bool Actor::checkEat() const
+{
+    if (mpEatData != nullptr && (mpEatData->getState() == 1 || mpEatData->getState() == 2))
+        return true;
+
+    if (mpChibiYoshiEatData != nullptr && (mpChibiYoshiEatData->getState() == 1 || mpChibiYoshiEatData->getState() == 2))
+        return true;
+
+    return false;
+}
+
 void Actor::deleteActor(bool no_respawn)
 {
     requestDelete();
