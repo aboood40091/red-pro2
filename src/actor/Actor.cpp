@@ -4,8 +4,12 @@
 #include <actor/ChibiYoshiEatData.h>
 #include <actor/EatData.h>
 #include <collision/ActorCollisionCheckMgr.h>
+#include <collision/BasicBgCollisionCheck.h>
+#include <collision/BgCollisionCheckParam.h>
+#include <collision/BgCollisionCheckResult.h>
 #include <enemy/TottenMgr.h>
 #include <game/SubjectMgr.h>
+#include <map/LayerID.h>
 #include <map_obj/ChibiYoshiAwaData.h>
 #include <player/PlayerMgr.h>
 #include <player/PlayerObject.h>
@@ -188,6 +192,41 @@ void Actor::yoganWaveSplashEffect(const sead::Vector3f& pos)
 
 void Actor::poisonSplashEffect(const sead::Vector3f& pos)
 {
+}
+
+f32 Actor::getEffectZPos() const
+{
+    if (mCollisionMask.isOnBit(0) && mLayer == cLayerID_Layer1)
+    {
+        const BgCollisionCheckParam param = {
+            0,                              // _0
+            false,                          // ignore_quicksand
+            cLayerID_Layer1,                // layer
+            sead::BitFlag8(3),              // collision_mask
+            cBgCollisionCheckType_Solid,    // type
+            nullptr                         // callback
+        };
+        const sead::Vector2f check_pos(
+            mPos.x,
+            mPos.y + 2.0f
+        );
+        BgCollisionCheckResultPoint res;
+        BasicBgCollisionCheck bg_check(param);
+        if (!bg_check.checkPointUnit(&res, check_pos))
+        {
+            bg_check.setLayer(cLayerID_Layer0);
+            if (bg_check.checkPointUnit(&res, check_pos))
+            {
+                if (res.bg_check_data.getUnitKind() != BgCheckUnitInfo::cKind_Normal || res.bg_check_data.getUnitSolidType() != BgCheckUnitInfo::cSolidType_None)
+                    return 3300.0f;
+            }
+        }
+        return 4500.0f;
+    }
+    else
+    {
+        return mPos.z;
+    }
 }
 
 void Actor::deleteActor(bool no_respawn)
