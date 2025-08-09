@@ -123,6 +123,13 @@ u32 Actor::directionToPlayerV(const sead::Vector3f& position)
     }
 }
 
+void Actor::deleteActor(bool no_respawn)
+{
+    requestDelete();
+    if (_270 != nullptr && !no_respawn)
+        *_270 &= ~1;
+}
+
 u32 Actor::calcTottenToSrcDir_(const sead::BoundBox2f& src_range) const
 {
     if (!MainGame::instance()->isStory() ||
