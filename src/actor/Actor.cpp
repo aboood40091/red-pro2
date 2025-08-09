@@ -1,8 +1,12 @@
 #include <actor/Actor.h>
+#include <actor/ActorCullUtil.h>
 #include <actor/ActorUtil.h>
+#include <actor/ChibiYoshiEatData.h>
+#include <actor/EatData.h>
 #include <collision/ActorCollisionCheckMgr.h>
 #include <enemy/TottenMgr.h>
 #include <game/SubjectMgr.h>
+#include <map_obj/ChibiYoshiAwaData.h>
 #include <player/PlayerMgr.h>
 #include <player/PlayerObject.h>
 #include <scroll/BgScrollMgr.h>
@@ -121,6 +125,48 @@ u32 Actor::directionToPlayerV(const sead::Vector3f& position)
     {
         return DIRECTION_UP;
     }
+}
+
+bool Actor::screenOutCheck(u16 flag)
+{
+    if (mpEatData != nullptr && mpEatData->getState() == 2)
+        return false;
+
+    if (mpChibiYoshiEatData != nullptr && mpChibiYoshiEatData->getState() == 2)
+        return false;
+
+    if (mpChibiYoshiAwaData != nullptr && mpChibiYoshiAwaData->getState() != 0)
+        return false;
+
+    if (!(flag & 8))
+    {
+        ActorBgCollisionCheck* p_bc = getBgCheck();
+        if (p_bc != nullptr && p_bc->getOutput().isOnBit(2))
+            return false;
+    }
+
+    const f32 l = mPos.x + mVisibleArea.offset.x - mVisibleArea.size.x * 0.5f;
+    const f32 r = l + mVisibleArea.size.x;
+
+    const f32 b = mPos.y + mVisibleArea.offset.y - mVisibleArea.size.y * 0.5f;
+    const f32 t = b + mVisibleArea.size.y;
+
+    const sead::BoundBox2f visible_range(l, b, r, t);
+
+    if ((flag & 0x10) && calcTottenToSrcDir_(visible_range) == DIRECTION_RIGHT)
+        return false;
+
+    bool out = false;
+
+    if (ActorCullUtil::areaCullCheck(visible_range, mAreaNo))
+        out = true;
+    else if (!(flag & 4) && ActorCullUtil::screenCullCheck(visible_range, mCullLimit))
+        out = true;
+
+    if (out && !(flag & 2))
+        deleteActor(mIsNoRespawn);
+
+    return out;
 }
 
 void Actor::deleteActor(bool no_respawn)
