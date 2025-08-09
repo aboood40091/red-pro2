@@ -1,10 +1,12 @@
 #include <actor/Actor.h>
 #include <actor/ActorUtil.h>
 #include <collision/ActorCollisionCheckMgr.h>
+#include <enemy/TottenMgr.h>
 #include <game/SubjectMgr.h>
 #include <player/PlayerMgr.h>
 #include <player/PlayerObject.h>
 #include <scroll/BgScrollMgr.h>
+#include <system/MainGame.h>
 
 #define COMBO_CNT_MAX 9
 
@@ -119,4 +121,19 @@ u32 Actor::directionToPlayerV(const sead::Vector3f& position)
     {
         return DIRECTION_UP;
     }
+}
+
+u32 Actor::calcTottenToSrcDir_(const sead::BoundBox2f& src_range) const
+{
+    if (!MainGame::instance()->isStory() ||
+        TottenMgr::instance() == nullptr ||
+        TottenMgr::instance()->getTottenActor() == nullptr)
+    {
+        return DIRECTION_LEFT;
+    }
+
+    if (TottenMgr::instance()->getTottenActor()->getPos().x > src_range.getMax().x)
+        return DIRECTION_LEFT;
+    else
+        return DIRECTION_RIGHT;
 }
