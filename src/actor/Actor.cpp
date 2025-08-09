@@ -169,6 +169,27 @@ bool Actor::screenOutCheck(u16 flag)
     return out;
 }
 
+void Actor::allEnemyDeathEffSet()
+{
+}
+
+void Actor::waterSplashEffect(const sead::Vector3f& pos)
+{
+}
+
+void Actor::yoganSplashEffect(const sead::Vector3f& pos)
+{
+}
+
+void Actor::yoganWaveSplashEffect(const sead::Vector3f& pos)
+{
+    yoganSplashEffect(pos);
+}
+
+void Actor::poisonSplashEffect(const sead::Vector3f& pos)
+{
+}
+
 void Actor::deleteActor(bool no_respawn)
 {
     requestDelete();
