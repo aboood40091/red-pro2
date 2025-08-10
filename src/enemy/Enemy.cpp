@@ -6,7 +6,7 @@ bool Enemy::ceilCheck(f32 pos_y, ActorCollisionCheck* p_cc)
     // true: The enemy is completely above the screen
 
     const f32 screen_top_world_pos = BgScrollMgr::instance()->getScreenTop(); // The World-space position of the screen top edge in this frame
-    return screen_top_world_pos < pos_y + p_cc->getInfo().center_offset_y - p_cc->getInfo().half_size_y;
+    return screen_top_world_pos < pos_y + p_cc->getCollisionData().center_offset_y - p_cc->getCollisionData().half_size_y;
 }
 
 void Enemy::normal_collcheck(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
@@ -51,17 +51,17 @@ void Enemy::normal_collcheck(ActorCollisionCheck* cc_self, ActorCollisionCheck* 
 
             if (!p_en_self->playerDamageCheck(cc_self, cc_other))
             {
-                if (cc_other->getInfo().type == ActorCollisionCheck::cType_PlayerAttack)
+                if (cc_other->getCollisionData().kind == ActorCollisionCheck::cKind_PlayerAttack)
                     return;
 
                 s32 player_no = p_actor_other->getPlayerNo();
                 if (!(0 <= player_no && player_no < 4))
                     return;
 
-                if (p_en_self->mNoPlayerHitTimer[player_no] != 0)
+                if (p_en_self->mNoHitPlayerTimer[player_no] != 0)
                     return;
 
-                p_en_self->mNoPlayerHitTimer[player_no] = 5;
+                p_en_self->mNoHitPlayerTimer[player_no] = cNoHitPlayerTimerDefault;
 
                 p_en_self->vsPlayerHitCheck_Normal(cc_self, cc_other);
                 return;
@@ -74,7 +74,7 @@ void Enemy::normal_collcheck(ActorCollisionCheck* cc_self, ActorCollisionCheck* 
             if (!(0 <= player_no && player_no < 4))
                 return;
 
-            if (cc_other->getInfo().attack == ActorCollisionCheck::cAttack_YoshiTongue)
+            if (cc_other->getCollisionData().attack == ActorCollisionCheck::cAttack_YoshiEat)
             {
                 p_en_self->hitYoshiEat(cc_self, cc_other);
                 return;
@@ -85,10 +85,10 @@ void Enemy::normal_collcheck(ActorCollisionCheck* cc_self, ActorCollisionCheck* 
 
             if (!p_en_self->yoshiDamageCheck(cc_self, cc_other))
             {
-                if (p_en_self->mNoPlayerHitTimer[player_no] != 0)
+                if (p_en_self->mNoHitPlayerTimer[player_no] != 0)
                     return;
 
-                p_en_self->mNoPlayerHitTimer[player_no] = 5;
+                p_en_self->mNoHitPlayerTimer[player_no] = cNoHitPlayerTimerDefault;
 
                 p_en_self->vsYoshiHitCheck_Normal(cc_self, cc_other);
                 return;
@@ -102,7 +102,7 @@ void Enemy::normal_collcheck(ActorCollisionCheck* cc_self, ActorCollisionCheck* 
 
             if (!p_en_self->chibiYoshiDamageCheck(cc_self, cc_other))
             {
-                if (cc_other->getInfo().attack != ActorCollisionCheck::cAttack_Generic)
+                if (cc_other->getCollisionData().attack != ActorCollisionCheck::cAttack_Generic)
                     return;
 
                 p_en_self->vsChibiYoshiHitCheck_Normal(cc_self, cc_other);

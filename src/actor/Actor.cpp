@@ -217,7 +217,7 @@ f32 Actor::getEffectZPos() const
             bg_check.setLayer(cLayerID_Layer0);
             if (bg_check.checkPointUnit(&res, check_pos))
             {
-                if (res.bg_check_data.getUnitKind() != BgCheckUnitInfo::cKind_Normal || res.bg_check_data.getUnitSolidType() != BgCheckUnitInfo::cSolidType_None)
+                if (res.bg_check_data.getType() != BgUnitCode::cType_None || res.bg_check_data.getHitType() != BgUnitCode::cHitType_None)
                     return 3300.0f;
             }
         }
