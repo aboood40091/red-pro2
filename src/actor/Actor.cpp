@@ -451,3 +451,24 @@ void Actor::setAreaNo_()
 {
     mAreaNo = Info::instance()->getAreaNo();
 }
+
+void Actor::calcSpeedX_()
+{
+    f32 speed_x = mSpeed.x;
+    f32 speed_max_x = mSpeedMax.x;
+
+    if (speed_x < speed_max_x)
+    {
+        speed_x += mAccelF;
+        if (speed_x > speed_max_x)
+            speed_x = speed_max_x;
+    }
+    else if (speed_x > speed_max_x)
+    {
+        speed_x -= mAccelF;
+        if (speed_x < speed_max_x)
+            speed_x = speed_max_x;
+    }
+
+    mSpeed.x = speed_x;
+}
