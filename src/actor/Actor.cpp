@@ -446,3 +446,8 @@ void Actor::splashEffect_(const sead::Vector3f& pos, EffectID effect_id, u8 wave
     Bg::instance()->setWaterInWave(mPos, wave_scale);
     GameAudio::getAudioObjMap()->startSound(sound_label, eff_pos);
 }
+
+void Actor::setAreaNo_()
+{
+    mAreaNo = Info::instance()->getAreaNo();
+}
