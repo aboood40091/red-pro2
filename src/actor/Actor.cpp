@@ -479,3 +479,19 @@ void Actor::calcSpeedY_(f32 accel_y, f32 speed_max_y)
     if (mSpeed.y < speed_max_y)
         mSpeed.y = speed_max_y;
 }
+
+void Actor::calcFallSpeed_(f32 accel_y, f32 fall_speed_max)
+{
+    if (mSpeed.y < fall_speed_max)
+    {
+        mSpeed.y -= accel_y;
+        if (mSpeed.y > fall_speed_max)
+            mSpeed.y = fall_speed_max;
+    }
+    else if (mSpeed.y > fall_speed_max)
+    {
+        mSpeed.y += accel_y;
+        if (mSpeed.y < fall_speed_max)
+            mSpeed.y = fall_speed_max;
+    }
+}
