@@ -387,7 +387,7 @@ void Actor::postExecute_(MainState state)
     {
         mPosPrevPostExec = mPos;
 
-        if (!(mProfFlag & Profile::cFlag_LoopPosX))
+        if (!(mProfFlag & Profile::cFlag_NoLoopPosX))
         {
             f32 pos_x_loop = AreaTask::instance()->getLoopPosX(mPosPrevPostExec.x);
             f32 pos_x_prev = mPosPrevPostExec.x;
