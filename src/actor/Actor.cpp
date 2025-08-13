@@ -472,3 +472,10 @@ void Actor::calcSpeedX_()
 
     mSpeed.x = speed_x;
 }
+
+void Actor::calcSpeedY_(f32 accel_y, f32 speed_max_y)
+{
+    mSpeed.y += accel_y;
+    if (mSpeed.y < speed_max_y)
+        mSpeed.y = speed_max_y;
+}
