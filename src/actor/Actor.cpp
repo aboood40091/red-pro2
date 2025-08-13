@@ -3,11 +3,13 @@
 #include <actor/ActorUtil.h>
 #include <actor/ChibiYoshiEatData.h>
 #include <actor/EatData.h>
+#include <actor/Profile.h>
 #include <collision/ActorCollisionCheckMgr.h>
 #include <collision/BasicBgCollisionCheck.h>
 #include <collision/BgCollisionCheckParam.h>
 #include <collision/BgCollisionCheckResult.h>
 #include <enemy/TottenMgr.h>
+#include <game/Info.h>
 #include <game/SubjectMgr.h>
 #include <map/LayerID.h>
 #include <map_obj/ChibiYoshiAwaData.h>
@@ -17,6 +19,9 @@
 #include <system/MainGame.h>
 
 #define COMBO_CNT_MAX 9
+
+const f32 Actor::cCullXLimit = 80.0f;
+const f32 Actor::cCullYLimit = 256.0f;
 
 void Actor::removeCollisionCheck()
 {
@@ -260,4 +265,83 @@ u32 Actor::calcTottenToSrcDir_(const sead::BoundBox2f& src_range) const
         return DIRECTION_LEFT;
     else
         return DIRECTION_RIGHT;
+}
+
+Actor::Actor(const ActorCreateParam& param)
+    : ActorBase(param)
+    , mDirection(DIRECTION_RIGHT)
+    , mPlayerNo(-1)
+    , mControllerLytPlayerNo(-1)
+    , mLayer(param.param_ex_0.course.layer)
+    , mCollisionMask(cCcLineKind_0)
+    , mSpeedF(0.0f)
+    , mSpeedFMax(0.0f)
+    , mFallSpeedMax(0.0f)
+    , mAccelY(0.0f)
+    , mAccelF(0.0f)
+    , mPos(param.position)
+    , mSpeed(0.0f, 0.0f, 0.0f)
+    , mSpeedMax(0.0f, 0.0f, 0.0f)
+    , mScale(1.0f, 1.0f, 1.0f)
+    , mAngle()
+    , mAnglePrev()
+    , mPosDelta(0.0f, 0.0f)
+    , mCollisionCheck()
+    , mVisibleAreaOffset(
+        param.p_profile->getActorCreateInfo().spawn_range.offset_x,
+        param.p_profile->getActorCreateInfo().spawn_range.offset_y)
+    , mVisibleAreaSize(
+        param.p_profile->getActorCreateInfo().spawn_range.half_size_x * 2.0f,
+        param.p_profile->getActorCreateInfo().spawn_range.half_size_y * 2.0f)
+    , mSize(mVisibleAreaSize)
+    , mAreaNo(Info::instance()->getAreaNo())
+    , mActorType(cActorType_Generic)
+    , mIsExecEnable(true)
+    , mIsDrawEnable(true)
+    , mIsNoRespawn(false)
+    , _211(1)
+    , mCarryFlag(0)
+    , mSwitchFlag0(param.param_ex_0.course.switch_flag_0)
+    , mSwitchFlag1(param.param_ex_0.course.switch_flag_1)
+    , mCreateFlag(param.p_profile->getActorCreateInfo().flag)
+    , mBumpDamageTimer(0)
+    , mBumpDirection(DIRECTION_RIGHT)
+    , _220(0)
+    , mCarryDirection(DIRECTION_RIGHT)
+    , mThrowPlayerNo(0)
+    , mComboCnt(0)
+    , mProfFlag(param.p_profile->getFlag())
+    , mCenterOffset(0.0f, 0.0f, 0.0f)
+    , mPosPrev(param.position)
+    , mPosPrevPostExec(param.position)
+    , mPosPrev2(param.position)
+    , mpEatData(nullptr)
+    , mpChibiYoshiEatData(nullptr)
+    , mpPropelParts(nullptr)
+    , _270(param._28)
+    , mThrowSpeed(0.0f)
+    , mpChibiYoshiAwaData(nullptr)
+{
+    const ActorCreateInfo& info = param.p_profile->getActorCreateInfo();
+    const f32 cull_range_up = info.cull_range.up;
+    const f32 cull_range_down = info.cull_range.down;
+    const f32 cull_range_left = info.cull_range.left;
+    const f32 cull_range_right = info.cull_range.right;
+
+    mCullLimit.up = cCullYLimit;
+    mCullLimit.down = cCullYLimit;
+    mCullLimit.left = cCullXLimit;
+    mCullLimit.right = cCullXLimit;
+
+    mCullLimit.up += cull_range_up;
+    mCullLimit.down += cull_range_down;
+    mCullLimit.left += cull_range_left;
+    mCullLimit.right += cull_range_right;
+
+    mCollisionCheck.setLayer(mLayer);
+}
+
+Actor::~Actor()
+{
+    ActorCollisionCheckMgr::instance()->release(mCollisionCheck);
 }
