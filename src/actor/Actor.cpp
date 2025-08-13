@@ -9,9 +9,11 @@
 #include <collision/BgCollisionCheckParam.h>
 #include <collision/BgCollisionCheckResult.h>
 #include <enemy/TottenMgr.h>
+#include <fragment/FragmentMgr.h>
 #include <game/AreaTask.h>
 #include <game/Info.h>
 #include <game/SubjectMgr.h>
+#include <map/Bg.h>
 #include <map/LayerID.h>
 #include <map_obj/ChibiYoshiAwaData.h>
 #include <player/PlayerMgr.h>
@@ -435,4 +437,12 @@ bool Actor::drawCullCheck_()
 
     const sead::BoundBox2f visible_range(l, b, r, t);
     return ActorCullUtil::screenCullCheck(visible_range);
+}
+
+void Actor::splashEffect_(const sead::Vector3f& pos, EffectID effect_id, u8 wave_scale, const char* sound_label)
+{
+    const sead::Vector3f eff_pos(getPos2D(), 6500.0f);
+    FragmentMgr::instance()->createWaterSplashEff(eff_pos, mLayer, effect_id);
+    Bg::instance()->setWaterInWave(mPos, wave_scale);
+    GameAudio::getAudioObjMap()->startSound(sound_label, eff_pos);
 }
