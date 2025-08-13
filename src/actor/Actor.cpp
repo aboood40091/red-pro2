@@ -149,11 +149,11 @@ bool Actor::screenOutCheck(u16 flag)
             return false;
     }
 
-    const f32 l = mPos.x + mVisibleArea.offset.x - mVisibleArea.size.x * 0.5f;
-    const f32 r = l + mVisibleArea.size.x;
+    const f32 l = mPos.x + mVisibleAreaOffset.x - mVisibleAreaSize.x * 0.5f;
+    const f32 r = l + mVisibleAreaSize.x;
 
-    const f32 b = mPos.y + mVisibleArea.offset.y - mVisibleArea.size.y * 0.5f;
-    const f32 t = b + mVisibleArea.size.y;
+    const f32 b = mPos.y + mVisibleAreaOffset.y - mVisibleAreaSize.y * 0.5f;
+    const f32 t = b + mVisibleAreaSize.y;
 
     const sead::BoundBox2f visible_range(l, b, r, t);
 
