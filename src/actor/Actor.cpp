@@ -387,7 +387,7 @@ void Actor::postExecute_(MainState state)
     {
         mPosPrevPostExec = mPos;
 
-        if (!(mProfFlag & (1 << 10)))
+        if (!(mProfFlag & Profile::cFlag_LoopPosX))
         {
             f32 pos_x_loop = AreaTask::instance()->getLoopPosX(mPosPrevPostExec.x);
             f32 pos_x_prev = mPosPrevPostExec.x;
@@ -416,7 +416,7 @@ s32 Actor::preDraw_()
     if (mpChibiYoshiEatData != nullptr && mpChibiYoshiEatData->getState() == 2)
         return 0;
 
-    if ((mProfFlag & (1 << 1)) && drawCullCheck_())
+    if ((mProfFlag & Profile::cFlag_DrawCullCheck) && drawCullCheck_())
         return 0;
 
     return 1;
