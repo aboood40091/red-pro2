@@ -9,6 +9,7 @@
 #include <collision/BgCollisionCheckParam.h>
 #include <collision/BgCollisionCheckResult.h>
 #include <enemy/TottenMgr.h>
+#include <game/AreaTask.h>
 #include <game/Info.h>
 #include <game/SubjectMgr.h>
 #include <map/LayerID.h>
@@ -344,4 +345,79 @@ Actor::Actor(const ActorCreateParam& param)
 Actor::~Actor()
 {
     ActorCollisionCheckMgr::instance()->release(mCollisionCheck);
+}
+
+void Actor::postCreate_(MainState state)
+{
+    if (state == cState_Success)
+    {
+        mPosPrev = mPos;
+        mPosPrev2 = mPos;
+    }
+    ActorBase::postCreate_(state);
+}
+
+s32 Actor::preExecute_()
+{
+    mPosPrev = mPosPrev2;
+
+    if (ActorBase::preExecute_() == 0)
+        return 0;
+
+    if (!mIsExecEnable)
+        return 0;
+
+    getPos2D() += mPosDelta;
+
+    if (mBumpDamageTimer == 8)
+    {
+        SubjectMgr::instance()->onAcBlockHit();
+        blockHitInit_();
+    }
+
+    if (mBumpDamageTimer > 0)
+        mBumpDamageTimer--;
+
+    return 1;
+}
+
+void Actor::postExecute_(MainState state)
+{
+    if (state == cState_Success)
+    {
+        mPosPrevPostExec = mPos;
+
+        if (!(mProfFlag & (1 << 10)))
+        {
+            f32 pos_x_loop = AreaTask::instance()->getLoopPosX(mPosPrevPostExec.x);
+            f32 pos_x_prev = mPosPrevPostExec.x;
+            f32 delta = pos_x_prev - pos_x_loop;
+            mPos.x = pos_x_loop;
+            if (!(-0.0001f <= delta && delta <= 0.0001f))
+                mPosPrev.x += pos_x_loop - pos_x_prev;
+        }
+    }
+    mPosPrev2 = mPos;
+    mPosDelta = sead::Vector2f::zero;
+    ActorBase::postExecute_(state);
+}
+
+s32 Actor::preDraw_()
+{
+    if (ActorBase::preDraw_() == 0)
+        return 0;
+
+    if (!mIsDrawEnable)
+        return 0;
+
+    if (mpEatData != nullptr && mpEatData->getState() == 2)
+        return 0;
+
+    if (mpChibiYoshiEatData != nullptr && mpChibiYoshiEatData->getState() == 2)
+        return 0;
+
+    if ((mProfFlag & (1 << 1)) && drawCullCheck_())
+        return 0;
+
+    return 1;
 }
