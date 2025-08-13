@@ -421,3 +421,18 @@ s32 Actor::preDraw_()
 
     return 1;
 }
+
+bool Actor::drawCullCheck_()
+{
+    const f32 size_x = mSize.x + 32.0f;
+    const f32 size_y = mSize.y + 32.0f;
+    
+    const f32 l = mPos.x + mVisibleAreaOffset.x - size_x * 0.5f;
+    const f32 r = l + size_x;
+
+    const f32 b = mPos.y + mVisibleAreaOffset.y - size_y * 0.5f;
+    const f32 t = b + size_y;
+
+    const sead::BoundBox2f visible_range(l, b, r, t);
+    return ActorCullUtil::screenCullCheck(visible_range);
+}
