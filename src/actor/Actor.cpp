@@ -10,7 +10,9 @@
 #include <collision/BgCollisionCheckResult.h>
 #include <enemy/TottenMgr.h>
 #include <fragment/FragmentMgr.h>
+#include <fukidashi/FukidashiMgr.h>
 #include <game/AreaTask.h>
+#include <game/CourseTask.h>
 #include <game/Info.h>
 #include <game/SubjectMgr.h>
 #include <map/Bg.h>
@@ -493,5 +495,141 @@ void Actor::calcFallSpeed_(f32 accel_y, f32 fall_speed_max)
         mSpeed.y += accel_y;
         if (mSpeed.y < fall_speed_max)
             mSpeed.y = fall_speed_max;
+    }
+}
+
+void Actor::carryFukidashiCheck_(s32 action)
+{
+    static const sead::Vector2f c_range(
+        9.0f,
+        12.0f
+    );
+    carryFukidashiCheck_(action, c_range);
+}
+
+static inline bool CheckBoxOverlap(const sead::BoundBox2f& a, const sead::BoundBox2f& b)
+{
+    const sead::Vector2f& min_a = a.getMin();
+    const sead::Vector2f& min_b = b.getMin();
+
+    const sead::Vector2f& max_a = a.getMax();
+    const sead::Vector2f& max_b = b.getMax();
+
+    return min_a.x <= max_b.x && min_b.x <= max_a.x &&
+           min_a.y <= max_b.y && min_b.y <= max_a.y;
+}
+
+Actor* Actor::searchCarryFukidashiPlayer_(s32 action)
+{
+    const sead::Vector2f& center_pos = getCenterPos2D();
+
+    const FieldGameData& game_data = 
+        (CourseTask::instance() != nullptr)
+            ? CourseTask::instance()->getGameData()
+            : FieldGame::instance()->getGameData();
+
+    Actor* p_actor_player = nullptr;
+    f32 dist = sead::Mathf::maxNumber();
+
+    for (s32 i = 0; i < 4; i++)
+    {
+        if (!PlayerMgr::instance()->isPlayerActive(i))
+            continue;
+
+        if (game_data.getPlayerData(mControllerLytPlayerNo).fukidashi_flag.isOnBit(action))
+            continue;
+
+        PlayerObject* p_player_current = PlayerMgr::instance()->getPlayerObject2(i);
+        if (p_player_current == nullptr)
+            continue;
+
+        f32 dist_current = p_player_current->getCenterPos2D().squaredDistance(center_pos);
+        if (dist_current < dist)
+        {
+            p_actor_player = p_player_current;
+            dist = dist_current;
+        }
+    }
+
+    return p_actor_player;
+}
+
+void Actor::carryFukidashiCheck_(s32 action, const sead::Vector2f& range)
+{
+    const sead::Vector2f& center_pos = getCenterPos2D();
+    const sead::BoundBox2f check_range(
+        center_pos.x - range.x, center_pos.y - range.y,
+        center_pos.x + range.x, center_pos.y + range.y
+    );
+
+    const FieldGameData& game_data = 
+        (CourseTask::instance() != nullptr)
+            ? CourseTask::instance()->getGameData()
+            : FieldGame::instance()->getGameData();
+
+    if ((0 <= mControllerLytPlayerNo && mControllerLytPlayerNo < 4) &&
+        game_data.getPlayerData(mControllerLytPlayerNo).fukidashi_flag.isOnBit(action))
+    {
+        mControllerLytPlayerNo = -1;
+    }
+
+    if (0 <= mControllerLytPlayerNo && mControllerLytPlayerNo < 4)
+    {
+        PlayerObject* p_player = PlayerMgr::instance()->getPlayerObject(mControllerLytPlayerNo);
+        if (p_player == nullptr)
+            return;
+
+        if (!FukidashiMgr::instance()->isVisible(mControllerLytPlayerNo))
+            FukidashiMgr::instance()->show(mControllerLytPlayerNo, action);
+
+        bool hide = true;
+        if (p_player->isDrawingCarryFukidashi())
+        {
+            sead::Vector2f center_offset, half_size;
+            p_player->getSpinLiftUpCcSizeInfo(&center_offset, &half_size);
+
+            f32 center_pos_x = AreaTask::instance()->getLoopPosX(p_player->getPos().x + center_offset.x) ;
+            f32 center_pos_y = p_player->getPos().y + center_offset.y;
+
+            const sead::BoundBox2f check_range_player(
+                center_pos_x - half_size.x - 2.0f, center_pos_y - half_size.y,
+                center_pos_x + half_size.x + 2.0f, center_pos_y + half_size.y
+            );
+
+            if (CheckBoxOverlap(check_range, check_range_player))
+                hide = false;
+        }
+        if (hide)
+        {
+            FukidashiMgr::instance()->hide(mControllerLytPlayerNo, action);
+            mControllerLytPlayerNo = -1;
+        }
+    }
+    else
+    {
+        Actor* p_actor_player = searchCarryFukidashiPlayer_(action);
+        if (p_actor_player == nullptr)
+            return;
+
+        PlayerObject* p_player = sead::DynamicCast<PlayerObject>(p_actor_player);
+        if (p_player == nullptr)
+            return;
+
+        if (p_player->isDrawingCarryFukidashi())
+        {
+            sead::Vector2f center_offset, half_size;
+            p_player->getSpinLiftUpCcSizeInfo(&center_offset, &half_size);
+
+            f32 center_pos_x = AreaTask::instance()->getLoopPosX(p_player->getPos().x + center_offset.x) ;
+            f32 center_pos_y = p_player->getPos().y + center_offset.y;
+
+            const sead::BoundBox2f check_range_player(
+                center_pos_x - half_size.x, center_pos_y - half_size.y,
+                center_pos_x + half_size.x, center_pos_y + half_size.y
+            );
+
+            if (CheckBoxOverlap(check_range, check_range_player))
+                mControllerLytPlayerNo = p_player->getPlayerNo();
+        }
     }
 }
