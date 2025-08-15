@@ -601,7 +601,7 @@ void Actor::carryFukidashiCheck_(s32 action, const sead::Vector2f& range)
         }
         if (hide)
         {
-            FukidashiMgr::instance()->hide(mControllerLytPlayerNo, action);
+            FukidashiMgr::instance()->hideTemp(mControllerLytPlayerNo, action);
             mControllerLytPlayerNo = -1;
         }
     }
