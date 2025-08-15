@@ -633,3 +633,21 @@ void Actor::carryFukidashiCheck_(s32 action, const sead::Vector2f& range)
         }
     }
 }
+
+void Actor::carryFukidashiCancel_(s32 action, s32 player_no)
+{
+    for (s32 i = 0; i < 4; i++)
+    {
+        if (i == player_no)
+        {
+            FukidashiMgr::instance()->hide(i, action);
+            FukidashiMgr::instance()->setComplete(i, action);
+        }
+        else
+        {
+            FukidashiMgr::instance()->hideTemp(i, action);
+        }
+    }
+
+    mControllerLytPlayerNo = -1;
+}
