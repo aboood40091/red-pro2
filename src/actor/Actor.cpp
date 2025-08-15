@@ -521,7 +521,7 @@ static inline bool CheckBoxOverlap(const sead::BoundBox2f& a, const sead::BoundB
 
 Actor* Actor::searchCarryFukidashiPlayer_(s32 action)
 {
-    const sead::Vector2f& center_pos = getCenterPos2D();
+    const sead::Vector2f& center_pos = getCenterPos();
 
     const FieldGameData& game_data = 
         (CourseTask::instance() != nullptr)
@@ -556,7 +556,7 @@ Actor* Actor::searchCarryFukidashiPlayer_(s32 action)
 
 void Actor::carryFukidashiCheck_(s32 action, const sead::Vector2f& range)
 {
-    const sead::Vector2f& center_pos = getCenterPos2D();
+    const sead::Vector2f& center_pos = getCenterPos();
     const sead::BoundBox2f check_range(
         center_pos.x - range.x, center_pos.y - range.y,
         center_pos.x + range.x, center_pos.y + range.y
