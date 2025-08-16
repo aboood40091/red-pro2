@@ -186,7 +186,7 @@ const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
     ProfileID::c27F,                                        // 181
     ProfileID::c0D3,                                        // 182
     ProfileID::c30A,                                        // 183
-    ProfileID::c15E,                                        // 184
+    ProfileID::cIcicleBig,                                  // 184
     ProfileID::c30B,                                        // 185
     ProfileID::c0D4,                                        // 186
     ProfileID::c28B,                                        // 187

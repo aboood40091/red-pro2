@@ -634,7 +634,7 @@ enum DrawPriority
     cDrawPriority_16F                                       = 595,
     cDrawPriority_29D                                       = 596,
     cDrawPriority_30A                                       = 597,
-    cDrawPriority_15E                                       = 598,
+    cDrawPriority_IcicleBig                                 = 598,
     cDrawPriority_30B                                       = 599,
     cDrawPriority_30C                                       = 600,
     cDrawPriority_30D                                       = 601,
@@ -1304,7 +1304,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_SwitchPbuttonNoWallKick,                  // ProfileID::cSwitchPbuttonNoWallKick
     cDrawPriority_15C,                                      // ProfileID::c15C
     cDrawPriority_15D,                                      // ProfileID::c15D
-    cDrawPriority_15E,                                      // ProfileID::c15E
+    cDrawPriority_IcicleBig,                                // ProfileID::cIcicleBig
     cDrawPriority_LemmyBall,                                // ProfileID::cLemmyBall
     cDrawPriority_LemmyBomb,                                // ProfileID::cLemmyBomb
     cDrawPriority_161,                                      // ProfileID::c161
@@ -2222,7 +2222,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::cSwitchPbuttonNoWallKick
     Profile::cResType_Course,       // ProfileID::c15C
     Profile::cResType_Course,       // ProfileID::c15D
-    Profile::cResType_Course,       // ProfileID::c15E
+    Profile::cResType_Course,       // ProfileID::cIcicleBig
     Profile::cResType_Course,       // ProfileID::cLemmyBall
     Profile::cResType_Course,       // ProfileID::cLemmyBomb
     Profile::cResType_Course,       // ProfileID::c161
@@ -4036,7 +4036,7 @@ static const sead::SafeString cRes_15D[]  = {
     "switch_koopa"
 };
 
-static const sead::SafeString cRes_15E[]  = {
+static const sead::SafeString cRes_IcicleBig[]  = {
     "obj_turara_rakka_Big"
 };
 
@@ -6508,7 +6508,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_SwitchPbuttonNoWallKick),                    // ProfileID::cSwitchPbuttonNoWallKick
     0,                                                          // ProfileID::c15C
     GetResNum(cRes_15D),                                        // ProfileID::c15D
-    GetResNum(cRes_15E),                                        // ProfileID::c15E
+    GetResNum(cRes_IcicleBig),                                  // ProfileID::cIcicleBig
     GetResNum(cRes_LemmyBall),                                  // ProfileID::cLemmyBall
     GetResNum(cRes_LemmyBomb),                                  // ProfileID::cLemmyBomb
     GetResNum(cRes_161),                                        // ProfileID::c161
@@ -7426,7 +7426,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_SwitchPbuttonNoWallKick,                   // ProfileID::cSwitchPbuttonNoWallKick
     nullptr,                                        // ProfileID::c15C
     cRes_15D,                                       // ProfileID::c15D
-    cRes_15E,                                       // ProfileID::c15E
+    cRes_IcicleBig,                                 // ProfileID::cIcicleBig
     cRes_LemmyBall,                                 // ProfileID::cLemmyBall
     cRes_LemmyBomb,                                 // ProfileID::cLemmyBomb
     cRes_161,                                       // ProfileID::c161

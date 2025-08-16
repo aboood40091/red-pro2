@@ -691,7 +691,7 @@ bool Actor::canPress_(const BgCollision* p_bg_collision)
 
 bool Actor::checkPressLR_(const ActorBgCollisionCheck& bc, u32 direction)
 {
-    static const u32 c_hit_dir_bit[DIRECTION_NUM_X] = { 0, 1 };
+    static const u32 c_hit_dir_bit[DIRECTION_NUM_X] = { ActorBgCollisionCheck::cHitDirBit_Right, ActorBgCollisionCheck::cHitDirBit_Left };
     static const f32 c_dir_sign[DIRECTION_NUM_X] = { 1.0f, -1.0f };
     static const u32 c_dir_type[DIRECTION_NUM_X] = { DIRECTION_RIGHT, DIRECTION_LEFT };
 
