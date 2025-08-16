@@ -6,6 +6,7 @@
 #include <actor/Profile.h>
 #include <collision/ActorCollisionCheckMgr.h>
 #include <collision/BasicBgCollisionCheck.h>
+#include <collision/BgCollision.h>
 #include <collision/BgCollisionCheckParam.h>
 #include <collision/BgCollisionCheckResult.h>
 #include <enemy/TottenMgr.h>
@@ -17,6 +18,7 @@
 #include <game/SubjectMgr.h>
 #include <map/Bg.h>
 #include <map/LayerID.h>
+#include <map_obj/BlockCoinBase.h>
 #include <map_obj/ChibiYoshiAwaData.h>
 #include <player/PlayerMgr.h>
 #include <player/PlayerObject.h>
@@ -650,4 +652,80 @@ void Actor::carryFukidashiCancel_(s32 action, s32 player_no)
     }
 
     mControllerLytPlayerNo = -1;
+}
+
+bool Actor::isEnablePressLR_(const ActorBgCollisionCheck& bc)
+{
+    if (bc.getOutput().checkRightWallEx() && bc.getOutput().checkLeftWallEx())
+    {
+        if (!bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk24) &&
+            !bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk31) &&
+            !bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk30))
+        {
+            const BgCollision* p_bg_collision_r = bc.getHitBgCollisionWall(DIRECTION_RIGHT);
+            const BgCollision* p_bg_collision_l = bc.getHitBgCollisionWall(DIRECTION_LEFT);
+            if (p_bg_collision_r == nullptr || p_bg_collision_l == nullptr ||
+                (p_bg_collision_r != p_bg_collision_l && p_bg_collision_r->getOwner() != p_bg_collision_l->getOwner()))
+            {
+                if (canPress_(p_bg_collision_r) && canPress_(p_bg_collision_l))
+                    if (checkPressLR_(bc, DIRECTION_LEFT) || checkPressLR_(bc, DIRECTION_RIGHT))
+                        return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool Actor::canPress_(const BgCollision* p_bg_collision)
+{
+    if (p_bg_collision != nullptr)
+    {
+        if (p_bg_collision->isCallbackFlag(12) ||
+            (p_bg_collision->isCallbackFlag(11) && p_bg_collision->getType() != BgCollision::cType_BreakableIce))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Actor::checkPressLR_(const ActorBgCollisionCheck& bc, u32 direction)
+{
+    static const u32 c_hit_dir_bit[DIRECTION_NUM_X] = { 0, 1 };
+    static const f32 c_dir_sign[DIRECTION_NUM_X] = { 1.0f, -1.0f };
+    static const u32 c_dir_type[DIRECTION_NUM_X] = { DIRECTION_RIGHT, DIRECTION_LEFT };
+
+    if (bc.isHit(1 << c_hit_dir_bit[direction])) // If has been actively hit on this specific frame
+        return true;
+
+    if (canPressIfApproaching_(bc.getHitBgCollisionWall(direction), bc.getHitBgCollisionWall(InvDirX(direction))))
+    {
+        for (s32 i = 0; i < DIRECTION_NUM_X; i++)
+        {
+            u32 direction = c_dir_type[i];
+            const BgCollision* p_bg_collision = bc.getHitBgCollisionWall(direction);
+            if (p_bg_collision != nullptr &&
+                (p_bg_collision->getTypePosX() - p_bg_collision->getTypePosPrevX()) * c_dir_sign[direction] < 0.0f)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Actor::canPressIfApproaching_(const BgCollision* p_bgcol_approaching_side, const BgCollision* p_bgcol_fixed_side)
+{
+    if (p_bgcol_fixed_side != nullptr)
+    {
+        BlockCoinBase* p_block = p_bgcol_fixed_side->getOwner<BlockCoinBase>(); // "const BlockCoinBase*" does not match, what a joke of a compiler
+        if (p_block != nullptr && p_block->getMoveType() != BlockCoinBase::cMoveType_None)
+            return false;
+    }
+
+    if (p_bgcol_approaching_side != nullptr && (p_bgcol_approaching_side->getType() == BgCollision::cType_BoostBlock || p_bgcol_approaching_side->getType() == BgCollision::cType_BreakableIce))
+        return true;
+
+    return false;
 }
