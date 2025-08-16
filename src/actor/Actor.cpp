@@ -676,6 +676,31 @@ bool Actor::isEnablePressLR_(const ActorBgCollisionCheck& bc)
     return false;
 }
 
+bool Actor::isEnablePressUD_(const ActorBgCollisionCheck& bc)
+{
+    if (bc.getOutput().checkFoot() && bc.getOutput().checkHeadEx())
+    {
+        if (!bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk14) &&
+            !bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk17) &&
+            !bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk5) &&
+            !bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk9))
+        {
+            const BgCollision* p_bg_collision_d = bc.getHitBgCollisionFoot();
+            const BgCollision* p_bg_collision_u = bc.getHitBgCollisionHead();
+            if (p_bg_collision_d == nullptr || p_bg_collision_u == nullptr ||
+                (p_bg_collision_d != p_bg_collision_u && p_bg_collision_d->getOwner() != p_bg_collision_u->getOwner()))
+            {
+                if (canPress_(p_bg_collision_u) && canPress_(p_bg_collision_d))
+                    if (p_bg_collision_u == nullptr || p_bg_collision_u->getOwner() == nullptr || p_bg_collision_u->getOwner()->getProfileID() != ProfileID::cIcicleBig)
+                        if (BgUnitCode::getAttr(bc.getBgCheckData(DIRECTION_DOWN)) != BgUnitCode::cNuma)
+                            if (checkPressD_(bc) || checkPressU_(bc))
+                                return true;
+            }
+        }
+    }
+    return false;
+}
+
 bool Actor::canPress_(const BgCollision* p_bg_collision)
 {
     if (p_bg_collision != nullptr)
@@ -705,10 +730,52 @@ bool Actor::checkPressLR_(const ActorBgCollisionCheck& bc, u32 direction)
             u32 direction = c_dir_type[i];
             const BgCollision* p_bg_collision = bc.getHitBgCollisionWall(direction);
             if (p_bg_collision != nullptr &&
-                (p_bg_collision->getTypePosX() - p_bg_collision->getTypePosPrevX()) * c_dir_sign[direction] < 0.0f)
+                (p_bg_collision->getTypePos().x - p_bg_collision->getTypePosPrev().x) * c_dir_sign[direction] < 0.0f)
             {
                 return true;
             }
+        }
+    }
+
+    return false;
+}
+
+bool Actor::checkPressU_(const ActorBgCollisionCheck& bc)
+{
+    if (bc.isHit(1 << ActorBgCollisionCheck::cHitDirBit_Up)) // If has been actively hit on this specific frame
+        return true;
+
+    if (canPressIfApproaching_(bc.getHitBgCollisionFoot(), bc.getHitBgCollisionHead()))
+    {
+        if (bc.getHitBgCollisionFoot() != nullptr && mPosDelta.y > 0.0f)
+            return true;
+
+        const BgCollision* p_bg_collision = bc.getHitBgCollisionHead();
+        if (p_bg_collision != nullptr &&
+            (p_bg_collision->getTypePos().y - p_bg_collision->getTypePosPrev().y) < 0.0f)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Actor::checkPressD_(const ActorBgCollisionCheck& bc)
+{
+    if (bc.isHit(1 << ActorBgCollisionCheck::cHitDirBit_Down)) // If has been actively hit on this specific frame
+        return true;
+
+    if (canPressIfApproaching_(bc.getHitBgCollisionHead(), bc.getHitBgCollisionFoot()))
+    {
+        if (bc.getHitBgCollisionFoot() != nullptr && mPosDelta.y > 0.0f)
+            return true;
+
+        const BgCollision* p_bg_collision = bc.getHitBgCollisionHead();
+        if (p_bg_collision != nullptr &&
+            (p_bg_collision->getTypePos().y - p_bg_collision->getTypePosPrev().y) < 0.0f)
+        {
+            return true;
         }
     }
 
