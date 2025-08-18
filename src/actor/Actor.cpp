@@ -799,3 +799,43 @@ bool Actor::canPressIfApproaching_(const BgCollision* p_bgcol_approaching_side, 
 
     return false;
 }
+
+bool Actor::setPressBreakLR_(const ActorBgCollisionCheck& bc)
+{
+    const BgCollision* p_bg_collision_r = bc.getHitBgCollisionWall(DIRECTION_RIGHT);
+    const BgCollision* p_bg_collision_l = bc.getHitBgCollisionWall(DIRECTION_LEFT);
+
+    if (setPressBreakIce_(p_bg_collision_l))
+        return true;
+
+    if (setPressBreakIce_(p_bg_collision_r))
+        return true;
+
+    if (setPressBreakBlockDRC_(p_bg_collision_l))
+        return true;
+
+    if (setPressBreakBlockDRC_(p_bg_collision_r))
+        return true;
+
+    return false;
+}
+
+bool Actor::setPressBreakUD_(const ActorBgCollisionCheck& bc)
+{
+    const BgCollision* p_bg_collision_d = bc.getHitBgCollisionFoot();
+    const BgCollision* p_bg_collision_u = bc.getHitBgCollisionHead();
+
+    if (setPressBreakIce_(p_bg_collision_u))
+        return true;
+
+    if (setPressBreakBlockDRC_(p_bg_collision_u))
+        return true;
+
+    if (setPressBreakIce_(p_bg_collision_d))
+        return true;
+
+    if (setPressBreakBlockDRC_(p_bg_collision_d))
+        return true;
+
+    return false;
+}
