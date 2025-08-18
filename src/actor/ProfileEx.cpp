@@ -140,7 +140,7 @@ enum DrawPriority
     cDrawPriority_MechaKoopa                                = 101,
     cDrawPriority_20D                                       = 102,
     cDrawPriority_20E                                       = 103,
-    cDrawPriority_16A                                       = 104,
+    cDrawPriority_PentaroIce                                = 104,
     cDrawPriority_210                                       = 105,
     cDrawPriority_211                                       = 106,
     cDrawPriority_212                                       = 107,
@@ -681,7 +681,7 @@ enum DrawPriority
     cDrawPriority_323                                       = 642,
     cDrawPriority_324                                       = 643,
     cDrawPriority_325                                       = 644,
-    cDrawPriority_0ED                                       = 645,
+    cDrawPriority_PlyIce                                    = 645,
     cDrawPriority_326                                       = 646,
     cDrawPriority_144                                       = 647,
     cDrawPriority_145                                       = 648,
@@ -1191,7 +1191,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_0EA,                                      // ProfileID::c0EA
     cDrawPriority_0EB,                                      // ProfileID::c0EB
     cDrawPriority_0EC,                                      // ProfileID::c0EC
-    cDrawPriority_0ED,                                      // ProfileID::c0ED
+    cDrawPriority_PlyIce,                                   // ProfileID::cPlyIce
     cDrawPriority_TarzanIvy,                                // ProfileID::cTarzanIvy
     cDrawPriority_0EF,                                      // ProfileID::c0EF
     cDrawPriority_0F0,                                      // ProfileID::c0F0
@@ -1316,7 +1316,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_167,                                      // ProfileID::c167
     cDrawPriority_168,                                      // ProfileID::c168
     cDrawPriority_169,                                      // ProfileID::c169
-    cDrawPriority_16A,                                      // ProfileID::c16A
+    cDrawPriority_PentaroIce,                               // ProfileID::cPentaroIce
     cDrawPriority_16B,                                      // ProfileID::c16B
     cDrawPriority_16C,                                      // ProfileID::c16C
     cDrawPriority_16D,                                      // ProfileID::c16D
@@ -2109,7 +2109,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c0EA
     Profile::cResType_Course,       // ProfileID::c0EB
     Profile::cResType_Course,       // ProfileID::c0EC
-    Profile::cResType_Boot,         // ProfileID::c0ED
+    Profile::cResType_Boot,         // ProfileID::cPlyIce
     Profile::cResType_Course,       // ProfileID::cTarzanIvy
     Profile::cResType_Course,       // ProfileID::c0EF
     Profile::cResType_Course,       // ProfileID::c0F0
@@ -2234,7 +2234,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c167
     Profile::cResType_Course,       // ProfileID::c168
     Profile::cResType_Course,       // ProfileID::c169
-    Profile::cResType_Course,       // ProfileID::c16A
+    Profile::cResType_Course,       // ProfileID::cPentaroIce
     Profile::cResType_Course,       // ProfileID::c16B
     Profile::cResType_Course,       // ProfileID::c16C
     Profile::cResType_Course,       // ProfileID::c16D
@@ -3688,7 +3688,7 @@ static const sead::SafeString cRes_0EC[]  = {
     "obj_waterfloat"
 };
 
-static const sead::SafeString cRes_0ED[]  = {
+static const sead::SafeString cRes_PlyIce[]  = {
     "ice"
 };
 
@@ -4082,7 +4082,7 @@ static const sead::SafeString cRes_169[]  = {
     "R_lift_number_ship_up"
 };
 
-static const sead::SafeString cRes_16A[]  = {
+static const sead::SafeString cRes_PentaroIce[]  = {
     "ice"
 };
 
@@ -6395,7 +6395,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_0EA),                                        // ProfileID::c0EA
     GetResNum(cRes_0EB),                                        // ProfileID::c0EB
     GetResNum(cRes_0EC),                                        // ProfileID::c0EC
-    GetResNum(cRes_0ED),                                        // ProfileID::c0ED
+    GetResNum(cRes_PlyIce),                                     // ProfileID::cPlyIce
     GetResNum(cRes_TarzanIvy),                                  // ProfileID::cTarzanIvy
     GetResNum(cRes_0EF),                                        // ProfileID::c0EF
     GetResNum(cRes_0F0),                                        // ProfileID::c0F0
@@ -6520,7 +6520,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_167),                                        // ProfileID::c167
     GetResNum(cRes_168),                                        // ProfileID::c168
     GetResNum(cRes_169),                                        // ProfileID::c169
-    GetResNum(cRes_16A),                                        // ProfileID::c16A
+    GetResNum(cRes_PentaroIce),                                 // ProfileID::cPentaroIce
     GetResNum(cRes_16B),                                        // ProfileID::c16B
     GetResNum(cRes_16C),                                        // ProfileID::c16C
     GetResNum(cRes_16D),                                        // ProfileID::c16D
@@ -7313,7 +7313,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_0EA,                                       // ProfileID::c0EA
     cRes_0EB,                                       // ProfileID::c0EB
     cRes_0EC,                                       // ProfileID::c0EC
-    cRes_0ED,                                       // ProfileID::c0ED
+    cRes_PlyIce,                                    // ProfileID::cPlyIce
     cRes_TarzanIvy,                                 // ProfileID::cTarzanIvy
     cRes_0EF,                                       // ProfileID::c0EF
     cRes_0F0,                                       // ProfileID::c0F0
@@ -7438,7 +7438,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_167,                                       // ProfileID::c167
     cRes_168,                                       // ProfileID::c168
     cRes_169,                                       // ProfileID::c169
-    cRes_16A,                                       // ProfileID::c16A
+    cRes_PentaroIce,                                // ProfileID::cPentaroIce
     cRes_16B,                                       // ProfileID::c16B
     cRes_16C,                                       // ProfileID::c16C
     cRes_16D,                                       // ProfileID::c16D

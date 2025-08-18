@@ -208,13 +208,16 @@ void Actor::poisonSplashEffect(const sead::Vector3f& pos)
 
 f32 Actor::getEffectZPos() const
 {
-    if (mCollisionMask.isOnBit(0) && mLayer == cLayerID_Layer1)
+    if (mCollisionMask.isOn(cCcLineKind_0) && mLayer == cLayerID_Layer1)
     {
         const BgCollisionCheckParam param = {
             0,                              // _0
             false,                          // ignore_quicksand
             cLayerID_Layer1,                // layer
-            sead::BitFlag8(3),              // collision_mask
+            sead::BitFlag8(                 // collision_mask
+                cCcLineKind_0 |
+                cCcLineKind_1
+            ),
             cBgCollisionCheckType_Solid,    // type
             nullptr                         // callback
         };
