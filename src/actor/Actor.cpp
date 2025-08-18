@@ -20,6 +20,7 @@
 #include <game/SubjectMgr.h>
 #include <map/Bg.h>
 #include <map/LayerID.h>
+#include <map_obj/ActorBlockMakeDRC.h>
 #include <map_obj/BlockCoinBase.h>
 #include <map_obj/ChibiYoshiAwaData.h>
 #include <player/PlayerMgr.h>
@@ -869,6 +870,20 @@ bool Actor::setPressBreakIce_(const BgCollision* p_bg_collision)
                     return true;
                 }
             }
+        }
+    }
+    return false;
+}
+
+bool Actor::setPressBreakBlockDRC_(const BgCollision* p_bg_collision)
+{
+    if (p_bg_collision != nullptr)
+    {
+        ActorBlockMakeDRC* p_block_drc = p_bg_collision->getOwner<ActorBlockMakeDRC>();
+        if (p_block_drc != nullptr)
+        {
+            p_block_drc->destroy();
+            return true;
         }
     }
     return false;
