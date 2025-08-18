@@ -9,6 +9,8 @@
 #include <collision/BgCollision.h>
 #include <collision/BgCollisionCheckParam.h>
 #include <collision/BgCollisionCheckResult.h>
+#include <enemy/Ice.h>
+#include <enemy/PentaroIce.h>
 #include <enemy/TottenMgr.h>
 #include <fragment/FragmentMgr.h>
 #include <fukidashi/FukidashiMgr.h>
@@ -22,6 +24,7 @@
 #include <map_obj/ChibiYoshiAwaData.h>
 #include <player/PlayerMgr.h>
 #include <player/PlayerObject.h>
+#include <player/PlyIce.h>
 #include <scroll/BgScrollMgr.h>
 #include <system/MainGame.h>
 
@@ -837,5 +840,36 @@ bool Actor::setPressBreakUD_(const ActorBgCollisionCheck& bc)
     if (setPressBreakBlockDRC_(p_bg_collision_d))
         return true;
 
+    return false;
+}
+
+bool Actor::setPressBreakIce_(const BgCollision* p_bg_collision)
+{
+    if (p_bg_collision != nullptr)
+    {
+        Actor* p_actor = p_bg_collision->getOwner();
+        if (p_actor != nullptr)
+        {
+            if (p_actor->getProfileID() == ProfileID::cPentaroIce)
+            {
+                static_cast<PentaroIce*>(p_actor)->breakReq(this);
+                return true;
+            }
+            else if (p_actor->getProfileID() == ProfileID::cPlyIce)
+            {
+                static_cast<PlyIce*>(p_actor)->breakReq();
+                return true;
+            }
+            else
+            {
+                Ice* p_ice = sead::DynamicCast<Ice>(p_actor);
+                if (p_ice != nullptr)
+                {
+                    p_ice->breakReq(*this);
+                    return true;
+                }
+            }
+        }
+    }
     return false;
 }
