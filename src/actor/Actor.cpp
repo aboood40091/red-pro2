@@ -4,6 +4,7 @@
 #include <actor/ChibiYoshiEatData.h>
 #include <actor/EatData.h>
 #include <actor/Profile.h>
+#include <collision/ActorBgCollisionCheckUtil.h>
 #include <collision/ActorCollisionCheckMgr.h>
 #include <collision/BasicBgCollisionCheck.h>
 #include <collision/BgCollision.h>
@@ -280,6 +281,8 @@ u32 Actor::calcTottenToSrcDir_(const sead::BoundBox2f& src_range) const
     else
         return DIRECTION_RIGHT;
 }
+
+static const sead::Vector3f unused(0.0f, 0.0f, 0.0f);
 
 Actor::Actor(const ActorCreateParam& param)
     : ActorBase(param)
@@ -842,6 +845,87 @@ bool Actor::setPressBreakUD_(const ActorBgCollisionCheck& bc)
         return true;
 
     return false;
+}
+
+bool Actor::setPressIceHeadBreak_(const ActorBgCollisionCheck& bc)
+{
+    if (!bc.getOutput().checkFoot())
+        return false;
+
+    if (!(bc.getOutput().checkRightWallEx() && bc.getOutput().checkLeftWallEx()))
+        return false;
+
+    Ice* p_ice_u = nullptr;
+
+    const BgCollision* p_bg_collision_u = bc.getHitBgCollisionHead();
+    if (p_bg_collision_u != nullptr)
+        p_ice_u = p_bg_collision_u->getOwner<Ice>();
+
+    if (p_ice_u == nullptr)
+    {
+        sead::Vector2f pos = mPos;
+
+        const ActorBgCollisionCheck::Sensor* p_head_sensor;
+        bool sensor_valid = false;
+        if (bc.isSensor1Set(DIRECTION_UP))
+        {
+            if (!bc.isSensor1Null(DIRECTION_UP))
+            {
+                const sead::UnsafeArray<ActorBgCollisionCheck::Sensor, 4>& sensors = bc.getSensorArray1();
+                p_head_sensor = &(sensors[DIRECTION_UP]);
+                sensor_valid = true;
+            }
+        }
+        else if (bc.isSensor2Set(DIRECTION_UP))
+        {
+            const sead::UnsafeArray<ActorBgCollisionCheck::Sensor, 4>& sensors = bc.getSensorArray2();
+            p_head_sensor = &(sensors[DIRECTION_UP]);
+            sensor_valid = true;
+        }
+        if (sensor_valid && p_head_sensor != nullptr)
+        {
+            sead::Vector2f center_offset;
+            ActorBgCollisionCheckUtil::getHSensorCenterOffset(*p_head_sensor, center_offset);
+            pos.x += center_offset.x;
+            pos.y += center_offset.y * 0.75f;
+        }
+
+        BgCollisionCheckResultPoint res;
+        BasicBgCollisionCheck bg_check;
+        if (!bg_check.checkPointActor(&res, pos))
+            return false;
+
+        p_bg_collision_u = res.p_bg_collision;
+        if (p_bg_collision_u == nullptr)
+            return false;
+
+        if (p_bg_collision_u->getType() != BgCollision::cType_BreakableIce)
+            return false;
+
+        p_ice_u = p_bg_collision_u->getOwner<Ice>();
+    }
+
+    Ice* p_ice_r = nullptr;
+
+    const BgCollision* p_bg_collision_r = bc.getHitBgCollisionWall(DIRECTION_RIGHT);
+    if (p_bg_collision_r != nullptr)
+        p_ice_r = p_bg_collision_r->getOwner<Ice>();
+
+    Ice* p_ice_l = nullptr;
+
+    const BgCollision* p_bg_collision_l = bc.getHitBgCollisionWall(DIRECTION_LEFT);
+    if (p_bg_collision_l != nullptr)
+        p_ice_l = p_bg_collision_l->getOwner<Ice>();
+
+    if (p_ice_u == p_ice_r || p_ice_u == p_ice_l)
+    {
+        setPressBreakIce_(p_bg_collision_u);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool Actor::setPressBreakIce_(const BgCollision* p_bg_collision)
