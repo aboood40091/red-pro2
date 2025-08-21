@@ -21,8 +21,8 @@ void PtclCalcCallback::callback_0(nw::eft::ParticleCalcArg& arg)
     WaterType water_type = ActorBgCollisionCheck::checkWater(pos, cLayerID_Layer1);
     switch (water_type)
     {
-    case cWaterType_Water_1:
-    case cWaterType_Water_2:
+    case cWaterType_Water:
+    case cWaterType_AirWater:
         return;
     }
 
