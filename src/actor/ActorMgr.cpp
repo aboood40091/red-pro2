@@ -77,22 +77,19 @@ ActorBase::MainState ActorMgr::doCreate_(ActorBase* p_actor)
     if (p_actor->isActive())
         return ActorBase::cState_Success;
 
-    ActorBase::MainState create_state = ActorBase::cState_Cancelled;
+    ActorBase::MainState create_state = ActorBase::cState_None;
 
-    s32 ret = p_actor->preCreate_();
-    if (ret)
+    if (p_actor->preCreate_())
     {
         sead::CurrentHeapSetter chs(p_actor->getActorHeap());
 
-        ret = p_actor->create_();
-        switch (ret)
+        switch (p_actor->create_())
         {
-        case 0: create_state = ActorBase::cState_Waiting;   break;
-        case 1: create_state = ActorBase::cState_Success;   break;
-        case 2: create_state = ActorBase::cState_Error;     break;
+        case ActorBase::cResult_Wait:       create_state = ActorBase::cState_Wait;      break;
+        case ActorBase::cResult_Success:    create_state = ActorBase::cState_Success;   break;
+        case ActorBase::cResult_Failed:     create_state = ActorBase::cState_Failed;    break;
         }
     }
-
     p_actor->postCreate_(create_state);
 
     if (create_state == ActorBase::cState_Success)
@@ -199,33 +196,31 @@ void ActorMgr::doDeleteActors_(bool destroy)
     {
         ActorBase* p_actor = &(*itr);
 
-        ActorBase::MainState delete_state = ActorBase::cState_Cancelled;
+        ActorBase::MainState delete_state = ActorBase::cState_None;
         if (destroy && !p_actor->isActive())
             delete_state = ActorBase::cState_Success;
 
         else
         {
-            s32 ret = p_actor->preDelete_();
-            if (destroy || ret)
+            bool res = p_actor->preDelete_();
+            if (destroy || res)
             {
-                ret = p_actor->doDelete_();
-                switch (ret)
+                switch (p_actor->doDelete_())
                 {
-                case 0: delete_state = ActorBase::cState_Waiting;   break;
-                case 1: delete_state = ActorBase::cState_Success;   break;
-                case 2: delete_state = ActorBase::cState_Error;     break;
+                case ActorBase::cResult_Wait:       delete_state = ActorBase::cState_Wait;      break;
+                case ActorBase::cResult_Success:    delete_state = ActorBase::cState_Success;   break;
+                case ActorBase::cResult_Failed:     delete_state = ActorBase::cState_Failed;    break;
                 }
             }
-
             p_actor->postDelete_(delete_state);
 
             if (destroy && delete_state != ActorBase::cState_Success)
-                delete_state = ActorBase::cState_Error;
+                delete_state = ActorBase::cState_Failed;
         }
 
         switch (delete_state)
         {
-        case ActorBase::cState_Error:
+        case ActorBase::cState_Failed:
         case ActorBase::cState_Success:
             break;
         default:
@@ -331,9 +326,9 @@ ActorBase* ActorMgr::createImmediately(const ActorCreateParam& param, CreateOpti
             else if (option == cCreateOption_ActiveImmediately)
                 pushExecuteAndDrawList_(p_actor);
             return p_actor;
-        case ActorBase::cState_Cancelled:
-        case ActorBase::cState_Error:
-        case ActorBase::cState_Waiting:
+        case ActorBase::cState_None:
+        case ActorBase::cState_Failed:
+        case ActorBase::cState_Wait:
             p_actor->requestDelete();
             mDeleteManage.pushBack(p_actor);
             break;
@@ -380,7 +375,7 @@ void ActorMgr::calcCreateDelete_()
             mCreateManage.erase(p_actor);
             pushExecuteAndDrawList_(p_actor);
             break;
-        case ActorBase::cState_Error:
+        case ActorBase::cState_Failed:
             p_actor->requestDelete();
             mCreateManage.erase(p_actor);
             mDeleteManage.pushBack(p_actor);
@@ -399,21 +394,19 @@ void ActorMgr::execute()
 
         if (deleteNotRequested_(p_actor))
         {
-            ActorBase::MainState execute_state = ActorBase::cState_Cancelled;
+            ActorBase::MainState execute_state = ActorBase::cState_None;
 
-            s32 ret = p_actor->preExecute_();
-            if (ret)
+            if (p_actor->preExecute_())
             {
-                execute_state = ActorBase::cState_Success;
+                if (p_actor->execute_())
+                    execute_state = ActorBase::cState_Success;
 
-                ret = p_actor->execute_();
-                if (ret == 0)
+                else
                 {
-                    execute_state = ActorBase::cState_Error;
+                    execute_state = ActorBase::cState_Failed;
                     p_actor->requestDelete();
                 }
             }
-
             p_actor->postExecute_(execute_state);
         }
 
@@ -446,18 +439,15 @@ void ActorMgr::draw()
 
         if (!p_actor->isDeleted())
         {
-            ActorBase::MainState draw_state = ActorBase::cState_Cancelled;
+            ActorBase::MainState draw_state = ActorBase::cState_None;
 
-            s32 ret = p_actor->preDraw_();
-            if (ret)
+            if (p_actor->preDraw_())
             {
-                draw_state = ActorBase::cState_Success;
-
-                ret = p_actor->draw_();
-                if (ret == 0)
-                    draw_state = ActorBase::cState_Error;
+                if (p_actor->draw_())
+                    draw_state = ActorBase::cState_Success;
+                else
+                    draw_state = ActorBase::cState_Failed;
             }
-
             p_actor->postDraw_(draw_state);
         }
     }

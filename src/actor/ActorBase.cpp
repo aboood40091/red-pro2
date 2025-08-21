@@ -62,52 +62,52 @@ ActorBase::~ActorBase()
         mpParent->removeChild(this);
 }
 
-s32 ActorBase::preCreate_()
+bool ActorBase::preCreate_()
 {
-    return 1;
+    return true;
 }
 
-s32 ActorBase::create_()
+ActorBase::Result ActorBase::create_()
 {
-    return 1;
+    return cResult_Success;
 }
 
 void ActorBase::postCreate_(MainState state)
 {
     switch (state)
     {
-    case cState_Cancelled:
+    case cState_None:
         break;
-    case cState_Error:
+    case cState_Failed:
         break;
     case cState_Success:
         break;
-    case cState_Waiting:
+    case cState_Wait:
         break;
     }
 }
 
-s32 ActorBase::preExecute_()
+bool ActorBase::preExecute_()
 {
     EventMgr* event_mgr = EventMgr::instance();
     if (event_mgr == nullptr || event_mgr->getCurrentEvent() == nullptr)
-        return 1;
+        return true;
 
-    return static_cast<s32>(event_mgr->isJoin(this));
+    return event_mgr->isJoin(this);
 }
 
-s32 ActorBase::execute_()
+bool ActorBase::execute_()
 {
-    return 1;
+    return true;
 }
 
 void ActorBase::postExecute_(MainState state)
 {
     switch (state)
     {
-    case cState_Cancelled:
+    case cState_None:
         break;
-    case cState_Error:
+    case cState_Failed:
         break;
     case cState_Success:
         break;
@@ -118,50 +118,50 @@ void ActorBase::finalUpdate_()
 {
 }
 
-s32 ActorBase::preDraw_()
+bool ActorBase::preDraw_()
 {
-    return 1;
+    return true;
 }
 
-s32 ActorBase::draw_()
+bool ActorBase::draw_()
 {
-    return 1;
+    return true;
 }
 
 void ActorBase::postDraw_(MainState state)
 {
     switch (state)
     {
-    case cState_Cancelled:
+    case cState_None:
         break;
-    case cState_Error:
+    case cState_Failed:
         break;
     case cState_Success:
         break;
     }
 }
 
-s32 ActorBase::preDelete_()
+bool ActorBase::preDelete_()
 {
-    return 1;
+    return true;
 }
 
-s32 ActorBase::doDelete_()
+ActorBase::Result ActorBase::doDelete_()
 {
-    return 1;
+    return cResult_Success;
 }
 
 void ActorBase::postDelete_(MainState state)
 {
     switch (state)
     {
-    case cState_Cancelled:
+    case cState_None:
         break;
-    case cState_Error:
+    case cState_Failed:
         break;
     case cState_Success:
         break;
-    case cState_Waiting:
+    case cState_Wait:
         break;
     }
 }

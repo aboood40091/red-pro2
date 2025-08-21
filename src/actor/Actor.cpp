@@ -373,15 +373,15 @@ void Actor::postCreate_(MainState state)
     ActorBase::postCreate_(state);
 }
 
-s32 Actor::preExecute_()
+bool Actor::preExecute_()
 {
     mPosPrev = mPosPrev2;
 
-    if (ActorBase::preExecute_() == 0)
-        return 0;
+    if (!ActorBase::preExecute_())
+        return false;
 
     if (!mIsExecEnable)
-        return 0;
+        return false;
 
     getPos2D() += mPosDelta;
 
@@ -394,7 +394,7 @@ s32 Actor::preExecute_()
     if (mBumpDamageTimer > 0)
         mBumpDamageTimer--;
 
-    return 1;
+    return true;
 }
 
 void Actor::postExecute_(MainState state)
@@ -418,24 +418,24 @@ void Actor::postExecute_(MainState state)
     ActorBase::postExecute_(state);
 }
 
-s32 Actor::preDraw_()
+bool Actor::preDraw_()
 {
-    if (ActorBase::preDraw_() == 0)
-        return 0;
+    if (!ActorBase::preDraw_())
+        return false;
 
     if (!mIsDrawEnable)
-        return 0;
+        return false;
 
     if (mpEatData != nullptr && mpEatData->getState() == 2)
-        return 0;
+        return false;
 
     if (mpChibiYoshiEatData != nullptr && mpChibiYoshiEatData->getState() == 2)
-        return 0;
+        return false;
 
     if ((mProfFlag & Profile::cFlag_DrawCullCheck) && drawCullCheck_())
-        return 0;
+        return false;
 
-    return 1;
+    return true;
 }
 
 bool Actor::drawCullCheck_()
