@@ -26,3 +26,12 @@ ActorCollision::ActorCollision(const ActorCreateParam& param)
 {
 }
 
+void ActorCollision::clampWaterSpeedY_()
+{
+    if (mSpeed.y < mWaterFallSpeedMax)
+        mSpeed.y = mWaterFallSpeedMax;
+
+    else if (mSpeed.y > mWaterSpeedMaxY)
+        mSpeed.y = mWaterSpeedMaxY;
+}
+
