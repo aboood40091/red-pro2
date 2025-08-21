@@ -41,3 +41,60 @@ void ActorCollision::enterWater_()
     mIsSubmerged = true;
 }
 
+WaterType ActorCollision::checkEnterWater_(f32* p_surface_pos_y, const sead::Vector3f& check_pos)
+{
+    f32 surface_pos_y = check_pos.y;
+    WaterType water_type = ActorBgCollisionCheck::checkWater(&surface_pos_y, check_pos, mLayer);
+    const f32 splash_pos_z = 6500.0f;
+
+    switch (water_type)
+    {
+    default:
+        mIsSubmerged = false;
+        break;
+    case cWaterType_Water:
+        if (!mIsSubmerged)
+        {
+            enterWater_();
+            waterSplashEffect(sead::Vector3f(mPos.x, surface_pos_y, splash_pos_z));
+        }
+        break;
+    case cWaterType_AirWater:
+        if (!mIsSubmerged)
+        {
+            enterWater_();
+            waterSplashEffect(sead::Vector3f(mPos.x, surface_pos_y, splash_pos_z));
+        }
+        break;
+    case cWaterType_Lava:
+        if (!mIsSubmerged)
+        {
+            mIsSubmerged = true;
+            if (mNoLavaSplashTimer == 0)
+                yoganSplashEffect(sead::Vector3f(mPos.x, surface_pos_y, splash_pos_z));
+        }
+        break;
+    case cWaterType_LavaWave:
+        if (!mIsSubmerged)
+        {
+            mIsSubmerged = true;
+            if (mNoLavaSplashTimer == 0)
+                yoganWaveSplashEffect(sead::Vector3f(mPos.x, surface_pos_y, splash_pos_z));
+        }
+        break;
+    case cWaterType_Poison:
+        if (!mIsSubmerged)
+        {
+            mIsSubmerged = true;
+            poisonSplashEffect(sead::Vector3f(mPos.x, surface_pos_y, splash_pos_z));
+        }
+        break;
+    }
+
+    if (mIsSubmerged)
+        if (p_surface_pos_y != nullptr)
+            *p_surface_pos_y = surface_pos_y;
+
+    return water_type;
+}
+
