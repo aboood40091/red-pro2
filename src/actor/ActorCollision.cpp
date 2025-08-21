@@ -98,3 +98,60 @@ WaterType ActorCollision::checkEnterWater_(f32* p_surface_pos_y, const sead::Vec
     return water_type;
 }
 
+void ActorCollision::calcWater_()
+{
+    if (mNoWaterCalc)
+        return;
+
+    bool pre_check = false;
+
+    switch (mWaterCalcType)
+    {
+    case cWaterCalcType_EnablePreCheck:
+        if (!mCheckWaterNeeded)
+            pre_check = true;
+        break;
+    case cWaterCalcType_ForceOut:
+        mCheckWaterNeeded = false;
+        mIsSubmerged = false;
+        break;
+    default:
+        break;
+    }
+
+    if (pre_check)
+    {
+        mCheckWaterNeeded = true;
+        WaterType water_type = mUseWaterTypeOverride ? mWaterTypeOverride : ActorBgCollisionCheck::checkWater(nullptr, *mpWaterCheckPos, mLayer);
+        if (water_type != cWaterType_None)
+            enterWater_();
+    }
+    else if (mCheckWaterNeeded)
+    {
+        f32 surface_pos_y;
+        WaterType water_type = checkEnterWater_(&surface_pos_y, *mpWaterCheckPos);
+        if (water_type == cWaterType_Lava || water_type == cWaterType_LavaWave)
+        {
+            if (smokeDamageEnable_Yogan_(surface_pos_y))
+            {
+                setSmokeDamage_(nullptr);
+                mCheckWaterNeeded = false;
+                mIsSubmerged = false;
+            }
+        }
+        else if (water_type == cWaterType_Poison)
+        {
+            if (smokeDamageEnable_Poison_(surface_pos_y))
+            {
+                setSmokeDamage_(nullptr);
+                mCheckWaterNeeded = false;
+                mIsSubmerged = false;
+            }
+        }
+    }
+
+    if (mNoLavaSplashTimer > 0)
+        mNoLavaSplashTimer--;
+
+    mWaterCalcType = cWaterCalcType_Normal;
+}
