@@ -155,3 +155,9 @@ void ActorCollision::calcWater_()
 
     mWaterCalcType = cWaterCalcType_Normal;
 }
+
+void ActorCollision::postCreate_(MainState state)
+{
+    calcWater_();
+    Actor::postCreate_(state);
+}
