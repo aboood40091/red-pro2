@@ -35,3 +35,9 @@ void ActorCollision::clampWaterSpeedY_()
         mSpeed.y = mWaterSpeedMaxY;
 }
 
+void ActorCollision::enterWater_()
+{
+    clampWaterSpeedY_();
+    mIsSubmerged = true;
+}
+
