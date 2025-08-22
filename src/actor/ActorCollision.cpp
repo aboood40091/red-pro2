@@ -222,10 +222,22 @@ bool ActorCollision::vf13C()
     return false;
 }
 
-void ActorCollision::vf144(s32)
+void ActorCollision::vf144(s32 param)
 {
+    switch (param)
+    {
+    case 0:
+        break;
+    case 1:
+        break;
+  //case 2: // Present in NSMB2, but removed from NSMBU
+  //    break;
+    }
 }
 
-void ActorCollision::setSmokeDamage_(Actor*)
+void ActorCollision::setSmokeDamage_(Actor* p_actor)
 {
+    if (p_actor != nullptr)
+    {
+    }
 }
