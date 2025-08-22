@@ -161,3 +161,21 @@ void ActorCollision::postCreate_(MainState state)
     calcWater_();
     Actor::postCreate_(state);
 }
+
+void ActorCollision::calcBgSpeed_()
+{
+    mBgSpeedPrev = mBgSpeed;
+    mIsInQuicksand = false;
+
+    if (mBgCheckObj.getOutput().checkFoot())
+    {
+        if (mBgCheckObj.getOutput().isQuicksand())
+            mIsInQuicksand = true;
+
+        mBgSpeed = mBgCheckObj.getBgSpeed();
+    }
+    else
+    {
+        mBgSpeed.set(0.0f, 0.0f);
+    }
+}
