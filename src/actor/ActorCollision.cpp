@@ -209,3 +209,10 @@ void ActorCollision::postExecute_(MainState state)
 
     Actor::postExecute_(state);
 }
+
+ActorBase::Result ActorCollision::doDelete_()
+{
+    mBgCheckObj.reset();
+
+    return Actor::doDelete_();
+}
