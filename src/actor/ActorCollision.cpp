@@ -201,3 +201,11 @@ bool ActorCollision::preExecute_()
 
     return true;
 }
+
+void ActorCollision::postExecute_(MainState state)
+{
+    calcWater_();
+    mUseWaterTypeOverride = false;
+
+    Actor::postExecute_(state);
+}
