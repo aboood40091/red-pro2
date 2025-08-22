@@ -253,3 +253,24 @@ bool ActorCollision::bgCheckWall_() const
     u8 direction = mSpeed.x < 0.0f ? cDirType_Left : cDirType_Right;
     return mBgCheckObj.getOutput().checkWallEx(direction);
 }
+
+ActorCollision::BgCheckFlag ActorCollision::bgCheck_()
+{
+    mBgCheckObj.process();
+
+    BgCheckFlag flag = cBgCheckFlag_None;
+
+    if (bgCheckFoot_())
+    {
+        flag |= cBgCheckFlag_Foot;
+        mSpeed.y = 0.0f;
+    }
+
+    if (mBgCheckObj.getOutput().checkHeadEx())
+        flag |= cBgCheckFlag_Head;
+
+    if (bgCheckWall_())
+        flag |= cBgCheckFlag_Wall;
+
+    return flag;
+}
