@@ -216,3 +216,12 @@ ActorBase::Result ActorCollision::doDelete_()
 
     return Actor::doDelete_();
 }
+
+bool ActorCollision::vf13C()
+{
+    return false;
+}
+
+void ActorCollision::vf144(s32)
+{
+}
