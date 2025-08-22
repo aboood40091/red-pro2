@@ -225,3 +225,7 @@ bool ActorCollision::vf13C()
 void ActorCollision::vf144(s32)
 {
 }
+
+void ActorCollision::setSmokeDamage_(Actor*)
+{
+}
