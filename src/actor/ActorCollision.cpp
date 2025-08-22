@@ -246,3 +246,10 @@ bool ActorCollision::bgCheckFoot_() const
 {
     return mBgCheckObj.getOutput().checkFoot();
 }
+
+bool ActorCollision::bgCheckWall_() const
+{
+    // TODO: Greatly non-matching
+    u8 direction = mSpeed.x < 0.0f ? cDirType_Left : cDirType_Right;
+    return mBgCheckObj.getOutput().checkWallEx(direction);
+}
