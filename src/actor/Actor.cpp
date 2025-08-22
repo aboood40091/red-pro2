@@ -115,16 +115,16 @@ u32 Actor::directionToPlayerH(const sead::Vector3f& position)
     if (0 <= player_no && player_no < 4)
     {
         if (pl_position.x < 0.0)
-            return DIRECTION_LEFT;
+            return cDirType_Left;
         else
-            return DIRECTION_RIGHT;
+            return cDirType_Right;
     }
     else
     {
         if (mPos.x > BgScrollMgr::instance()->getScreenCenterX() + 96.0f)
-            return DIRECTION_LEFT;
+            return cDirType_Left;
         else if (mPos.x < BgScrollMgr::instance()->getScreenCenterX() - 96.0f)
-            return DIRECTION_RIGHT;
+            return cDirType_Right;
         else
             return mDirection;
     }
@@ -138,13 +138,13 @@ u32 Actor::directionToPlayerV(const sead::Vector3f& position)
     if (0 <= player_no && player_no < 4)
     {
         if (pl_position.y < 0.0)
-            return DIRECTION_DOWN;
+            return cDirType_Down;
         else
-            return DIRECTION_UP;
+            return cDirType_Up;
     }
     else
     {
-        return DIRECTION_UP;
+        return cDirType_Up;
     }
 }
 
@@ -174,7 +174,7 @@ bool Actor::screenOutCheck(u16 flag)
 
     const sead::BoundBox2f visible_range(l, b, r, t);
 
-    if ((flag & 0x10) && calcTottenToSrcDir_(visible_range) == DIRECTION_RIGHT)
+    if ((flag & 0x10) && calcTottenToSrcDir_(visible_range) == cDirType_Right)
         return false;
 
     bool out = false;
@@ -273,20 +273,20 @@ u32 Actor::calcTottenToSrcDir_(const sead::BoundBox2f& src_range) const
         TottenMgr::instance() == nullptr ||
         TottenMgr::instance()->getTottenActor() == nullptr)
     {
-        return DIRECTION_LEFT;
+        return cDirType_Left;
     }
 
     if (TottenMgr::instance()->getTottenActor()->getPos().x > src_range.getMax().x)
-        return DIRECTION_LEFT;
+        return cDirType_Left;
     else
-        return DIRECTION_RIGHT;
+        return cDirType_Right;
 }
 
 static const sead::Vector3f unused(0.0f, 0.0f, 0.0f);
 
 Actor::Actor(const ActorCreateParam& param)
     : ActorBase(param)
-    , mDirection(DIRECTION_RIGHT)
+    , mDirection(cDirType_Right)
     , mPlayerNo(-1)
     , mControllerLytPlayerNo(-1)
     , mLayer(param.param_ex_0.course.layer)
@@ -322,9 +322,9 @@ Actor::Actor(const ActorCreateParam& param)
     , mSwitchFlag1(param.param_ex_0.course.switch_flag_1)
     , mCreateFlag(param.p_profile->getActorCreateInfo().flag)
     , mBumpDamageTimer(0)
-    , mBumpDirection(DIRECTION_RIGHT)
+    , mBumpDirection(cDirType_Right)
     , _220(0)
-    , mCarryDirection(DIRECTION_RIGHT)
+    , mCarryDirection(cDirType_Right)
     , mThrowPlayerNo(0)
     , mComboCnt(0)
     , mProfFlag(param.p_profile->getFlag())
@@ -672,13 +672,13 @@ bool Actor::isEnablePressLR_(const ActorBgCollisionCheck& bc)
             !bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk31) &&
             !bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk30))
         {
-            const BgCollision* p_bg_collision_r = bc.getHitBgCollisionWall(DIRECTION_RIGHT);
-            const BgCollision* p_bg_collision_l = bc.getHitBgCollisionWall(DIRECTION_LEFT);
+            const BgCollision* p_bg_collision_r = bc.getHitBgCollisionWall(cDirType_Right);
+            const BgCollision* p_bg_collision_l = bc.getHitBgCollisionWall(cDirType_Left);
             if (p_bg_collision_r == nullptr || p_bg_collision_l == nullptr ||
                 (p_bg_collision_r != p_bg_collision_l && p_bg_collision_r->getOwner() != p_bg_collision_l->getOwner()))
             {
                 if (canPress_(p_bg_collision_r) && canPress_(p_bg_collision_l))
-                    if (checkPressLR_(bc, DIRECTION_LEFT) || checkPressLR_(bc, DIRECTION_RIGHT))
+                    if (checkPressLR_(bc, cDirType_Left) || checkPressLR_(bc, cDirType_Right))
                         return true;
             }
         }
@@ -702,7 +702,7 @@ bool Actor::isEnablePressUD_(const ActorBgCollisionCheck& bc)
             {
                 if (canPress_(p_bg_collision_u) && canPress_(p_bg_collision_d))
                     if (p_bg_collision_u == nullptr || p_bg_collision_u->getOwner() == nullptr || p_bg_collision_u->getOwner()->getProfileID() != ProfileID::cIcicleBig)
-                        if (BgUnitCode::getAttr(bc.getBgCheckData(DIRECTION_DOWN)) != BgUnitCode::cNuma)
+                        if (BgUnitCode::getAttr(bc.getBgCheckData(cDirType_Down)) != BgUnitCode::cNuma)
                             if (checkPressD_(bc) || checkPressU_(bc))
                                 return true;
             }
@@ -726,16 +726,16 @@ bool Actor::canPress_(const BgCollision* p_bg_collision)
 
 bool Actor::checkPressLR_(const ActorBgCollisionCheck& bc, u32 direction)
 {
-    static const u32 c_hit_dir_bit[DIRECTION_NUM_X] = { ActorBgCollisionCheck::cHitDirBit_Right, ActorBgCollisionCheck::cHitDirBit_Left };
-    static const f32 c_dir_sign[DIRECTION_NUM_X] = { 1.0f, -1.0f };
-    static const u32 c_dir_type[DIRECTION_NUM_X] = { DIRECTION_RIGHT, DIRECTION_LEFT };
+    static const u32 c_hit_dir_bit[cDirType_NumX] = { ActorBgCollisionCheck::cHitDirBit_Right, ActorBgCollisionCheck::cHitDirBit_Left };
+    static const f32 c_dir_sign[cDirType_NumX] = { 1.0f, -1.0f };
+    static const u32 c_dir_type[cDirType_NumX] = { cDirType_Right, cDirType_Left };
 
     if (bc.isHit(1 << c_hit_dir_bit[direction])) // If has been actively hit on this specific frame
         return true;
 
     if (canPressIfApproaching_(bc.getHitBgCollisionWall(direction), bc.getHitBgCollisionWall(InvDirX(direction))))
     {
-        for (s32 i = 0; i < DIRECTION_NUM_X; i++)
+        for (s32 i = 0; i < cDirType_NumX; i++)
         {
             u32 direction = c_dir_type[i];
             const BgCollision* p_bg_collision = bc.getHitBgCollisionWall(direction);
@@ -809,8 +809,8 @@ bool Actor::canPressIfApproaching_(const BgCollision* p_bgcol_approaching_side, 
 
 bool Actor::setPressBreakLR_(const ActorBgCollisionCheck& bc)
 {
-    const BgCollision* p_bg_collision_r = bc.getHitBgCollisionWall(DIRECTION_RIGHT);
-    const BgCollision* p_bg_collision_l = bc.getHitBgCollisionWall(DIRECTION_LEFT);
+    const BgCollision* p_bg_collision_r = bc.getHitBgCollisionWall(cDirType_Right);
+    const BgCollision* p_bg_collision_l = bc.getHitBgCollisionWall(cDirType_Left);
 
     if (setPressBreakIce_(p_bg_collision_l))
         return true;
@@ -867,19 +867,19 @@ bool Actor::setPressIceHeadBreak_(const ActorBgCollisionCheck& bc)
 
         const ActorBgCollisionCheck::Sensor* p_head_sensor;
         bool sensor_valid = false;
-        if (bc.isSensor1Set(DIRECTION_UP))
+        if (bc.isSensor1Set(cDirType_Up))
         {
-            if (!bc.isSensor1Null(DIRECTION_UP))
+            if (!bc.isSensor1Null(cDirType_Up))
             {
-                const sead::UnsafeArray<ActorBgCollisionCheck::Sensor, 4>& sensors = bc.getSensorArray1();
-                p_head_sensor = &(sensors[DIRECTION_UP]);
+                const ActorBgCollisionCheck::SensorArray& sensors = bc.getSensorArray1();
+                p_head_sensor = &(sensors[cDirType_Up]);
                 sensor_valid = true;
             }
         }
-        else if (bc.isSensor2Set(DIRECTION_UP))
+        else if (bc.isSensor2Set(cDirType_Up))
         {
-            const sead::UnsafeArray<ActorBgCollisionCheck::Sensor, 4>& sensors = bc.getSensorArray2();
-            p_head_sensor = &(sensors[DIRECTION_UP]);
+            const ActorBgCollisionCheck::SensorArray& sensors = bc.getSensorArray2();
+            p_head_sensor = &(sensors[cDirType_Up]);
             sensor_valid = true;
         }
         if (sensor_valid && p_head_sensor != nullptr)
@@ -907,13 +907,13 @@ bool Actor::setPressIceHeadBreak_(const ActorBgCollisionCheck& bc)
 
     Ice* p_ice_r = nullptr;
 
-    const BgCollision* p_bg_collision_r = bc.getHitBgCollisionWall(DIRECTION_RIGHT);
+    const BgCollision* p_bg_collision_r = bc.getHitBgCollisionWall(cDirType_Right);
     if (p_bg_collision_r != nullptr)
         p_ice_r = p_bg_collision_r->getOwner<Ice>();
 
     Ice* p_ice_l = nullptr;
 
-    const BgCollision* p_bg_collision_l = bc.getHitBgCollisionWall(DIRECTION_LEFT);
+    const BgCollision* p_bg_collision_l = bc.getHitBgCollisionWall(cDirType_Left);
     if (p_bg_collision_l != nullptr)
         p_ice_l = p_bg_collision_l->getOwner<Ice>();
 
