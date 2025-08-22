@@ -241,3 +241,8 @@ void ActorCollision::setSmokeDamage_(Actor* p_actor)
     {
     }
 }
+
+bool ActorCollision::bgCheckFoot_() const
+{
+    return mBgCheckObj.getOutput().checkFoot();
+}
