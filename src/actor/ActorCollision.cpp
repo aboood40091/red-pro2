@@ -1,4 +1,5 @@
 #include <actor/ActorCollision.h>
+#include <game/Quake.h>
 
 ActorCollision::ActorCollision(const ActorCreateParam& param)
     : Actor(param)
@@ -178,4 +179,25 @@ void ActorCollision::calcBgSpeed_()
     {
         mBgSpeed.set(0.0f, 0.0f);
     }
+}
+
+bool ActorCollision::preExecute_()
+{
+    if (!Actor::preExecute_())
+        return false;
+
+    mBgCheckObj.atFrameStart();
+    calcBgSpeed_();
+
+    if (!mIsNoRespawn && vf13C())
+    {
+        if (Quake::instance()->getFlag() & (1 << 1))
+            vf144(0);
+        else if (Quake::instance()->getFlag() & (1 << 2))
+            vf144(1);
+      //else if (Quake::instance()->getFlag() & (1 << 0)) // Present in NSMB2, but removed from NSMBU
+      //    vf144(2);
+    }
+
+    return true;
 }
