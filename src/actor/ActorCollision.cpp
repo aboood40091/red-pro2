@@ -402,3 +402,22 @@ void ActorCollision::posMoveCalcJump_()
             mJumpFrame = 0;
     }
 }
+
+void ActorCollision::posMove_()
+{
+    f32 saka_sin_v, saka_cos_v;
+    sead::Mathf::sinCosIdx(&saka_sin_v, &saka_cos_v, mBgCheckObj.getSakaAngle());
+
+    f32 speed_x = mSpeed.x * saka_cos_v;
+    if (mIsSubmerged || mIsInQuicksand)
+        speed_x *= 0.5f;
+    speed_x += mBgSpeed.x;
+
+    f32 speed_y = mSpeed.x * saka_sin_v + mSpeed.y + mBgSpeed.y;
+
+    posMoveCalcJump_();
+    speed_x += mJumpSpeedF;
+
+    mPos.x += speed_x;
+    mPos.y += speed_y;
+}
