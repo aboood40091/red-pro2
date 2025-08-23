@@ -384,3 +384,21 @@ f32 ActorCollision::chaseZero_(f32 value, f32 step) const
     }
     return value;
 }
+
+void ActorCollision::posMoveCalcJump_()
+{
+    if (mJumpFrame != 1)
+        return;
+
+    if (mBgCheckObj.getOutput().checkFoot())
+    {
+        mJumpSpeedF = 0.0f;
+        mJumpFrame = 0;
+    }
+    else
+    {
+        mJumpSpeedF = chaseZero_(mJumpSpeedF, mJumpAccelF);
+        if (mJumpSpeedF == 0.0f)
+            mJumpFrame = 0;
+    }
+}
