@@ -349,3 +349,21 @@ void ActorCollision::calcSpeedY_()
         Actor::calcSpeedY_(mAccelY, speed_max_y);
     }
 }
+
+void ActorCollision::calcFallSpeed_()
+{
+    f32 fall_speed_max = mFallSpeedMax;
+
+    if (mIsSubmerged)
+    {
+        if (fall_speed_max < mWaterFallSpeedMax)
+            fall_speed_max = mWaterFallSpeedMax;
+        else if (fall_speed_max > mWaterSpeedMaxY)
+            fall_speed_max = mWaterSpeedMaxY;
+        Actor::calcFallSpeed_(mWaterGravity, fall_speed_max);
+    }
+    else
+    {
+        Actor::calcFallSpeed_(mAccelY, fall_speed_max);
+    }
+}
