@@ -331,3 +331,21 @@ bool ActorCollision::isHitBgCollision_(const BgCollision& bg_collision) const
 
     return false;
 }
+
+void ActorCollision::calcSpeedY_()
+{
+    f32 speed_max_y = mSpeedMax.y;
+
+    if (mIsSubmerged)
+    {
+        if (speed_max_y < mWaterFallSpeedMax)
+            speed_max_y = mWaterFallSpeedMax;
+        else if (speed_max_y > mWaterSpeedMaxY)
+            speed_max_y = mWaterSpeedMaxY;
+        Actor::calcSpeedY_(mWaterGravity, speed_max_y);
+    }
+    else
+    {
+        Actor::calcSpeedY_(mAccelY, speed_max_y);
+    }
+}
