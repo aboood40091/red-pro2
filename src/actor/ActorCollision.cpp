@@ -1,4 +1,5 @@
 #include <actor/ActorCollision.h>
+#include <collision/BgCollision.h>
 #include <game/Quake.h>
 
 ActorCollision::ActorCollision(const ActorCreateParam& param)
@@ -273,4 +274,14 @@ ActorCollision::BgCheckFlag ActorCollision::bgCheck_()
         flag |= cBgCheckFlag_Wall;
 
     return flag;
+}
+
+void ActorCollision::clampMoveDistance_(BgCollision& bg_collision)
+{
+    if (getPos2D().squaredDistance(mPosPrev) > 0x10000)
+    {
+        mPosPrev = mPos;
+        mPosPrev2 = mPos;
+        bg_collision.update();
+    }
 }
