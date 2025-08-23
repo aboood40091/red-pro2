@@ -1,4 +1,5 @@
 #include <actor/ActorCollision.h>
+#include <collision/ActorBgCollisionCheck.h>
 #include <collision/BgCollision.h>
 #include <game/Quake.h>
 
@@ -284,4 +285,49 @@ void ActorCollision::clampMoveDistance_(BgCollision& bg_collision)
         mPosPrev2 = mPos;
         bg_collision.update();
     }
+}
+
+bool ActorCollision::isHitBgCollision_(const BgCollision& bg_collision) const
+{
+    for (
+        BgCollision::BcList::Node* p_node = bg_collision.getBcListFoot().front()
+        ; p_node != nullptr
+        ; p_node = p_node->next
+    )
+    {
+        if (p_node->obj->getOwner() != nullptr)
+            return true;
+    }
+
+    for (
+        BgCollision::BcList::Node* p_node = bg_collision.getBcListHead().front()
+        ; p_node != nullptr
+        ; p_node = p_node->next
+    )
+    {
+        if (p_node->obj->getSensorFlag(cDirType_Up).isOnBit(21) && p_node->obj->getOwner() != nullptr)
+            return true;
+    }
+
+    for (
+        BgCollision::BcList::Node* p_node = bg_collision.getBcListWallR().front()
+        ; p_node != nullptr
+        ; p_node = p_node->next
+    )
+    {
+        if (p_node->obj->getSensorFlag(cDirType_Left).isOnBit(18) && p_node->obj->getOwner() != nullptr)    // Nintendo uses Left here and not Right
+            return true;
+    }
+
+    for (
+        BgCollision::BcList::Node* p_node = bg_collision.getBcListWallL().front()
+        ; p_node != nullptr
+        ; p_node = p_node->next
+    )
+    {
+        if (p_node->obj->getSensorFlag(cDirType_Right).isOnBit(18) && p_node->obj->getOwner() != nullptr)   // Nintendo uses Right here and not Left
+            return true;
+    }
+
+    return false;
 }
