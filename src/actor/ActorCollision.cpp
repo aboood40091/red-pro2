@@ -367,3 +367,20 @@ void ActorCollision::calcFallSpeed_()
         Actor::calcFallSpeed_(mAccelY, fall_speed_max);
     }
 }
+
+f32 ActorCollision::chaseZero_(f32 value, f32 step) const
+{
+    if (value < 0.0f)
+    {
+        value += step;
+        if (value > 0.0f)
+            value = 0.0f;
+    }
+    else if (value > 0.0f)
+    {
+        value -= step;
+        if (value < 0.0f)
+            value = 0.0f;
+    }
+    return value;
+}
