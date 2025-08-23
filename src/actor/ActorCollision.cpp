@@ -421,3 +421,20 @@ void ActorCollision::posMove_()
     mPos.x += speed_x;
     mPos.y += speed_y;
 }
+
+bool ActorCollision::isJump_() const
+{
+    if (mJumpFrame == 0 && mIsOnGround && !mBgCheckObj.getOutput().checkFoot())
+        return true;
+
+    return false;
+}
+
+void ActorCollision::calcJumpSpeedF_()
+{
+    if (isJump_())
+    {
+        mJumpFrame += 1;
+        mJumpSpeedF = mPosDelta.x + mBgSpeedPrev.x;
+    }
+}
