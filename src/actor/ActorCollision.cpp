@@ -2,7 +2,9 @@
 #include <collision/ActorBgCollisionCheck.h>
 #include <collision/BgCollision.h>
 #include <collision/BgCollisionCheckResult.h>
+#include <game/CourseTask.h>
 #include <game/Quake.h>
+#include <layout/GamesceneBase.h>
 #include <player/PlayerDemoMgr.h>
 
 ActorCollision::ActorCollision(const ActorCreateParam& param)
@@ -504,4 +506,11 @@ void ActorCollision::checkSnapToGround_(f32 y_check_distance, const ActorBgColli
 void ActorCollision::snapToGround_(f32 y_check_distance, const ActorBgCollisionCheck::Sensor& foot_sensor, bool extended, bool force)
 {
     snapToGroundImpl_(y_check_distance, foot_sensor, extended, force);
+}
+
+void ActorCollision::registerInGamescene_()
+{
+    GamesceneBase* p_gamescene = CourseTask::instance()->getGamescene();
+    if (p_gamescene != nullptr)
+        p_gamescene->registerActor(mActorUniqueID);
 }
