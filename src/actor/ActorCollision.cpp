@@ -1,7 +1,9 @@
 #include <actor/ActorCollision.h>
 #include <collision/ActorBgCollisionCheck.h>
 #include <collision/BgCollision.h>
+#include <collision/BgCollisionCheckResult.h>
 #include <game/Quake.h>
+#include <player/PlayerDemoMgr.h>
 
 ActorCollision::ActorCollision(const ActorCreateParam& param)
     : Actor(param)
@@ -454,4 +456,41 @@ bool ActorCollision::isEnablePress_()
         return true;
     }
     return false;
+}
+
+void ActorCollision::snapToGroundImpl_(f32 y_check_distance, const ActorBgCollisionCheck::Sensor& foot_sensor, bool extended, bool force)
+{
+    mBgCheckObj.initBgCheck();
+    sead::Vector2f p0, p1;
+    BgCollisionCheckResultArea res;
+
+    if (!force)
+    {
+        if (PlayerDemoMgr::instance() != nullptr && PlayerDemoMgr::instance()->isPlayerGameStop())
+            return;
+    }
+
+    p0 = mPos;
+    p1.x = p0.x;
+    if (extended)
+    {
+        p0.y += y_check_distance;
+        p1.y = p0.y - y_check_distance * 2;
+    }
+    else
+    {
+        p1.y = p0.y - y_check_distance;
+    }
+
+    if (mBgCheckObj.getBgCheck().checkArea(&res, p0, p1))
+    {
+        getPos2D() = res.hit_pos;
+        mPos.y -= foot_sensor.center_offset;
+        mBgCheckObj.getOutput().setFoot();
+    }
+}
+
+void ActorCollision::snapToGround_(f32 y_check_distance, const ActorBgCollisionCheck::Sensor& foot_sensor, bool extended, bool force)
+{
+    snapToGroundImpl_(y_check_distance, foot_sensor, extended, force);
 }
