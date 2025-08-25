@@ -445,3 +445,13 @@ WaterType ActorCollision::checkWater_(f32* p_surface_pos_y)
     mWaterTypeOverride = ActorBgCollisionCheck::checkWater(p_surface_pos_y, *mpWaterCheckPos, mLayer);
     return mWaterTypeOverride;
 }
+
+bool ActorCollision::isEnablePress_()
+{
+    if (!mIsNoRespawn &&
+        (isEnablePressUD_(mBgCheckObj) || isEnablePressLR_(mBgCheckObj)))
+    {
+        return true;
+    }
+    return false;
+}
