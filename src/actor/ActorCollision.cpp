@@ -438,3 +438,10 @@ void ActorCollision::calcJumpSpeedF_()
         mJumpSpeedF = mPosDelta.x + mBgSpeedPrev.x;
     }
 }
+
+WaterType ActorCollision::checkWater_(f32* p_surface_pos_y)
+{
+    mUseWaterTypeOverride = true;
+    mWaterTypeOverride = ActorBgCollisionCheck::checkWater(p_surface_pos_y, *mpWaterCheckPos, mLayer);
+    return mWaterTypeOverride;
+}
