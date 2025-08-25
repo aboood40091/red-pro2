@@ -490,6 +490,17 @@ void ActorCollision::snapToGroundImpl_(f32 y_check_distance, const ActorBgCollis
     }
 }
 
+void ActorCollision::checkSnapToGround_(f32 y_check_distance, const ActorBgCollisionCheck::Sensor& foot_sensor)
+{
+    if (mParam1 & 1)
+    {
+        // TODO: Non-matching, figure out exactly what they were trying to do with mParam1
+        bool extended = mParam1 <= 1 ? false : true;
+        bool force = mParam1 <= 2 ? true : false;
+        snapToGroundImpl_(y_check_distance, foot_sensor, extended, force);
+    }
+}
+
 void ActorCollision::snapToGround_(f32 y_check_distance, const ActorBgCollisionCheck::Sensor& foot_sensor, bool extended, bool force)
 {
     snapToGroundImpl_(y_check_distance, foot_sensor, extended, force);
