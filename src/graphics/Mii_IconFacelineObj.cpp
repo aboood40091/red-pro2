@@ -124,12 +124,14 @@ void IconFacelineObj::setupVertex_()
 
 void IconFacelineObj::setupIndex_()
 {
-    static const sead::UnsafeArray<u32, 6> cIndex = {
+    static const u32 cIndex[6] = {
         0, 1, 2,
         2, 3, 0
     };
+    
+    for (s32 i = 0; i < 6; i++)
+        mIndex[i] = cIndex[i];
 
-    mIndex = cIndex;
     mIndexStream.setUpStream(mIndex.getBufferPtr(), 6, GX2_PRIMITIVE_TRIANGLES);
 }
 

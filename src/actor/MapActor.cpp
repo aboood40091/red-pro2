@@ -1,7 +1,7 @@
 #include <actor/MapActor.h>
 #include <actor/ProfileID.h>
 
-const sead::UnsafeArray<s32, 724> MapActor::cProfileID = {
+const MapActor::Profile MapActor::cProfileID[724] = {
     ProfileID::c1D3,                                        //   0
     ProfileID::c1D5,                                        //   1
     ProfileID::c1DF,                                        //   2
