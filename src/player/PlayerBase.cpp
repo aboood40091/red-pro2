@@ -202,3 +202,8 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     changeDemoState(StateID_DemoNone, 0);
     changeChallengeState(StateID_ChallengeState1);
 }
+
+PlayerBase::~PlayerBase()
+{
+    PlayerBase::releaseCcData();
+}
