@@ -1,5 +1,6 @@
 #include <player/PlayerBase.h>
 #include <player/PlayerModelBaseMgr.h>
+#include <utility/Timer.h>
 
 PlayerBase::PlayerBase(const ActorCreateParam& param)
     : Actor(param)
@@ -220,4 +221,50 @@ ActorBase::Result PlayerBase::create_()
     mpModelBaseMgr->calc(mtx);
 
     return cResult_Success;
+}
+
+bool PlayerBase::preExecute_()
+{
+    getPos2D() += mNextFrameSpeed;
+    mNextFrameSpeed.set(0.0f, 0.0f, 0.0f);
+
+    offStatus(cStatus_1);
+
+    if (!Actor::preExecute_())
+        return false;
+
+    if (isStatus(cStatus_2))
+        return false;
+
+    mBgCheckPlayer.atFrameStart();
+
+    onStatus(cStatus_1);
+
+    offStatus(cStatus_270);
+    offStatus(cStatus_71);
+    offStatus(cStatus_134);
+    offStatus(cStatus_138);
+    offStatus(cStatus_141);
+
+    if (isStatus(cStatus_256))
+    {
+        onStatus(cStatus_255);
+        offStatus(cStatus_256);
+    }
+
+    offStatus(cStatus_117);
+    if (isStatus(cStatus_118))
+    {
+        onStatus(cStatus_117);
+        offStatus(cStatus_118);
+    }
+
+    offStatus(cStatus_171);
+
+    if (mSpeed.y <= 0.0f)
+        offStatus(cStatus_10);
+
+    CalcTimer<s32>(&_2a4);
+
+    return true;
 }
