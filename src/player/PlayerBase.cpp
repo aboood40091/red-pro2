@@ -268,3 +268,22 @@ bool PlayerBase::preExecute_()
 
     return true;
 }
+
+bool PlayerBase::execute_()
+{
+    CalcTimer<s32>(&mExecuteFreezeTimer);
+    if (mExecuteFreezeTimer != 0)
+        bgCheck(true);
+    else
+    {
+        mPlayerKey.update();
+        setZPosition();
+        releaseCcData();
+        executeMain();
+        mPlayerKey.updateEnd();
+        mAudioObj.calc(getCenterPos());
+    }
+    executeLastPlayer();
+    vf19C();
+    return true;
+}
