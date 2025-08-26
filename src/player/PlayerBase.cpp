@@ -1,4 +1,5 @@
 #include <player/PlayerBase.h>
+#include <player/PlayerModelBaseMgr.h>
 
 PlayerBase::PlayerBase(const ActorCreateParam& param)
     : Actor(param)
@@ -206,4 +207,17 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
 PlayerBase::~PlayerBase()
 {
     PlayerBase::releaseCcData();
+}
+
+ActorBase::Result PlayerBase::create_()
+{
+    mHipdropExEffect.createModel();
+
+    sead::Matrixf mtx;
+    mtx.makeRTIdx(mAngle, mPos);
+    mtx.multScaleLocal(mScale);
+
+    mpModelBaseMgr->calc(mtx);
+
+    return cResult_Success;
 }
