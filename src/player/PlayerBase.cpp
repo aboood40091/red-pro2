@@ -294,3 +294,51 @@ void PlayerBase::clearFollowMameKuribo()
     mFollowMameKuribo = 0;
     offStatus(cStatus_174);
 }
+
+static inline sead::Vector3f CalcMaskPosSpeed(const sead::Vector3f& dst_pos, const sead::Vector3f& mask_pos, s32 time)
+{
+    if (time < 1)
+        time = 1;
+
+    sead::Vector3f speed = dst_pos;
+    speed -= mask_pos;
+    speed /= time;
+    return speed;
+}
+
+void PlayerBase::calcMaskPos()
+{
+    CalcTimer<s32>(&mMaskPosInterpTimer);
+
+    sead::Vector3f base_pos = mPos;
+
+    switch (mMaskPosInterpSrcType)
+    {
+    default:
+        {
+            sead::Vector3f speed = CalcMaskPosSpeed(base_pos, mMaskPos, mMaskPosInterpTimer);
+            mMaskPos += speed;
+        }
+        break;
+    case 0:
+        {
+            sead::Vector3f speed = CalcMaskPosSpeed(base_pos, mMaskPos, mMaskPosInterpTimer);
+            mMaskPos += speed;
+        }
+        break;
+    case 1:
+        {
+            sead::Vector3f ankle_l;
+            mpModelBaseMgr->getJointPos(&ankle_l, "ankle_l1");
+            sead::Vector3f ankle_r;
+            mpModelBaseMgr->getJointPos(&ankle_r, "ankle_r1");
+
+            sead::Vector3f ankle_pos = base_pos;
+            ankle_pos.y = (ankle_l.y + ankle_r.y) * 0.5f;
+
+            sead::Vector3f speed = CalcMaskPosSpeed(ankle_pos, mMaskPos, mMaskPosInterpTimer);
+            mMaskPos += speed;
+        }
+        break;
+    }
+}
