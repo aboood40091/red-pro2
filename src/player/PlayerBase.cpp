@@ -287,3 +287,10 @@ bool PlayerBase::execute_()
     vf19C();
     return true;
 }
+
+void PlayerBase::clearFollowMameKuribo()
+{
+    mFrameEndFollowMameKuribo = mFollowMameKuribo;
+    mFollowMameKuribo = 0;
+    offStatus(cStatus_174);
+}
