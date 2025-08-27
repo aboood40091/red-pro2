@@ -342,3 +342,46 @@ void PlayerBase::calcMaskPos()
         break;
     }
 }
+
+void PlayerBase::postExecute_(MainState state)
+{
+    mFrameEndPosDelta = mPos - mPosPrev;
+
+    if (state == cState_Success)
+    {
+        offStatus(cStatus_46);
+        offStatus(cStatus_47);
+        offStatus(cStatus_178);
+        offStatus(cStatus_128);
+        offStatus(cStatus_136);
+        offStatus(cStatus_137);
+        offStatus(cStatus_282);
+        offStatus(cStatus_130);
+        offStatus(cStatus_148);
+        offStatus(cStatus_151);
+        offStatus(cStatus_152);
+        offStatus(cStatus_105);
+        offStatus(cStatus_106);
+        offStatus(cStatus_93);
+        offStatus(cStatus_63);
+        offStatus(cStatus_255);
+
+        if (!isStatus(cStatus_250))
+            mBgCheckPlayer.reset();
+        offStatus(cStatus_250);
+
+        if (isStatus(cStatus_153) && isStatus(cStatus_7))
+            onStatus(cStatus_2);
+
+        clearFollowMameKuribo();
+        clearCcPlayerRev();
+        clearCcData();
+
+        if (!isStatus(cStatus_9))
+            mFaderPos = mPos;
+
+        calcMaskPos();
+    }
+
+    Actor::postExecute_(state);
+}
