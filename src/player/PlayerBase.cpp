@@ -1,3 +1,4 @@
+#include <enemy/Enemy.h>
 #include <player/PlayerBase.h>
 #include <player/PlayerModelBaseMgr.h>
 #include <utility/Timer.h>
@@ -401,4 +402,12 @@ bool PlayerBase::preDraw_()
         return false;
 
     return true;
+}
+
+void PlayerBase::blockHitInit_()
+{
+    if (isStatus(cStatus_60))
+        return;
+
+    bouncePlayer1(Enemy::cFumiJumpSpeed + 3.628f, mSpeedF, true, cBounceType_Normal, cJumpSe_None);
 }
