@@ -385,3 +385,20 @@ void PlayerBase::postExecute_(MainState state)
 
     Actor::postExecute_(state);
 }
+
+bool PlayerBase::preDraw_()
+{
+    if (isStatus(cStatus_123))
+    {
+        offStatus(cStatus_Invisible);
+        offStatus(cStatus_123);
+    }
+
+    if (isStatus(cStatus_Invisible))
+        return false;
+
+    if (!Actor::preDraw_())
+        return false;
+
+    return true;
+}
