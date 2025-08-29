@@ -1130,3 +1130,12 @@ s8 PlayerBase::calcComboCount(s32 max)
         mComboCnt++;
     return mComboCnt;
 }
+
+const f32 PlayerBase::cDirSpeed[] = { 1.0f, -1.0f };
+const f32 PlayerBase::cJumpSpeed = 3.628f;
+const f32 PlayerBase::cUnkZero = 0.0f;
+const f32 PlayerBase::cWaterNumaJumpSpeed = 0.75f;
+const f32 PlayerBase::cMaxFallSpeed = -4.0f;
+const f32 PlayerBase::cMaxFallSpeed_Foot = -2.0f;
+const f32 PlayerBase::cTurnPowerUpRate = 3.0;
+const f32 PlayerBase::cWaterCancelCrouchAnmSpeed = 0.1f;
