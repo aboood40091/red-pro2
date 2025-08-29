@@ -1,7 +1,18 @@
 #include <enemy/Enemy.h>
+#include <game/AreaTask.h>
+#include <game/CourseTask.h>
+#include <game/SubjectMgr.h>
+#include <map/LayerID.h>
+#include <map_obj/ActorCoinMgr.h>
 #include <player/PlayerBase.h>
+#include <player/PlayerMgr.h>
 #include <player/PlayerModelBaseMgr.h>
+#include <scroll/BgScrollMgr.h>
 #include <utility/MathUtil.h>
+
+const f32 PlayerBase::cFireShootFrame = 4.0f;
+
+static const sead::Vector3f unused(0.0f, 0.0f, 0.0f);
 
 PlayerBase::PlayerBase(const ActorCreateParam& param)
     : Actor(param)
@@ -291,9 +302,9 @@ bool PlayerBase::execute_()
 
 void PlayerBase::clearFollowMameKuribo()
 {
+    offStatus(cStatus_FollowMameKuribo);
     mFrameEndFollowMameKuribo = mFollowMameKuribo;
     mFollowMameKuribo = 0;
-    offStatus(cStatus_174);
 }
 
 static inline sead::Vector3f CalcMaskPosSpeed(const sead::Vector3f& dst_pos, const sead::Vector3f& mask_pos, s32 time)
@@ -410,4 +421,712 @@ void PlayerBase::blockHitInit_()
         return;
 
     bouncePlayer1(Enemy::cFumiJumpSpeed + 3.628f, mSpeedF, true, cBounceType_Normal, cJumpSe_None);
+}
+
+void PlayerBase::setDrawTypeInDistantView()
+{
+    mpModelBaseMgr->setDrawType(PlayerModelBaseMgr::cDrawType_InDistantView);
+}
+
+void PlayerBase::resetDrawType()
+{
+    mpModelBaseMgr->setDrawType(PlayerModelBaseMgr::cDrawType_Normal);
+}
+
+bool PlayerBase::isKinopio() const
+{
+    switch (mCharacter)
+    {
+    case cPlayerCharacter_YellowToad:
+    case cPlayerCharacter_BlueToad:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool PlayerBase::isTotten() const
+{
+    return mCharacter == cPlayerCharacter_Nabbit;
+}
+
+bool PlayerBase::isMameAction()
+{
+    if (mMode == cPlayerMode_Mini && !isLiftUpExceptMame())
+        return true;
+    else
+        return false;
+}
+
+PlayerModelBase* PlayerBase::getModel()
+{
+    return mpModelBaseMgr->getModelBase();
+}
+
+sead::Vector3f* PlayerBase::getHeadTopPosP()
+{
+    return getModel()->getHeadTopPosP();
+}
+
+sead::Vector3f* PlayerBase::getHatPosP()
+{
+    return mpModelBaseMgr->getHatPosP();
+}
+
+bool PlayerBase::vf154()
+{
+    if (isStatus(cStatus_210))
+        return false;
+
+    if (isStatus(cStatus_122))
+        return false;
+
+    if (isStatus(cStatus_280))
+        return false;
+
+    if (_2a4 == 0 && isStatus(cStatus_209))
+        return false;
+
+    return true;
+}
+
+void PlayerBase::setMaskPosInterpType(s32 src_type)
+{
+    mMaskPosInterpSrcType = src_type;
+    mMaskPosInterpTimer = 3;
+}
+
+void PlayerBase::dokanAdjustMaskPos(sead::Vector3f& mask_pos)
+{
+    if (!isStatus(cStatus_210))
+        return;
+
+    switch (mDokanDir)
+    {
+    case cDokanDir_Up:
+        {
+            f32 y = mask_pos.y;
+            if (y > mDokanPosPrev.y)
+                y = mDokanPosPrev.y;
+            mask_pos.y = y;
+        }
+        break;
+    case cDokanDir_Down:
+        {
+            f32 y = mask_pos.y;
+            if (y < mDokanPosPrev.y)
+                y = mDokanPosPrev.y;
+            mask_pos.y = y;
+        }
+        break;
+    case cDokanDir_Left:
+        {
+            f32 x = mask_pos.x;
+            if (x < mDokanPosPrev.x)
+                x = mDokanPosPrev.x;
+            mask_pos.x = x;
+        }
+        break;
+    case cDokanDir_Right:
+        {
+            f32 x = mask_pos.x;
+            if (x > mDokanPosPrev.x)
+                x = mDokanPosPrev.x;
+            mask_pos.x = x;
+        }
+        break;
+    }
+}
+
+bool PlayerBase::checkRideActor(PlayerBase* p_player_other)
+{
+    if (mRideActorID == p_player_other->getActorUniqueID())
+        return true;
+
+    if (p_player_other->mRideActorID == getActorUniqueID())
+        return true;
+
+    return false;
+}
+
+void PlayerBase::setRideNat(f32 value)
+{
+    onStatus(cStatus_RideNat);
+    mRideNatPosY = value;
+}
+
+void PlayerBase::updateRideNat()
+{
+    if (isStatus(cStatus_RideNat) && mSpeed.y <= 0.0f)
+    {
+        if (!isStatus(cStatus_127) && mPos.y <= mRideNatPosY)
+            onStatus(cStatus_127);
+    }
+    else
+    {
+        offStatus(cStatus_127);
+    }
+}
+
+void PlayerBase::onFollowMameKuribo()
+{
+    onStatus(cStatus_FollowMameKuribo);
+    mFollowMameKuribo++;
+}
+
+s32 PlayerBase::getFollowMameKuribo()
+{
+    return mFrameEndFollowMameKuribo;
+}
+
+#define FOLLOW_MAME_KURIBO_TYPE_NUM 5
+
+s32 PlayerBase::getFollowMameKuriboSpeedType()
+{
+    return sead::Mathi::clamp2(0, getFollowMameKuribo() - 1, FOLLOW_MAME_KURIBO_TYPE_NUM - 1);
+}
+
+f32 PlayerBase::getFollowMameKuriboSpeedScaleX()
+{
+    if (!isStatus(cStatus_FollowMameKuribo))
+        return 1.0;
+
+    static const f32 ratios[] = {
+        0.60f,
+        0.55f,
+        0.50f,
+        0.45f,
+        0.40f
+    };
+    static_assert(sizeof(ratios) / sizeof(f32) == FOLLOW_MAME_KURIBO_TYPE_NUM);
+
+    return ratios[getFollowMameKuriboSpeedType()];
+}
+
+f32 PlayerBase::getFollowMameKuriboSpeedScaleY()
+{
+    if (!isStatus(cStatus_FollowMameKuribo))
+        return 1.0;
+
+    static const f32 ratios[] = {
+        0.84f,
+        0.81f,
+        0.78f,
+        0.75f,
+        0.72f
+    };
+    static_assert(sizeof(ratios) / sizeof(f32) == FOLLOW_MAME_KURIBO_TYPE_NUM);
+
+    return ratios[getFollowMameKuriboSpeedType()];
+}
+
+void PlayerBase::reduceCoinNum_(s32 coin_num)
+{
+    FieldGameData* p_game_data = CourseTask::instance()->getGameData();
+    if (p_game_data != nullptr)
+        p_game_data->setPlayerCoinNum(
+            mPlayerNo,
+            p_game_data->getPlayerCoinNum(mPlayerNo) - coin_num
+        );
+}
+
+s32 PlayerBase::adjustCoinReductionNumCB_(s32 coin_num)
+{
+    const FieldGameData* p_game_data = CourseTask::instance()->getGameData();
+
+    if (CourseTask::instance()->getGameMode() == FieldGameMode::cCoinBattle)
+    {
+        s32 coin_num_self = 0;
+        if (p_game_data != nullptr)
+            coin_num_self = p_game_data->getPlayerCoinNum(mPlayerNo);
+
+        if (coin_num > coin_num_self)
+            coin_num = coin_num_self;
+
+        return coin_num;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void PlayerBase::coinJumpOnStampCB(s32 coin_num)
+{
+    coin_num = adjustCoinReductionNumCB_(coin_num);
+    if (coin_num == 0)
+        return;
+
+    reduceCoinNum_(coin_num);
+
+    ActorCoinMgr::CoinJumpArg arg;
+    arg.pos = getCenterPos();
+    arg.dir = mDirection;
+    arg.count = coin_num;
+    arg.layer = cLayerID_Layer1;
+    arg.spawn_height = 0;
+    arg._13 = 0;
+    arg.spacing_decrease = 0;
+    arg._15 = 0;
+    arg.curve_type = 0;
+    ActorCoinMgr::instance()->spawnCoinJump(arg, true, mPlayerNo);
+}
+
+static inline s32 GetBaseDamageCoinNumCB(s32 type, s32 diff_from_min)
+{
+    s32 coin_num = 0;
+    if (type == 0)
+    {
+        if (diff_from_min >= 50)
+            coin_num = 10;
+        else if (diff_from_min >= 30)
+            coin_num = 5;
+        else if (diff_from_min >= 10)
+            coin_num = 3;
+        else if (diff_from_min > 0)
+            coin_num = 1;
+    }
+    else
+    {
+        if (diff_from_min >= 50)
+            coin_num = 20;
+        else if (diff_from_min >= 30)
+            coin_num = 10;
+        else if (diff_from_min >= 10)
+            coin_num = 5;
+        else if (diff_from_min > 0)
+            coin_num = 2;
+        else
+            coin_num = 1;
+    }
+    return coin_num;
+}
+
+void PlayerBase::coinFunsuiOnDamageCB(s32 type, Actor* p_eat_die_actor)
+{
+    const FieldGameData* p_game_data = CourseTask::instance()->getGameData();
+
+    if (CourseTask::instance()->getGameMode() != FieldGameMode::cCoinBattle)
+        return;
+
+    s32 coin_num_self = 0;
+    if (p_game_data != nullptr)
+        coin_num_self = p_game_data->getPlayerCoinNum(mPlayerNo);
+
+    s32 diff_from_min = coin_num_self - PlayerMgr::instance()->getCoinNumMin();
+
+    s32 coin_num = adjustCoinReductionNumCB_(GetBaseDamageCoinNumCB(type, diff_from_min));
+    if (coin_num == 0)
+        return;
+
+    reduceCoinNum_(coin_num);
+
+    sead::Vector3f funsui_pos = getCenterPos();
+    s32 funsui_angle_type = 0; // Angle = value * 22.5 + 45 degrees
+    f32 screen_left = BgScrollMgr::instance()->getScreenLeft() - 16.0f;
+    f32 screen_right = BgScrollMgr::instance()->getScreenRight() + 16.0f;
+    if (type == 2)
+    {
+        if (funsui_pos.x < screen_left)
+            funsui_angle_type = 2;
+        else
+            funsui_angle_type = 1;
+
+        if (funsui_pos.x > screen_right)
+            funsui_angle_type = 3;
+    }
+    {
+        f32 x = funsui_pos.x;
+        if (x < screen_left)
+            x = screen_left;
+        else if (x > screen_right)
+            x = screen_right;
+        funsui_pos.x = x;
+    }
+    f32 screen_bottom = BgScrollMgr::instance()->getScreenBottom() - 16.0f;
+    {
+        f32 y = funsui_pos.y;
+        if (y < screen_bottom)
+            y = screen_bottom;
+        funsui_pos.y = y;
+    }
+    ActorCoinMgr::instance()->spawnCoinSpringFunsui(funsui_pos, mPlayerNo, coin_num, funsui_angle_type, p_eat_die_actor);
+}
+
+void PlayerBase::calcTimerProc()
+{
+    MathUtil::calcTimer(&_205c);
+    if (_205c < 60)
+    {
+        if (_205c & 4)
+            onStatus(cStatus_HideTemporarily);
+    }
+    else
+    {
+        if (_205c & 8)
+            onStatus(cStatus_HideTemporarily);
+    }
+
+    MathUtil::calcTimer(&_2060);
+    MathUtil::calcTimer(&_2064);
+    MathUtil::calcTimer(&_2068);
+    MathUtil::calcTimer(&_206c);
+    MathUtil::calcTimer(&_2070);
+    MathUtil::calcTimer(&_4e0);
+    MathUtil::calcTimer(&_2134);
+    MathUtil::calcTimer(&_209c);
+    MathUtil::calcTimer(&_20a0);
+    MathUtil::calcTimer(&_21e0);
+    MathUtil::calcTimer(&_21e8);
+    MathUtil::calcTimer(&_21d8);
+    MathUtil::calcTimer(&_214c);
+    MathUtil::calcTimer(&_1bb4);
+    MathUtil::calcTimer(&mPenguinSlideCooldown);
+
+    updateNoHitPlayer();
+    calcNoHitObjBgTimer();
+}
+
+void PlayerBase::startQuakeShock(Quake::ShockType shock_type)
+{
+    Quake::instance()->shockMotor(mPlayerNo, shock_type, 0, false);
+}
+
+void PlayerBase::startPatternRumble(const char* pattern)
+{
+    Quake::instance()->shockMotor(mPlayerNo, Quake::cShockType_4, 0, false);
+}
+
+const PlayerModelBase* PlayerBase::getModel() const
+{
+    return mpModelBaseMgr->getModelBase();
+}
+
+void PlayerBase::getAnkleCenterPos(sead::Vector3f* p_pos)
+{
+    sead::Vector3f ankle_l;
+    mpModelBaseMgr->getJointPos(&ankle_l, "ankle_l1");
+
+    mpModelBaseMgr->getJointPos(p_pos, "ankle_r1");
+
+    p_pos->x = (ankle_l.x + p_pos->x) * 0.5f;
+    p_pos->y = (ankle_l.y + p_pos->y) * 0.5f;
+    p_pos->z = (ankle_l.z + p_pos->z) * 0.5f;
+}
+
+f32 PlayerBase::getThrowSpeed()
+{
+    f32 throw_speed = mThrowSpeed;
+    if (isNowBgCross(cBgCross_IsFoot))
+        throw_speed = mPosDelta.x;
+    return throw_speed;
+}
+
+f32 PlayerBase::getThrowLoopPosX(f32 x)
+{
+    if (AreaTask::instance()->getLoopType() == 0)
+        return x;
+
+    f32 area_w = AreaTask::instance()->getBound().getSizeX();
+    if (sead::Mathf::abs(x - mPos.x) <= area_w * 0.5f)
+        return x;
+
+    if (x < mPos.x)
+        return x + area_w;
+    else
+        return x - area_w;
+}
+
+void PlayerBase::calcAdditionalAirSpeedF()
+{
+    if (!isNowBgCross(cBgCross_IsFoot))
+        sead::Mathf::chase(&mAdditionalAirSpeedF, 0.0f, mAdditionalAirSpeedFDecelStep);
+    
+    else
+    {
+        mAdditionalAirSpeedF = 0.0f;
+        mAdditionalAirSpeedFStart = 0.0f;
+    }
+}
+
+void PlayerBase::posMoveAnglePenguin(const sead::Vector3f& speed)
+{
+    sead::Vector2f saka_move_speed(0.0f, speed.y);
+    if (isNowBgCross(cBgCross_IsHead) && speed.y > 0.0f)
+    {
+        Angle angle = mBgCheckPlayer.getHeadSakaMoveAngle(mDirection);
+        if (angle > 0)
+            saka_move_speed.x = speed.y * sead::Mathf::sinIdx(angle);
+        saka_move_speed.y = speed.y * sead::Mathf::abs(sead::Mathf::cosIdx(angle));
+    }
+    if (isNowBgCross(cBgCross_IsFoot) && speed.y < 0.0f)
+    {
+        Angle angle = mBgCheckPlayer.getSakaMoveAngle(mDirection);
+        if (angle < 0)
+        {
+            if (sead::Mathf::abs(speed.x) > 0.0f)
+                if (speed.x > 0.0f)
+                    saka_move_speed.x = speed.y * sead::Mathf::sinIdx(angle);
+                else
+                    saka_move_speed.x = -speed.y * sead::Mathf::sinIdx(angle);
+            saka_move_speed.y = speed.y * sead::Mathf::abs(sead::Mathf::cosIdx(angle));
+        }
+    }
+
+    Angle saka_angle;
+    if (isNowBgCross(cBgCross_IsHead))
+        saka_angle = mBgCheckPlayer.getHeadSakaAngle();
+    else
+        saka_angle = mBgCheckPlayer.getSakaAngle();
+    f32 saka_sin_v, saka_cos_v;
+    sead::Mathf::sinCosIdx(&saka_sin_v, &saka_cos_v, saka_angle);
+    saka_cos_v = sead::Mathf::abs(saka_cos_v);
+
+    sead::Vector2f delta(
+        speed.x * saka_cos_v,
+        speed.x * saka_sin_v
+    );
+    if (delta.y < 0.0f)
+        delta.y = 0.0f;
+
+    delta += saka_move_speed;
+    posMove_(delta, speed.z);
+}
+
+void PlayerBase::posMoveAnglePlayer(const sead::Vector3f& speed)
+{
+    sead::Vector3f base_speed(speed);
+    if ((base_speed.x > 0.0f && isNowBgCross(cBgCross_IsWallTouchR)) ||
+        (base_speed.x < 0.0f && isNowBgCross(cBgCross_IsWallTouchL)))
+    {
+        if (sead::Mathf::abs(base_speed.x) > 2.5f)
+            base_speed.x = base_speed.x > 0.0f ? 2.5f : -2.5f;
+    }
+
+    if (isStatus(cStatus_98) || isStatus(cStatus_97))
+    {
+        posMoveAnglePenguin(base_speed);
+        return;
+    }
+
+    Angle unk_angle = 0;
+    if (isStatus(cStatus_36))
+        unk_angle = _1b38 + 0x40000000;
+    f32 unk_sin_v, unk_cos_v;
+    sead::Mathf::sinCosIdx(&unk_sin_v, &unk_cos_v, unk_angle);
+    unk_cos_v = sead::Mathf::abs(unk_cos_v);
+
+    sead::Vector2f unk_speed(
+        -(base_speed.y * unk_sin_v),
+          base_speed.y * unk_cos_v
+    );
+
+    Angle saka_angle;
+    if (isNowBgCross(cBgCross_IsHead))
+        saka_angle = mBgCheckPlayer.getHeadSakaAngle();
+    else
+        saka_angle = mBgCheckPlayer.getSakaAngle();
+    f32 saka_sin_v, saka_cos_v;
+    sead::Mathf::sinCosIdx(&saka_sin_v, &saka_cos_v, saka_angle);
+    saka_cos_v = sead::Mathf::abs(saka_cos_v);
+
+    sead::Vector3f delta(
+        base_speed.x * saka_cos_v + unk_speed.x,
+        base_speed.x * saka_sin_v + unk_speed.y,
+        base_speed.z
+    );
+    posMove_(delta);
+}
+
+void PlayerBase::calcPlayerSpeedXY()
+{
+    if (_209c != 0)
+    {
+        if (isNowBgCross(cBgCross_IsFoot))
+        {
+            mSpeed.y += mAccelY;
+            mPos.y += mSpeed.y;
+        }
+        return;
+    }
+
+    f32 speed_rev = 0.0f;
+    bool cc_rev = calcCcPlayerRev(&speed_rev);
+
+    f32 target_speedF = mSpeedFMax;
+    f32 scale_accelF = 1.0f;
+
+    if (isStatus(cStatus_FollowMameKuribo))
+        target_speedF *= getFollowMameKuriboSpeedScaleX();
+
+    if (cc_rev)
+    {
+        if (target_speedF < -0.5f)
+            target_speedF = -0.5f;
+        else if (target_speedF > 0.5f)
+            target_speedF = 0.5f;
+
+        scale_accelF = (sead::Mathf::abs(target_speedF) < sead::Mathf::abs(mSpeedF)) ? 1.0f : 1.8f;
+    }
+
+    calcSpeedF_(mAccelF * scale_accelF, target_speedF);
+  //calcWindSpeed(); // Removed in NSMBU
+
+    f32 speedF = mSpeedF;
+    if (!isStatus(cStatus_147))
+    {
+        if (speedF < -5.0f)
+            speedF = -5.0f;
+        else if (speedF > 5.0f)
+            speedF = 5.0f;
+    }
+    mSpeed.x = speedF;
+
+    if (mSpeed.x * speed_rev >= 0.0f)
+    {
+        sead::Vector3f wall_check_pos(
+            mPos.x + mSpeed.x + speed_rev,
+            mPos.y + mCenterOffsetY * 0.5f,
+            mPos.z
+        );
+        f32 hit_pos_x;
+        if (mBgCheckPlayer.checkWall(wall_check_pos, mSpeed.x + speed_rev, &hit_pos_x))
+            speed_rev = 0.0f;
+    }
+
+    f32 speed_x = speed_rev;
+
+    f32 throw_speed = mThrowSpeed;
+    if (throw_speed != 0.0f)
+    {
+        if (!isNowBgCross(cBgCross_IsFoot))
+        {
+            speed_x += throw_speed;
+            if (isStatus(cStatus_11) && _1bb4 == 0)
+            {
+                MathUtil::addCalc(&throw_speed, 0.0f, 0.1f, 0.1f, 0.01f);
+                mThrowSpeed = throw_speed;
+            }
+        }
+        else
+        {
+            if (getPowerChangeType(false) != 1)
+            {
+                f32 add_speedF = throw_speed;
+                if (add_speedF * mSpeedF >= 0.0f)
+                    add_speedF *= isStatus(cStatus_131) ? 0.0f : 0.15f;
+                mSpeedF += add_speedF;
+            }
+            mThrowSpeed = 0.0f;
+            offStatus(cStatus_11);
+            _1bb4 = 120;
+        }
+    }
+
+    calcAdditionalAirSpeedF();
+    speed_x += mAdditionalAirSpeedF;
+
+    setSandEffect();
+
+    getPos2D() += _1b60;
+
+    if (isNowBgCross(cBgCross_IsFoot) && isStatus(cStatus_244))
+        mSpeedF = 0.0f;
+
+    _4c8 = mSpeed;
+    mSpeed.y += mAccelY;
+
+    f32 fall_speed_max = mFallSpeedMax; // Negative
+    if (isNowBgCross(cBgCross_IsSlightlyInsideSinkSand) || isNowBgCross(cBgCross_IsPartiallySubmergedInSinkSand))
+        fall_speed_max = 0.0f;
+
+    if (mSpeed.y < fall_speed_max)
+        mSpeed.y = fall_speed_max;
+
+    sead::Vector3f speed(
+        mSpeed.x + speed_x,
+        mSpeed.y,
+        mSpeed.z
+    );
+    posMoveAnglePlayer(speed);
+}
+
+void PlayerBase::initAdditionalAirSpeedF(f32 start_val, f32 len_frames)
+{
+    if (!(start_val * mSpeedF >= 0.0f))
+        return;
+
+    f32 val_mag = sead::Mathf::abs(start_val);
+    if (val_mag < 1.0f)
+    {
+        if (val_mag <= 0.1f)
+            return;
+
+        start_val = (start_val > 0.0f) ? 1.0f : -1.0f;
+    }
+
+    mAdditionalAirSpeedF = start_val;
+    mAdditionalAirSpeedFStart = 0.0f;
+    mPos.x += start_val;
+    mAdditionalAirSpeedFDecelStep = sead::Mathf::abs(start_val / len_frames);
+}
+
+bool PlayerBase::setJump(u8 param, JumpSe jump_se_type)
+{
+    if (!isNowBgCross(cBgCross_IsWater) && !isStatus(cStatus_146))
+    {
+        if ((mpModelBaseMgr->getAnmFlag(PlayerModelBase::cAnmFlagType_Main) & PlayerModelBase::cAnmFlag_0) && checkStandUpRoof())
+            return setCrouchJump();
+
+        if (mPlayerKey.triggerJump())
+        {
+            JumpInf jmp_inf;
+            jmp_inf.speed_y = 0.0f;
+            jmp_inf.jump_se_type = jump_se_type;
+            jmp_inf._8 = param;
+            changeState(StateID_Jump, jmp_inf);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool PlayerBase::setDelayHelpJump()
+{
+    if (mPlayerKey.triggerJump() && sead::Mathf::abs(mSpeedF) > 1.3f && checkOldBgCrossFoot(2))
+    {
+        if (setJump(1, cJumpSe_Normal))
+            return true;
+    }
+    return false;
+}
+
+bool PlayerBase::checkJumpTrigger()
+{
+    if (isNowBgCross(cBgCross_IsFoot) && isNowBgCross(cBgCross_55))
+    {
+        if (setJump(1, cJumpSe_Normal))
+            return true;
+    }
+    return false;
+}
+
+void PlayerBase::clearTreadCount()
+{
+    SubjectMgr::instance()->onPlFumiCntClr();
+    mTreadCnt = 0;
+}
+
+s8 PlayerBase::calcTreadCount(s32 max)
+{
+    if (mTreadCnt < max)
+        mTreadCnt++;
+    return mTreadCnt;
+}
+
+s8 PlayerBase::calcComboCount(s32 max)
+{
+    if (mComboCnt < max)
+        mComboCnt++;
+    return mComboCnt;
 }
