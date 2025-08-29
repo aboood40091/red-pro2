@@ -537,7 +537,7 @@ Actor* Actor::searchCarryFukidashiPlayer_(s32 action)
 
     const FieldGameData& game_data = 
         (CourseTask::instance() != nullptr)
-            ? CourseTask::instance()->getGameData()
+            ? *CourseTask::instance()->getGameData()
             : FieldGame::instance()->getGameData();
 
     Actor* p_actor_player = nullptr;
@@ -576,7 +576,7 @@ void Actor::carryFukidashiCheck_(s32 action, const sead::Vector2f& range)
 
     const FieldGameData& game_data = 
         (CourseTask::instance() != nullptr)
-            ? CourseTask::instance()->getGameData()
+            ? *CourseTask::instance()->getGameData()
             : FieldGame::instance()->getGameData();
 
     if ((0 <= mControllerLytPlayerNo && mControllerLytPlayerNo < 4) &&
@@ -666,7 +666,7 @@ void Actor::carryFukidashiCancel_(s32 action, s32 player_no)
 
 bool Actor::isEnablePressLR_(const ActorBgCollisionCheck& bc)
 {
-    if (bc.getOutput().checkRightWallEx() && bc.getOutput().checkLeftWallEx())
+    if (bc.checkWall(cDirType_Right) && bc.checkWall(cDirType_Left))
     {
         if (!bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk24) &&
             !bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk31) &&
@@ -688,7 +688,7 @@ bool Actor::isEnablePressLR_(const ActorBgCollisionCheck& bc)
 
 bool Actor::isEnablePressUD_(const ActorBgCollisionCheck& bc)
 {
-    if (bc.getOutput().checkFoot() && bc.getOutput().checkHeadEx())
+    if (bc.checkFoot() && bc.checkHead())
     {
         if (!bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk14) &&
             !bc.getOutput().isOnBit(ActorBgCollisionCheck::Output::cBit_Unk17) &&
@@ -849,10 +849,10 @@ bool Actor::setPressBreakUD_(const ActorBgCollisionCheck& bc)
 
 bool Actor::setPressIceHeadBreak_(const ActorBgCollisionCheck& bc)
 {
-    if (!bc.getOutput().checkFoot())
+    if (!bc.checkFoot())
         return false;
 
-    if (!(bc.getOutput().checkRightWallEx() && bc.getOutput().checkLeftWallEx()))
+    if (!(bc.checkWall(cDirType_Right) && bc.checkWall(cDirType_Left)))
         return false;
 
     Ice* p_ice_u = nullptr;

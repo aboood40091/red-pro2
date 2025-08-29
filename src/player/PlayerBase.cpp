@@ -1,7 +1,7 @@
 #include <enemy/Enemy.h>
 #include <player/PlayerBase.h>
 #include <player/PlayerModelBaseMgr.h>
-#include <utility/Timer.h>
+#include <utility/MathUtil.h>
 
 PlayerBase::PlayerBase(const ActorCreateParam& param)
     : Actor(param)
@@ -66,9 +66,9 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mLineSpinLiftID()
     , _1b9c(0)
     , mNoHitObjBgTimer(0)
-    , _1ba4(0.0f)
-    , _1ba8(0.0f)
-    , _1bac(0.0f)
+    , mAdditionalAirSpeedFStart(0.0f)
+    , mAdditionalAirSpeedF(0.0f)
+    , mAdditionalAirSpeedFDecelStep(0.0f)
     , _1bb0(0.0f)
     , _1bb4(0)
     , mCollisionCheck2_React()
@@ -154,7 +154,7 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mRidePlayerPosDelta(0.0f, 0.0f, 0.0f)
     , _2208()
     , mHipdropEffectStep(0)
-    , mRideNat(0.0f)
+    , mRideNatPosY(0.0f)
     , mFrameEndFollowMameKuribo(0)
     , mFollowMameKuribo(0)
     , mPenguinSlideCooldown(0)
@@ -265,14 +265,14 @@ bool PlayerBase::preExecute_()
     if (mSpeed.y <= 0.0f)
         offStatus(cStatus_10);
 
-    CalcTimer<s32>(&_2a4);
+    MathUtil::calcTimer(&_2a4);
 
     return true;
 }
 
 bool PlayerBase::execute_()
 {
-    CalcTimer<s32>(&mExecuteFreezeTimer);
+    MathUtil::calcTimer(&mExecuteFreezeTimer);
     if (mExecuteFreezeTimer != 0)
         bgCheck(true);
     else
@@ -309,7 +309,7 @@ static inline sead::Vector3f CalcMaskPosSpeed(const sead::Vector3f& dst_pos, con
 
 void PlayerBase::calcMaskPos()
 {
-    CalcTimer<s32>(&mMaskPosInterpTimer);
+    MathUtil::calcTimer(&mMaskPosInterpTimer);
 
     sead::Vector3f base_pos = mPos;
 
@@ -353,7 +353,7 @@ void PlayerBase::postExecute_(MainState state)
         offStatus(cStatus_46);
         offStatus(cStatus_47);
         offStatus(cStatus_178);
-        offStatus(cStatus_128);
+        offStatus(cStatus_RideNat);
         offStatus(cStatus_136);
         offStatus(cStatus_137);
         offStatus(cStatus_282);

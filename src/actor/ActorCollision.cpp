@@ -174,9 +174,9 @@ void ActorCollision::calcBgSpeed_()
     mBgSpeedPrev = mBgSpeed;
     mIsInQuicksand = false;
 
-    if (mBgCheckObj.getOutput().checkFoot())
+    if (mBgCheckObj.checkFoot())
     {
-        if (mBgCheckObj.getOutput().isQuicksand())
+        if (mBgCheckObj.isQuicksand())
             mIsInQuicksand = true;
 
         mBgSpeed = mBgCheckObj.getBgSpeed();
@@ -250,14 +250,14 @@ void ActorCollision::setSmokeDamage_(Actor* p_actor)
 
 bool ActorCollision::bgCheckFoot_() const
 {
-    return mBgCheckObj.getOutput().checkFoot();
+    return mBgCheckObj.checkFoot();
 }
 
 bool ActorCollision::bgCheckWall_() const
 {
     // TODO: Greatly non-matching
     u8 direction = mSpeed.x < 0.0f ? cDirType_Left : cDirType_Right;
-    return mBgCheckObj.getOutput().checkWallEx(direction);
+    return mBgCheckObj.checkWall(direction);
 }
 
 ActorCollision::BgCheckFlag ActorCollision::bgCheck_()
@@ -272,7 +272,7 @@ ActorCollision::BgCheckFlag ActorCollision::bgCheck_()
         mSpeed.y = 0.0f;
     }
 
-    if (mBgCheckObj.getOutput().checkHeadEx())
+    if (mBgCheckObj.checkHead())
         flag |= cBgCheckFlag_Head;
 
     if (bgCheckWall_())
@@ -394,7 +394,7 @@ void ActorCollision::posMoveCalcJump_()
     if (mJumpFrame != 1)
         return;
 
-    if (mBgCheckObj.getOutput().checkFoot())
+    if (mBgCheckObj.checkFoot())
     {
         mJumpSpeedF = 0.0f;
         mJumpFrame = 0;
@@ -428,7 +428,7 @@ void ActorCollision::posMove_()
 
 bool ActorCollision::isJump_() const
 {
-    if (mJumpFrame == 0 && mIsOnGround && !mBgCheckObj.getOutput().checkFoot())
+    if (mJumpFrame == 0 && mIsOnGround && !mBgCheckObj.checkFoot())
         return true;
 
     return false;
