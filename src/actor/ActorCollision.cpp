@@ -283,7 +283,7 @@ ActorCollision::BgCheckFlag ActorCollision::bgCheck_()
 
 void ActorCollision::clampMoveDistance_(BgCollision& bg_collision)
 {
-    if (getPos2D().squaredDistance(mPosPrev) > 0x10000)
+    if (getPos2D().squaredDistance(mPosPrev) > sead::MathCalcCommon<u16>::maxNumber())
     {
         mPosPrev = mPos;
         mPosPrev2 = mPos;
