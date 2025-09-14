@@ -34,7 +34,7 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mpSpeedData_Normal(nullptr)
     , mpSpeedData_Star(nullptr)
     , mpGravityData(nullptr)
-    , _4e0(0)
+    , mNoGravityTimer(0)
     , _4e4(0.0f)
     , _4e8(false)
     , mNextFrameSpeed(0.0f, 0.0f, 0.0f)
@@ -51,28 +51,28 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mOldBgCross()
     , mOldBgCrossFoot()
     , _1b0c(mPos.y)
-    , _1b10(0.0f)
+    , mKaniPosY(0.0f)
     , mSakaType(ActorBgCollisionCheck::SakaType(0))
-    , mSakaAngle()
-    , _1b1c()
-    , _1b20()
-    , _1b24()
+    , mSpeedSakaAngle()
+    , mSpeedSakaAnglePrev()
+    , mSakaBaseAngle()
+    , mSakaBaseAnglePrev()
     , _1b28(0.0f, 0.0f, 0.0f)
     , mBgAttr(cBgAttr_Rock)
-    , _1b38()
-    , mWaterTopPosY(0.0f)
-    , mWaterTopPosY2(0.0f)
+    , mWallAngle()
+    , mWaterSurfacePosY(0.0f)
+    , mWaterSurfacePosYPrev(0.0f)
     , mWaterType(cWaterType_None)
     , mWaterDepthType(0)
     , mAirWaterHitPos(0.0f, 0.0f, 0.0f)
     , mAirWaterHitAngle()
     , mSinkSandSurfacePosY(0.0f)
-    , _1b60(0.0f, 0.0f)
-    , _1b68(0.0f, 0.0f)
-    , _1b70(0.0f)
-    , _1b74(16.0f)
-    , _1b78(0)
-    , _1b7c(0)
+    , mBgSpeed(0.0f, 0.0f)
+    , mBgSpeedPrev(0.0f, 0.0f)
+    , mSandSinkRate(0.0f)
+    , mDispSideLimitPad(16.0f)
+    , mIsBgDamageEnable(false)
+    , mDamageBgTypeInfo()
     , mBgPressIDBuffer()
     , mLineSpinLiftID()
     , _1b9c(0)
@@ -379,7 +379,7 @@ void PlayerBase::postExecute_(MainState state)
         offStatus(cStatus_255);
 
         if (!isStatus(cStatus_250))
-            mBgCheckPlayer.reset();
+            mBgCheckPlayer.clearBg();
         offStatus(cStatus_250);
 
         if (isStatus(cStatus_153) && isStatus(cStatus_7))
@@ -559,12 +559,12 @@ void PlayerBase::updateRideNat()
 {
     if (isStatus(cStatus_RideNat) && mSpeed.y <= 0.0f)
     {
-        if (!isStatus(cStatus_127) && mPos.y <= mRideNatPosY)
-            onStatus(cStatus_127);
+        if (!isStatus(cStatus_RideNatDone) && mPos.y <= mRideNatPosY)
+            onStatus(cStatus_RideNatDone);
     }
     else
     {
-        offStatus(cStatus_127);
+        offStatus(cStatus_RideNatDone);
     }
 }
 
@@ -772,7 +772,7 @@ void PlayerBase::calcTimerProc()
     MathUtil::calcTimer(&_2068);
     MathUtil::calcTimer(&_206c);
     MathUtil::calcTimer(&_2070);
-    MathUtil::calcTimer(&_4e0);
+    MathUtil::calcTimer(&mNoGravityTimer);
     MathUtil::calcTimer(&_2134);
     MathUtil::calcTimer(&_209c);
     MathUtil::calcTimer(&_20a0);
@@ -854,14 +854,14 @@ void PlayerBase::posMoveAnglePenguin(const sead::Vector3f& speed)
     sead::Vector2f saka_move_speed(0.0f, speed.y);
     if (isNowBgCross(cBgCross_IsHead) && speed.y > 0.0f)
     {
-        Angle angle = mBgCheckPlayer.getHeadSakaMoveAngle(mDirection);
+        Angle angle = mBgCheckPlayer.getHeadSakaAngle(mDirection);
         if (angle > 0)
             saka_move_speed.x = speed.y * sead::Mathf::sinIdx(angle);
         saka_move_speed.y = speed.y * sead::Mathf::abs(sead::Mathf::cosIdx(angle));
     }
     if (isNowBgCross(cBgCross_IsFoot) && speed.y < 0.0f)
     {
-        Angle angle = mBgCheckPlayer.getSakaMoveAngle(mDirection);
+        Angle angle = mBgCheckPlayer.getSakaAngle(mDirection);
         if (angle < 0)
         {
             if (sead::Mathf::abs(speed.x) > 0.0f)
@@ -875,9 +875,9 @@ void PlayerBase::posMoveAnglePenguin(const sead::Vector3f& speed)
 
     Angle saka_angle;
     if (isNowBgCross(cBgCross_IsHead))
-        saka_angle = mBgCheckPlayer.getHeadSakaAngle();
+        saka_angle = mBgCheckPlayer.getHeadSakaBaseAngle();
     else
-        saka_angle = mBgCheckPlayer.getSakaAngle();
+        saka_angle = mBgCheckPlayer.getSakaBaseAngle();
     f32 saka_sin_v, saka_cos_v;
     sead::Mathf::sinCosIdx(&saka_sin_v, &saka_cos_v, saka_angle);
     saka_cos_v = sead::Mathf::abs(saka_cos_v);
@@ -909,30 +909,30 @@ void PlayerBase::posMoveAnglePlayer(const sead::Vector3f& speed)
         return;
     }
 
-    Angle unk_angle = 0;
+    Angle wall_move_angle = 0;
     if (isStatus(cStatus_36))
-        unk_angle = _1b38 + 0x40000000;
-    f32 unk_sin_v, unk_cos_v;
-    sead::Mathf::sinCosIdx(&unk_sin_v, &unk_cos_v, unk_angle);
-    unk_cos_v = sead::Mathf::abs(unk_cos_v);
+        wall_move_angle = mWallAngle + (s32)sead::Mathi::cQuarterRoundIdx;
+    f32 wall_move_sin_v, wall_move_cos_v;
+    sead::Mathf::sinCosIdx(&wall_move_sin_v, &wall_move_cos_v, wall_move_angle);
+    wall_move_cos_v = sead::Mathf::abs(wall_move_cos_v);
 
-    sead::Vector2f unk_speed(
-        -(base_speed.y * unk_sin_v),
-          base_speed.y * unk_cos_v
+    sead::Vector2f wall_move_speed(
+        -(base_speed.y * wall_move_sin_v),
+          base_speed.y * wall_move_cos_v
     );
 
     Angle saka_angle;
     if (isNowBgCross(cBgCross_IsHead))
-        saka_angle = mBgCheckPlayer.getHeadSakaAngle();
+        saka_angle = mBgCheckPlayer.getHeadSakaBaseAngle();
     else
-        saka_angle = mBgCheckPlayer.getSakaAngle();
+        saka_angle = mBgCheckPlayer.getSakaBaseAngle();
     f32 saka_sin_v, saka_cos_v;
     sead::Mathf::sinCosIdx(&saka_sin_v, &saka_cos_v, saka_angle);
     saka_cos_v = sead::Mathf::abs(saka_cos_v);
 
     sead::Vector3f delta(
-        base_speed.x * saka_cos_v + unk_speed.x,
-        base_speed.x * saka_sin_v + unk_speed.y,
+        base_speed.x * saka_cos_v + wall_move_speed.x,
+        base_speed.x * saka_sin_v + wall_move_speed.y,
         base_speed.z
     );
     posMove_(delta);
@@ -1028,7 +1028,7 @@ void PlayerBase::calcPlayerSpeedXY()
 
     setSandEffect();
 
-    getPos2D() += _1b60;
+    getPos2D() += mBgSpeed;
 
     if (isNowBgCross(cBgCross_IsFoot) && isStatus(cStatus_244))
         mSpeedF = 0.0f;
@@ -1073,7 +1073,7 @@ void PlayerBase::initAdditionalAirSpeedF(f32 start_val, f32 len_frames)
 
 bool PlayerBase::setJump(u8 param, JumpSe jump_se_type)
 {
-    if (!isNowBgCross(cBgCross_IsWater) && !isStatus(cStatus_146))
+    if (!isNowBgCross(cBgCross_IsUnderwater) && !isStatus(cStatus_146))
     {
         if ((mpModelBaseMgr->getAnmFlag(PlayerModelBase::cAnmFlagType_Main) >> PlayerModelBase::cAnmFlagBit_0 & 1) && checkStandUpRoof())
             return setCrouchJump();
@@ -1103,7 +1103,7 @@ bool PlayerBase::setDelayHelpJump()
 
 bool PlayerBase::checkJumpTrigger()
 {
-    if (isNowBgCross(cBgCross_IsFoot) && isNowBgCross(cBgCross_55))
+    if (isNowBgCross(cBgCross_IsFoot) && !isNowBgCross(cBgCross_IsKani))
     {
         if (setJump(1, cJumpSe_Normal))
             return true;

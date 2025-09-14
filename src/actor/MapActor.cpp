@@ -125,8 +125,8 @@ const MapActor::Profile MapActor::cProfileID[724] = {
     ProfileID::c21B,                                        // 120
     ProfileID::c313,                                        // 121
     ProfileID::c315,                                        // 122
-    ProfileID::c079,                                        // 123
-    ProfileID::c07A,                                        // 124
+    ProfileID::cIntermittent,                               // 123
+    ProfileID::cIntermittentPermanent,                      // 124
     ProfileID::c274,                                        // 125
     ProfileID::c275,                                        // 126
     ProfileID::cSearchKiller,                               // 127
@@ -135,7 +135,7 @@ const MapActor::Profile MapActor::cProfileID[724] = {
     ProfileID::c271,                                        // 130
     ProfileID::c221,                                        // 131
     ProfileID::c081,                                        // 132
-    ProfileID::c0B8,                                        // 133
+    ProfileID::cLineSpinLift,                               // 133
     ProfileID::c316,                                        // 134
     ProfileID::c27B,                                        // 135
     ProfileID::c27C,                                        // 136
@@ -158,14 +158,14 @@ const MapActor::Profile MapActor::cProfileID[724] = {
     ProfileID::c0BB,                                        // 153
     ProfileID::c136,                                        // 154
     ProfileID::c091,                                        // 155
-    ProfileID::c07B,                                        // 156
+    ProfileID::cWaterIntermittent,                          // 156
     ProfileID::c320,                                        // 157
     ProfileID::c19B,                                        // 158
     ProfileID::c08B,                                        // 159
     ProfileID::c08C,                                        // 160
     ProfileID::c08D,                                        // 161
     ProfileID::c08E,                                        // 162
-    ProfileID::c07C,                                        // 163
+    ProfileID::cWaterIntermittentPermanent,                 // 163
     ProfileID::c209,                                        // 164
     ProfileID::c02D,                                        // 165
     ProfileID::c02E,                                        // 166
@@ -397,7 +397,7 @@ const MapActor::Profile MapActor::cProfileID[724] = {
     ProfileID::cUnderwaterKoopaJr,                          // 392
     ProfileID::c16D,                                        // 393
     ProfileID::c330,                                        // 394
-    ProfileID::c04F,                                        // 395
+    ProfileID::cLiftZenStar,                                // 395
     ProfileID::c104,                                        // 396
     ProfileID::c131,                                        // 397
     ProfileID::c132,                                        // 398
@@ -409,7 +409,7 @@ const MapActor::Profile MapActor::cProfileID[724] = {
     ProfileID::c157,                                        // 404
     ProfileID::c042,                                        // 405
     ProfileID::cBossKK,                                     // 406
-    ProfileID::c05A,                                        // 407
+    ProfileID::cBgActorYukaMario,                           // 407
     ProfileID::cMiniGameKinopio,                            // 408
     ProfileID::c16E,                                        // 409
     ProfileID::c0FE,                                        // 410
@@ -701,13 +701,13 @@ const MapActor::Profile MapActor::cProfileID[724] = {
     ProfileID::c09F,                                        // 696
     ProfileID::c147,                                        // 697
     ProfileID::c1ED,                                        // 698
-    ProfileID::c0B9,                                        // 699
-    ProfileID::c0BA,                                        // 700
+    ProfileID::cLineSpinLiftParentRDash,                    // 699
+    ProfileID::cLineSpinLiftChildRDash,                     // 700
     ProfileID::c125,                                        // 701
     ProfileID::c1FD,                                        // 702
     ProfileID::c310,                                        // 703
     ProfileID::c12F,                                        // 704
-    ProfileID::c07D,                                        // 705
+    ProfileID::cWaterIntermittentPermanentRD3_3,            // 705
     ProfileID::c130,                                        // 706
     ProfileID::c12D,                                        // 707
     ProfileID::c347,                                        // 708

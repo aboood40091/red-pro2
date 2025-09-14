@@ -1,7 +1,6 @@
 #include <actor/ActorMgr.h>
 #include <actor/AttentionLookat.h>
 #include <actor/AttentionMgr.h>
-#include <player/PlayerBase.h>
 #include <player/PlayerFaceAngleUtil.h>
 #include <player/PlayerMgr.h>
 #include <player/PlayerObject.h>

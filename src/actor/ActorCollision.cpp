@@ -218,7 +218,7 @@ void ActorCollision::postExecute_(MainState state)
 
 ActorBase::Result ActorCollision::doDelete_()
 {
-    mBgCheckObj.reset();
+    mBgCheckObj.clearBg();
 
     return Actor::doDelete_();
 }
@@ -262,7 +262,7 @@ bool ActorCollision::bgCheckWall_() const
 
 ActorCollision::BgCheckFlag ActorCollision::bgCheck_()
 {
-    mBgCheckObj.process();
+    mBgCheckObj.checkBg();
 
     BgCheckFlag flag = cBgCheckFlag_None;
 
@@ -309,7 +309,7 @@ bool ActorCollision::isHitBgCollision_(const BgCollision& bg_collision) const
         ; p_node = p_node->next
     )
     {
-        if (p_node->obj->getSensorFlag(cDirType_Up).isOnBit(21) && p_node->obj->getOwner() != nullptr)
+        if (p_node->obj->getSensorFlag(cDirType_Up).isOnBit(ActorBgCollisionCheck::SensorFlag::cBit_21) && p_node->obj->getOwner() != nullptr)
             return true;
     }
 
@@ -319,7 +319,7 @@ bool ActorCollision::isHitBgCollision_(const BgCollision& bg_collision) const
         ; p_node = p_node->next
     )
     {
-        if (p_node->obj->getSensorFlag(cDirType_Left).isOnBit(18) && p_node->obj->getOwner() != nullptr)    // Nintendo uses Left here and not Right
+        if (p_node->obj->getSensorFlag(cDirType_Left).isOnBit(ActorBgCollisionCheck::SensorFlag::cBit_18) && p_node->obj->getOwner() != nullptr)    // Nintendo uses Left here and not Right
             return true;
     }
 
@@ -329,7 +329,7 @@ bool ActorCollision::isHitBgCollision_(const BgCollision& bg_collision) const
         ; p_node = p_node->next
     )
     {
-        if (p_node->obj->getSensorFlag(cDirType_Right).isOnBit(18) && p_node->obj->getOwner() != nullptr)   // Nintendo uses Right here and not Left
+        if (p_node->obj->getSensorFlag(cDirType_Right).isOnBit(ActorBgCollisionCheck::SensorFlag::cBit_18) && p_node->obj->getOwner() != nullptr)   // Nintendo uses Right here and not Left
             return true;
     }
 
@@ -410,7 +410,7 @@ void ActorCollision::posMoveCalcJump_()
 void ActorCollision::posMove_()
 {
     f32 saka_sin_v, saka_cos_v;
-    sead::Mathf::sinCosIdx(&saka_sin_v, &saka_cos_v, mBgCheckObj.getSakaAngle());
+    sead::Mathf::sinCosIdx(&saka_sin_v, &saka_cos_v, mBgCheckObj.getSakaBaseAngle());
 
     f32 speed_x = mSpeed.x * saka_cos_v;
     if (mIsSubmerged || mIsInQuicksand)

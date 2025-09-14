@@ -253,7 +253,7 @@ enum DrawPriority
     cDrawPriority_FinalBomhei                               = 214,
     cDrawPriority_KinokoLift                                = 215,
     cDrawPriority_KinokoLiftColor                           = 216,
-    cDrawPriority_04F                                       = 217,
+    cDrawPriority_LiftZenStar                               = 217,
     cDrawPriority_033                                       = 218,
     cDrawPriority_0AD                                       = 219,
     cDrawPriority_0AE                                       = 220,
@@ -410,7 +410,7 @@ enum DrawPriority
     cDrawPriority_134                                       = 371,
     cDrawPriority_13F                                       = 372,
     cDrawPriority_140                                       = 373,
-    cDrawPriority_135                                       = 374,
+    cDrawPriority_ActorBlockMakeDRC                         = 374,
     cDrawPriority_136                                       = 375,
     cDrawPriority_137                                       = 376,
     cDrawPriority_138                                       = 377,
@@ -532,13 +532,13 @@ enum DrawPriority
     cDrawPriority_2F4                                       = 493,
     cDrawPriority_303                                       = 494,
     cDrawPriority_304                                       = 495,
-    cDrawPriority_079                                       = 496,
-    cDrawPriority_07A                                       = 497,
-    cDrawPriority_07B                                       = 498,
-    cDrawPriority_07C                                       = 499,
-    cDrawPriority_07D                                       = 500,
+    cDrawPriority_Intermittent                              = 496,
+    cDrawPriority_IntermittentPermanent                     = 497,
+    cDrawPriority_WaterIntermittent                         = 498,
+    cDrawPriority_WaterIntermittentPermanent                = 499,
+    cDrawPriority_WaterIntermittentPermanentRD3_3           = 500,
     cDrawPriority_07E                                       = 501,
-    cDrawPriority_07F                                       = 502,
+    cDrawPriority_WaterIntermittentBossChild                = 502,
     cDrawPriority_YoganIntermittent                         = 503,
     cDrawPriority_Woochan                                   = 504,
     cDrawPriority_268                                       = 505,
@@ -560,9 +560,9 @@ enum DrawPriority
     cDrawPriority_0B5                                       = 521,
     cDrawPriority_0B6                                       = 522,
     cDrawPriority_0B7                                       = 523,
-    cDrawPriority_0B8                                       = 524,
-    cDrawPriority_0B9                                       = 525,
-    cDrawPriority_0BA                                       = 526,
+    cDrawPriority_LineSpinLift                              = 524,
+    cDrawPriority_LineSpinLiftParentRDash                   = 525,
+    cDrawPriority_LineSpinLiftChildRDash                    = 526,
     cDrawPriority_0BC                                       = 527,
     cDrawPriority_081                                       = 528,
     cDrawPriority_093                                       = 529,
@@ -739,7 +739,7 @@ enum DrawPriority
     cDrawPriority_057                                       = 700,
     cDrawPriority_058                                       = 701,
     cDrawPriority_059                                       = 702,
-    cDrawPriority_05A                                       = 703,
+    cDrawPriority_BgActorYukaMario                          = 703,
     cDrawPriority_05B                                       = 704,
     cDrawPriority_0FC                                       = 705,
     cDrawPriority_0FD                                       = 706,
@@ -1033,7 +1033,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_04C,                                      // ProfileID::c04C
     cDrawPriority_KinokoLift,                               // ProfileID::cKinokoLift
     cDrawPriority_KinokoLiftColor,                          // ProfileID::cKinokoLiftColor
-    cDrawPriority_04F,                                      // ProfileID::c04F
+    cDrawPriority_LiftZenStar,                              // ProfileID::cLiftZenStar
     cDrawPriority_050,                                      // ProfileID::c050
     cDrawPriority_051,                                      // ProfileID::c051
     cDrawPriority_052,                                      // ProfileID::c052
@@ -1044,7 +1044,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_057,                                      // ProfileID::c057
     cDrawPriority_058,                                      // ProfileID::c058
     cDrawPriority_059,                                      // ProfileID::c059
-    cDrawPriority_05A,                                      // ProfileID::c05A
+    cDrawPriority_BgActorYukaMario,                         // ProfileID::cBgActorYukaMario
     cDrawPriority_05B,                                      // ProfileID::c05B
     cDrawPriority_05C,                                      // ProfileID::c05C
     cDrawPriority_05D,                                      // ProfileID::c05D
@@ -1075,13 +1075,13 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_076,                                      // ProfileID::c076
     cDrawPriority_077,                                      // ProfileID::c077
     cDrawPriority_078,                                      // ProfileID::c078
-    cDrawPriority_079,                                      // ProfileID::c079
-    cDrawPriority_07A,                                      // ProfileID::c07A
-    cDrawPriority_07B,                                      // ProfileID::c07B
-    cDrawPriority_07C,                                      // ProfileID::c07C
-    cDrawPriority_07D,                                      // ProfileID::c07D
+    cDrawPriority_Intermittent,                             // ProfileID::cIntermittent
+    cDrawPriority_IntermittentPermanent,                    // ProfileID::cIntermittentPermanent
+    cDrawPriority_WaterIntermittent,                        // ProfileID::cWaterIntermittent
+    cDrawPriority_WaterIntermittentPermanent,               // ProfileID::cWaterIntermittentPermanent
+    cDrawPriority_WaterIntermittentPermanentRD3_3,          // ProfileID::cWaterIntermittentPermanentRD3_3
     cDrawPriority_07E,                                      // ProfileID::c07E
-    cDrawPriority_07F,                                      // ProfileID::c07F
+    cDrawPriority_WaterIntermittentBossChild,               // ProfileID::cWaterIntermittentBossChild
     cDrawPriority_YoganIntermittent,                        // ProfileID::cYoganIntermittent
     cDrawPriority_081,                                      // ProfileID::c081
     cDrawPriority_082,                                      // ProfileID::c082
@@ -1138,9 +1138,9 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_0B5,                                      // ProfileID::c0B5
     cDrawPriority_0B6,                                      // ProfileID::c0B6
     cDrawPriority_0B7,                                      // ProfileID::c0B7
-    cDrawPriority_0B8,                                      // ProfileID::c0B8
-    cDrawPriority_0B9,                                      // ProfileID::c0B9
-    cDrawPriority_0BA,                                      // ProfileID::c0BA
+    cDrawPriority_LineSpinLift,                             // ProfileID::cLineSpinLift
+    cDrawPriority_LineSpinLiftParentRDash,                  // ProfileID::cLineSpinLiftParentRDash
+    cDrawPriority_LineSpinLiftChildRDash,                   // ProfileID::cLineSpinLiftChildRDash
     cDrawPriority_0BB,                                      // ProfileID::c0BB
     cDrawPriority_0BC,                                      // ProfileID::c0BC
     cDrawPriority_0BD,                                      // ProfileID::c0BD
@@ -1263,7 +1263,7 @@ const s16 Profile::cDrawPriority[cProfileID_Max] = {
     cDrawPriority_132,                                      // ProfileID::c132
     cDrawPriority_133,                                      // ProfileID::c133
     cDrawPriority_134,                                      // ProfileID::c134
-    cDrawPriority_135,                                      // ProfileID::c135
+    cDrawPriority_ActorBlockMakeDRC,                        // ProfileID::cActorBlockMakeDRC
     cDrawPriority_136,                                      // ProfileID::c136
     cDrawPriority_137,                                      // ProfileID::c137
     cDrawPriority_138,                                      // ProfileID::c138
@@ -1951,7 +1951,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c04C
     Profile::cResType_Course,       // ProfileID::cKinokoLift
     Profile::cResType_Course,       // ProfileID::cKinokoLiftColor
-    Profile::cResType_Course,       // ProfileID::c04F
+    Profile::cResType_Course,       // ProfileID::cLiftZenStar
     Profile::cResType_Course,       // ProfileID::c050
     Profile::cResType_Course,       // ProfileID::c051
     Profile::cResType_Course,       // ProfileID::c052
@@ -1962,7 +1962,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c057
     Profile::cResType_Course,       // ProfileID::c058
     Profile::cResType_Boot,         // ProfileID::c059
-    Profile::cResType_Course,       // ProfileID::c05A
+    Profile::cResType_Course,       // ProfileID::cBgActorYukaMario
     Profile::cResType_Course,       // ProfileID::c05B
     Profile::cResType_Course,       // ProfileID::c05C
     Profile::cResType_Course,       // ProfileID::c05D
@@ -1993,13 +1993,13 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c076
     Profile::cResType_Course,       // ProfileID::c077
     Profile::cResType_Course,       // ProfileID::c078
-    Profile::cResType_Course,       // ProfileID::c079
-    Profile::cResType_Course,       // ProfileID::c07A
-    Profile::cResType_Course,       // ProfileID::c07B
-    Profile::cResType_Course,       // ProfileID::c07C
-    Profile::cResType_Course,       // ProfileID::c07D
+    Profile::cResType_Course,       // ProfileID::cIntermittent
+    Profile::cResType_Course,       // ProfileID::cIntermittentPermanent
+    Profile::cResType_Course,       // ProfileID::cWaterIntermittent
+    Profile::cResType_Course,       // ProfileID::cWaterIntermittentPermanent
+    Profile::cResType_Course,       // ProfileID::cWaterIntermittentPermanentRD3_3
     Profile::cResType_Course,       // ProfileID::c07E
-    Profile::cResType_Course,       // ProfileID::c07F
+    Profile::cResType_Course,       // ProfileID::cWaterIntermittentBossChild
     Profile::cResType_Course,       // ProfileID::cYoganIntermittent
     Profile::cResType_Course,       // ProfileID::c081
     Profile::cResType_Course,       // ProfileID::c082
@@ -2056,9 +2056,9 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Course,       // ProfileID::c0B5
     Profile::cResType_Course,       // ProfileID::c0B6
     Profile::cResType_Course,       // ProfileID::c0B7
-    Profile::cResType_Course,       // ProfileID::c0B8
-    Profile::cResType_Course,       // ProfileID::c0B9
-    Profile::cResType_Course,       // ProfileID::c0BA
+    Profile::cResType_Course,       // ProfileID::cLineSpinLift
+    Profile::cResType_Course,       // ProfileID::cLineSpinLiftParentRDash
+    Profile::cResType_Course,       // ProfileID::cLineSpinLiftChildRDash
     Profile::cResType_Course,       // ProfileID::c0BB
     Profile::cResType_Course,       // ProfileID::c0BC
     Profile::cResType_Boot,         // ProfileID::c0BD
@@ -2181,7 +2181,7 @@ const s8 Profile::cResType[cProfileID_Max] = {
     Profile::cResType_Boot,         // ProfileID::c132
     Profile::cResType_Boot,         // ProfileID::c133
     Profile::cResType_Boot,         // ProfileID::c134
-    Profile::cResType_Boot,         // ProfileID::c135
+    Profile::cResType_Boot,         // ProfileID::cActorBlockMakeDRC
     Profile::cResType_Course,       // ProfileID::c136
     Profile::cResType_Boot,         // ProfileID::c137
     Profile::cResType_Course,       // ProfileID::c138
@@ -2988,7 +2988,7 @@ static const sead::SafeString cRes_KinokoLiftColor[]  = {
     "lift_kinoko_sora"
 };
 
-static const sead::SafeString cRes_04F[]  = {
+static const sead::SafeString cRes_LiftZenStar[]  = {
     "lift_zen_star"
 };
 
@@ -3038,7 +3038,7 @@ static const sead::SafeString cRes_059[]  = {
     "obj_envfog"
 };
 
-static const sead::SafeString cRes_05A[]  = {
+static const sead::SafeString cRes_BgActorYukaMario[]  = {
     "mario_brothers_yuka"
 };
 
@@ -3169,23 +3169,23 @@ static const sead::SafeString cRes_077[]  = {
     "obj_coin"
 };
 
-static const sead::SafeString cRes_079[]  = {
+static const sead::SafeString cRes_Intermittent[]  = {
     "sandpillar"
 };
 
-static const sead::SafeString cRes_07A[]  = {
+static const sead::SafeString cRes_IntermittentPermanent[]  = {
     "sandpillar"
 };
 
-static const sead::SafeString cRes_07B[]  = {
+static const sead::SafeString cRes_WaterIntermittent[]  = {
     "waterpillar"
 };
 
-static const sead::SafeString cRes_07C[]  = {
+static const sead::SafeString cRes_WaterIntermittentPermanent[]  = {
     "waterpillar"
 };
 
-static const sead::SafeString cRes_07D[]  = {
+static const sead::SafeString cRes_WaterIntermittentPermanentRD3_3[]  = {
     "waterpillar"
 };
 
@@ -3193,7 +3193,7 @@ static const sead::SafeString cRes_07E[]  = {
     "waterpillar"
 };
 
-static const sead::SafeString cRes_07F[]  = {
+static const sead::SafeString cRes_WaterIntermittentBossChild[]  = {
     "waterpillar"
 };
 
@@ -3429,15 +3429,15 @@ static const sead::SafeString cRes_0B7[]  = {
     "block_challenge"
 };
 
-static const sead::SafeString cRes_0B8[]  = {
+static const sead::SafeString cRes_LineSpinLift[]  = {
     "lift_torokko"
 };
 
-static const sead::SafeString cRes_0B9[]  = {
+static const sead::SafeString cRes_LineSpinLiftParentRDash[]  = {
     "lift_torokko"
 };
 
-static const sead::SafeString cRes_0BA[]  = {
+static const sead::SafeString cRes_LineSpinLiftChildRDash[]  = {
     "lift_torokko"
 };
 
@@ -3882,7 +3882,7 @@ static const sead::SafeString cRes_11E[]  = {
     "lift_zen_float"
 };
 
-static const sead::SafeString cRes_135[]  = {
+static const sead::SafeString cRes_ActorBlockMakeDRC[]  = {
     "block_DRC"
 };
 
@@ -6237,7 +6237,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_04C),                                        // ProfileID::c04C
     GetResNum(cRes_KinokoLift),                                 // ProfileID::cKinokoLift
     GetResNum(cRes_KinokoLiftColor),                            // ProfileID::cKinokoLiftColor
-    GetResNum(cRes_04F),                                        // ProfileID::c04F
+    GetResNum(cRes_LiftZenStar),                                // ProfileID::cLiftZenStar
     GetResNum(cRes_050),                                        // ProfileID::c050
     GetResNum(cRes_051),                                        // ProfileID::c051
     GetResNum(cRes_052),                                        // ProfileID::c052
@@ -6248,7 +6248,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_057),                                        // ProfileID::c057
     GetResNum(cRes_058),                                        // ProfileID::c058
     GetResNum(cRes_059),                                        // ProfileID::c059
-    GetResNum(cRes_05A),                                        // ProfileID::c05A
+    GetResNum(cRes_BgActorYukaMario),                           // ProfileID::cBgActorYukaMario
     GetResNum(cRes_05B),                                        // ProfileID::c05B
     GetResNum(cRes_05C),                                        // ProfileID::c05C
     0,                                                          // ProfileID::c05D
@@ -6279,13 +6279,13 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_076),                                        // ProfileID::c076
     GetResNum(cRes_077),                                        // ProfileID::c077
     0,                                                          // ProfileID::c078
-    GetResNum(cRes_079),                                        // ProfileID::c079
-    GetResNum(cRes_07A),                                        // ProfileID::c07A
-    GetResNum(cRes_07B),                                        // ProfileID::c07B
-    GetResNum(cRes_07C),                                        // ProfileID::c07C
-    GetResNum(cRes_07D),                                        // ProfileID::c07D
+    GetResNum(cRes_Intermittent),                               // ProfileID::cIntermittent
+    GetResNum(cRes_IntermittentPermanent),                      // ProfileID::cIntermittentPermanent
+    GetResNum(cRes_WaterIntermittent),                          // ProfileID::cWaterIntermittent
+    GetResNum(cRes_WaterIntermittentPermanent),                 // ProfileID::cWaterIntermittentPermanent
+    GetResNum(cRes_WaterIntermittentPermanentRD3_3),            // ProfileID::cWaterIntermittentPermanentRD3_3
     GetResNum(cRes_07E),                                        // ProfileID::c07E
-    GetResNum(cRes_07F),                                        // ProfileID::c07F
+    GetResNum(cRes_WaterIntermittentBossChild),                 // ProfileID::cWaterIntermittentBossChild
     GetResNum(cRes_YoganIntermittent),                          // ProfileID::cYoganIntermittent
     GetResNum(cRes_081),                                        // ProfileID::c081
     GetResNum(cRes_082),                                        // ProfileID::c082
@@ -6342,9 +6342,9 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     GetResNum(cRes_0B5),                                        // ProfileID::c0B5
     GetResNum(cRes_0B6),                                        // ProfileID::c0B6
     GetResNum(cRes_0B7),                                        // ProfileID::c0B7
-    GetResNum(cRes_0B8),                                        // ProfileID::c0B8
-    GetResNum(cRes_0B9),                                        // ProfileID::c0B9
-    GetResNum(cRes_0BA),                                        // ProfileID::c0BA
+    GetResNum(cRes_LineSpinLift),                               // ProfileID::cLineSpinLift
+    GetResNum(cRes_LineSpinLiftParentRDash),                    // ProfileID::cLineSpinLiftParentRDash
+    GetResNum(cRes_LineSpinLiftChildRDash),                     // ProfileID::cLineSpinLiftChildRDash
     GetResNum(cRes_0BB),                                        // ProfileID::c0BB
     GetResNum(cRes_0BC),                                        // ProfileID::c0BC
     GetResNum(cRes_0BD),                                        // ProfileID::c0BD
@@ -6467,7 +6467,7 @@ const u8 Profile::cResNum[cProfileID_Max] = {
     0,                                                          // ProfileID::c132
     0,                                                          // ProfileID::c133
     0,                                                          // ProfileID::c134
-    GetResNum(cRes_135),                                        // ProfileID::c135
+    GetResNum(cRes_ActorBlockMakeDRC),                          // ProfileID::cActorBlockMakeDRC
     GetResNum(cRes_136),                                        // ProfileID::c136
     0,                                                          // ProfileID::c137
     GetResNum(cRes_138),                                        // ProfileID::c138
@@ -7155,7 +7155,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_04C,                                       // ProfileID::c04C
     cRes_KinokoLift,                                // ProfileID::cKinokoLift
     cRes_KinokoLiftColor,                           // ProfileID::cKinokoLiftColor
-    cRes_04F,                                       // ProfileID::c04F
+    cRes_LiftZenStar,                               // ProfileID::cLiftZenStar
     cRes_050,                                       // ProfileID::c050
     cRes_051,                                       // ProfileID::c051
     cRes_052,                                       // ProfileID::c052
@@ -7166,7 +7166,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_057,                                       // ProfileID::c057
     cRes_058,                                       // ProfileID::c058
     cRes_059,                                       // ProfileID::c059
-    cRes_05A,                                       // ProfileID::c05A
+    cRes_BgActorYukaMario,                          // ProfileID::cBgActorYukaMario
     cRes_05B,                                       // ProfileID::c05B
     cRes_05C,                                       // ProfileID::c05C
     nullptr,                                        // ProfileID::c05D
@@ -7197,13 +7197,13 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_076,                                       // ProfileID::c076
     cRes_077,                                       // ProfileID::c077
     nullptr,                                        // ProfileID::c078
-    cRes_079,                                       // ProfileID::c079
-    cRes_07A,                                       // ProfileID::c07A
-    cRes_07B,                                       // ProfileID::c07B
-    cRes_07C,                                       // ProfileID::c07C
-    cRes_07D,                                       // ProfileID::c07D
+    cRes_Intermittent,                              // ProfileID::cIntermittent
+    cRes_IntermittentPermanent,                     // ProfileID::cIntermittentPermanent
+    cRes_WaterIntermittent,                         // ProfileID::cWaterIntermittent
+    cRes_WaterIntermittentPermanent,                // ProfileID::cWaterIntermittentPermanent
+    cRes_WaterIntermittentPermanentRD3_3,           // ProfileID::cWaterIntermittentPermanentRD3_3
     cRes_07E,                                       // ProfileID::c07E
-    cRes_07F,                                       // ProfileID::c07F
+    cRes_WaterIntermittentBossChild,                // ProfileID::cWaterIntermittentBossChild
     cRes_YoganIntermittent,                         // ProfileID::cYoganIntermittent
     cRes_081,                                       // ProfileID::c081
     cRes_082,                                       // ProfileID::c082
@@ -7260,9 +7260,9 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     cRes_0B5,                                       // ProfileID::c0B5
     cRes_0B6,                                       // ProfileID::c0B6
     cRes_0B7,                                       // ProfileID::c0B7
-    cRes_0B8,                                       // ProfileID::c0B8
-    cRes_0B9,                                       // ProfileID::c0B9
-    cRes_0BA,                                       // ProfileID::c0BA
+    cRes_LineSpinLift,                              // ProfileID::cLineSpinLift
+    cRes_LineSpinLiftParentRDash,                   // ProfileID::cLineSpinLiftParentRDash
+    cRes_LineSpinLiftChildRDash,                    // ProfileID::cLineSpinLiftChildRDash
     cRes_0BB,                                       // ProfileID::c0BB
     cRes_0BC,                                       // ProfileID::c0BC
     cRes_0BD,                                       // ProfileID::c0BD
@@ -7385,7 +7385,7 @@ const sead::SafeString* Profile::cResList[cProfileID_Max] = {
     nullptr,                                        // ProfileID::c132
     nullptr,                                        // ProfileID::c133
     nullptr,                                        // ProfileID::c134
-    cRes_135,                                       // ProfileID::c135
+    cRes_ActorBlockMakeDRC,                         // ProfileID::cActorBlockMakeDRC
     cRes_136,                                       // ProfileID::c136
     nullptr,                                        // ProfileID::c137
     cRes_138,                                       // ProfileID::c138

@@ -715,8 +715,8 @@ bool Actor::canPress_(const BgCollision* p_bg_collision)
 {
     if (p_bg_collision != nullptr)
     {
-        if (p_bg_collision->isCallbackFlag(12) ||
-            (p_bg_collision->isCallbackFlag(11) && p_bg_collision->getType() != BgCollision::cType_BreakableIce))
+        if (p_bg_collision->isFlag(12) ||
+            (p_bg_collision->isFlag(11) && p_bg_collision->getType() != BgCollision::cType_BreakableIce))
         {
             return false;
         }
