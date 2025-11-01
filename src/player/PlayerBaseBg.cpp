@@ -196,10 +196,10 @@ void PlayerBase::postBgCrossImpl_()
 
     if (!isNowBgCross(cBgCross_IsFoot) && isOldBgCross(cBgCross_OnRide))
     {
-        mAdditionalAirSpeedFStart = 0.0f;
+        mAddAirSpeedFStart = 0.0f;
         f32 delta = mPos.x - mPosPrev.x;
         if (sead::Mathf::abs(delta - mPosDelta.x) >= 0.01f && mPosDelta.x * delta >= 0.0f)
-            mAdditionalAirSpeedFStart = mPosDelta.x;
+            mAddAirSpeedFStart = mPosDelta.x;
     }
 
     if (!isNowBgCross(cBgCross_74) &&
@@ -211,8 +211,8 @@ void PlayerBase::postBgCrossImpl_()
     {
         mSpeedF = 0.0f;
         mSpeedFMax = 0.0f;
-        mThrowSpeed = 0.0f;
-        mAdditionalAirSpeedF = 0.0f;
+        mAddSpeedF = 0.0f;
+        mAddAirSpeedF = 0.0f;
     }
 }
 
@@ -279,17 +279,17 @@ void PlayerBase::setBcSensorFlagsImpl_()
     }
 }
 
-void PlayerBase::resetBgSpeed()
+void PlayerBase::clearBgSpeed()
 {
     mBgSpeedPrev = mBgSpeed;
     mBgSpeed.set(0.0f, 0.0f);
-    _1bb0 = 0.0f;
+    mAddBgSpeedF = 0.0f;
 }
 
 void PlayerBase::clearBgCheckInfo()
 {
     mNowBgCross.reset();
-    resetBgSpeed();
+    clearBgSpeed();
     mBgAttr = cBgAttr_Rock;
     mWaterDepthType = 0;
 }
@@ -566,8 +566,8 @@ void PlayerBase::checkBgCross_()
 
     mSpeedSakaAnglePrev = mSpeedSakaAngle;
     mSpeedSakaAngle = 0;
-    mSakaBaseAnglePrev = mSakaBaseAngle;
-    mSakaBaseAngle = 0;
+    mBaseSakaAnglePrev = mBaseSakaAngle;
+    mBaseSakaAngle = 0;
 
     ActorBgCollisionCheck::Output& output = mBgCheckPlayer.getOutput();
 
@@ -602,7 +602,7 @@ void PlayerBase::checkBgCross_()
     if (output.checkFoot())
     {
         mSpeedSakaAngle = getSakaAngleBySpeed(mSpeedF);
-        mSakaBaseAngle = mBgCheckPlayer.getSakaBaseAngle();
+        mBaseSakaAngle = mBgCheckPlayer.getSakaBaseAngle();
         mSakaType = mBgCheckPlayer.getSakaType(mBgCheckPlayer.getSakaBaseAngle());
 
         bool is_saka = isSaka_();

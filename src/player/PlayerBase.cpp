@@ -55,8 +55,8 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mSakaType(ActorBgCollisionCheck::SakaType(0))
     , mSpeedSakaAngle()
     , mSpeedSakaAnglePrev()
-    , mSakaBaseAngle()
-    , mSakaBaseAnglePrev()
+    , mBaseSakaAngle()
+    , mBaseSakaAnglePrev()
     , _1b28(0.0f, 0.0f, 0.0f)
     , mBgAttr(cBgAttr_Rock)
     , mWallAngle()
@@ -77,10 +77,10 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mLineSpinLiftID()
     , _1b9c(0)
     , mNoHitObjBgTimer(0)
-    , mAdditionalAirSpeedFStart(0.0f)
-    , mAdditionalAirSpeedF(0.0f)
-    , mAdditionalAirSpeedFDecelStep(0.0f)
-    , _1bb0(0.0f)
+    , mAddAirSpeedFStart(0.0f)
+    , mAddAirSpeedF(0.0f)
+    , mAddAirSpeedFDecelStep(0.0f)
+    , mAddBgSpeedF(0.0f)
     , _1bb4(0)
     , mCollisionCheck2_React()
     , mCollisionCheck3_React()
@@ -468,9 +468,9 @@ sead::Vector3f* PlayerBase::getHeadTopPosP()
     return getModel()->getHeadTopPosP();
 }
 
-sead::Vector3f* PlayerBase::getHatPosP()
+sead::Vector3f* PlayerBase::getHeadPosP()
 {
-    return mpModelBaseMgr->getHatPosP();
+    return mpModelBaseMgr->getHeadPosP();
 }
 
 bool PlayerBase::vf154()
@@ -816,7 +816,7 @@ void PlayerBase::getAnkleCenterPos(sead::Vector3f* p_pos)
 
 f32 PlayerBase::getThrowSpeed()
 {
-    f32 throw_speed = mThrowSpeed;
+    f32 throw_speed = mAddSpeedF;
     if (isNowBgCross(cBgCross_IsFoot))
         throw_speed = mPosDelta.x;
     return throw_speed;
@@ -837,15 +837,15 @@ f32 PlayerBase::getThrowLoopPosX(f32 x)
         return x - area_w;
 }
 
-void PlayerBase::calcAdditionalAirSpeedF()
+void PlayerBase::calcAddAirSpeedF()
 {
     if (!isNowBgCross(cBgCross_IsFoot))
-        sead::Mathf::chase(&mAdditionalAirSpeedF, 0.0f, mAdditionalAirSpeedFDecelStep);
+        sead::Mathf::chase(&mAddAirSpeedF, 0.0f, mAddAirSpeedFDecelStep);
     
     else
     {
-        mAdditionalAirSpeedF = 0.0f;
-        mAdditionalAirSpeedFStart = 0.0f;
+        mAddAirSpeedF = 0.0f;
+        mAddAirSpeedFStart = 0.0f;
     }
 }
 
@@ -996,35 +996,35 @@ void PlayerBase::calcPlayerSpeedXY()
 
     f32 speed_x = speed_rev;
 
-    f32 throw_speed = mThrowSpeed;
-    if (throw_speed != 0.0f)
+    f32 base_add_speedF = mAddSpeedF;
+    if (base_add_speedF != 0.0f)
     {
         if (!isNowBgCross(cBgCross_IsFoot))
         {
-            speed_x += throw_speed;
+            speed_x += base_add_speedF;
             if (isStatus(cStatus_11) && _1bb4 == 0)
             {
-                MathUtil::addCalc(&throw_speed, 0.0f, 0.1f, 0.1f, 0.01f);
-                mThrowSpeed = throw_speed;
+                MathUtil::addCalc(&base_add_speedF, 0.0f, 0.1f, 0.1f, 0.01f);
+                mAddSpeedF = base_add_speedF;
             }
         }
         else
         {
             if (getPowerChangeType(false) != 1)
             {
-                f32 add_speedF = throw_speed;
+                f32 add_speedF = base_add_speedF;
                 if (add_speedF * mSpeedF >= 0.0f)
                     add_speedF *= isStatus(cStatus_131) ? 0.0f : 0.15f;
                 mSpeedF += add_speedF;
             }
-            mThrowSpeed = 0.0f;
+            mAddSpeedF = 0.0f;
             offStatus(cStatus_11);
             _1bb4 = 120;
         }
     }
 
-    calcAdditionalAirSpeedF();
-    speed_x += mAdditionalAirSpeedF;
+    calcAddAirSpeedF();
+    speed_x += mAddAirSpeedF;
 
     setSandEffect();
 
@@ -1051,7 +1051,7 @@ void PlayerBase::calcPlayerSpeedXY()
     posMoveAnglePlayer(speed);
 }
 
-void PlayerBase::initAdditionalAirSpeedF(f32 start_val, f32 len_frames)
+void PlayerBase::initAddAirSpeedF(f32 start_val, f32 len_frames)
 {
     if (!(start_val * mSpeedF >= 0.0f))
         return;
@@ -1065,10 +1065,10 @@ void PlayerBase::initAdditionalAirSpeedF(f32 start_val, f32 len_frames)
         start_val = (start_val > 0.0f) ? 1.0f : -1.0f;
     }
 
-    mAdditionalAirSpeedF = start_val;
-    mAdditionalAirSpeedFStart = 0.0f;
+    mAddAirSpeedF = start_val;
+    mAddAirSpeedFStart = 0.0f;
     mPos.x += start_val;
-    mAdditionalAirSpeedFDecelStep = sead::Mathf::abs(start_val / len_frames);
+    mAddAirSpeedFDecelStep = sead::Mathf::abs(start_val / len_frames);
 }
 
 bool PlayerBase::setJump(u8 param, JumpSe jump_se_type)

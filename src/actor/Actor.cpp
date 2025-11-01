@@ -336,7 +336,7 @@ Actor::Actor(const ActorCreateParam& param)
     , mpChibiYoshiEatData(nullptr)
     , mpPropelParts(nullptr)
     , _270(param._28)
-    , mThrowSpeed(0.0f)
+    , mAddSpeedF(0.0f)
     , mpChibiYoshiAwaData(nullptr)
 {
     const ActorCreateInfo& info = param.p_profile->getActorCreateInfo();
