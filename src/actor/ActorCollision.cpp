@@ -255,8 +255,10 @@ bool ActorCollision::bgCheckFoot_() const
 
 bool ActorCollision::bgCheckWall_() const
 {
-    // TODO: Greatly non-matching
-    u8 direction = mSpeed.x < 0.0f ? cDirType_Left : cDirType_Right;
+    s32 direction = cDirType_Right;
+    if (mSpeed.x < 0.0f)
+        direction = cDirType_Left;
+
     return mBgCheckObj.checkWall(direction);
 }
 
