@@ -27,6 +27,17 @@ ModelResource* ModelResourceMgr::getResource(const sead::SafeString& key) const
     return (*holder)->mpModelResource;
 }
 
+bool ModelResourceMgr::unload(const sead::SafeString& key)
+{
+    ModelResourceHolder** holder = mResHolderTreeMap.find(key);
+    if (!holder)
+        return false;
+
+    delete (*holder)->mpModelResource;
+    delete (*holder);
+    return true;
+}
+
 ModelResourceMgr::ModelResourceHolder::ModelResourceHolder(const sead::SafeString& key, ModelResource* p_mdl_res)
     : mpModelResource(p_mdl_res)
 {
