@@ -173,7 +173,7 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
         if (p_bg_center)
         {
             mBgPos = p_bg_center->getPosition();
-            p_bg_center->requestDelete();
+            p_bg_center->deleteRequest();
         }
     }
     else

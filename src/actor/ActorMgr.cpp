@@ -100,7 +100,7 @@ ActorBase::MainState ActorMgr::doCreate_(ActorBase* p_actor)
 
 void ActorMgr::delete_(ActorBase* p_actor)
 {
-    p_actor->requestDelete();
+    p_actor->deleteRequest();
 }
 
 void ActorMgr::doDelete_(ActorBase* p_actor)
@@ -158,7 +158,7 @@ void ActorMgr::pushExecuteAndDrawList_(ActorBase* p_actor)
 
 bool ActorMgr::deleteNotRequested_(ActorBase* p_actor)
 {
-    return !p_actor->isDeleted();
+    return !p_actor->isRequestedDelete();
 }
 
 void ActorMgr::moveActorOnCreateListToDestoryList_()
@@ -289,7 +289,7 @@ void RequestDeleteNotPlayerYoshiItem(ActorBase* p_actor, u32)
     if (p_item != nullptr && p_item->getEatenByYoshi() != nullptr)
         return;
 
-    p_actor->requestDelete();
+    p_actor->deleteRequest();
 }
 
 }
@@ -301,7 +301,7 @@ void ActorMgr::destroy()
     moveActorOnCreateListToDestoryList_();
 
     for (ActorBase::List::robustIterator itr = mExecuteManage.robustBegin(), itr_end = mExecuteManage.robustEnd(); itr != itr_end; ++itr)
-        if (itr->mRequestDelete)
+        if (itr->mDeleteRequestFlag)
             doDelete_(&(*itr));
 
     doDeleteActors_(true);
@@ -329,7 +329,7 @@ ActorBase* ActorMgr::createImmediately(const ActorCreateParam& param, CreateOpti
         case ActorBase::cState_None:
         case ActorBase::cState_Failed:
         case ActorBase::cState_Wait:
-            p_actor->requestDelete();
+            p_actor->deleteRequest();
             mDeleteManage.pushBack(p_actor);
             break;
         }
@@ -376,7 +376,7 @@ void ActorMgr::calcCreateDelete_()
             pushExecuteAndDrawList_(p_actor);
             break;
         case ActorBase::cState_Failed:
-            p_actor->requestDelete();
+            p_actor->deleteRequest();
             mCreateManage.erase(p_actor);
             mDeleteManage.pushBack(p_actor);
             break;
@@ -404,13 +404,13 @@ void ActorMgr::execute()
                 else
                 {
                     execute_state = ActorBase::cState_Failed;
-                    p_actor->requestDelete();
+                    p_actor->deleteRequest();
                 }
             }
             p_actor->postExecute_(execute_state);
         }
 
-        if (p_actor->mRequestDelete)
+        if (p_actor->mDeleteRequestFlag)
             doDelete_(p_actor);
     }
 
@@ -437,7 +437,7 @@ void ActorMgr::draw()
     {
         ActorBase* p_actor = &(*itr);
 
-        if (!p_actor->isDeleted())
+        if (!p_actor->isRequestedDelete())
         {
             ActorBase::MainState draw_state = ActorBase::cState_None;
 

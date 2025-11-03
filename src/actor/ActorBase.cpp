@@ -23,7 +23,7 @@ ActorBase::ActorBase(const ActorCreateParam& param)
     , mCreateImmediately(ActorMgr::instance()->mActorCreateImmediately)
     , _d(param._28 != nullptr)
     , mIsActive(false)
-    , mRequestDelete(false)
+    , mDeleteRequestFlag(false)
     , mParam0(param.param_0)
     , mParam1(param.param_1)
     , mParamEx(param.param_ex_1)
@@ -43,7 +43,7 @@ ActorBase::ActorBase(const ActorCreateParam& param)
     else
     {
         if (param.parent_id.isValid())
-            mRequestDelete = true;
+            mDeleteRequestFlag = true;
     }
 }
 

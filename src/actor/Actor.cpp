@@ -185,7 +185,7 @@ bool Actor::screenOutCheck(u16 flag)
         out = true;
 
     if (out && !(flag & 2))
-        deleteActor(mIsNoRespawn);
+        deleteActor(mManualDeletedFlag);
 
     return out;
 }
@@ -260,10 +260,10 @@ bool Actor::checkEat() const
     return false;
 }
 
-void Actor::deleteActor(bool no_respawn)
+void Actor::deleteActor(bool manual_deleted)
 {
-    requestDelete();
-    if (_270 != nullptr && !no_respawn)
+    deleteRequest();
+    if (_270 != nullptr && !manual_deleted)
         *_270 &= ~1;
 }
 
@@ -315,9 +315,9 @@ Actor::Actor(const ActorCreateParam& param)
     , mActorType(cActorType_Generic)
     , mIsExecEnable(true)
     , mIsDrawEnable(true)
-    , mIsNoRespawn(false)
+    , mManualDeletedFlag(false)
     , _211(1)
-    , mCarryFlag(0)
+    , mCarryFlag(cCarryFlag_None)
     , mSwitchFlag0(param.param_ex_0.course.switch_flag_0)
     , mSwitchFlag1(param.param_ex_0.course.switch_flag_1)
     , mCreateFlag(param.p_profile->getActorCreateInfo().flag)

@@ -28,7 +28,7 @@ ActorPtrCache::iterator ActorPtrCache::find(ActorFindFunc* io_find_func, iterato
             continue;
         }
 
-        if (!(*it)->isDeleted() && (*io_find_func)(**it))
+        if (!(*it)->isRequestedDelete() && (*io_find_func)(**it))
             break;
     }
 

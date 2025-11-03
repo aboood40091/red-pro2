@@ -195,7 +195,7 @@ bool ActorCollision::preExecute_()
     mBgCheckObj.atFrameStart();
     calcBgSpeed_();
 
-    if (!mIsNoRespawn && vf13C())
+    if (!mManualDeletedFlag && vf13C())
     {
         if (Quake::instance()->getFlag() & (1 << 1))
             vf144(0);
@@ -454,7 +454,7 @@ WaterType ActorCollision::checkWater_(f32* p_surface_pos_y)
 
 bool ActorCollision::isEnablePress_()
 {
-    if (!mIsNoRespawn &&
+    if (!mManualDeletedFlag &&
         (isEnablePressUD_(mBgCheckObj) || isEnablePressLR_(mBgCheckObj)))
     {
         return true;

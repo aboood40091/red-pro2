@@ -605,7 +605,7 @@ void PlayerBase::checkBgCross_()
         mBaseSakaAngle = mBgCheckPlayer.getSakaBaseAngle();
         mSakaType = mBgCheckPlayer.getSakaType(mBgCheckPlayer.getSakaBaseAngle());
 
-        bool is_saka = isSaka_();
+        bool is_saka = mBgCheckPlayer.isSaka();
         if (is_saka)
             onNowBgCross(cBgCross_IsSaka);
 
