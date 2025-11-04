@@ -70,15 +70,15 @@ void CarryEnemy::setCarryImpl_(Actor* p_player, CarryType type)
     {
     default:
         break;
-    case cCarryType_Carry:
-    case cCarryType_Carry_2:
-        mCarryBaseOffset = cCarryBaseOffset_Carry;
-        mIsLiftUp = false;
-        break;
     case cCarryType_LiftUp:
     case cCarryType_LiftUp_2:
         mCarryBaseOffset = cCarryBaseOffset_LiftUp;
         mIsLiftUp = true;
+        break;
+    case cCarryType_Carry:
+    case cCarryType_Carry_2:
+        mCarryBaseOffset = cCarryBaseOffset_Carry;
+        mIsLiftUp = false;
         break;
     }
     mCarryPlayerNo = p_player->getPlayerNo();
@@ -92,6 +92,62 @@ void CarryEnemy::setSpinLiftUpActor(Actor* p_player)
     setCarryImpl_(p_player, cCarryType_LiftUp);
 }
 
+void CarryEnemy::reviseCarryBgPosX_(ActorBgCollisionCheck& bc, const sead::Vector3f& player_pos)
+{
+    BgCollisionCheckResultArea res;
+
+    bc.initBgCheck();
+    bc.getBgCheck().setIgnoreQuicksand(true);
+
+    const ActorBgCollisionCheck::Sensor* p_sensor = nullptr;
+    if (bc.isSensor1Set(cDirType_Right))
+    {
+        if (!bc.isSensor1Null(cDirType_Right))
+            p_sensor = bc.getSensor1(cDirType_Right);
+    }
+    else if (bc.isSensor2Set(cDirType_Right))
+    {
+        p_sensor = bc.getSensor2(cDirType_Right);
+    }
+
+    f32 wall_base_offs = p_sensor != nullptr ? p_sensor->center_offset : 0.0f;
+
+    f32 wall_offs = sead::Mathf::abs(wall_base_offs) * cEnMuki[mDirection];
+
+    sead::Vector2f p0(player_pos.x, player_pos.y);
+    sead::Vector2f p1(mPos.x + wall_offs, player_pos.y);
+
+    if (bc.getBgCheck().checkArea(&res, p0, p1, 1 << mDirection))
+        mPos.x = res.hit_pos.x - wall_offs;
+}
+
+void CarryEnemy::reviseCarryBgPosY_(ActorBgCollisionCheck& bc)
+{
+    BgCollisionCheckResultArea res;
+
+    bc.initBgCheck();
+    bc.getBgCheck().setIgnoreQuicksand(true);
+
+    const ActorBgCollisionCheck::Sensor* p_sensor = nullptr;
+    if (bc.isSensor1Set(cDirType_Up))
+    {
+        if (!bc.isSensor1Null(cDirType_Up))
+            p_sensor = bc.getSensor1(cDirType_Up);
+    }
+    else if (bc.isSensor2Set(cDirType_Up))
+    {
+        p_sensor = bc.getSensor2(cDirType_Up);
+    }
+
+    f32 ceil_offs = p_sensor != nullptr ? p_sensor->center_offset : 0.0f;
+
+    sead::Vector2f p0(mPos.x, mPos.y + 1.0f);
+    sead::Vector2f p1(p0.x, p0.y + ceil_offs + 1.0f);
+
+    if (bc.getBgCheck().checkArea(&res, p0, p1, 1 << cDirType_Up))
+        mPos.y = res.hit_pos.y - ceil_offs;
+}
+
 bool CarryEnemy::carryCheckBg(Actor* p_player)
 {
     // bg check
@@ -99,7 +155,8 @@ bool CarryEnemy::carryCheckBg(Actor* p_player)
     {
         if (AreaTask::instance()->getLoopType() != 0)
         {
-            const sead::Vector3f& delta = mPos - mPosPrev;
+            sead::Vector3f delta;
+            delta.setSub(mPos, mPosPrev);
 
             f32 player_pos_x = p_player->getPos().x;
             f32 pos_x = mPos.x;
@@ -118,63 +175,8 @@ bool CarryEnemy::carryCheckBg(Actor* p_player)
 
         const sead::Vector3f& player_center_pos = p_player->getCenterPos();
 
-        {
-            BgCollisionCheckResultArea res;
-
-            mBgCheckObj.initBgCheck();
-            mBgCheckObj.getBgCheck().setIgnoreQuicksand(true);
-
-            const ActorBgCollisionCheck::Sensor* p_sensor = nullptr;
-            if (mBgCheckObj.isSensor1Set(cDirType_Right))
-            {
-                if (!mBgCheckObj.isSensor1Null(cDirType_Right))
-                    p_sensor = &(mBgCheckObj.getSensorArray1()[cDirType_Right]);
-            }
-            else if (mBgCheckObj.isSensor2Set(cDirType_Right))
-            {
-                p_sensor = &(mBgCheckObj.getSensorArray2()[cDirType_Right]);
-            }
-
-            f32 wall_base_offs = 0.0f;
-            if (p_sensor != nullptr)
-                wall_base_offs = p_sensor->center_offset;
-
-            f32 wall_offs = sead::Mathf::abs(wall_base_offs) * cEnMuki[mDirection];
-
-            sead::Vector2f p0(player_center_pos.x, player_center_pos.y);
-            sead::Vector2f p1(mPos.x + wall_offs, player_center_pos.y);
-
-            if (mBgCheckObj.getBgCheck().checkArea(&res, p0, p1, 1 << mDirection))
-                mPos.x = res.hit_pos.x - wall_offs;
-        }
-
-        {
-            BgCollisionCheckResultArea res;
-
-            mBgCheckObj.initBgCheck();
-            mBgCheckObj.getBgCheck().setIgnoreQuicksand(true);
-
-            const ActorBgCollisionCheck::Sensor* p_sensor = nullptr;
-            if (mBgCheckObj.isSensor1Set(cDirType_Up))
-            {
-                if (!mBgCheckObj.isSensor1Null(cDirType_Up))
-                    p_sensor = &(mBgCheckObj.getSensorArray1()[cDirType_Up]);
-            }
-            else if (mBgCheckObj.isSensor2Set(cDirType_Up))
-            {
-                p_sensor = &(mBgCheckObj.getSensorArray2()[cDirType_Up]);
-            }
-
-            f32 ceil_offs = 0.0f;
-            if (p_sensor != nullptr)
-                ceil_offs = p_sensor->center_offset;
-
-            sead::Vector2f p0(mPos.x, mPos.y + 1.0f);
-            sead::Vector2f p1(p0.x, p0.y + ceil_offs + 1.0f);
-
-            if (mBgCheckObj.getBgCheck().checkArea(&res, p0, p1, 1 << cDirType_Up))
-                mPos.y = res.hit_pos.y - ceil_offs;
-        }
+        reviseCarryBgPosX_(mBgCheckObj, player_center_pos);
+        reviseCarryBgPosY_(mBgCheckObj);
 
         mPosPrev = player_center_pos;
     }
@@ -393,15 +395,15 @@ void CarryEnemy::playerHitCheck_Awake(ActorCollisionCheck* cc_self, ActorCollisi
 
 bool CarryEnemy::sleepSpinFumiProcCheck_(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
 {
-    PlayerObject* p_player_obj = cc_other->getOwner<PlayerObject>();
+    Actor* p_player = cc_other->getOwner();
 
-    if (!p_player_obj->isStatus(PlayerObject::cStatus_69))
+    if (!sead::DynamicCast<PlayerObject>(p_player)->isStatus(PlayerObject::cStatus_69))
         return false;
 
     if (fumiCheck(cc_self, cc_other, cFumiSeType_Normal) != cFumiType_SpinFumi)
         return false;
 
-    reactSpinFumiProc(p_player_obj);
+    reactSpinFumiProc(p_player);
     return true;
 }
 
@@ -468,13 +470,15 @@ bool CarryEnemy::hitCallback_Shell(ActorCollisionCheck* cc_self, ActorCollisionC
             combo_score = mCombo.getComboScore(p_actor_other->getComboCnt());
         }
 
+        f32 fall_speed_x_factor = carried ? 0.7f : 1.0f;
+
         const sead::Vector2f c_dead_speed[cDirType_NumX] = {
             sead::Vector2f(
-                cDieFallInitSpeedX[cDirType_Right] * (carried ? 0.7f : 1.0f),
+                cDieFallInitSpeedX[cDirType_Right] * fall_speed_x_factor,
                 cDieFallInitSpeedY
             ),
             sead::Vector2f(
-                cDieFallInitSpeedX[cDirType_Left] * (carried ? 0.7f : 1.0f),
+                cDieFallInitSpeedX[cDirType_Left] * fall_speed_x_factor,
                 cDieFallInitSpeedY
             )
         };
