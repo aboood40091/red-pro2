@@ -571,7 +571,7 @@ void CarryEnemy::calcCarryPos(sead::Vector3f* p_pos, PlayerObject* p_player_obj)
     }
 }
 
-void CarryEnemy::calcCarryCcPos(ActorCollisionCheck* p_cc, PlayerObject* p_player_obj)
+void CarryEnemy::adjustCarryCc(ActorCollisionCheck* p_cc, PlayerObject* p_player_obj)
 {
     if (p_cc != nullptr)
     {
@@ -666,7 +666,7 @@ void CarryEnemy::executeState_Carry()
     mPosPrev = carry_pos;
     mPosPrev2 = carry_pos;
 
-    calcCarryCcPos(&mCollisionCheck, p_player_obj);
+    adjustCarryCc(&mCollisionCheck, p_player_obj);
 }
 
 void CarryEnemy::finalizeState_Carry()
