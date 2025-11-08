@@ -26,7 +26,7 @@ CarryEnemy::CarryEnemy(const ActorCreateParam& param)
     , _18a4(0)
     , mCarryPlayerNo(0)
     , mCarryPlayerID()
-    , mIsCarryEnemy(false)
+    , mForceSetShellDamageEffect(false)
     , mIsLiftUp(false)
 {
     mPreCarryCcCenterOffset.x = 0.0f;
@@ -487,12 +487,12 @@ bool CarryEnemy::hitCallback_Shell(ActorCollisionCheck* cc_self, ActorCollisionC
         bool eff_set = true;
         if (cc_other->getAttack() == ActorCollisionCheck::cAttack_Shell)
         {
-            if (!mIsCarryEnemy)
+            if (!mForceSetShellDamageEffect)
             {
                 CarryEnemy* p_carry_en_other = sead::DynamicCast<CarryEnemy>(p_actor_other);
                 if (p_carry_en_other != nullptr)
                 {
-                    p_carry_en_other->mIsCarryEnemy = true;
+                    p_carry_en_other->mForceSetShellDamageEffect = true;
                     return true;
                 }
             }
