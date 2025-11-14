@@ -2,7 +2,7 @@
 #include <graphics/ModelResourceMgr.h>
 #include <system/ResMgr.h>
 
-Profile::Profile(ActorFactory factory, s32 id, const sead::SafeString& name, const ActorCreateInfo* p_create_info, u32 flag)
+Profile::Profile(ActorFactory factory, s32 id, const sead::SafeString& name, const ActorCreateInfo* p_create_info, Flag flag)
     : mFactory(factory)
     , mID(id)
     , mpActorCreateInfo(p_create_info != nullptr ? p_create_info : &ActorCreateInfo::cDefault)

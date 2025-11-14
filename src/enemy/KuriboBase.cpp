@@ -23,6 +23,6 @@ KuriboBase::KuriboBase(const ActorCreateParam& param)
     , _1a14(0.0f)
     , mEatData(mActorUniqueID)
     , mChibiYoshiEatData(mActorUniqueID)
-    , mScaler(this)
+    , mBoyoMgr(this)
 {
 }

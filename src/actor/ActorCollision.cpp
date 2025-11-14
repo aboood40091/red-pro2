@@ -452,7 +452,7 @@ WaterType ActorCollision::checkWater_(f32* p_surface_pos_y)
     return mWaterTypeOverride;
 }
 
-bool ActorCollision::isEnablePress_()
+bool ActorCollision::hasamareBgCheck_()
 {
     if (!mManualDeletedFlag &&
         (isEnablePressUD_(mBgCheckObj) || isEnablePressLR_(mBgCheckObj)))

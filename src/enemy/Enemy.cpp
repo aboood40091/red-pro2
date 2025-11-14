@@ -46,7 +46,7 @@ void Enemy::normal_collcheck(ActorCollisionCheck* cc_self, ActorCollisionCheck* 
         break;
     case cActorType_Player:
         {
-            if (!p_en_self->_17ec.isOnBit(24) && ceilCheck(p_en_self->mPos.y, cc_self))
+            if (!p_en_self->mEnFlag.isOn(cEnFlag_NoCeilCheckPlayer) && ceilCheck(p_en_self->mPos.y, cc_self))
                 return;
 
             if (!p_en_self->playerDamageCheck(cc_self, cc_other))
