@@ -1,4 +1,4 @@
-#include <actor/ProfileID.h>
+#include <actor/ProfileInfo.h>
 #include <collision/BgCollision.h>
 #include <collision/BgCollisionCheckHitResult.h>
 #include <collision/BgCollisionCheckResult.h>
@@ -593,7 +593,7 @@ void PlayerBase::checkBgCross_()
             if (p_bg_collision_head != nullptr)
             {
                 const Actor* p_actor_head = p_bg_collision_head->getOwner();
-                if (p_actor_head != nullptr && p_actor_head->getProfileID() == ProfileID::cBgActorYukaMario)
+                if (p_actor_head != nullptr && p_actor_head->getProfileID() == ProfileInfo::cProfileID_BgActorYukaMario)
                     onNowBgCross(cBgCross_HitBgActorYuka);
             }
         }
@@ -689,31 +689,31 @@ void PlayerBase::checkBgCross_()
                     Actor* p_actor_foot = p_bg_collision_foot->getOwner();
                     if (p_actor_foot != nullptr)
                     {
-                        if (p_actor_foot->getProfileID() == ProfileID::cLineSpinLift ||
-                            p_actor_foot->getProfileID() == ProfileID::cLineSpinLiftParentRDash ||
-                            p_actor_foot->getProfileID() == ProfileID::cLineSpinLiftChildRDash)
+                        if (p_actor_foot->getProfileID() == ProfileInfo::cProfileID_LineSpinLift ||
+                            p_actor_foot->getProfileID() == ProfileInfo::cProfileID_LineSpinLiftParentRDash ||
+                            p_actor_foot->getProfileID() == ProfileInfo::cProfileID_LineSpinLiftChildRDash)
                         {
                             onNowBgCross(cBgCross_IsLineSpinLift);
                             mLineSpinLiftID = p_actor_foot->getActorUniqueID();
                         }
-                        else if (p_actor_foot->getProfileID() == ProfileID::cActorBlockMakeDRC)
+                        else if (p_actor_foot->getProfileID() == ProfileInfo::cProfileID_ActorBlockMakeDRC)
                         {
                             onNowBgCross(cBgCross_IsBlockDRC);
                         }
-                        else if (p_actor_foot->getProfileID() == ProfileID::cLiftZenStar)
+                        else if (p_actor_foot->getProfileID() == ProfileInfo::cProfileID_LiftZenStar)
                         {
                             onNowBgCross(cBgCross_IsLiftZenStar);
                         }
-                        else if (p_actor_foot->getProfileID() == ProfileID::cFloorGyration)
+                        else if (p_actor_foot->getProfileID() == ProfileInfo::cProfileID_FloorGyration)
                         {
                             onNowBgCross(cBgCross_IsFloorGyration);
                         }
-                        else if (p_actor_foot->getProfileID() == ProfileID::cIntermittent ||
-                                 p_actor_foot->getProfileID() == ProfileID::cIntermittentPermanent ||
-                                 p_actor_foot->getProfileID() == ProfileID::cWaterIntermittent ||
-                                 p_actor_foot->getProfileID() == ProfileID::cWaterIntermittentPermanent ||
-                                 p_actor_foot->getProfileID() == ProfileID::cWaterIntermittentBossChild ||
-                                 p_actor_foot->getProfileID() == ProfileID::cWaterIntermittentPermanentRD3_3)
+                        else if (p_actor_foot->getProfileID() == ProfileInfo::cProfileID_Intermittent ||
+                                 p_actor_foot->getProfileID() == ProfileInfo::cProfileID_IntermittentPermanent ||
+                                 p_actor_foot->getProfileID() == ProfileInfo::cProfileID_WaterIntermittent ||
+                                 p_actor_foot->getProfileID() == ProfileInfo::cProfileID_WaterIntermittentPermanent ||
+                                 p_actor_foot->getProfileID() == ProfileInfo::cProfileID_WaterIntermittentBossChild ||
+                                 p_actor_foot->getProfileID() == ProfileInfo::cProfileID_WaterIntermittentPermanentRD3_3)
                         {
                             onNowBgCross(cBgCross_IsFunsui);
                         }
@@ -903,7 +903,7 @@ void PlayerBase::checkCarryObjBgCarried_(const ActorBgCollisionCheck::Output& ou
             onNowBgCross(c_bg_cross_bit_carry_obj_bg_carried.get(dir));
     }
 
-    if (p_actor_wall->getProfileID() == ProfileID::cActorBlockMakeDRC)
+    if (p_actor_wall->getProfileID() == ProfileInfo::cProfileID_ActorBlockMakeDRC)
         onNowBgCross(cBgCross_15);
 }
 

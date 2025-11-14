@@ -701,7 +701,7 @@ bool Actor::isEnablePressUD_(const ActorBgCollisionCheck& bc)
                 (p_bg_collision_d != p_bg_collision_u && p_bg_collision_d->getOwner() != p_bg_collision_u->getOwner()))
             {
                 if (canPress_(p_bg_collision_u) && canPress_(p_bg_collision_d))
-                    if (p_bg_collision_u == nullptr || p_bg_collision_u->getOwner() == nullptr || p_bg_collision_u->getOwner()->getProfileID() != ProfileID::cIcicleBig)
+                    if (p_bg_collision_u == nullptr || p_bg_collision_u->getOwner() == nullptr || p_bg_collision_u->getOwner()->getProfileID() != ProfileInfo::cProfileID_IcicleBig)
                         if (BgUnitCode::getAttr(bc.getBgCheckData(cDirType_Down)) != BgUnitCode::cNuma)
                             if (checkPressD_(bc) || checkPressU_(bc))
                                 return true;
@@ -935,12 +935,12 @@ bool Actor::setPressBreakIce_(const BgCollision* p_bg_collision)
         Actor* p_actor = p_bg_collision->getOwner();
         if (p_actor != nullptr)
         {
-            if (p_actor->getProfileID() == ProfileID::cPentaroIce)
+            if (p_actor->getProfileID() == ProfileInfo::cProfileID_PentaroIce)
             {
                 static_cast<PentaroIce*>(p_actor)->breakReq(this);
                 return true;
             }
-            else if (p_actor->getProfileID() == ProfileID::cPlyIce)
+            else if (p_actor->getProfileID() == ProfileInfo::cProfileID_PlyIce)
             {
                 static_cast<PlyIce*>(p_actor)->breakReq();
                 return true;

@@ -9,17 +9,17 @@ Profile::Profile(ActorFactory factory, s32 id, const sead::SafeString& name, con
     , mIsResLoaded(false)
     , mFlag(flag)
 {
-    sProfile[mID] = this;
+    sProfileList[mID] = this;
 }
 
 void Profile::loadResource(sead::Heap* heap)
 {
     if (!mIsResLoaded)
     {
-        const sead::SafeString* res = getResList(mID);
+        const sead::SafeString* res = ProfileInfo::getResList(mID);
         if (res != nullptr)
         {
-            for (s32 num = getResNum(mID); num != 0; --num)
+            for (s32 num = ProfileInfo::getResNum(mID); num != 0; --num)
             {
                 ResMgr::instance()->loadArchiveRes(
                     *res, sead::FormatFixedSafeString<260>("actor/%s.szs", res->cstr()), heap, true
@@ -42,8 +42,8 @@ void Profile::unloadResource(sead::Heap* heap)
 
 ModelResource* Profile::getResource(u32 index) const
 {
-    const sead::SafeString* res = getResList(mID);
-    if (res != nullptr && index < getResNum(mID))
+    const sead::SafeString* res = ProfileInfo::getResList(mID);
+    if (res != nullptr && index < ProfileInfo::getResNum(mID))
         return ModelResourceMgr::instance()->getResource(res[index]);
 
     return nullptr;
@@ -51,9 +51,9 @@ ModelResource* Profile::getResource(u32 index) const
 
 Profile* Profile::get(s32 id)
 {
-    return sProfile[id];
+    return sProfileList[id];
 }
 
 // -------------------------------------------------------------------------------------------- //
 
-sead::SafeArray<Profile*, cProfileID_Max> Profile::sProfile;
+sead::SafeArray<Profile*, ProfileInfo::cProfileID_Max> Profile::sProfileList;

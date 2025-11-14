@@ -1,5 +1,5 @@
 #include <actor/ActorMgr.h>
-#include <actor/ProfileID.h>
+#include <actor/ProfileInfo.h>
 #include <distant_view/DistantViewMgr.h>
 #include <distant_view/DVCameraParam.h>
 #include <effect/PtclMgr.h>
@@ -166,7 +166,7 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
     const AreaData* p_area_data = p_cd_file->getAreaData(area);
     const DistantViewData* p_dv_data = p_cd_file->getBg2Data(p_area_data->bg2);
 
-    const ActorMgr::iterator itr_bg_center = ActorMgr::instance()->find(ProfileID::cBgCenter);
+    const ActorMgr::iterator itr_bg_center = ActorMgr::instance()->find(ProfileInfo::cProfileID_BgCenter);
     if (itr_bg_center != ActorMgr::instance()->getActorEnd())
     {
         BgCenter* p_bg_center = sead::DynamicCast<BgCenter>(*itr_bg_center);

@@ -1,7 +1,6 @@
 #include <actor/ActorMgr.h>
 #include <actor/ActorFindFunc.h>
 #include <actor/Profile.h>
-#include <actor/ProfileID.h>
 #include <item/ItemBase.h>
 #include <player/ChibiYoshi.h>
 #include <player/Yoshi.h>
@@ -46,10 +45,10 @@ ActorBase* ActorMgr::doConstructActor_(const ActorCreateParam& param, bool creat
 
     s32 profile_id = param.p_profile->getID();
 
-    if (profile_id == ProfileID::cPlayerObject ||
-        profile_id == ProfileID::cTottenPlayer ||
-        profile_id == ProfileID::cCourseSelectPlayer ||
-        profile_id == ProfileID::cCourseSelectPlayer2PSub)
+    if (profile_id == ProfileInfo::cProfileID_PlayerObject ||
+        profile_id == ProfileInfo::cProfileID_TottenPlayer ||
+        profile_id == ProfileInfo::cProfileID_CourseSelectPlayer ||
+        profile_id == ProfileInfo::cProfileID_CourseSelectPlayer2PSub)
     {
         heap = sead::FrameHeap::tryCreate(0, "PlayerHeap", mpPlayerUnitHeap);
     }
@@ -107,7 +106,7 @@ void ActorMgr::doDelete_(ActorBase* p_actor)
 {
     mExecuteManage.erase(p_actor);
 
-    s32 draw_priority = Profile::getDrawPriority(p_actor->getProfileID());
+    s32 draw_priority = ProfileInfo::getDrawPriority(p_actor->getProfileID());
     if (draw_priority >= 0)
         mDrawManage.erase(p_actor);
 
@@ -136,14 +135,14 @@ void ActorMgr::pushExecuteAndDrawList_(ActorBase* p_actor)
     if (!added)
         mExecuteManage.pushBack(p_actor);
 
-    s32 draw_priority = Profile::getDrawPriority(p_actor->getProfileID());
+    s32 draw_priority = ProfileInfo::getDrawPriority(p_actor->getProfileID());
     if (draw_priority >= 0)
     {
         bool added = false;
 
         for (ActorBase::List::iterator itr = mDrawManage.begin(), itr_end = mDrawManage.end(); itr != itr_end; ++itr)
         {
-            if (draw_priority <= Profile::getDrawPriority(itr->getProfileID()))
+            if (draw_priority <= ProfileInfo::getDrawPriority(itr->getProfileID()))
             {
                 mDrawManage.insertBefore(&(*itr), p_actor);
                 added = true;
@@ -271,10 +270,10 @@ namespace {
 
 void RequestDeleteNotPlayerYoshiItem(ActorBase* p_actor, u32)
 {
-    if (p_actor->getProfileID() == ProfileID::cPlayerObject || p_actor->getProfileID() == ProfileID::cTottenPlayer)
+    if (p_actor->getProfileID() == ProfileInfo::cProfileID_PlayerObject || p_actor->getProfileID() == ProfileInfo::cProfileID_TottenPlayer)
         return;
 
-    if (p_actor->getProfileID() == ProfileID::cYoshi)
+    if (p_actor->getProfileID() == ProfileInfo::cProfileID_Yoshi)
     {
         Yoshi* p_yoshi = sead::DynamicCast<Yoshi>(p_actor);
         if (p_yoshi != nullptr && p_yoshi->getPlayerNo() != -1)
