@@ -273,7 +273,7 @@ void CarryEnemy::setSlideCc()
         ActorCollisionCheck::cTargetKind_Item |
         ActorCollisionCheck::cTargetKind_Killer
     );
-    mCollisionCheck.onStatus(ActorCollisionCheck::cStatus_Unk12);
+    mCollisionCheck.onStatus(ActorCollisionCheck::cStatus_MoveKill);
 }
 
 void CarryEnemy::setSlideBc()
@@ -306,7 +306,7 @@ void CarryEnemy::resetSlideCc()
         ActorCollisionCheck::cTargetKind_Item |
         ActorCollisionCheck::cTargetKind_Killer
     );
-    mCollisionCheck.offStatus(ActorCollisionCheck::cStatus_Unk12);
+    mCollisionCheck.offStatus(ActorCollisionCheck::cStatus_MoveKill);
 }
 
 void CarryEnemy::resetSlideBc()
