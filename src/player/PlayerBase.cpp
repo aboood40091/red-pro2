@@ -382,7 +382,7 @@ void PlayerBase::postExecute_(MainState state)
             mBgCheckPlayer.clearBg();
         offStatus(cStatus_250);
 
-        if (isStatus(cStatus_153) && isStatus(cStatus_7))
+        if (isStatus(cStatus_153) && isStatus(cStatus_DispOut))
             onStatus(cStatus_2);
 
         clearFollowMameKuribo();

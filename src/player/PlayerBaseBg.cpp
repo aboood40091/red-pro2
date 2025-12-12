@@ -5,10 +5,12 @@
 #include <enemy/Ice.h>
 #include <game/AreaTask.h>
 #include <map_obj/CarryObjBase.h>
+#include <player/PlayerDemoMgr.h>
 #include <player/PlayerMgr.h>
 #include <player/PlayerObject.h>
 #include <scroll/BgScrollMgr.h>
 #include <system/RDashMgr.h>
+#include <utility/MathUtil.h>
 
 PlayerBase::BgAttr PlayerBase::getFootBgAttr(BgUnitCode::Attr attr)
 {
@@ -1051,4 +1053,503 @@ void PlayerBase::bgCheck(bool side_view_check)
     checkWater();
     checkDamageBg();
     postBgCross();
+}
+
+void PlayerBase::clearBgAndSakaAngle()
+{
+    clearBgCheckInfo();
+
+    mSpeedSakaAnglePrev = 0;
+    mSpeedSakaAngle = 0;
+    mBaseSakaAnglePrev = 0;
+    mBaseSakaAngle = 0;
+}
+
+bool PlayerBase::isSlipSaka()
+{
+    if (!isStatus(cStatus_NoSlipSaka))
+    {
+        if (isSaka())
+        {
+            BgUnitCode::SlipAttr slip_attr = BgUnitCode::getSlipAttr(mBgCheckPlayer.getBgCheckData(cDirType_Down));
+            if (slip_attr != BgUnitCode::cSlipAttr_NoSlip && slip_attr != BgUnitCode::cSlipAttr_SakaLowPow)
+                return true;
+        }
+    }
+
+    return false;
+}
+
+bool PlayerBase::checkBGCrossWall(s32 dir)
+{
+    static const u32 c_bg_cross_wall_bit[cDirType_NumX] = { cBgCross_IsWallTouchR, cBgCross_IsWallTouchL };
+    return isNowBgCross(c_bg_cross_wall_bit[dir]);
+}
+
+bool PlayerBase::checkOldBgCrossFoot(s32 frame_cnt)
+{
+    s32 i = 0;
+    while (frame_cnt > 0)
+    {
+        if (mOldBgCrossFoot[i])
+            return true;
+        frame_cnt--;
+        i++;
+    }
+    return false;
+}
+
+void PlayerBase::setJumpSandSinkRate()
+{
+    mSandSinkRate = -0.6f;
+}
+
+Angle PlayerBase::getSakaAngle(s32 dir)
+{
+    Angle angle = mBgCheckPlayer.getSakaBaseAngle();
+    if (dir == cDirType_Left)
+        angle = -angle;
+    return angle;
+}
+
+bool PlayerBase::getSakaUpDown(s32 dir)
+{
+    bool ret;
+    if (dir == cDirType_Right)
+    {
+        if (mBgCheckPlayer.getSakaDir() != ActorBgCollisionCheck::cSakaDir_Right)
+            ret = true;
+        else
+            ret = false;
+    }
+    else
+    {
+        if (mBgCheckPlayer.getSakaDir() == ActorBgCollisionCheck::cSakaDir_Right)
+            ret = true;
+        else
+            ret = false;
+    }
+    return ret;
+}
+
+bool PlayerBase::setBgDamage()
+{
+    if (mIsBgDamageEnable)
+    {
+        mIsBgDamageEnable = false;
+
+        switch (mDamageBgTypeInfo)
+        {
+        case BgUnitCode::cTypeInfo_Damage_Lava:
+            return setDamage2(nullptr, cDamageType_Fire2);
+        case BgUnitCode::cTypeInfo_Damage_Doku:
+            return setDamage2(nullptr, cDamageType_Poison);
+        case BgUnitCode::cTypeInfo_Damage_Die:
+            return setDamage2(nullptr, cDamageType_Kill);
+        default:
+            return setDamage(nullptr, cDamageType_Hit2);
+        }
+    }
+    return false;
+}
+
+void PlayerBase::calcNoHitObjBgTimer()
+{
+    MathUtil::calcTimer(&mNoHitObjBgTimer);
+    if (mNoHitObjBgTimer == 0)
+        mBgCheckPlayer.setIgnoreActor(nullptr);
+}
+
+void PlayerBase::setLandSakaJumpSpeedF()
+{
+    if (!isOldBgCross(cBgCross_IsFoot) && mSpeed.y > 0.0f && mBgCheckPlayer.checkFoot())
+    {
+        f32 cos_f = sead::Mathf::cosIdx(mBgCheckPlayer.getSakaBaseAngle());
+        f32 speed_f = mSpeedF;
+        f32 speed_f_limit = sead::Mathf::abs(speed_f * cos_f);
+        if (speed_f < -speed_f_limit)
+            speed_f = -speed_f_limit;
+        else if (speed_f > speed_f_limit)
+            speed_f = speed_f_limit;
+        mSpeedF = speed_f;
+    }
+}
+
+bool PlayerBase::isRideMove()
+{
+    if (isNowBgCross(cBgCross_OnRide) && mPosDelta.x != 0.0f)
+        return true;
+    return false;
+}
+
+void PlayerBase::setNoHitObjBg(Actor* p_no_hit_obj, s32 time)
+{
+    mBgCheckPlayer.setIgnoreActor(p_no_hit_obj);
+    mNoHitObjBgTimer = time;
+}
+
+void PlayerBase::setJumpAddSpeedF(f32 f)
+{
+    if (isNowBgCross(cBgCross_IsFoot))
+        return;
+
+    if (f < -2.0f)
+        f = -2.0;
+    else if (f > 2.0f)
+        f = 2.0f;
+
+    mAddSpeedF = f;
+    _1bb4 = 120;
+    onStatus(cStatus_11);
+}
+
+void PlayerBase::setAddLiftSpeedF()
+{
+    if (isOldBgCross(cBgCross_IsFoot))
+    {
+        f32 add_bg_speedF = mAddBgSpeedF;
+        if (isStatus(cStatus_131))
+            add_bg_speedF *= 0.4f;
+        mAddBgSpeedF = 0.0f;
+        setJumpAddSpeedF(mBgSpeedPrev.x + add_bg_speedF);
+    }
+    else
+    {
+        setJumpAddSpeedF(mAddSpeedF * 0.5f);
+    }
+}
+
+void PlayerBase::dispPinchRequestRDash()
+{
+    if (!RDashMgr::instance()->isNSLU())
+        return;
+
+    onStatus(cStatus_RDash_DispPinch);
+}
+
+void PlayerBase::initDispSideLemit()
+{
+    if (AreaTask::instance()->getLoopType() == 1)
+        return;
+
+    const BgScrollMgr& bg_scroll_mgr = *BgScrollMgr::instance();
+
+    f32 limit_l = bg_scroll_mgr.getScreenLeft () + mDispSideLimitPad;
+    f32 limit_r = bg_scroll_mgr.getScreenRight() - mDispSideLimitPad;
+
+    if (mPos.x < limit_l)
+    {
+        _20a4[cDirType_Left] = 1;
+        _20ac[cDirType_Left] = mPos.x - limit_l;
+    }
+
+    if (mPos.x > limit_r)
+    {
+        _20a4[cDirType_Right] = 1;
+        _20ac[cDirType_Right] = mPosPrev.x - limit_r;
+    }
+}
+
+bool PlayerBase::isLenientOutCheck()
+{
+    const BgScrollMgr& bg_scroll_mgr = *BgScrollMgr::instance();
+
+    if (!bg_scroll_mgr.isScrollMeterEnable() && bg_scroll_mgr.getScrollEffectMgr()._3c._8 == 0.0f)
+    {
+        if (PlayerMgr::instance()->getNum() > 1)
+            return true;
+
+        if (bg_scroll_mgr.getAreaScrollDir() == cDirType_Up)
+            return true;
+
+        if (bg_scroll_mgr.getAreaScrollDir() == cDirType_Down)
+            return true;
+    }
+
+    return false;
+}
+
+void PlayerBase::setFallDownDemo()
+{
+    if (PlayerMgr::instance()->getCannonJumpTimer() != 0)
+        setBalloonDispOut();
+    else
+        setFallDownDemoImpl();
+}
+
+void PlayerBase::underOverCheck_()
+{
+    const BgScrollMgr& bg_scroll_mgr = *BgScrollMgr::instance();
+
+    f32 visible_area_t = mPos.y + mVisibleAreaOffset.y + mVisibleAreaSize.y;
+
+    bool lenient = false;
+    if (isLenientOutCheck())
+        lenient = true;
+
+    if (visible_area_t < bg_scroll_mgr.getScreenBottom() - 24.0f)
+    {
+        bool dead = false;
+        if (lenient)
+        {
+            if (visible_area_t < AreaTask::instance()->getBound().getMin().y)
+                dead = true;
+        }
+        else
+        {
+            if (!isStatus(cStatus_254))
+                dead = true;
+        }
+        if (dead)
+            setFallDownDemo();
+    }
+}
+
+void PlayerBase::setPressBgCollision_(const BgCollision* p_bg_collision)
+{
+    if (p_bg_collision == nullptr)
+        return;
+
+    Actor* p_actor = p_bg_collision->getOwner();
+    if (p_actor == nullptr)
+        return;
+
+    mBgPressIDBuffer.pushBack(p_actor->getActorUniqueID());
+}
+
+bool PlayerBase::checkPressBgUD_()
+{
+    if (isEnablePressUD_(mBgCheckPlayer) && !setPressBreakUD_(mBgCheckPlayer))
+    {
+        setPressBgCollision_(mBgCheckPlayer.getHitBgCollisionFoot());
+        setPressBgCollision_(mBgCheckPlayer.getHitBgCollisionHead());
+        if (setPressBgDamage(cDamageType_Hit2, true))
+            return true;
+    }
+    return false;
+}
+
+bool PlayerBase::checkPressBgLR_()
+{
+    if (isStatus(cStatus_RDash_DispPinch))
+    {
+        if ((isNowBgCross(cBgCross_DispSideLimitR) && mBgCheckPlayer.isHit(1 << ActorBgCollisionCheck::cHitDirBit_Right)) ||
+            (isNowBgCross(cBgCross_DispSideLimitL) && mBgCheckPlayer.isHit(1 << ActorBgCollisionCheck::cHitDirBit_Left )))
+        {
+            setPressBgCollision_(mBgCheckPlayer.getHitBgCollisionWall(cDirType_Right));
+            setPressBgCollision_(mBgCheckPlayer.getHitBgCollisionWall(cDirType_Left));
+            if (setPressBgDamage(cDamageType_Kill, false))
+                return true;
+        }
+    }
+    else
+    {
+        if (!(isNowBgCross(cBgCross_DispSideLimitL) && isNowBgCross(cBgCross_IsWallTouchR)) &&
+            !(isNowBgCross(cBgCross_DispSideLimitR) && isNowBgCross(cBgCross_IsWallTouchL)) &&
+            isEnablePressLR_(mBgCheckPlayer) && !setPressBreakLR_(mBgCheckPlayer))
+        {
+            if (isStatus(cStatus_99))
+            {
+                forceSlipToStoop();
+                return true;
+            }
+            setPressBgCollision_(mBgCheckPlayer.getHitBgCollisionWall(cDirType_Right));
+            setPressBgCollision_(mBgCheckPlayer.getHitBgCollisionWall(cDirType_Left));
+            if (setPressBgDamage(cDamageType_Kill, false))
+                return true;
+        }
+    }
+    return false;
+}
+
+bool PlayerBase::checkPressBg()
+{
+    if (!isDemoMode())
+    {
+        if (setPressIceHeadBreak_(mBgCheckPlayer) || checkPressBgUD_() || checkPressBgLR_())
+            return true;
+    }
+    return false;
+}
+
+bool PlayerBase::checkDispOutLR()
+{
+    const BgScrollMgr& bg_scroll_mgr = *BgScrollMgr::instance();
+
+    f32 visible_area_x = mPos.x + mVisibleAreaOffset.x;
+    f32 visible_area_w = mVisibleAreaSize.x;
+
+    if ((visible_area_x + visible_area_w < bg_scroll_mgr.getScreenLeft () - 16.0f) ||
+        (visible_area_x - visible_area_w > bg_scroll_mgr.getScreenRight() + 16.0f))
+    {
+        onStatus(cStatus_DispOut);
+        onStatus(cStatus_DispOutDanger);
+        return true;
+    }
+
+    return false;
+}
+
+bool PlayerBase::checkBalloonInDispOutLR()
+{
+    const BgScrollMgr& bg_scroll_mgr = *BgScrollMgr::instance();
+
+    f32 camera_pad_x = 16.0f;
+    if (bg_scroll_mgr.isScrollMeterEnable() && bg_scroll_mgr.getZoomType() == cZoomType_Static_TrackY)
+        camera_pad_x = 0.0f;
+
+    f32 visible_area_x = mPos.x + mVisibleAreaOffset.x;
+    f32 visible_area_w = mVisibleAreaSize.x;
+
+    if (visible_area_x + visible_area_w < bg_scroll_mgr.getScreenLeft() - camera_pad_x)
+    {
+        onStatus(cStatus_DispOut);
+        setBalloonInDispOut(cDirType_Left);
+        return true;
+    }
+    else if (visible_area_x - visible_area_w > bg_scroll_mgr.getScreenRight() + camera_pad_x)
+    {
+        onStatus(cStatus_DispOut);
+        setBalloonInDispOut(cDirType_Right);
+        return true;
+    }
+
+    return false;
+}
+
+void PlayerBase::checkDisplayOutDead()
+{
+    const BgScrollMgr& bg_scroll_mgr = *BgScrollMgr::instance();
+
+    f32 visible_area_t = mPos.y + mVisibleAreaOffset.y + mVisibleAreaSize.y;
+
+    f32 camera_pad_y = 24.0f;
+    if (isLenientOutCheck())
+        camera_pad_y = 64.0f;
+
+    f32 danger_threshold = bg_scroll_mgr.getScreenBottom() - 16.0f;
+    f32 balloon_threshold = bg_scroll_mgr.getScreenBottom() - camera_pad_y;
+
+    if (visible_area_t < danger_threshold)
+    {
+        onStatus(cStatus_DispOut);
+        onStatus(cStatus_DispOutDanger);
+    }
+
+    if (visible_area_t < balloon_threshold)
+        setBalloonInDispOut(cDirType_Down);
+
+    f32 visible_area_b = mPos.y + mVisibleAreaOffset.y - mVisibleAreaSize.y;
+    if (visible_area_b > bg_scroll_mgr.getScreenTop() + 16.0f)
+        onStatus(cStatus_DispOut);
+
+    checkDispOutLR();
+    if (!isStatus(cStatus_253) && !isStatus(cStatus_252) && !isStatus(cStatus_251))
+        checkBalloonInDispOutLR();
+}
+
+void PlayerBase::checkDispOver()
+{
+    offStatus(cStatus_DispOut);
+    offStatus(cStatus_DispOutDanger);
+    offStatus(cStatus_DispOutPosYAdj);
+
+    if (isStatus(cStatus_14) || isStatus(cStatus_122))
+        return;
+
+    if (PlayerDemoMgr::instance()->isPlayerGameStop())
+        return;
+
+    if (!isStatus(cStatus_247))
+    {
+        upperOverCheck();
+        underOverCheck_();
+        checkPressBg();
+        setBgDamage();
+    }
+    checkDisplayOutDead();
+}
+
+void PlayerBase::upperOverCheck()
+{
+    f32 top = BgScrollMgr::instance()->getScreenTop() + 96.0f;
+
+    if (mPos.y > top)
+    {
+        if (BgScrollMgr::instance()->getAreaScrollDir() == cDirType_Down || BgScrollMgr::instance()->getAreaScrollDirSub() == cDirType_Down)
+        {
+            if (isNowBgCross(cBgCross_IsFoot))
+            {
+                sead::Vector3f check_pos(mPos.x, mPos.y - 32.0f, mPos.z);
+                f32 hit_pos_y;
+                if (mBgCheckPlayer.checkRoof(check_pos, 32.0f, &hit_pos_y))
+                {
+                    top -= 20.0f;
+                    if (hit_pos_y < top)
+                    {
+                        setBalloonDispOut();
+                        return;
+                    }
+                    mPos.y = top;
+                    mPosPrev = mPos;
+                    mPosPrev2 = mPos;
+                    onStatus(cStatus_DispOutPosYAdj);
+                    return; // TODO: This results in different flow
+                }
+            }
+        }
+
+        mPos.y = top;
+        onStatus(cStatus_DispOutPosYAdj);
+    }
+}
+
+bool PlayerBase::checkStandUpRoof()
+{
+    ActorBgCollisionCheck::Sensor* p_head_sensor = getHeadBgPointData();
+    if (p_head_sensor != nullptr)
+    {
+        f32 stand_y = mPos.y + getStandHeadBgPointY() - 1.0f;
+        sead::Vector3f check_pos(mPos.x + p_head_sensor->p1, mPos.y + 4.0f, mPos.z);
+        f32 check_distance = sead::Mathf::abs(stand_y - check_pos.y);
+        f32 hit_pos_y;
+        if (mBgCheckPlayer.checkRoof(check_pos, check_distance, &hit_pos_y))
+            return true;
+        check_pos.x = mPos.x + p_head_sensor->p2;
+        if (mBgCheckPlayer.checkRoof(check_pos, check_distance, &hit_pos_y))
+            return true;
+    }
+    return false;
+}
+
+bool PlayerBase::isBgPress(Actor* p_actor)
+{
+    if (p_actor != nullptr && !mBgPressIDBuffer.isEmpty())
+        for (sead::RingBuffer<ActorUniqueID>::iterator itr = mBgPressIDBuffer.begin(), itr_end = mBgPressIDBuffer.end(); itr != itr_end; ++itr)
+            if (*itr == p_actor->getActorUniqueID())
+                return true;
+
+    return false;
+}
+
+bool PlayerBase::setPressBgDamageImpl(DamageType type)
+{
+    if (type == cDamageType_Kill)
+    {
+        if (setDamage2(nullptr, cDamageType_Kill))
+        {
+            // mBgCheckPlayer.clearBgcSaveAll();
+            return true;
+        }
+    }
+    else
+    {
+        if (setDamage2(nullptr, type))
+        {
+            // mBgCheckPlayer.clearBgcSaveAll();
+            Quake::instance()->shockMotor(mPlayerNo, Quake::cShockType_4, 0, false);
+            return true;
+        }
+    }
+    return false;
 }
