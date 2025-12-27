@@ -102,7 +102,7 @@ void Enemy::normal_collcheck(ActorCollisionCheck* cc_self, ActorCollisionCheck* 
 
             if (!p_en_self->chibiYoshiDamageCheck(cc_self, cc_other))
             {
-                if (cc_other->getAttack() != ActorCollisionCheck::cAttack_Generic)
+                if (cc_other->getAttack() != ActorCollisionCheck::cAttack_None)
                     return;
 
                 p_en_self->vsChibiYoshiHitCheck_Normal(cc_self, cc_other);

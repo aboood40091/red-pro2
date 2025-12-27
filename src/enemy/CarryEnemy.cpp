@@ -300,7 +300,7 @@ void CarryEnemy::startSlide()
 
 void CarryEnemy::resetSlideCc()
 {
-    mCollisionCheck.setAttack(ActorCollisionCheck::cAttack_Generic);
+    mCollisionCheck.setAttack(ActorCollisionCheck::cAttack_None);
     mCollisionCheck.offVsKind(
         ActorCollisionCheck::cTargetKind_Balloon |
         ActorCollisionCheck::cTargetKind_Item |
@@ -680,7 +680,7 @@ void CarryEnemy::finalizeState_Carry()
 
     mCollisionCheck.offVsKind(ActorCollisionCheck::cTargetKind_Killer);
     mCollisionCheck.onVsKind(ActorCollisionCheck::cTargetKind_Unk10);
-    mCollisionCheck.setAttack(ActorCollisionCheck::cAttack_Generic);
+    mCollisionCheck.setAttack(ActorCollisionCheck::cAttack_None);
 
     cancelCarry();
 
