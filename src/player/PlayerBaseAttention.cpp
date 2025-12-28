@@ -98,17 +98,14 @@ bool PlayerBase::calcHeadAttentionAngle_(const sead::Vector2f& target_pos, sead:
 
         target_z = angle_z * sead::Mathf::cosIdx(s32(MathUtil::absAngle(angle_y) * 0.5f));
     }
-    else
+    else if (MathUtil::absAngle(angle_y) < sead::Mathu::cQuarterRoundIdx)
     {
-        if (MathUtil::absAngle(angle_y) < sead::Mathf::deg2idx(90))
-        {
-            mpModelBaseMgr->changeFaceAngleOverrideFlag(PlayerModelBase::cFaceAngleOverrideFlag_Y, false);
-            mpModelBaseMgr->changeFaceAngleOverrideFlag(PlayerModelBase::cFaceAngleOverrideFlag_Z, true);
+        mpModelBaseMgr->changeFaceAngleOverrideFlag(PlayerModelBase::cFaceAngleOverrideFlag_Y, false);
+        mpModelBaseMgr->changeFaceAngleOverrideFlag(PlayerModelBase::cFaceAngleOverrideFlag_Z, true);
 
-            ret = true;
+        ret = true;
 
-            target_z = angle_z;
-        }
+        target_z = angle_z;
     }
     if (ret)
     {

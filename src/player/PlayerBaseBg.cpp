@@ -175,7 +175,7 @@ void PlayerBase::postBgCrossImpl_()
         if (isNowBgCross(cBgCross_IsUnderwater) || isNowBgCross(cBgCross_IsHold))
             mSpeed.y = 0.0f;
 
-        if (isNowBgCross(cBgCross_IsSlightlyInsideSinkSand) && !isStatus(cStatus_238))
+        if (isNowBgCross(cBgCross_IsSlightlyInsideSinkSand) && !isStatus(cStatus_DemoControl))
         {
             mSpeed.y = 0.0f;
             mBgSpeed.set(0.0f, mSandSinkRate);
@@ -198,10 +198,10 @@ void PlayerBase::postBgCrossImpl_()
 
     if (!isNowBgCross(cBgCross_IsFoot) && isOldBgCross(cBgCross_OnRide))
     {
-        mAddAirSpeedFStart = 0.0f;
+        mAirDriftSpeedFStart = 0.0f;
         f32 delta = mPos.x - mPosPrev.x;
         if (sead::Mathf::abs(delta - mPosDelta.x) >= 0.01f && mPosDelta.x * delta >= 0.0f)
-            mAddAirSpeedFStart = mPosDelta.x;
+            mAirDriftSpeedFStart = mPosDelta.x;
     }
 
     if (!isNowBgCross(cBgCross_74) &&
@@ -214,7 +214,7 @@ void PlayerBase::postBgCrossImpl_()
         mSpeedF = 0.0f;
         mSpeedFMax = 0.0f;
         mAddSpeedF = 0.0f;
-        mAddAirSpeedF = 0.0f;
+        mAirDriftSpeedF = 0.0f;
     }
 }
 
@@ -1547,7 +1547,7 @@ bool PlayerBase::setPressBgDamageImpl(DamageType type)
         if (setDamage2(nullptr, type))
         {
             // mBgCheckPlayer.clearBgcSaveAll();
-            Quake::instance()->shockMotor(mPlayerNo, Quake::cShockType_4, 0, false);
+            Quake::instance()->shockMotor(mPlayerNo, Quake::cShockType_4);
             return true;
         }
     }

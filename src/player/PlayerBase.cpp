@@ -77,9 +77,9 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mLineSpinLiftID()
     , _1b9c(0)
     , mNoHitObjBgTimer(0)
-    , mAddAirSpeedFStart(0.0f)
-    , mAddAirSpeedF(0.0f)
-    , mAddAirSpeedFDecelStep(0.0f)
+    , mAirDriftSpeedFStart(0.0f)
+    , mAirDriftSpeedF(0.0f)
+    , mAirDriftSpeedFDecelStep(0.0f)
     , mAddBgSpeedF(0.0f)
     , _1bb4(0)
     , mCollisionCheck2_React()
@@ -93,17 +93,17 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , _2068(0)
     , _206c(0)
     , _2070(0)
-    , _2074(0.0f)
-    , _2078(0.0f)
-    , _207c(0.0f)
+    , mCcPlayerRevSpeedFScale(0.0f)
+    , mCcPlayerRevSpeedFStart(0.0f)
+    , mCcPlayerRevSpeedF(0.0f)
     , _2080(0.0f)
     , _2084(0)
     , _2085(0)
     , mNoHitPlayerTimer(0)
     , mNoHitPlayerID()
-    , _2090(0)
-    , _2094(0)
-    , _2098(0.0f)
+    , mReductionMode(cReductionMode_None)
+    , mReductionStep(0)
+    , mReductionScale(0.0f)
     , _209c(0)
     , _20a0(0)
     , _20a4()
@@ -789,12 +789,12 @@ void PlayerBase::calcTimerProc()
 
 void PlayerBase::startQuakeShock(Quake::ShockType shock_type)
 {
-    Quake::instance()->shockMotor(mPlayerNo, shock_type, 0, false);
+    Quake::instance()->shockMotor(mPlayerNo, shock_type);
 }
 
 void PlayerBase::startPatternRumble(const char* pattern)
 {
-    Quake::instance()->shockMotor(mPlayerNo, Quake::cShockType_4, 0, false);
+    Quake::instance()->shockMotor(mPlayerNo, Quake::cShockType_4);
 }
 
 const PlayerModelBase* PlayerBase::getModel() const
@@ -837,15 +837,15 @@ f32 PlayerBase::getThrowLoopPosX(f32 x)
         return x - area_w;
 }
 
-void PlayerBase::calcAddAirSpeedF()
+void PlayerBase::calcAirDriftSpeedF()
 {
     if (!isNowBgCross(cBgCross_IsFoot))
-        sead::Mathf::chase(&mAddAirSpeedF, 0.0f, mAddAirSpeedFDecelStep);
+        sead::Mathf::chase(&mAirDriftSpeedF, 0.0f, mAirDriftSpeedFDecelStep);
     
     else
     {
-        mAddAirSpeedF = 0.0f;
-        mAddAirSpeedFStart = 0.0f;
+        mAirDriftSpeedF = 0.0f;
+        mAirDriftSpeedFStart = 0.0f;
     }
 }
 
@@ -1023,8 +1023,8 @@ void PlayerBase::calcPlayerSpeedXY()
         }
     }
 
-    calcAddAirSpeedF();
-    speed_x += mAddAirSpeedF;
+    calcAirDriftSpeedF();
+    speed_x += mAirDriftSpeedF;
 
     setSandEffect();
 
@@ -1051,7 +1051,7 @@ void PlayerBase::calcPlayerSpeedXY()
     posMoveAnglePlayer(speed);
 }
 
-void PlayerBase::initAddAirSpeedF(f32 start_val, f32 len_frames)
+void PlayerBase::initAirDriftSpeedF(f32 start_val, f32 len_frames)
 {
     if (!(start_val * mSpeedF >= 0.0f))
         return;
@@ -1065,10 +1065,10 @@ void PlayerBase::initAddAirSpeedF(f32 start_val, f32 len_frames)
         start_val = (start_val > 0.0f) ? 1.0f : -1.0f;
     }
 
-    mAddAirSpeedF = start_val;
-    mAddAirSpeedFStart = 0.0f;
+    mAirDriftSpeedF = start_val;
+    mAirDriftSpeedFStart = 0.0f;
     mPos.x += start_val;
-    mAddAirSpeedFDecelStep = sead::Mathf::abs(start_val / len_frames);
+    mAirDriftSpeedFDecelStep = sead::Mathf::abs(start_val / len_frames);
 }
 
 bool PlayerBase::setJump(u8 param, JumpSe jump_se_type)
