@@ -1,4 +1,16 @@
-#include <player/PlayerBase.h>
+#include <event/EventMgr.h>
+#include <event/EventStartCoinBattle.h>
+#include <game/CourseTimer.h>
+#include <game/Info.h>
+#include <input/InputMgr.h>
+#include <map/Next.h>
+#include <player/PlayerDemoMgr.h>
+#include <player/PlayerMgr.h>
+#include <player/PlayerObject.h>
+#include <scene/Scene.h>
+#include <scroll/BgScrollMgr.h>
+#include <system/RDashMgr.h>
+#include <utility/MathUtil.h>
 
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoCreate)
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoNone)
@@ -25,3 +37,419 @@ CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoControl)
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoState23)
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoState24)
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoState25)
+
+void PlayerBase::offDemo()
+{
+    if (mPlayerNo >= 0 && isStatus(cStatus_208))
+    {
+        PlayerMgr::instance()->offDemo(mPlayerNo);
+        CourseTimer::instance()->offStopTimer(mPlayerNo);
+        offStatus(cStatus_DemoMode);
+        offStatus(cStatus_208);
+    }
+}
+
+void PlayerBase::initializeState_DemoNone()
+{
+    mDemoWaitTimer = 15;
+    PlayerDemoMgr::instance()->clearDemoNo(mPlayerNo);
+    offDemo();
+    onStatus(cStatus_191);
+    if (mChangeDemoStateParam == 1)
+        offStatus(cStatus_235);
+    else
+        PlayerDemoMgr::instance()->playOther();
+    offStatus(cStatus_Invisible);
+}
+
+void PlayerBase::executeState_DemoNone()
+{
+    if (isStatus(cStatus_191) && InputMgr::instance()->isInputEnabled())
+    {
+        offDemo();
+        offStatus(cStatus_191);
+    }
+
+    // if (checkTimeOut())
+    //     return;
+
+    if (isNowBgCross(cBgCross_IsFoot) || isStatus(cStatus_84) || isStatus(cStatus_37))
+    {
+        if (mPlayerKey.buttonRight())
+            mDokanInTimerR = sead::Mathi::clampMax(mDokanInTimerR + 1, 100);
+        else
+            mDokanInTimerR = 0;
+
+        if (mPlayerKey.buttonLeft())
+            mDokanInTimerL = sead::Mathi::clampMax(mDokanInTimerL + 1, 100);
+        else
+            mDokanInTimerL = 0;
+    }
+    else
+    {
+        mDokanInTimerR = 0;
+        mDokanInTimerL = 0;
+    }
+
+    if (mDemoWaitTimer == 0 && isEnableDokanInStatus())
+        onStatus(cStatus_EnableDokanIn);
+
+    setDokanIn(cDokanDir_Down) || setDokanIn(cDokanDir_Up) ||
+    setDokanIn(cDokanDir_Right) || setDokanIn(cDokanDir_Left);
+}
+
+void PlayerBase::finalizeState_DemoNone()
+{
+}
+
+void PlayerBase::initializeState_DemoState3()
+{
+}
+
+void PlayerBase::executeState_DemoState3()
+{
+}
+
+void PlayerBase::finalizeState_DemoState3()
+{
+}
+
+void PlayerBase::initializeState_DemoStartCoinBattle()
+{
+    mPlayerKey.onStatus(PlayerKey::cStatus_NoInput);
+}
+
+void PlayerBase::onDemo()
+{
+    if (mPlayerNo >= 0)
+    {
+        PlayerMgr::instance()->onDemo(mPlayerNo);
+        CourseTimer::instance()->onStopTimer(mPlayerNo);
+        onStatus(cStatus_DemoMode);
+        onStatus(cStatus_208);
+    }
+}
+
+void PlayerBase::changeDemoState(const StateID& state_id, s32 param)
+{
+    onDemo();
+    mChangeDemoStateParam = param;
+    mDemoAction = 0;
+    mDemoMode = 0;
+    offDemoType(cDemoType_1);
+    offDemoType(cDemoType_3);
+    offDemoType(cDemoType_4);
+    mDemoStateMgr.changeState(state_id);
+}
+
+void PlayerBase::executeState_DemoStartCoinBattle()
+{
+    EventStartCoinBattle* p_event = sead::DynamicCast<EventStartCoinBattle>(EventMgr::instance()->getCurrentEvent());
+    if (p_event == nullptr)
+        changeDemoState(StateID_DemoNone, 0);
+}
+
+void PlayerBase::finalizeState_DemoStartCoinBattle()
+{
+    mPlayerKey.offStatus(PlayerKey::cStatus_NoInput);
+}
+
+void PlayerBase::initializeState_DemoOutDoor()
+{
+}
+
+void PlayerBase::executeState_DemoOutDoor()
+{
+}
+
+void PlayerBase::finalizeState_DemoOutDoor()
+{
+}
+
+void PlayerBase::initializeState_DemoInDoor()
+{
+}
+
+void PlayerBase::executeState_DemoInDoor()
+{
+}
+
+void PlayerBase::finalizeState_DemoInDoor()
+{
+}
+
+void PlayerBase::initializeState_DemoNextGotoBlock()
+{
+    if (isStatus(cStatus_58))
+        PlayerMgr::instance()->onNextGotoBlock(mPlayerNo);
+
+    mDstNextGotoID = mChangeDemoStateParam;
+    onDemoType(cDemoType_3);
+    mPlayerKey.onStatus(PlayerKey::cStatus_Demo);
+    onStatus(cStatus_242);
+    onStatus(cStatus_266);
+    initializeDemoControl();
+}
+
+bool PlayerBase::isDemo5Any_()
+{
+    for (s32 i = 0; i < 4; i++)
+    {
+        PlayerObject* p_player_obj = PlayerMgr::instance()->getPlayerObject(i);
+        if (p_player_obj != nullptr && p_player_obj->isDemoType(cDemoType_5))
+            return true;
+    }
+    return false;
+}
+
+void PlayerBase::setFaderPos(const sead::Vector3f& pos)
+{
+    const BgScrollMgr& bg_scroll_mgr = *BgScrollMgr::instance();
+
+    sead::Vector3f fader_pos = pos;
+    fader_pos.x = sead::Mathf::clamp2(bg_scroll_mgr.getScreenLeft(), fader_pos.x, bg_scroll_mgr.getScreenRight());
+    fader_pos.y = sead::Mathf::clamp2(bg_scroll_mgr.getScreenBottom(), fader_pos.y, bg_scroll_mgr.getScreenTop());
+    MathUtil::getGlbPosToLyt(fader_pos);
+
+    Scene::instance()->getFadeCenter().set(
+        fader_pos.x,
+        fader_pos.y,
+        0.0f
+    );
+
+    mFaderPos = pos;
+    onStatus(cStatus_FaderPosSet);
+}
+
+void PlayerBase::changeNextScene(s32)
+{
+    onStatus(cStatus_SceneChangeNext);
+    PlayerDemoMgr::instance()->setCourseOutList(mPlayerNo);
+
+    if (PlayerDemoMgr::instance()->getCourseOutList(0) == mPlayerNo)
+    {
+        Next::instance()->requestChangeScene();
+        PlayerDemoMgr::instance()->setCourseOutPlayerNo(mPlayerNo);
+    }
+}
+
+void PlayerBase::executeState_DemoNextGotoBlock()
+{
+    if (mDemoMode == 0 && mDemoWaitTimer == 0)
+    {
+        mDemoMode = 1;
+
+        bool scene_already_changed = false;
+        u8 file_no;
+
+        if (isDemo5Any_())
+            scene_already_changed = true;
+        else
+        {
+            file_no = Info::instance()->getFileNo();
+            if (Next::instance()->isDifferentChangeSceneNextDat(file_no, mDstNextGotoID))
+                scene_already_changed = true;
+        }
+
+        if (scene_already_changed)
+        {
+            onStatus(cStatus_SceneChangeNext);
+        }
+        else
+        {
+            sead::Vector3f fader_pos = mPos;
+            if (mNextGotoDelay == cNextGotoBlockDelay_Short)
+                fader_pos.y += 8.0f;
+            setFaderPos(fader_pos);
+            Next::instance()->setChangeSceneNextDat(file_no, mDstNextGotoID);
+            changeNextScene(0);
+        }
+    }
+}
+
+void PlayerBase::finalizeState_DemoNextGotoBlock()
+{
+    mPlayerKey.offStatus(PlayerKey::cStatus_Demo);
+    offStatus(cStatus_242);
+    offStatus(cStatus_266);
+    offStatus(cStatus_243);
+}
+
+bool PlayerBase::executeDemoState()
+{
+    offStatus(cStatus_265);
+
+    MathUtil::calcTimer(&mDemoWaitTimer);
+    MathUtil::calcTimer(&_20ec);
+
+    bool is_demo_mode_old = isStatus(cStatus_DemoMode);
+
+    mDemoStateMgr.executeState();
+
+    checkDemoControl();
+
+    EventStartCoinBattle* p_event = sead::DynamicCast<EventStartCoinBattle>(EventMgr::instance()->getCurrentEvent());
+    if (p_event != nullptr && *mDemoStateMgr.getStateID() == StateID_DemoNone)
+        changeDemoState(StateID_DemoStartCoinBattle, 0);
+
+    if (isStatus(cStatus_DemoMode) || is_demo_mode_old)
+    {
+        if (isStatus(cStatus_265))
+            onStatus(cStatus_263);
+
+        clearBgSpeed();
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void PlayerBase::onDemoType(DemoType type)
+{
+    mDemoTypeFlag.setBit(type);
+}
+
+void PlayerBase::offDemoType(DemoType type)
+{
+    mDemoTypeFlag.resetBit(type);
+}
+
+void PlayerBase::offDemoMode()
+{
+    mDemoTypeFlag.makeAllZero();
+}
+
+bool PlayerBase::isDemoMode() const
+{
+    return !mDemoTypeFlag.isZero();
+}
+
+bool PlayerBase::isDemoType(DemoType type)
+{
+    return mDemoTypeFlag.isOnBit(type);
+}
+
+bool PlayerBase::isDemoAll()
+{
+    return isDemoMode();
+}
+
+bool PlayerBase::isDemo()
+{
+    if (isDemoMode() && !isDemoType(cDemoType_4))
+        return true;
+    else
+        return false;
+}
+
+void PlayerBase::setShadowkunCatchDemo()
+{
+    onDemoType(cDemoType_ShadowkunCatch);
+    onStatus(cStatus_ShadowkunCatch);
+}
+
+bool PlayerBase::isDisableDokanInDemo()
+{
+    if (isDemo5Any_())
+        return true;
+
+    return isDemoMode();
+}
+
+bool PlayerBase::isDemo3Any_()
+{
+    for (s32 i = 0; i < 4; i++)
+    {
+        PlayerObject* p_player_obj = PlayerMgr::instance()->getPlayerObject(i);
+        if (p_player_obj != nullptr && p_player_obj->isDemoType(cDemoType_3))
+            return true;
+    }
+    return false;
+}
+
+bool PlayerBase::isDisableGoalDemo()
+{
+    if (isDemo3Any_())
+        return true;
+
+    return isDemoMode();
+}
+
+bool PlayerBase::isSceneChangeWaitDone()
+{
+    if (isStatus(cStatus_SceneChangeNext))
+        return true;
+
+    if (isStatus(cStatus_280))
+        return true;
+
+    if (isWaitFrameCountMax())
+        return true;
+
+    return false;
+}
+
+bool PlayerBase::isDispOutCheckOn()
+{
+    if (isDemoType(cDemoType_1))
+        return false;
+
+    if (isStatus(cStatus_14))
+        return false;
+
+    if (isStatus(cStatus_17))
+        return false;
+
+    if (isStatus(cStatus_122))
+        return false;
+
+    if (isStatus(cStatus_227))
+        return false;
+
+    if (isStatus(cStatus_242))
+        return false;
+
+    if (isStatus(cStatus_153))
+        return false;
+
+    return true;
+}
+
+void PlayerBase::changeNormalAction()
+{
+    bgCheck(false);
+    offZPosSetNone();
+    changeState(StateID_Walk, 1);
+    changeDemoState(StateID_DemoNone, 0);
+}
+
+bool PlayerBase::setNextGotoBlockDemo(s32 dst_next_goto_no, s32 wait_timer, NextGotoBlockDelay delay, bool unk_rdash)
+{
+    if (isDemo() || isStatus(cStatus_122))
+        return false;
+
+    if (*mDemoStateMgr.getStateID() == StateID_DemoNextGotoBlock)
+        return true;
+
+    mNextGotoDelay = delay;
+    changeDemoState(StateID_DemoNextGotoBlock, dst_next_goto_no);
+    mDemoWaitTimer = wait_timer;
+
+    if (RDashMgr::instance()->isNSLU() && unk_rdash)
+        onStatus(cStatus_243);
+
+    if (mNextGotoDelay == cNextGotoBlockDelay_Normal)
+    {
+        offStatus(cStatus_DemoMode);
+        if (!isStatus(cStatus_99))
+            changeState(StateID_Fall, 1);
+    }
+
+    if (isStatus(cStatus_107))
+        changeState(StateID_Fall, 1);
+
+    return true;
+}
