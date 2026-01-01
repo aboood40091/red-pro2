@@ -349,7 +349,7 @@ bool PlayerBase::checkDispSideLemit_()
     if (isStatus(cStatus_252))
         return false;
 
-    if (isStatus(cStatus_251))
+    if (isStatus(cStatus_ShadowkunCatch))
         return false;
 
     if (AreaTask::instance()->getLoopType() == 1)
@@ -1444,7 +1444,7 @@ void PlayerBase::checkDisplayOutDead()
         onStatus(cStatus_DispOut);
 
     checkDispOutLR();
-    if (!isStatus(cStatus_253) && !isStatus(cStatus_252) && !isStatus(cStatus_251))
+    if (!isStatus(cStatus_253) && !isStatus(cStatus_252) && !isStatus(cStatus_ShadowkunCatch))
         checkBalloonInDispOutLR();
 }
 

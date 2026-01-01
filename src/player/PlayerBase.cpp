@@ -113,12 +113,12 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mDemoTypeFlag()
     , mDemoMode(0)
     , mDemoAction(0)
-    , _20e8(0)
+    , mDemoWaitTimer(0)
     , _20ec(0)
     , mPlayerJumpDaiID(0)
     , mDstNextGotoID(0)
     , mNextGotoType(0)
-    , _20fc(0)
+    , mNextGotoDelay(cNextGotoBlockDelay_None)
     , _2100()
     , _2108()
     , mFaderPos(mPos)
@@ -140,8 +140,8 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mDokanType(cDokanType_Invalid)
     , _2178(0.0f)
     , _217c(0.0f)
-    , _2180(0)
-    , _2184(0)
+    , mDokanInTimerL(0)
+    , mDokanInTimerR(0)
     , mpDokanBgCollision(nullptr)
     , mIsDokanSwim(false)
     , _2190(0.0f)
@@ -271,7 +271,7 @@ bool PlayerBase::preExecute_()
         offStatus(cStatus_118);
     }
 
-    offStatus(cStatus_171);
+    offStatus(cStatus_EnableDokanIn);
 
     if (mSpeed.y <= 0.0f)
         offStatus(cStatus_10);
@@ -389,7 +389,7 @@ void PlayerBase::postExecute_(MainState state)
         clearCcPlayerRev();
         clearCcData();
 
-        if (!isStatus(cStatus_9))
+        if (!isStatus(cStatus_FaderPosSet))
             mFaderPos = mPos;
 
         calcMaskPos();
@@ -484,7 +484,7 @@ bool PlayerBase::vf154()
     if (isStatus(cStatus_280))
         return false;
 
-    if (_2a4 == 0 && isStatus(cStatus_209))
+    if (_2a4 == 0 && isStatus(cStatus_SceneChangeNext))
         return false;
 
     return true;
