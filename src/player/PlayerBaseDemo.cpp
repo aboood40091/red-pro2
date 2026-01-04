@@ -14,7 +14,7 @@
 
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoCreate)
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoNone)
-CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoState3)
+CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoReset)
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoStartCoinBattle)
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoGoal)
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoStartWait)
@@ -102,15 +102,15 @@ void PlayerBase::finalizeState_DemoNone()
 {
 }
 
-void PlayerBase::initializeState_DemoState3()
+void PlayerBase::initializeState_DemoReset()
 {
 }
 
-void PlayerBase::executeState_DemoState3()
+void PlayerBase::executeState_DemoReset()
 {
 }
 
-void PlayerBase::finalizeState_DemoState3()
+void PlayerBase::finalizeState_DemoReset()
 {
 }
 

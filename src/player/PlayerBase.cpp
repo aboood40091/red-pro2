@@ -117,7 +117,7 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , _20ec(0)
     , mPlayerJumpDaiID(0)
     , mDstNextGotoID(0)
-    , mNextGotoType(0)
+    , mNextGotoType(cNextGotoType_Normal)
     , mNextGotoDelay(cNextGotoBlockDelay_None)
     , _2100()
     , _2108()
@@ -598,7 +598,7 @@ f32 PlayerBase::getFollowMameKuriboSpeedScaleX()
         0.45f,
         0.40f
     };
-    static_assert(sizeof(ratios) / sizeof(f32) == FOLLOW_MAME_KURIBO_TYPE_NUM);
+    static_assert((sizeof(ratios) / sizeof(f32)) == FOLLOW_MAME_KURIBO_TYPE_NUM);
 
     return ratios[getFollowMameKuriboSpeedType()];
 }
@@ -615,7 +615,7 @@ f32 PlayerBase::getFollowMameKuriboSpeedScaleY()
         0.75f,
         0.72f
     };
-    static_assert(sizeof(ratios) / sizeof(f32) == FOLLOW_MAME_KURIBO_TYPE_NUM);
+    static_assert((sizeof(ratios) / sizeof(f32)) == FOLLOW_MAME_KURIBO_TYPE_NUM);
 
     return ratios[getFollowMameKuriboSpeedType()];
 }
