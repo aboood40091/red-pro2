@@ -51,7 +51,7 @@ void PlayerBase::offDemo()
 
 void PlayerBase::initializeState_DemoNone()
 {
-    mDemoWaitTimer = 15;
+    mDemoActionTimer = 15;
     PlayerDemoMgr::instance()->clearDemoNo(mPlayerNo);
     offDemo();
     onStatus(cStatus_191);
@@ -91,7 +91,7 @@ void PlayerBase::executeState_DemoNone()
         mDokanInTimerL = 0;
     }
 
-    if (mDemoWaitTimer == 0 && isEnableDokanInStatus())
+    if (mDemoActionTimer == 0 && isEnableDokanInStatus())
         onStatus(cStatus_EnableDokanIn);
 
     setDokanIn(cDokanDir_Down) || setDokanIn(cDokanDir_Up) ||
@@ -134,8 +134,8 @@ void PlayerBase::changeDemoState(const StateID& state_id, s32 param)
 {
     onDemo();
     mChangeDemoStateParam = param;
+    mDemoSubAction = 0;
     mDemoAction = 0;
-    mDemoMode = 0;
     offDemoType(cDemoType_1);
     offDemoType(cDemoType_3);
     offDemoType(cDemoType_4);
@@ -235,9 +235,9 @@ void PlayerBase::changeNextScene(s32)
 
 void PlayerBase::executeState_DemoNextGotoBlock()
 {
-    if (mDemoMode == 0 && mDemoWaitTimer == 0)
+    if (mDemoAction == cDemoNextGotoBlockAction_Walk && mDemoActionTimer == 0)
     {
-        mDemoMode = 1;
+        mDemoAction = cDemoNextGotoBlockAction_SceneChange;
 
         bool scene_already_changed = false;
         u8 file_no;
@@ -279,7 +279,7 @@ bool PlayerBase::executeDemoState()
 {
     offStatus(cStatus_265);
 
-    MathUtil::calcTimer(&mDemoWaitTimer);
+    MathUtil::calcTimer(&mDemoActionTimer);
     MathUtil::calcTimer(&_20ec);
 
     bool is_demo_mode_old = isStatus(cStatus_DemoMode);
@@ -436,7 +436,7 @@ bool PlayerBase::setNextGotoBlockDemo(s32 dst_next_goto_no, s32 wait_timer, Next
 
     mNextGotoDelay = delay;
     changeDemoState(StateID_DemoNextGotoBlock, dst_next_goto_no);
-    mDemoWaitTimer = wait_timer;
+    mDemoActionTimer = wait_timer;
 
     if (RDashMgr::instance()->isNSLU() && unk_rdash)
         onStatus(cStatus_243);

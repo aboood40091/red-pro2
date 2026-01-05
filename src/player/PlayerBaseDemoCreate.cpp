@@ -64,7 +64,7 @@ void PlayerBase::setPosAndDir(const sead::Vector3f& pos, s32 dir)
     mDirection = dir;
 }
 
-void PlayerBase::stopGameAtCreate()
+void PlayerBase::stopCreateOther()
 {
     if (mNextGotoType == cNextGotoType_Vine ||
         mNextGotoType == cNextGotoType_ShiroBoss ||
@@ -228,7 +228,7 @@ void PlayerBase::initialTitle(NextGotoType)
 
 void PlayerBase::initializeState_DemoCreate()
 {
-    stopGameAtCreate();
+    stopCreateOther();
 }
 
 void PlayerBase::executeState_DemoCreate()
@@ -265,18 +265,18 @@ void PlayerBase::initializeState_DemoStartWait()
 
 void PlayerBase::executeState_DemoStartWait()
 {
-    switch (mDemoMode)
+    switch (mDemoAction)
     {
     default:
         break;
-    case 0:
+    case cDemoStartWaitAction_Wait:
         if (InputMgr::instance()->isInputEnabled())
         {
             PlayerDemoMgr::instance()->playOther();
-            mDemoMode = 1;
+            mDemoAction = cDemoStartWaitAction_Move;
         }
         break;
-    case 1:
+    case cDemoStartWaitAction_Move:
         mSpeed.y = cMaxFallSpeed_Foot;
         mPos.y += mSpeed.y;
         bgCheck(false);
@@ -292,7 +292,7 @@ void PlayerBase::finalizeState_DemoStartWait()
 void PlayerBase::initializeState_DemoWait()
 {
     mPlayerKey.onStatus(PlayerKey::cStatus_NoInput);
-    mDemoWaitTimer = 0;
+    mDemoActionTimer = 0;
     switch (mChangeDemoStateParam)
     {
     default:
@@ -300,33 +300,33 @@ void PlayerBase::initializeState_DemoWait()
     case 0:
     case 1:
         PlayerDemoMgr::instance()->setDemoMode(PlayerDemoMgr::cMode_Wait);
-        mDemoMode = 0;
+        mDemoAction = cDemoWaitAction_WaitTurn;
         break;
     case 2:
-        mDemoMode = 2;
+        mDemoAction = cDemoWaitAction_WaitSingle;
         break;
     }
 }
 
 void PlayerBase::executeState_DemoWait()
 {
-    switch (mDemoMode)
+    switch (mDemoAction)
     {
     default:
         break;
-    case 0:
+    case cDemoWaitAction_WaitTurn:
         {
             PlayerDemoMgr& demo_mgr = *PlayerDemoMgr::instance();
             if (demo_mgr.isEnableCheckDemoNo() && demo_mgr.getNextDemoNo() == mPlayerNo)
             {
-                mDemoMode = 1;
+                mDemoAction = cDemoWaitAction_Move;
                 if (demo_mgr.getCourseOutPlayerNo() != mPlayerNo)
-                    mDemoWaitTimer = 10;
+                    mDemoActionTimer = 10;
             }
         }
         break;
-    case 1:
-        if (mDemoWaitTimer == 0)
+    case cDemoWaitAction_Move:
+        if (mDemoActionTimer == 0)
         {
             PlayerDemoMgr::instance()->turnNextDemoNo();
             switch (mChangeDemoStateParam)
@@ -349,7 +349,7 @@ void PlayerBase::executeState_DemoWait()
             }
         }
         break;
-    case 2:
+    case cDemoWaitAction_WaitSingle:
         if (InputMgr::instance()->isInputEnabled())
             changeDemoState(StateID_DemoNone, 0);
         break;
