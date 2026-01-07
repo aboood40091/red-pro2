@@ -94,8 +94,8 @@ void PlayerBase::executeState_DemoNone()
     if (mDemoActionTimer == 0 && isEnableDokanInStatus())
         onStatus(cStatus_EnableDokanIn);
 
-    setDokanIn(cDokanDir_Down) || setDokanIn(cDokanDir_Up) ||
-    setDokanIn(cDokanDir_Right) || setDokanIn(cDokanDir_Left);
+    setDokanIn(cDokanDir_FaceUp) || setDokanIn(cDokanDir_FaceDown) ||
+    setDokanIn(cDokanDir_FaceLeft) || setDokanIn(cDokanDir_FaceRight);
 }
 
 void PlayerBase::finalizeState_DemoNone()

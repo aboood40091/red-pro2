@@ -269,7 +269,7 @@ void Actor::deleteActor(bool manual_deleted)
 
 u32 Actor::calcTottenToSrcDir_(const sead::BoundBox2f& src_range) const
 {
-    if (!MainGame::instance()->isStory() ||
+    if (!MainGame::instance()->isShadowkunQuest() ||
         TottenMgr::instance() == nullptr ||
         TottenMgr::instance()->getTottenActor() == nullptr)
     {
@@ -865,24 +865,8 @@ bool Actor::setPressIceHeadBreak_(const ActorBgCollisionCheck& bc)
     {
         sead::Vector2f pos = mPos;
 
-        const ActorBgCollisionCheck::Sensor* p_head_sensor;
-        bool sensor_valid = false;
-        if (bc.isSensor1Set(cDirType_Up))
-        {
-            if (!bc.isSensor1Null(cDirType_Up))
-            {
-                const ActorBgCollisionCheck::SensorArray& sensors = bc.getSensorArray1();
-                p_head_sensor = &(sensors[cDirType_Up]);
-                sensor_valid = true;
-            }
-        }
-        else if (bc.isSensor2Set(cDirType_Up))
-        {
-            const ActorBgCollisionCheck::SensorArray& sensors = bc.getSensorArray2();
-            p_head_sensor = &(sensors[cDirType_Up]);
-            sensor_valid = true;
-        }
-        if (sensor_valid && p_head_sensor != nullptr)
+        const ActorBgCollisionCheck::Sensor* p_head_sensor = bc.getSensorEffective(cDirType_Up);
+        if (p_head_sensor != nullptr)
         {
             sead::Vector2f center_offset;
             ActorBgCollisionCheckUtil::getHSensorCenterOffset(*p_head_sensor, center_offset);

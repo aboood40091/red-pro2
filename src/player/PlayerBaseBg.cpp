@@ -259,7 +259,7 @@ void PlayerBase::setBcSensorFlagsImpl_()
     if (isStatus(cStatus_73) && mSpeedSakaAnglePrev > 0)
         mBgCheckPlayer.getSensorFlag(cDirType_Down).setBit(ActorBgCollisionCheck::SensorFlag::cBit_0);
 
-    if (checkDokanInKeyTrig(cDokanDir_Up))
+    if (checkButtonDokanIn(cDokanDir_ButtonUp))
         mBgCheckPlayer.getSensorFlag(cDirType_Down).setBit(ActorBgCollisionCheck::SensorFlag::cBit_50);
 
     if (isStatus(cStatus_131))

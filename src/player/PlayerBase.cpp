@@ -133,13 +133,13 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , _213c()
     , _2148(0)
     , _214c(0)
-    , mDokanDir(cDokanDir_Up)
+    , mDokanDir(cDokanDir_ButtonUp)
     , mDokanPos()
-    , mDokanPosPrev()
+    , mDokanFaderPos()
     , mDokanPosMoveDelta()
     , mDokanType(cDokanType_Invalid)
-    , _2178(0.0f)
-    , _217c(0.0f)
+    , mDokanMoveYOffset(0.0f)
+    , mDokanMoveXThreshold(0.0f)
     , mDokanInTimerL(0)
     , mDokanInTimerR(0)
     , mpDokanBgCollision(nullptr)
@@ -503,35 +503,35 @@ void PlayerBase::dokanAdjustMaskPos(sead::Vector3f& mask_pos)
 
     switch (mDokanDir)
     {
-    case cDokanDir_Up:
+    case cDokanDir_ButtonUp:
         {
             f32 y = mask_pos.y;
-            if (y > mDokanPosPrev.y)
-                y = mDokanPosPrev.y;
+            if (y > mDokanFaderPos.y)
+                y = mDokanFaderPos.y;
             mask_pos.y = y;
         }
         break;
-    case cDokanDir_Down:
+    case cDokanDir_ButtonDown:
         {
             f32 y = mask_pos.y;
-            if (y < mDokanPosPrev.y)
-                y = mDokanPosPrev.y;
+            if (y < mDokanFaderPos.y)
+                y = mDokanFaderPos.y;
             mask_pos.y = y;
         }
         break;
-    case cDokanDir_Left:
+    case cDokanDir_ButtonLeft:
         {
             f32 x = mask_pos.x;
-            if (x < mDokanPosPrev.x)
-                x = mDokanPosPrev.x;
+            if (x < mDokanFaderPos.x)
+                x = mDokanFaderPos.x;
             mask_pos.x = x;
         }
         break;
-    case cDokanDir_Right:
+    case cDokanDir_ButtonRight:
         {
             f32 x = mask_pos.x;
-            if (x > mDokanPosPrev.x)
-                x = mDokanPosPrev.x;
+            if (x > mDokanFaderPos.x)
+                x = mDokanFaderPos.x;
             mask_pos.x = x;
         }
         break;

@@ -317,7 +317,7 @@ void PlayerBase::executeState_DemoWait()
     case cDemoWaitAction_WaitTurn:
         {
             PlayerDemoMgr& demo_mgr = *PlayerDemoMgr::instance();
-            if (demo_mgr.isEnableCheckDemoNo() && demo_mgr.getNextDemoNo() == mPlayerNo)
+            if (demo_mgr.checkDemoNo(&mPlayerNo))
             {
                 mDemoAction = cDemoWaitAction_Move;
                 if (demo_mgr.getCourseOutPlayerNo() != mPlayerNo)

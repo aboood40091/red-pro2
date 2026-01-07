@@ -99,16 +99,7 @@ void CarryEnemy::reviseCarryBgPosX_(ActorBgCollisionCheck& bc, const sead::Vecto
     bc.initBgCheck();
     bc.getBgCheck().setIgnoreQuicksand(true);
 
-    const ActorBgCollisionCheck::Sensor* p_sensor = nullptr;
-    if (bc.isSensor1Set(cDirType_Right))
-    {
-        if (!bc.isSensor1Null(cDirType_Right))
-            p_sensor = bc.getSensor1(cDirType_Right);
-    }
-    else if (bc.isSensor2Set(cDirType_Right))
-    {
-        p_sensor = bc.getSensor2(cDirType_Right);
-    }
+    const ActorBgCollisionCheck::Sensor* p_sensor = bc.getSensorEffective(cDirType_Right);
 
     f32 wall_base_offs = p_sensor != nullptr ? p_sensor->center_offset : 0.0f;
 
@@ -128,16 +119,7 @@ void CarryEnemy::reviseCarryBgPosY_(ActorBgCollisionCheck& bc)
     bc.initBgCheck();
     bc.getBgCheck().setIgnoreQuicksand(true);
 
-    const ActorBgCollisionCheck::Sensor* p_sensor = nullptr;
-    if (bc.isSensor1Set(cDirType_Up))
-    {
-        if (!bc.isSensor1Null(cDirType_Up))
-            p_sensor = bc.getSensor1(cDirType_Up);
-    }
-    else if (bc.isSensor2Set(cDirType_Up))
-    {
-        p_sensor = bc.getSensor2(cDirType_Up);
-    }
+    const ActorBgCollisionCheck::Sensor* p_sensor = bc.getSensorEffective(cDirType_Up);
 
     f32 ceil_offs = p_sensor != nullptr ? p_sensor->center_offset : 0.0f;
 
