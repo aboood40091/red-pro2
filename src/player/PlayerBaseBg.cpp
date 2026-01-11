@@ -184,7 +184,7 @@ void PlayerBase::postBgCrossImpl_()
         if (isSaka() || isStatus(cStatus_73))
             mSpeed.y = 0.0f;
 
-        if (isStatus(cStatus_244))
+        if (isStatus(cStatus_DemoOnLandStop))
             mSpeedF = 0.0f;
 
         if (isNowBgCross(cBgCross_IsWater) && !isNowBgCross(cBgCross_IsUnderwater))

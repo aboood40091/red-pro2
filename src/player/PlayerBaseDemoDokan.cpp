@@ -253,7 +253,7 @@ void PlayerBase::executeDemoOutDokanLR()
     case cDemoOutDokanAction_MoveSubAxis:
         {
             Angle angle = getMukiAngle();
-            if (addCalcAngleY(angle, 1.0f / 10) == 0)
+            if (addCalcAngleY(angle, cAddCalcAngleYFrameNum_Default) == 0)
             {
                 if (mIsDokanSwim)
                     water_dokan_center_offset = getWaterDokanCenterOffset(mDokanPos.y) - mDokanPos.y;
@@ -461,7 +461,7 @@ void PlayerBase::executeState_DemoOutDokanRollLR()
     case cDemoOutDokanAction_MoveSubAxis:
         {
             Angle angle = getMukiAngle();
-            if (addCalcAngleY(angle, 1.0f / 10) == 0)
+            if (addCalcAngleY(angle, cAddCalcAngleYFrameNum_Default) == 0)
             {
                 if (demo_dokan_move_y(0.75f, 0.0f))
                 {

@@ -330,7 +330,7 @@ bool PlayerBase::calcCcPlayerRev(f32* p_speed_rev)
             if (mSpeedF * base_speed_rev <= 0.0f)
             {
                 *p_speed_rev = speed_rev;
-                if (!isStatus(cStatus_DemoControl) && !isStatus(cStatus_244))
+                if (!isStatus(cStatus_DemoControl) && !isStatus(cStatus_DemoOnLandStop))
                 {
                     f32 speed = mSpeedF;
                     f32 speed_rev_start = mCcPlayerRevSpeedFStart;

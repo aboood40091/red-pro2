@@ -169,7 +169,7 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mFrameEndFollowMameKuribo(0)
     , mFollowMameKuribo(0)
     , mPenguinSlideCooldown(0)
-    , mAnimePlayStep(0)
+    , mAnimePlayType(cAnimePlayType_Normal)
     , mEffectObjCommon()
     , mSlipSmokeEffect()
     , _22fc()
@@ -1030,7 +1030,7 @@ void PlayerBase::calcPlayerSpeedXY()
 
     getPos2D() += mBgSpeed;
 
-    if (isNowBgCross(cBgCross_IsFoot) && isStatus(cStatus_244))
+    if (isNowBgCross(cBgCross_IsFoot) && isStatus(cStatus_DemoOnLandStop))
         mSpeedF = 0.0f;
 
     _4c8 = mSpeed;
