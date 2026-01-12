@@ -15,7 +15,7 @@ void PlayerBase::initializeState_DemoControl()
     mPlayerKey.onStatus(PlayerKey::cStatus_Demo);
 
     onStatus(cStatus_DemoControl);
-    offStatus(cStatus_235);
+    offStatus(cStatus_DemoControlReq);
     offStatus(cStatus_240);
     offStatus(cStatus_149);
     onStatus(cStatus_64);
@@ -260,7 +260,7 @@ bool PlayerBase::startControlDemo(bool status)
     if (!PlayerMgr::instance()->isPlayerActive(mPlayerNo))
         return false;
 
-    onStatus(cStatus_235);
+    onStatus(cStatus_DemoControlReq);
     if (status)
         onStatus(cStatus_NoSlipSaka);
     else
@@ -312,7 +312,7 @@ bool PlayerBase::isUnkDemoLand_()
 
 void PlayerBase::checkDemoControl()
 {
-    if (!isStatus(cStatus_235))
+    if (!isStatus(cStatus_DemoControlReq))
         return;
 
     if (*mDemoStateMgr.getStateID() != StateID_DemoNone)

@@ -56,7 +56,7 @@ void PlayerBase::initializeState_DemoNone()
     offDemo();
     onStatus(cStatus_191);
     if (mChangeDemoStateParam == 1)
-        offStatus(cStatus_235);
+        offStatus(cStatus_DemoControlReq);
     else
         PlayerDemoMgr::instance()->playOther();
     offStatus(cStatus_Invisible);
