@@ -123,14 +123,14 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , _2108()
     , mFaderPos(mPos)
     , mIsLastPlayer(false)
-    , _2120(0.0f)
-    , _2124(0.0f)
-    , _2128(-1)
-    , _212c(-1)
+    , mGoalPoleHeight(0.0f)
+    , mGoalBaseLandPos(0.0f)
+    , mGoalDemoNo(-1)
+    , mGoalDemoOrder(-1)
     , mGoalBasePosY(0.0f)
-    , _2134(0)
-    , _2138(0)
-    , _213c()
+    , mGoalYoshiSpitOutTimer(0)
+    , mGoalLandTimer(0)
+    , mGoalLandPos()
     , _2148(0)
     , _214c(0)
     , mDokanDir(cDokanDir_ButtonUp)
@@ -773,7 +773,7 @@ void PlayerBase::calcTimerProc()
     MathUtil::calcTimer(&_206c);
     MathUtil::calcTimer(&_2070);
     MathUtil::calcTimer(&mNoGravityTimer);
-    MathUtil::calcTimer(&_2134);
+    MathUtil::calcTimer(&mGoalYoshiSpitOutTimer);
     MathUtil::calcTimer(&_209c);
     MathUtil::calcTimer(&_20a0);
     MathUtil::calcTimer(&_21e0);

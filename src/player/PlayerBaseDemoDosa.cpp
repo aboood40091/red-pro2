@@ -203,20 +203,20 @@ void PlayerBase::setControlDemoAnm(s32 anm_id, bool loop)
 //     return false;
 // }
 
-void PlayerBase::setControlDemoAnmMulti(AnimePlayType type)
+void PlayerBase::setControlDemoAnmSeq(AnimePlayType type)
 {
     if (!isStatus(cStatus_DemoControl))
         return;
 
-    mDemoSubAction = cDemoControlSubAction_AnmMulti;
+    mDemoSubAction = cDemoControlSubAction_AnmSeq;
     changeState(StateID_AnimePlay, type);
 }
 
-bool PlayerBase::isControlDemoAnmMulti(AnimePlayType type)
+bool PlayerBase::isControlDemoAnmSeq(AnimePlayType type)
 {
     if (isStatus(cStatus_DemoControl))
     {
-        if (mDemoSubAction == cDemoControlSubAction_AnmMulti && mAnimePlayType == type && isStatus(cStatus_AnimePlayMulti))
+        if (mDemoSubAction == cDemoControlSubAction_AnmSeq && mAnimePlayType == type && isStatus(cStatus_DemoScript))
             return true;
     }
     return false;
@@ -348,7 +348,7 @@ void PlayerBase::initializeState_AnimePlay()
 {
     mAnimePlayType = AnimePlayType(mChangeStateParam);
     if (mAnimePlayType != cAnimePlayType_Normal)
-        onStatus(cStatus_AnimePlayMulti);
+        onStatus(cStatus_DemoScript);
 }
 
 void PlayerBase::DemoAnmNormal()
@@ -369,7 +369,7 @@ void PlayerBase::DemoAnmBossSetUp()
     {
         mpModelBaseMgr->setAnm(PlayerAnmID::waitL3);
         mAction = cAnimePlayAction_End;
-        offStatus(cStatus_AnimePlayMulti);
+        offStatus(cStatus_DemoScript);
     }
 }
 
@@ -408,7 +408,7 @@ void PlayerBase::DemoAnmBossGlad()
         {
             mpModelBaseMgr->setAnm(PlayerAnmID::wait, 5.0f, 0.0f);
             mAction = cAnimePlayAction_End;
-            offStatus(cStatus_AnimePlayMulti);
+            offStatus(cStatus_DemoScript);
         }
         break;
     }
@@ -437,7 +437,7 @@ void PlayerBase::DemoAnmBossAttention()
             if (mAngle.y().chaseRest(target, step))
             {
                 mAction = cAnimePlayAction_End;
-                offStatus(cStatus_AnimePlayMulti);
+                offStatus(cStatus_DemoScript);
             }
         }
         break;
@@ -461,7 +461,7 @@ void PlayerBase::DemoAnmBossKeyGet()
             mpModelBaseMgr->setAnm(PlayerAnmID::boss_key_get, 0.0f);
             startGoalDemoVoice(cCourseClearType_Boss);
             mAction = cAnimePlayAction_End;
-            offStatus(cStatus_AnimePlayMulti);
+            offStatus(cStatus_DemoScript);
         }
         break;
     }
@@ -501,7 +501,7 @@ void PlayerBase::DemoAnmLastBoss2Glad()
         {
             mpModelBaseMgr->setAnm(PlayerAnmID::wait, 5.0f, 0.0f);
             mAction = cAnimePlayAction_End;
-            offStatus(cStatus_AnimePlayMulti);
+            offStatus(cStatus_DemoScript);
         }
         break;
     }
@@ -542,7 +542,7 @@ void PlayerBase::DemoAnmLastBoss1Glad()
         {
             mpModelBaseMgr->setAnm(PlayerAnmID::wait, 5.0f, 0.0f);
             mAction = cAnimePlayAction_End;
-            offStatus(cStatus_AnimePlayMulti);
+            offStatus(cStatus_DemoScript);
         }
         break;
     }
@@ -555,7 +555,7 @@ void PlayerBase::DemoAnmTitleSlip()
     default:
         break;
     case cAnimePlayAction_Start:
-        offStatus(cStatus_AnimePlayMulti);
+        offStatus(cStatus_DemoScript);
         mpModelBaseMgr->setAnm(PlayerAnmID::ice_slipF);
         mAction = cAnimePlayAction_TitleSlip_Move;
         // fallthrough
@@ -608,7 +608,7 @@ void PlayerBase::DemoAnmEndingGlad()
         {
             mpModelBaseMgr->setAnm(PlayerAnmID::dm_glad4_wait, 5.0f, 0.0f);
             mAction = cAnimePlayAction_End;
-            offStatus(cStatus_AnimePlayMulti);
+            offStatus(cStatus_DemoScript);
         }
         break;
     }
@@ -631,7 +631,7 @@ void PlayerBase::executeState_AnimePlay()
     maxFallSpeedSet();
     moveSpeedSet();
     powerSet();
-    if (isStatus(cStatus_AnimePlayMulti) || !checkWalkNextAction())
+    if (isStatus(cStatus_DemoScript) || !checkWalkNextAction())
     {
         switch (mAnimePlayType)
         {
@@ -677,7 +677,7 @@ void PlayerBase::executeState_AnimePlay()
 void PlayerBase::finalizeState_AnimePlay()
 {
     offStatus(cStatus_155);
-    offStatus(cStatus_AnimePlayMulti);
+    offStatus(cStatus_DemoScript);
     offStatus(cStatus_57);
     offStatus(cStatus_DemoAnmLoop);
 }
