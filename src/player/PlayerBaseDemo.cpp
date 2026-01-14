@@ -34,9 +34,9 @@ CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoInDoor)
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoNextGotoBlock)
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoDown)
 CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoControl)
-CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoState23)
-CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoState24)
-CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoState25)
+CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoSubjectClearLand)
+CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoSubjectClearAir)
+CREATE_STATE_VIRTUAL_ID_BASE(PlayerBase, DemoShadowFail)
 
 void PlayerBase::offDemo()
 {

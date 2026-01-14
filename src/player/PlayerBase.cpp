@@ -190,9 +190,9 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , _265c(0)
     , _2660(0)
     , mWaterEffect()
-    , mChallengeStateMgr(*this)
-    , _2748(0)
-    , _274c(false)
+    , mSubjectStateMgr(*this)
+    , mSubjectClearWaitTimer(0)
+    , mIsSubjectClear(false)
 {
     mOldBgCrossFoot.fill(FALSE);
     _20a4.fill(0);
@@ -214,7 +214,7 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
 
     changeState(StateID_Walk, 0);
     changeDemoState(StateID_DemoNone, 0);
-    changeChallengeState(StateID_ChallengeState1);
+    changeSubjectState(StateID_SubjectWait);
 }
 
 PlayerBase::~PlayerBase()

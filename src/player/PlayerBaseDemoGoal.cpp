@@ -305,7 +305,7 @@ void PlayerBase::executeDemoGoal_Wait()
 
 void PlayerBase::executeDemoGoal_KimePose()
 {
-    if (setGoalPutOnCapAnm(cCourseClearType_Normal))
+    if (execDemoKimePose(cCourseClearType_Normal))
         setDemoGoalMode(cDemoGoalAction_Wait, 0);
 }
 
