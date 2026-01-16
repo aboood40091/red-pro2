@@ -27,7 +27,7 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mAudioObj()
     , mAttentionLookat(mActorUniqueID)
     , mStatus()
-    , mCenterOffsetY(16.0f)
+    , mHeight(16.0f)
     , _4b8(cDirType_Right)
     , mFrameEndPosDelta(0.0f, 0.0f, 0.0f)
     , _4c8(0.0f, 0.0f, 0.0f)
@@ -986,7 +986,7 @@ void PlayerBase::calcPlayerSpeedXY()
     {
         sead::Vector3f wall_check_pos(
             mPos.x + mSpeed.x + speed_rev,
-            mPos.y + mCenterOffsetY * 0.5f,
+            mPos.y + mHeight * 0.5f,
             mPos.z
         );
         f32 hit_pos_x;
@@ -1010,7 +1010,7 @@ void PlayerBase::calcPlayerSpeedXY()
         }
         else
         {
-            if (getPowerChangeType(false) != 1)
+            if (getPowerChangeType(false) != cPowerChangeType_Ice)
             {
                 f32 add_speedF = base_add_speedF;
                 if (add_speedF * mSpeedF >= 0.0f)
@@ -1037,7 +1037,7 @@ void PlayerBase::calcPlayerSpeedXY()
     mSpeed.y += mAccelY;
 
     f32 fall_speed_max = mFallSpeedMax; // Negative
-    if (isNowBgCross(cBgCross_IsSlightlyInsideSinkSand) || isNowBgCross(cBgCross_IsPartiallySubmergedInSinkSand))
+    if (isOnSinkSand())
         fall_speed_max = 0.0f;
 
     if (mSpeed.y < fall_speed_max)

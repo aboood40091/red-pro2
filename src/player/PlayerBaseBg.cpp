@@ -516,7 +516,7 @@ bool PlayerBase::checkSinkSand()
         if (mSinkSandSurfacePosY > getCenterPos().y)
             onNowBgCross(cBgCross_IsPartiallySubmergedInSinkSand);
 
-        if (mSinkSandSurfacePosY > mPos.y + mCenterOffsetY)
+        if (mSinkSandSurfacePosY > mPos.y + mHeight)
             onNowBgCross(cBgCross_IsCompletelySubmergedInSinkSand);
 
         return true;
@@ -792,7 +792,7 @@ void PlayerBase::checkBgCross_()
 
         s32 kani_type = 0;
         const f32 check_distance = 8.0f;
-        sead::Vector3f check_pos(mPos.x, mPos.y + mCenterOffsetY + check_distance, mPos.z);
+        sead::Vector3f check_pos(mPos.x, mPos.y + mHeight + check_distance, mPos.z);
         if (mBgCheckPlayer.checkKani(&kani_type, &mKaniPosY, check_pos, check_distance))
         {
             if (kani_type != 0) // Fun fact, this is never true (ActorBgCollisionPlayerCheck::checkKani does not modify the parameter)
@@ -1112,22 +1112,22 @@ Angle PlayerBase::getSakaAngle(s32 dir)
     return angle;
 }
 
-bool PlayerBase::getSakaUpDown(s32 dir)
+PlayerBase::SakaUpDown PlayerBase::getSakaUpDown(s32 dir)
 {
-    bool ret;
+    SakaUpDown ret;
     if (dir == cDirType_Right)
     {
         if (mBgCheckPlayer.getSakaDir() != ActorBgCollisionCheck::cSakaDir_Right)
-            ret = true;
+            ret = cSakaUpDown_Uphill;
         else
-            ret = false;
+            ret = cSakaUpDown_Downhill;
     }
     else
     {
         if (mBgCheckPlayer.getSakaDir() == ActorBgCollisionCheck::cSakaDir_Right)
-            ret = true;
+            ret = cSakaUpDown_Uphill;
         else
-            ret = false;
+            ret = cSakaUpDown_Downhill;
     }
     return ret;
 }

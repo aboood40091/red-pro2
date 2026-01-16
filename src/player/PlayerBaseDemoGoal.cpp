@@ -78,7 +78,7 @@ void PlayerBase::executeDemoGoal_Pole()
                         done = true;
                     else
                     {
-                        if (mPos.y > p_below_player->mPos.y + p_below_player->mCenterOffsetY * 0.7f)
+                        if (mPos.y > p_below_player->mPos.y + p_below_player->mHeight * 0.7f)
                             done = true;
                         else
                         {

@@ -144,16 +144,16 @@ void PlayerBase::setTurnSmokeEffect(bool with_brake)
 
 void PlayerBase::setRunFootEffect()
 {
-    if (isNowBgCross(cBgCross_IsSlightlyInsideSinkSand) || isNowBgCross(cBgCross_IsPartiallySubmergedInSinkSand))
+    if (isOnSinkSand())
         return;
 
     if (!isStatus(cStatus_136))
         return;
 
-    f32 x_move_speed_dush = getSpeedData()->x_move_speed_dush;
+    f32 max_run_speed_hi = getSpeedData()->max_run_speed_hi;
 
     EffectID effect_id = cEffectID_None;
-    if (sead::Mathf::abs(mSpeedF) < x_move_speed_dush)
+    if (sead::Mathf::abs(mSpeedF) < max_run_speed_hi)
         effect_id = getRunSmokeEffectID();
     else
         effect_id = getDashSmokeEffectID();
@@ -192,7 +192,7 @@ void PlayerBase::setStartJumpEffect(bool with_smoke)
     if (!isNowBgCross(cBgCross_IsFoot))
         return;
 
-    if (isNowBgCross(cBgCross_IsSlightlyInsideSinkSand) || isNowBgCross(cBgCross_IsPartiallySubmergedInSinkSand))
+    if (isOnSinkSand())
     {
         // setSandJumpEffect();
         onStatus(cStatus_29);

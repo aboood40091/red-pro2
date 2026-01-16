@@ -163,8 +163,8 @@ void PlayerBase::setControlDemoWalk(f32 target_pos_x, f32 speed)
     _2108.x = sead::Mathf::abs(speed);
     mDemoSubAction = cDemoControlSubAction_Walk;
 
-    if (_2108.x > getSpeedData()->x_move_speed_dush)
-        _2108.x = getSpeedData()->x_move_speed_dush;
+    if (_2108.x > getSpeedData()->max_run_speed_hi)
+        _2108.x = getSpeedData()->max_run_speed_hi;
 }
 
 bool PlayerBase::isControlDemoWalk()
