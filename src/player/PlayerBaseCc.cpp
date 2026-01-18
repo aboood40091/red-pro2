@@ -457,7 +457,7 @@ void PlayerBase::setStampPlayerJump(bool allow_high_jump, f32 rev_y)
 
         if (allow_high_jump)
         {
-            Quake::instance()->shockMotor(mPlayerNo, Quake::cShockType_Stamp);
+            Quake::instance()->shockMotor(mPlayerNo, Quake::cShockType_PlayerImpact);
 
             if (mPlayerKey.buttonJump())
                 jump_speed = cJumpSpeed + 0.5f;
@@ -481,7 +481,7 @@ void PlayerBase::setStampPlayerJump(bool allow_high_jump, f32 rev_y)
 void PlayerBase::setStomped()
 {
     startVoiceSound(STOMPED);
-    Quake::instance()->shockMotor(mPlayerNo, Quake::cShockType_Stamp);
+    Quake::instance()->shockMotor(mPlayerNo, Quake::cShockType_PlayerImpact);
 
     sead::Vector3f face_pos;
     mpModelBaseMgr->getJointPos(&face_pos, "face_1");

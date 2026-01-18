@@ -40,7 +40,7 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mNextFrameSpeed(0.0f, 0.0f, 0.0f)
     , mPriority(0)
     , mTreadCnt(0)
-    , mComboCnt(0)
+    , mPlComboCnt(0)
     , mCharacter(cPlayerCharacter_Mario)
     , mMode(cPlayerMode_Small)
     , mBgCheckPlayer()
@@ -1126,9 +1126,9 @@ s8 PlayerBase::calcTreadCount(s32 max)
 
 s8 PlayerBase::calcComboCount(s32 max)
 {
-    if (mComboCnt < max)
-        mComboCnt++;
-    return mComboCnt;
+    if (mPlComboCnt < max)
+        mPlComboCnt++;
+    return mPlComboCnt;
 }
 
 const f32 PlayerBase::cDirSpeed[] = { 1.0f, -1.0f };

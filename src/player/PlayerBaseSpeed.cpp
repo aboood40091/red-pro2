@@ -213,7 +213,7 @@ void PlayerBase::moveSpeedSet()
         {
             if (getPowerChangeType(false) == cPowerChangeType_Ice)
                 mSpeedFMax = getIceSakaSlipOffSpeed();
-            if (isStatus(cStatus_259))
+            if (isStatus(cStatus_SlideSlope))
                 mSpeedFMax = getIceSakaSlipOffSpeed();
         }
     }

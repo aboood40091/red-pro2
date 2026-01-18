@@ -658,7 +658,7 @@ void PlayerBase::checkBgCross_()
         case BgUnitCode::cSlipAttr_Slip:
             onNowBgCross(cBgCross_Slip);
             break;
-        case BgUnitCode::cSlipAttr_SlideSlope:
+        case BgUnitCode::cSlipAttr_SlipFlatAngle:
             if (mSakaType == ActorBgCollisionCheck::cSakaType_None)
             {
                 mSakaType = ActorBgCollisionCheck::cSakaType_Gentle;
@@ -666,8 +666,8 @@ void PlayerBase::checkBgCross_()
             }
             onNowBgCross(cBgCross_Slip);
             break;
-        case BgUnitCode::cSlipAttr_Unk6:
-            onNowBgCross(cBgCross_SlipAttr6);
+        case BgUnitCode::cSlipAttr_SlideSlope:
+            onNowBgCross(cBgCross_IsSlideSlope);
             break;
         }
 
@@ -1072,7 +1072,7 @@ bool PlayerBase::isSlipSaka()
         if (isSaka())
         {
             BgUnitCode::SlipAttr slip_attr = BgUnitCode::getSlipAttr(mBgCheckPlayer.getBgCheckData(cDirType_Down));
-            if (slip_attr != BgUnitCode::cSlipAttr_NoSlip && slip_attr != BgUnitCode::cSlipAttr_SakaLowPow)
+            if (slip_attr != BgUnitCode::cSlipAttr_NoSuberu && slip_attr != BgUnitCode::cSlipAttr_SakaLowPow)
                 return true;
         }
     }
