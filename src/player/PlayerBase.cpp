@@ -104,8 +104,8 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mReductionMode(cReductionMode_None)
     , mReductionStep(0)
     , mReductionScale(0.0f)
-    , _209c(0)
-    , _20a0(0)
+    , mReductionSimpleMoveTimer(0)
+    , mNoStampPlayerJumpTimer(0)
     , _20a4()
     , _20ac()
     , mDemoStateMgr(*this)
@@ -774,8 +774,8 @@ void PlayerBase::calcTimerProc()
     MathUtil::calcTimer(&_2070);
     MathUtil::calcTimer(&mNoGravityTimer);
     MathUtil::calcTimer(&mGoalYoshiSpitOutTimer);
-    MathUtil::calcTimer(&_209c);
-    MathUtil::calcTimer(&_20a0);
+    MathUtil::calcTimer(&mReductionSimpleMoveTimer);
+    MathUtil::calcTimer(&mNoStampPlayerJumpTimer);
     MathUtil::calcTimer(&_21e0);
     MathUtil::calcTimer(&_21e8);
     MathUtil::calcTimer(&_21d8);
@@ -940,7 +940,7 @@ void PlayerBase::posMoveAnglePlayer(const sead::Vector3f& speed)
 
 void PlayerBase::calcPlayerSpeedXY()
 {
-    if (_209c != 0)
+    if (mReductionSimpleMoveTimer != 0)
     {
         if (isNowBgCross(cBgCross_IsFoot))
         {

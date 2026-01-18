@@ -406,7 +406,7 @@ bool PlayerBase::isEnableStampPlayerJump(ActorCollisionCheck* cc_self, ActorColl
     if (p_player_other->isLiftUp())
         return false;
 
-    if (p_player_other->_20a0 != 0)
+    if (p_player_other->mNoStampPlayerJumpTimer != 0)
         return false;
 
     if (p_player_other->isStatus(cStatus_82))
@@ -470,7 +470,7 @@ void PlayerBase::setStampPlayerJump(bool allow_high_jump, f32 rev_y)
         }
 
         mPos.y += rev_y;
-        setJumpAirDrift();
+        setHopAirDrift();
     }
     else
     {
@@ -494,10 +494,10 @@ void PlayerBase::initStampReduction()
 {
     onStatus(cStatus_118);
 
-    _20a0 = 10;
+    mNoStampPlayerJumpTimer = 10;
 
     if (!isStatus(cStatus_25) || mReductionStep == 0)
-        _209c = 4;
+        mReductionSimpleMoveTimer = 4;
 
     setStomped();
 }

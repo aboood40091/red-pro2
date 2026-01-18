@@ -257,10 +257,10 @@ void PlayerBase::simpleMoveSpeedSet()
     }
 }
 
-void PlayerBase::icePowerChange(bool b)
+void PlayerBase::icePowerChange(bool slip)
 {
     PowerChangeType power_change_type = getPowerChangeType(false);
-    if (power_change_type == cPowerChangeType_Ice || (power_change_type == cPowerChangeType_Snow && b))
+    if (power_change_type == cPowerChangeType_Ice || (power_change_type == cPowerChangeType_Snow && slip))
     {
         if (mSpeedFMax != 0.0f)
         {
@@ -268,7 +268,7 @@ void PlayerBase::icePowerChange(bool b)
                 mAccelF *= 0.375f;
             else
             {
-                if (!b)
+                if (!slip)
                 {
                     if (isSaka())
                         mAccelF *= 0.375f;
@@ -280,7 +280,7 @@ void PlayerBase::icePowerChange(bool b)
         else
         {
             if (!isSaka() && sead::Mathf::abs(mSpeedF) < 0.5f)
-                mAccelF = 0.004;
+                mAccelF = 0.004f;
             else
                 mAccelF *= 0.375f;
         }
@@ -314,7 +314,7 @@ void PlayerBase::slipPowerSet()
     icePowerChange(true);
 }
 
-void PlayerBase::getPowerSpeedData(PlayerPowerSpeedData& out_data)
+void PlayerBase::getPowerData(PlayerPowerData& out_data)
 {
     switch (getPowerChangeType(false))
     {
@@ -336,8 +336,8 @@ void PlayerBase::normalPowerSet()
         mAccelF = 0.75f;
     else
     {
-        PlayerPowerSpeedData power_speed_data;
-        getPowerSpeedData(power_speed_data);
+        PlayerPowerData power_data;
+        getPowerData(power_data);
 
         s32 walk_dir;
         if (!mPlayerKey.buttonWalk(&walk_dir))
@@ -351,14 +351,14 @@ void PlayerBase::normalPowerSet()
             }
             else if (mSpeedF * cDirSpeed[mDirection] < 0.0f)
             {
-                mAccelF = power_speed_data.stop_turn_decel;
+                mAccelF = power_data.stop_turn_decel;
             }
             else
             {
                 if (sead::Mathf::abs(mSpeedF) < getSpeedData()->max_run_speed_lo)
-                    mAccelF = power_speed_data.stop_x_accel;
+                    mAccelF = power_data.stop_x_accel;
                 else
-                    mAccelF = power_speed_data.x_accel_def;
+                    mAccelF = power_data.x_accel_def;
             }
             if (isStatus(cStatus_148))
                 mAccelF *= cTurnPowerUpRate;
@@ -369,7 +369,7 @@ void PlayerBase::normalPowerSet()
         {
             if (mSpeedF * cDirSpeed[mDirection] < 0.0f)
             {
-                mAccelF = power_speed_data.turn_decel;
+                mAccelF = power_data.turn_decel;
                 if (isStatus(cStatus_148))
                     mAccelF *= cTurnPowerUpRate;
             }
@@ -386,27 +386,27 @@ void PlayerBase::normalPowerSet()
                 f32 base_speed = sead::Mathf::abs(mSpeedF);
                 f32 base_max_speed = sead::Mathf::abs(mSpeedFMax);
                 if (base_speed < 0.5f) // Stage 0
-                    mAccelF = power_speed_data.x_accel_stage0;
+                    mAccelF = power_data.x_accel_stage0;
                 else if (base_speed < getSpeedData()->max_run_speed_lo) // Stage 1
                 {
                     if (mPlayerKey.buttonDush())
-                        mAccelF = power_speed_data.x_accel_stage1_dush;
+                        mAccelF = power_data.x_accel_stage1_dush;
                     else
-                        mAccelF = power_speed_data.x_accel_stage1;
+                        mAccelF = power_data.x_accel_stage1;
                 }
                 else if (base_speed < getSpeedData()->max_run_speed_md) // Stage 2
                 {
                     if (base_max_speed < getSpeedData()->max_run_speed_md)
-                        mAccelF = power_speed_data.x_accel_def;
+                        mAccelF = power_data.x_accel_def;
                     else
-                        mAccelF = power_speed_data.x_accel_stage2;
+                        mAccelF = power_data.x_accel_stage2;
                 }
                 else // Stage 3
                 {
                     if (base_max_speed < getSpeedData()->max_run_speed_md)
-                        mAccelF = power_speed_data.x_accel_def;
+                        mAccelF = power_data.x_accel_def;
                     else
-                        mAccelF = power_speed_data.x_accel_stage3;
+                        mAccelF = power_data.x_accel_stage3;
                 }
             }
         }
@@ -499,7 +499,7 @@ void PlayerBase::getPowerTurnData(PlayerPowerTurnData& out_data)
     }
 }
 
-void PlayerBase::setJumpAirDrift()
+void PlayerBase::setHopAirDrift()
 {
     const BgScrollMgr& bg_scroll_mgr = *BgScrollMgr::instance();
     const f32 center_prev = (bg_scroll_mgr.getScreenRectPrev().getMin().x + bg_scroll_mgr.getScreenRectPrev().getMax().x) * 0.5f;
