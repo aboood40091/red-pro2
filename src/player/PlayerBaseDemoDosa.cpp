@@ -53,7 +53,7 @@ void PlayerBase::executeState_DemoControl()
             else
             {
                 if (*mStateMgr.getStateID() != StateID_Fall)
-                    changeState(StateID_Fall, 1);
+                    changeState(StateID_Fall, cAnmBlend_Enable);
             }
             if (sead::Mathf::abs(mPos.x - _2100.x) < _2108.x)
             {

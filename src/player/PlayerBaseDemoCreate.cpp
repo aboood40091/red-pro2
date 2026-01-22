@@ -176,7 +176,7 @@ void PlayerBase::initialDokan(NextGotoType next_goto_type)
 
 void PlayerBase::initialFall(NextGotoType)
 {
-    changeState(StateID_Fall, 1);
+    changeState(StateID_Fall, cAnmBlend_Enable);
     changeDemoState(StateID_DemoWait, 2);
 }
 

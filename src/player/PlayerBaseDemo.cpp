@@ -445,11 +445,11 @@ bool PlayerBase::setNextGotoBlockDemo(s32 dst_next_goto_no, s32 wait_timer, Next
     {
         offStatus(cStatus_DemoMode);
         if (!isStatus(cStatus_99))
-            changeState(StateID_Fall, 1);
+            changeState(StateID_Fall, cAnmBlend_Enable);
     }
 
     if (isStatus(cStatus_107))
-        changeState(StateID_Fall, 1);
+        changeState(StateID_Fall, cAnmBlend_Enable);
 
     return true;
 }

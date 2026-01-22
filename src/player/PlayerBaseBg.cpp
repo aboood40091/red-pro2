@@ -91,7 +91,7 @@ bool PlayerBase::checkLedge_()
     mSpeed.y = 1.0f;
     offNowBgCross(cBgCross_IsFoot);
     mSpeedSakaAngle = 0;
-    changeState(StateID_Fall, 1);
+    changeState(StateID_Fall, cAnmBlend_Enable);
     return true;
 }
 
