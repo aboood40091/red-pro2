@@ -502,12 +502,12 @@ void PlayerBase::initStampReduction()
     setStomped();
 }
 
-void PlayerBase::calcJumpDaiReductionScale(s32 v0, s32 v1)
+void PlayerBase::calcJumpDaiReductionScale(s32 t, s32 max_t)
 {
-    if (v0 > v1)
-        v0 = v1;
+    if (t > max_t)
+        t = max_t;
 
-    mReductionScale = 0.6f * (f32)v0 / (f32)v1;
+    mReductionScale = 0.6f * (f32)t / (f32)max_t;
     mReductionMode = cReductionMode_JumpDai;
 }
 

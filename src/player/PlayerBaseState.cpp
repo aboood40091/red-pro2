@@ -255,7 +255,7 @@ void PlayerBase::changeStateImpl(const StateID& state_id, s32 param, const JumpI
     clearComboCount();
     mAction = 0;
     mActionTimer = 0;
-    mStunMode = 0;
+    mActionSubTimer = 0;
     _4e8 = false;
     offStatus(cStatus_196);
     offStatus(cStatus_197);
