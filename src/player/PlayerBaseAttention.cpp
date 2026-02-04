@@ -114,13 +114,13 @@ bool PlayerBase::calcHeadAttentionAngle_(const sead::Vector2f& target_pos, sead:
             mpModelBaseMgr->getFaceAngleOverride().y(),
             mpModelBaseMgr->getFaceAngleOverride().z()
         );
-        head_angle.y().addCalcAngle(target_y, 0.2f, cMaxStep_2, cMinStep);
+        head_angle.y().addCalcAngle(target_y, 1.0f / 5, cMaxStep_2, cMinStep);
         if (flag.isOnBit(1))
-            head_angle.z().addCalcAngle(target_z, 0.2f, cMaxStep_3, cMinStep);
+            head_angle.z().addCalcAngle(target_z, 1.0f / 5, cMaxStep_3, cMinStep);
         else if (flag.isOnBit(2))
-            head_angle.z().addCalcAngle(target_z, 0.5f, cMaxStep_1, cMinStep);
+            head_angle.z().addCalcAngle(target_z, 1.0f / 2, cMaxStep_1, cMinStep);
         else
-            head_angle.z().addCalcAngle(target_z, 0.2f, cMaxStep_2, cMinStep);
+            head_angle.z().addCalcAngle(target_z, 1.0f / 5, cMaxStep_2, cMinStep);
         mpModelBaseMgr->setFaceAngleOverride(head_angle);
     }
     return ret;
@@ -186,8 +186,8 @@ void PlayerBase::calcHeadAttentionAngle()
             mpModelBaseMgr->getFaceAngleOverride().y(),
             mpModelBaseMgr->getFaceAngleOverride().z()
         );
-        head_angle.y().addCalcAngle(0, 0.2f, cMaxStep_2, cMinStep);
-        head_angle.z().addCalcAngle(0, 0.2f, cMaxStep_2, cMinStep);
+        head_angle.y().addCalcAngle(0, 1.0f / 5, cMaxStep_2, cMinStep);
+        head_angle.z().addCalcAngle(0, 1.0f / 5, cMaxStep_2, cMinStep);
         mpModelBaseMgr->setFaceAngleOverride(head_angle);
 
         if (head_angle.z() == 0 && head_angle.y() == 0)

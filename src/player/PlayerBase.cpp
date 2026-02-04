@@ -212,7 +212,7 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
 
     mBgCheckPlayer.set(this, nullptr, nullptr, nullptr);
 
-    changeState(StateID_Walk, 0);
+    changeState(StateID_Walk, cAnmBlend_Disable);
     changeDemoState(StateID_DemoNone, 0);
     changeSubjectState(StateID_SubjectWait);
 }
@@ -953,7 +953,7 @@ void PlayerBase::calcPlayerSpeedXY()
     f32 speed_rev = 0.0f;
     bool cc_rev = calcCcPlayerRev(&speed_rev);
 
-    f32 target_speedF = mSpeedFMax;
+    f32 target_speedF = mMaxSpeedF;
     f32 scale_accelF = 1.0f;
 
     if (isStatus(cStatus_FollowMameKuribo))
@@ -1036,12 +1036,12 @@ void PlayerBase::calcPlayerSpeedXY()
     _4c8 = mSpeed;
     mSpeed.y += mAccelY;
 
-    f32 fall_speed_max = mFallSpeedMax; // Negative
+    f32 max_fall_speed = mMaxFallSpeed; // Negative
     if (isOnSinkSand())
-        fall_speed_max = 0.0f;
+        max_fall_speed = 0.0f;
 
-    if (mSpeed.y < fall_speed_max)
-        mSpeed.y = fall_speed_max;
+    if (mSpeed.y < max_fall_speed)
+        mSpeed.y = max_fall_speed;
 
     sead::Vector3f speed(
         mSpeed.x + speed_x,

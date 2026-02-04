@@ -122,7 +122,7 @@ void PlayerBase::setCreateAction_(NextGotoType next_goto_type)
 
 void PlayerBase::executeDemoCreate()
 {
-    changeState(StateID_Walk, 0);
+    changeState(StateID_Walk, cAnmBlend_Disable);
     mIsLastPlayer = false;
     s32 demo_index = PlayerDemoMgr::instance()->searchDemoNo(mPlayerNo);
     s32 demo_num = PlayerDemoMgr::instance()->getNumDemoNo();
@@ -133,7 +133,7 @@ void PlayerBase::executeDemoCreate()
 
 void PlayerBase::initialNormal(NextGotoType)
 {
-    changeState(StateID_Walk, 0);
+    changeState(StateID_Walk, cAnmBlend_Disable);
     changeDemoState(StateID_DemoStartWait, 0);
 }
 

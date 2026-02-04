@@ -36,7 +36,7 @@ void PlayerBase::initializeState_DemoGoal()
     mSpeedF = 0.0f;
     mSpeed.y = 0.0f;
     mAccelY = 0.0f;
-    mFallSpeedMax = -4.0f;
+    mMaxFallSpeed = -4.0f;
 }
 
 void PlayerBase::executeDemoGoal_Pole()
@@ -529,6 +529,6 @@ bool PlayerBase::vf51C_Base(u32)
         speed = 1.5f;
     mSpeedF = speed;
     mAccelF = 0.0f;
-    mSpeedFMax = 0.0f;
+    mMaxSpeedF = 0.0f;
     return startControlDemo(false);
 }

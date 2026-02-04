@@ -422,7 +422,7 @@ void PlayerBase::changeNormalAction()
 {
     bgCheck(false);
     offZPosSetNone();
-    changeState(StateID_Walk, 1);
+    changeState(StateID_Walk, cAnmBlend_Enable);
     changeDemoState(StateID_DemoNone, 0);
 }
 

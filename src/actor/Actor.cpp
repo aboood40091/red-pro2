@@ -292,8 +292,8 @@ Actor::Actor(const ActorCreateParam& param)
     , mLayer(param.param_ex_0.course.layer)
     , mCollisionMask(cCcLineKind_0)
     , mSpeedF(0.0f)
-    , mSpeedFMax(0.0f)
-    , mFallSpeedMax(0.0f)
+    , mMaxSpeedF(0.0f)
+    , mMaxFallSpeed(0.0f)
     , mAccelY(0.0f)
     , mAccelF(0.0f)
     , mPos(param.position)
@@ -494,19 +494,19 @@ void Actor::calcSpeedY_(f32 accel_y, f32 speed_max_y)
         mSpeed.y = speed_max_y;
 }
 
-void Actor::calcFallSpeed_(f32 accel_y, f32 fall_speed_max)
+void Actor::calcFallSpeed_(f32 accel_y, f32 max_fall_speed)
 {
-    if (mSpeed.y < fall_speed_max)
+    if (mSpeed.y < max_fall_speed)
     {
         mSpeed.y -= accel_y;
-        if (mSpeed.y > fall_speed_max)
-            mSpeed.y = fall_speed_max;
+        if (mSpeed.y > max_fall_speed)
+            mSpeed.y = max_fall_speed;
     }
-    else if (mSpeed.y > fall_speed_max)
+    else if (mSpeed.y > max_fall_speed)
     {
         mSpeed.y += accel_y;
-        if (mSpeed.y < fall_speed_max)
-            mSpeed.y = fall_speed_max;
+        if (mSpeed.y < max_fall_speed)
+            mSpeed.y = max_fall_speed;
     }
 }
 

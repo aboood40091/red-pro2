@@ -14,7 +14,7 @@ void PlayerBase::initializeState_HipAttack()
 {
     mAngle.y() = getMukiAngle();
     mSpeedF = 0.0f;
-    mSpeedFMax = 0.0f;
+    mMaxSpeedF = 0.0f;
     mAccelY = 0.0f;
     setHipAttack_Ready_();
     onStatus(cStatus_196);
@@ -63,7 +63,7 @@ void PlayerBase::executeState_HipAttack()
 
 void PlayerBase::finalizeState_HipAttack()
 {
-    mFallSpeedMax = cMaxFallSpeed;
+    mMaxFallSpeed = cMaxFallSpeed;
     offStatus(cStatus_48);
     offStatus(cStatus_49);
     offStatus(cStatus_50);
@@ -94,9 +94,9 @@ void PlayerBase::setHipAttack_AttackFall()
 {
     mAction = cHipAction_AttackFall;
     mAccelF = 0.1f;
-    mSpeedFMax = 0.0f;
+    mMaxSpeedF = 0.0f;
     mAccelY = getGravityData()->gravity;
-    mFallSpeedMax = -6.0f;
+    mMaxFallSpeed = -6.0f;
     mSpeed.y = -6.0f;
     onStatus(cStatus_48);
     mActionTimer = 5;
@@ -112,7 +112,7 @@ void PlayerBase::setHipAttack_StandNormal()
     onStatus(cStatus_160);
     onStatus(cStatus_165);
     mAccelY = getGravityData()->gravity;
-    mFallSpeedMax = -6.0f;
+    mMaxFallSpeed = -6.0f;
     mSpeed.y = 0.0f;
 }
 
@@ -196,15 +196,15 @@ void PlayerBase::HipAction_AttackFall()
     if (!isNowBgCross(cBgCross_IsFoot))
     {
         if (isNowBgCross(cBgCross_IsUnderwater))
-            mFallSpeedMax = -3.0f;
+            mMaxFallSpeed = -3.0f;
         else
-            mFallSpeedMax = -6.0f;
+            mMaxFallSpeed = -6.0f;
 
         mAccelY = getGravityData()->gravity;
 
         s32 walk_dir;
         if (mPlayerKey.buttonWalk(&walk_dir))
-            mSpeedFMax = cDirSpeed[walk_dir] * 0.3f;
+            mMaxSpeedF = cDirSpeed[walk_dir] * 0.3f;
 
         if (mPlayerKey.buttonDown() && mSpeed.y < 0.0f)
             setHipBlockBreak();
@@ -251,7 +251,7 @@ void PlayerBase::HipAction_AttackFall()
         }
         else
         {
-            mSpeedFMax = 0.0f;
+            mMaxSpeedF = 0.0f;
             mSpeedF = 0.0f;
             mSpeed.y = 0.0f;
             mAccelY = 0.0f;
@@ -328,7 +328,7 @@ void PlayerBase::HipAction_StandNormalEnd()
         else
         {
             if (mpModelBaseMgr->isAnmStop())
-                changeState(StateID_Walk, 1);
+                changeState(StateID_Walk, cAnmBlend_Enable);
             else
                 turnAngle();
         }

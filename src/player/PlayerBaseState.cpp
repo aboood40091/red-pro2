@@ -160,7 +160,7 @@ void PlayerBase::executeState_Funsui()
     if (mPlayerKey.buttonWalk(&walk_dir))
         target_speed = base_speed * cDirSpeed[walk_dir];
 
-    mSpeedFMax = target_speed;
+    mMaxSpeedF = target_speed;
 
     if (sead::Mathf::abs(mSpeedF) > base_speed)
         mAccelF = 0.1f;
@@ -185,7 +185,7 @@ void PlayerBase::initializeState_Cloud()
     mAccelY = 0.0f;
     mSpeed.y = 0.1f;
     mSpeedF = 0.0f;
-    mSpeedFMax = 0.0f;
+    mMaxSpeedF = 0.0f;
     mpModelBaseMgr->setAnm(PlayerAnmID::jumped);
 }
 
@@ -213,7 +213,7 @@ void PlayerBase::initializeState_Cloud2()
     mAccelY = 0.0f;
     mSpeed.y = 0.0f;
     mSpeedF = 0.0f;
-    mSpeedFMax = 0.0f;
+    mMaxSpeedF = 0.0f;
     mpModelBaseMgr->setAnm(PlayerAnmID::jumped);
 }
 
@@ -392,7 +392,7 @@ bool PlayerBase::checkTurn()
 void PlayerBase::setTurnEnd()
 {
     mAngle.y() = getMukiAngle();
-    changeState(StateID_Walk, 0);
+    changeState(StateID_Walk, cAnmBlend_Disable);
 }
 
 void PlayerBase::setCrouchActionAnm()
@@ -462,7 +462,7 @@ bool PlayerBase::setCancelCrouch()
     else
         mpModelBaseMgr->setRate(-0.1f);
 
-    changeState(StateID_Walk, 1);
+    changeState(StateID_Walk, cAnmBlend_Enable);
     return true;
 }
 

@@ -5,7 +5,7 @@
 ActorBgCollisionCheck::SakaType PlayerBase::getSakaType(s32 dir)
 {
     s32 saka_type = mSakaType;
-    if (isSaka() && BgUnitCode::getSlipAttr(mBgCheckPlayer.getBgCheckData(cDirType_Down)) == BgUnitCode::cSlipAttr_SakaLowPow)
+    if (isNowBgCross(cBgCross_IsSaka) && BgUnitCode::getSlipAttr(mBgCheckPlayer.getBgCheckData(cDirType_Down)) == BgUnitCode::cSlipAttr_SakaLowPow)
     {
         if (getSakaUpDown(dir) == cSakaUpDown_Downhill)
         {
@@ -54,7 +54,7 @@ static const f32 cSakaSlipOffSpeed[ActorBgCollisionCheck::cSakaType_Num] = {
 
 f32 PlayerBase::getSakaMaxSpeedRatio(s32 dir)
 {
-    if (isSaka())
+    if (isNowBgCross(cBgCross_IsSaka))
         return cSakaMaxSpeedRatio[getSakaType(dir)][getSakaUpDown(dir)];
     else
         return 1.0000f;
@@ -62,7 +62,7 @@ f32 PlayerBase::getSakaMaxSpeedRatio(s32 dir)
 
 f32 PlayerBase::getSakaStopAccele(s32 dir)
 {
-    if (isSaka())
+    if (isNowBgCross(cBgCross_IsSaka))
         return cSakaStopAccele[getSakaType(dir)][getSakaUpDown(dir)];
     else
         return 0.0350f;
@@ -70,7 +70,7 @@ f32 PlayerBase::getSakaStopAccele(s32 dir)
 
 float PlayerBase::getSakaMoveAccele(s32 dir)
 {
-    if (isSaka())
+    if (isNowBgCross(cBgCross_IsSaka))
         return cSakaMoveAccele[getSakaType(dir)][getSakaUpDown(dir)];
     else
         return 0.0300f;
@@ -83,7 +83,7 @@ float PlayerBase::getIceSakaSlipOffSpeed()
 
 void PlayerBase::maxFallSpeedSet()
 {
-    mFallSpeedMax = cMaxFallSpeed;
+    mMaxFallSpeed = cMaxFallSpeed;
 }
 
 void PlayerBase::setUnkJumpGravity()
@@ -137,18 +137,18 @@ bool PlayerBase::setSandMoveSpeed()
         if (mPlayerKey.buttonWalk(&walk_dir))
         {
             if (isStatus(cStatus_69))
-                mSpeedFMax = cDirSpeed[walk_dir];
+                mMaxSpeedF = cDirSpeed[walk_dir];
             else
-                mSpeedFMax = 0.5f * cDirSpeed[walk_dir];
+                mMaxSpeedF = 0.5f * cDirSpeed[walk_dir];
         }
         else
         {
-            mSpeedFMax = 0.0f;
+            mMaxSpeedF = 0.0f;
         }
-        if (mSpeedF * mSpeedFMax < 0.0f)
+        if (mSpeedF * mMaxSpeedF < 0.0f)
             mSpeedF = 0.0f;
-        else if (sead::Mathf::abs(mSpeedF) > sead::Mathf::abs(mSpeedFMax))
-            mSpeedF = mSpeedFMax;
+        else if (sead::Mathf::abs(mSpeedF) > sead::Mathf::abs(mMaxSpeedF))
+            mSpeedF = mMaxSpeedF;
         return true;
     }
     return false;
@@ -180,7 +180,7 @@ void PlayerBase::moveSpeedSet()
     {
         if (_4e8)
         {
-            mSpeedFMax = cDirSpeed[walk_dir];
+            mMaxSpeedF = cDirSpeed[walk_dir];
             return;
         }
         f32 max_run_speed_lo = getSpeedData()->max_run_speed_lo * cDirSpeed[walk_dir];
@@ -190,31 +190,31 @@ void PlayerBase::moveSpeedSet()
             f32 base_speed = sead::Mathf::abs(mSpeedF);
             f32 speed = base_speed * cDirSpeed[walk_dir];
             if (base_speed >= sead::Mathf::abs(max_run_speed_hi) || mPlayerKey.buttonDush())
-                mSpeedFMax = max_run_speed_hi;
+                mMaxSpeedF = max_run_speed_hi;
             else if (base_speed > sead::Mathf::abs(max_run_speed_lo))
-                mSpeedFMax = speed;
+                mMaxSpeedF = speed;
             else
-                mSpeedFMax = max_run_speed_lo;
+                mMaxSpeedF = max_run_speed_lo;
         }
         else
         {
             if (mPlayerKey.buttonDush())
-                mSpeedFMax = max_run_speed_hi * getSakaMaxSpeedRatio(walk_dir);
+                mMaxSpeedF = max_run_speed_hi * getSakaMaxSpeedRatio(walk_dir);
             else
-                mSpeedFMax = max_run_speed_lo * getSakaMaxSpeedRatio(walk_dir);
+                mMaxSpeedF = max_run_speed_lo * getSakaMaxSpeedRatio(walk_dir);
         }
     }
     else
     {
-        mSpeedFMax = 0.0f;
+        mMaxSpeedF = 0.0f;
         if (checkSakaReverse())
             mSpeedF = 0.0f;
         else if (!isStatus(cStatus_DemoControl))
         {
             if (getPowerChangeType(false) == cPowerChangeType_Ice)
-                mSpeedFMax = getIceSakaSlipOffSpeed();
+                mMaxSpeedF = getIceSakaSlipOffSpeed();
             if (isStatus(cStatus_SlideSlope))
-                mSpeedFMax = getIceSakaSlipOffSpeed();
+                mMaxSpeedF = getIceSakaSlipOffSpeed();
         }
     }
 
@@ -243,17 +243,17 @@ void PlayerBase::simpleMoveSpeedSet()
     {
         if (_4e8)
         {
-            mSpeedFMax = cDirSpeed[walk_dir];
+            mMaxSpeedF = cDirSpeed[walk_dir];
             return;
         }
         if (mPlayerKey.buttonDush())
-            mSpeedFMax = getSpeedData()->max_run_speed_hi * cDirSpeed[walk_dir];
+            mMaxSpeedF = getSpeedData()->max_run_speed_hi * cDirSpeed[walk_dir];
         else
-            mSpeedFMax = getSpeedData()->max_run_speed_lo * cDirSpeed[walk_dir];
+            mMaxSpeedF = getSpeedData()->max_run_speed_lo * cDirSpeed[walk_dir];
     }
     else
     {
-        mSpeedFMax = 0.0f;
+        mMaxSpeedF = 0.0f;
     }
 }
 
@@ -262,15 +262,15 @@ void PlayerBase::icePowerChange(bool slip)
     PowerChangeType power_change_type = getPowerChangeType(false);
     if (power_change_type == cPowerChangeType_Ice || (power_change_type == cPowerChangeType_Snow && slip))
     {
-        if (mSpeedFMax != 0.0f)
+        if (mMaxSpeedF != 0.0f)
         {
-            if (mSpeedF * mSpeedFMax < 0.0f)
+            if (mSpeedF * mMaxSpeedF < 0.0f)
                 mAccelF *= 0.375f;
             else
             {
                 if (!slip)
                 {
-                    if (isSaka())
+                    if (isNowBgCross(cBgCross_IsSaka))
                         mAccelF *= 0.375f;
                     else if (sead::Mathf::abs(mSpeedF) < 0.5f)
                         mAccelF *= 0.25f;
@@ -279,7 +279,7 @@ void PlayerBase::icePowerChange(bool slip)
         }
         else
         {
-            if (!isSaka() && sead::Mathf::abs(mSpeedF) < 0.5f)
+            if (!isNowBgCross(cBgCross_IsSaka) && sead::Mathf::abs(mSpeedF) < 0.5f)
                 mAccelF = 0.004f;
             else
                 mAccelF *= 0.375f;
@@ -294,7 +294,7 @@ static const f32 cSakaMoveAcceleRatio[PlayerBase::cSakaUpDown_Num] = {
 
 void PlayerBase::slipPowerSet()
 {
-    if (isSaka())
+    if (isNowBgCross(cBgCross_IsSaka))
     {
         s32 dir = cDirType_Right;
         if (mSpeedF < 0.0f)
@@ -342,7 +342,7 @@ void PlayerBase::normalPowerSet()
         s32 walk_dir;
         if (!mPlayerKey.buttonWalk(&walk_dir))
         {
-            if (isSaka())
+            if (isNowBgCross(cBgCross_IsSaka))
             {
                 s32 dir = cDirType_Right;
                 if (mSpeedF < 0.0f)
@@ -373,7 +373,7 @@ void PlayerBase::normalPowerSet()
                 if (isStatus(cStatus_148))
                     mAccelF *= cTurnPowerUpRate;
             }
-            else if (isSaka())
+            else if (isNowBgCross(cBgCross_IsSaka))
             {
                 s32 dir = cDirType_Right;
                 if (mSpeedF < 0.0f)
@@ -384,7 +384,7 @@ void PlayerBase::normalPowerSet()
             else
             {
                 f32 base_speed = sead::Mathf::abs(mSpeedF);
-                f32 base_max_speed = sead::Mathf::abs(mSpeedFMax);
+                f32 base_max_speed = sead::Mathf::abs(mMaxSpeedF);
                 if (base_speed < 0.5f) // Stage 0
                     mAccelF = power_data.x_accel_stage0;
                 else if (base_speed < getSpeedData()->max_run_speed_lo) // Stage 1

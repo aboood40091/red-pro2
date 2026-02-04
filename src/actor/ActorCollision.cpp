@@ -19,7 +19,7 @@ ActorCollision::ActorCollision(const ActorCreateParam& param)
     , mBgSpeed(0.0f, 0.0f)
     , mBgSpeedPrev(0.0f, 0.0f)
     , mWaterSpeedMaxY(1.5f)
-    , mWaterFallSpeedMax(-1.5f)
+    , mWaterMaxFallSpeed(-1.5f)
     , mWaterGravity(-0.0625f)
     , mCheckWaterNeeded(false)
     , mIsInQuicksand(false)
@@ -35,8 +35,8 @@ ActorCollision::ActorCollision(const ActorCreateParam& param)
 
 void ActorCollision::clampWaterSpeedY_()
 {
-    if (mSpeed.y < mWaterFallSpeedMax)
-        mSpeed.y = mWaterFallSpeedMax;
+    if (mSpeed.y < mWaterMaxFallSpeed)
+        mSpeed.y = mWaterMaxFallSpeed;
 
     else if (mSpeed.y > mWaterSpeedMaxY)
         mSpeed.y = mWaterSpeedMaxY;
@@ -344,8 +344,8 @@ void ActorCollision::calcSpeedY_()
 
     if (mIsSubmerged)
     {
-        if (speed_max_y < mWaterFallSpeedMax)
-            speed_max_y = mWaterFallSpeedMax;
+        if (speed_max_y < mWaterMaxFallSpeed)
+            speed_max_y = mWaterMaxFallSpeed;
         else if (speed_max_y > mWaterSpeedMaxY)
             speed_max_y = mWaterSpeedMaxY;
         Actor::calcSpeedY_(mWaterGravity, speed_max_y);
@@ -358,19 +358,19 @@ void ActorCollision::calcSpeedY_()
 
 void ActorCollision::calcFallSpeed_()
 {
-    f32 fall_speed_max = mFallSpeedMax;
+    f32 max_fall_speed = mMaxFallSpeed;
 
     if (mIsSubmerged)
     {
-        if (fall_speed_max < mWaterFallSpeedMax)
-            fall_speed_max = mWaterFallSpeedMax;
-        else if (fall_speed_max > mWaterSpeedMaxY)
-            fall_speed_max = mWaterSpeedMaxY;
-        Actor::calcFallSpeed_(mWaterGravity, fall_speed_max);
+        if (max_fall_speed < mWaterMaxFallSpeed)
+            max_fall_speed = mWaterMaxFallSpeed;
+        else if (max_fall_speed > mWaterSpeedMaxY)
+            max_fall_speed = mWaterSpeedMaxY;
+        Actor::calcFallSpeed_(mWaterGravity, max_fall_speed);
     }
     else
     {
-        Actor::calcFallSpeed_(mAccelY, fall_speed_max);
+        Actor::calcFallSpeed_(mAccelY, max_fall_speed);
     }
 }
 

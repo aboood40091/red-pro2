@@ -47,7 +47,7 @@ void PlayerBase::executeState_DemoControl()
                 if (*mStateMgr.getStateID() != StateID_Walk)
                 {
                     if (*mStateMgr.getStateID() != StateID_Turn)
-                        changeState(StateID_Walk, 1);
+                        changeState(StateID_Walk, cAnmBlend_Enable);
                 }
             }
             else
@@ -110,7 +110,7 @@ void PlayerBase::setControlDemoPos(const sead::Vector3f& pos)
     {
         onNowBgCross(cBgCross_IsFoot);
         if (*mStateMgr.getStateID() != StateID_Walk)
-            changeState(StateID_Walk, 0);
+            changeState(StateID_Walk, cAnmBlend_Disable);
     }
 }
 
@@ -125,7 +125,7 @@ void PlayerBase::setControlDemoDir(s32 dir)
     {
         onNowBgCross(cBgCross_IsFoot);
         if (*mStateMgr.getStateID() != StateID_Walk)
-            changeState(StateID_Walk, 1);
+            changeState(StateID_Walk, cAnmBlend_Enable);
     }
 }
 
@@ -140,7 +140,7 @@ void PlayerBase::setControlDemoWait()
         mPlayerKey.offDemoTrigger(PlayerKey::cKey_Left);
         mDemoSubAction = cDemoControlSubAction_Wait;
         onNowBgCross(cBgCross_IsFoot);
-        changeState(StateID_Walk, 1);
+        changeState(StateID_Walk, cAnmBlend_Enable);
     }
 }
 
@@ -340,7 +340,7 @@ void PlayerBase::checkDemoControl()
     if (isStatus(cStatus_237) && isStatus(cStatus_73))
     {
         mSpeedF = 0.0f;
-        changeState(StateID_Walk, 0);
+        changeState(StateID_Walk, cAnmBlend_Disable);
     }
 }
 

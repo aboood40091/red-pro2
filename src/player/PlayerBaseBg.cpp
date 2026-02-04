@@ -181,7 +181,7 @@ void PlayerBase::postBgCrossImpl_()
             mBgSpeed.set(0.0f, mSandSinkRate);
         }
 
-        if (isSaka() || isStatus(cStatus_73))
+        if (isNowBgCross(cBgCross_IsSaka) || isStatus(cStatus_73))
             mSpeed.y = 0.0f;
 
         if (isStatus(cStatus_DemoOnLandStop))
@@ -212,7 +212,7 @@ void PlayerBase::postBgCrossImpl_()
     )
     {
         mSpeedF = 0.0f;
-        mSpeedFMax = 0.0f;
+        mMaxSpeedF = 0.0f;
         mAddSpeedF = 0.0f;
         mAirDriftSpeedF = 0.0f;
     }
@@ -603,7 +603,7 @@ void PlayerBase::checkBgCross_()
 
     if (output.checkFoot())
     {
-        mSpeedSakaAngle = getSakaAngleBySpeed(mSpeedF);
+        mSpeedSakaAngle = getSakaAngleBySpeed();
         mBaseSakaAngle = mBgCheckPlayer.getSakaBaseAngle();
         mSakaType = mBgCheckPlayer.getSakaType(mBgCheckPlayer.getSakaBaseAngle());
 
@@ -1069,7 +1069,7 @@ bool PlayerBase::isSlipSaka()
 {
     if (!isStatus(cStatus_NoSlipSaka))
     {
-        if (isSaka())
+        if (isNowBgCross(cBgCross_IsSaka))
         {
             BgUnitCode::SlipAttr slip_attr = BgUnitCode::getSlipAttr(mBgCheckPlayer.getBgCheckData(cDirType_Down));
             if (slip_attr != BgUnitCode::cSlipAttr_NoSuberu && slip_attr != BgUnitCode::cSlipAttr_SakaLowPow)

@@ -50,7 +50,7 @@ void PlayerBase::stopOutDokanOther()
 void PlayerBase::initDemoOutDokanUD(DokanDir dir)
 {
     mDokanDir = dir;
-    changeState(StateID_Walk, 0);
+    changeState(StateID_Walk, cAnmBlend_Disable);
     setDokanWaitAnm(true);
     if (mDokanType == cDokanType_ForwardPipe)
     {
@@ -1018,7 +1018,7 @@ void PlayerBase::initDemoOutDokanBase()
     mAngle.x() = 0;
     mSpeed.set(0.0f, 0.0f, 0.0f);
     mSpeedF = 0.0f;
-    mSpeedFMax = 0.0f;
+    mMaxSpeedF = 0.0f;
     setZPosition(-1800.0f);
     onStatus(cStatus_210);
     if (!isStatus(cStatus_129))
