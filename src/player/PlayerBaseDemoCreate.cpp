@@ -22,12 +22,12 @@ void PlayerBase::reset()
     mSpeed.set(0.0f, 0.0f, 0.0f);
     mAccelY = 0.0f;
 
-    onStatus(cStatus_6);
+    onStatus(cStatus_DisableSound);
     {
         changeState(StateID_None, 0);
         changeDemoState(StateID_DemoReset, 0);
     }
-    offStatus(cStatus_6);
+    offStatus(cStatus_DisableSound);
 
     resetDrawType();
     mExecuteFreezeTimer = 0;

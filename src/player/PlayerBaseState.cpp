@@ -406,7 +406,7 @@ void PlayerBase::setCrouchActionAnm()
             mpModelBaseMgr->setAnm(PlayerAnmID::stoop_start);
         else
             mpModelBaseMgr->setAnm(PlayerAnmID::stoop_start, 0.1f, 3.0f, 0.0f);
-        startSound("SE_PLY_QUAT", 1);
+        startSound("SE_PLY_QUAT", cStartSoundType_DisableInEnding);
         break;
     case 1:
         mpModelBaseMgr->setAnm(PlayerAnmID::stoop);
