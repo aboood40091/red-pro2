@@ -295,7 +295,7 @@ void PlayerBase::endControlDemo()
     changeNormalAction();
 }
 
-bool PlayerBase::isUnkDemoLand_()
+bool PlayerBase::isUnkDemoLand()
 {
     if (!isDemoLand())
     {
@@ -324,7 +324,7 @@ void PlayerBase::checkDemoControl()
         if (isStatus(cStatus_240))
             mSpeedF *= 0.98f;
 
-        if (isUnkDemoLand_())
+        if (isUnkDemoLand())
         {
             mSpeedF = 0.0f;
             change_state = true;

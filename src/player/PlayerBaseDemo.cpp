@@ -191,7 +191,7 @@ void PlayerBase::initializeState_DemoNextGotoBlock()
     initializeDemoControl();
 }
 
-bool PlayerBase::isDemo5Any_()
+bool PlayerBase::isDemo5Any()
 {
     for (s32 i = 0; i < 4; i++)
     {
@@ -242,7 +242,7 @@ void PlayerBase::executeState_DemoNextGotoBlock()
         bool scene_already_changed = false;
         u8 file_no;
 
-        if (isDemo5Any_())
+        if (isDemo5Any())
             scene_already_changed = true;
         else
         {
@@ -353,13 +353,13 @@ void PlayerBase::setShadowkunCatchDemo()
 
 bool PlayerBase::isDisableDokanInDemo()
 {
-    if (isDemo5Any_())
+    if (isDemo5Any())
         return true;
 
     return isDemoMode();
 }
 
-bool PlayerBase::isDemo3Any_()
+bool PlayerBase::isDemo3Any()
 {
     for (s32 i = 0; i < 4; i++)
     {
@@ -372,7 +372,7 @@ bool PlayerBase::isDemo3Any_()
 
 bool PlayerBase::isDisableGoalDemo()
 {
-    if (isDemo3Any_())
+    if (isDemo3Any())
         return true;
 
     return isDemoMode();

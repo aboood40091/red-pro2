@@ -46,7 +46,7 @@ PlayerBase::BgAttr PlayerBase::getFootBgAttr(BgUnitCode::Attr attr)
     }
 }
 
-bool PlayerBase::checkLedge_()
+bool PlayerBase::checkLedge()
 {
     if (*mStateMgr.getStateID() != StateID_Walk)
         return false;
@@ -95,7 +95,7 @@ bool PlayerBase::checkLedge_()
     return true;
 }
 
-bool PlayerBase::vsPlayerCarryPush_()
+bool PlayerBase::vsPlayerCarryPush()
 {
     static const u32 c_dir_type[cDirType_NumX] = { cDirType_Left, cDirType_Right };
 
@@ -142,7 +142,7 @@ bool PlayerBase::vsPlayerCarryPush_()
     return false;
 }
 
-void PlayerBase::postBgCrossImpl_()
+void PlayerBase::postBgCrossBase()
 {
     if (isNowBgCross(cBgCross_IsHead))
     {
@@ -193,7 +193,7 @@ void PlayerBase::postBgCrossImpl_()
         if (mLineSpinLiftID.isValid() && !isNowBgCross(cBgCross_IsLineSpinLift))
             mLineSpinLiftID.invalidate();
 
-        checkLedge_();
+        checkLedge();
     }
 
     if (!isNowBgCross(cBgCross_IsFoot) && isOldBgCross(cBgCross_OnRide))
@@ -207,7 +207,7 @@ void PlayerBase::postBgCrossImpl_()
     if (!isNowBgCross(cBgCross_74) &&
         !isStatus(cStatus_46) &&
         !isStatus(cStatus_47) &&
-        !vsPlayerCarryPush_() &&
+        !vsPlayerCarryPush() &&
         ((isNowBgCross(cBgCross_IsWallTouchL) && mSpeedF < 0.0f) || (isNowBgCross(cBgCross_IsWallTouchR) && mSpeedF > 0.0f))
     )
     {
@@ -218,7 +218,7 @@ void PlayerBase::postBgCrossImpl_()
     }
 }
 
-void PlayerBase::setBcSensorFlagsImpl_()
+void PlayerBase::setBcSensorFlags()
 {
     mBgCheckPlayer.getSensorFlag(cDirType_Down).setBit(ActorBgCollisionCheck::SensorFlag::cBit_3);
     mBgCheckPlayer.getSensorFlag(cDirType_Down).setBit(ActorBgCollisionCheck::SensorFlag::cBit_4);
@@ -1269,12 +1269,12 @@ bool PlayerBase::isLenientOutCheck()
     return false;
 }
 
-void PlayerBase::setFallDownDemo()
+void PlayerBase::setFallDownDemoBase()
 {
     if (PlayerMgr::instance()->getCannonJumpTimer() != 0)
         setBalloonDispOut();
     else
-        setFallDownDemoImpl();
+        setFallDownDemo();
 }
 
 void PlayerBase::underOverCheck_()
@@ -1301,7 +1301,7 @@ void PlayerBase::underOverCheck_()
                 dead = true;
         }
         if (dead)
-            setFallDownDemo();
+            setFallDownDemoBase();
     }
 }
 
@@ -1532,7 +1532,7 @@ bool PlayerBase::isBgPress(Actor* p_actor)
     return false;
 }
 
-bool PlayerBase::setPressBgDamageImpl(DamageType type)
+bool PlayerBase::setPressBgDamageBase(DamageType type)
 {
     if (type == cDamageType_Kill)
     {
