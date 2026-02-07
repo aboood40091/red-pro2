@@ -1,4 +1,4 @@
-#include <game/Info.h>
+#include <game_info/CourseInfo.h>
 #include <player/PlayerBase.h>
 #include <player/PlayerMgr.h>
 #include <player/PlayerModelBaseMgr.h>
@@ -76,7 +76,7 @@ void PlayerBase::finalizeState_HipAttack()
     offStatus(cStatus_200);
     offStatus(cStatus_203);
     offStatus(cStatus_206);
-    offStatus(cStatus_248);
+    offStatus(cStatus_NoBgCrossUpdate);
     offStatus(cStatus_266);
 }
 
@@ -189,7 +189,7 @@ void PlayerBase::HipAction_AttackFall()
 
     if (mActionTimer == 0 || isNowBgCross(cBgCross_IsFoot))
     {
-        offStatus(cStatus_248);
+        offStatus(cStatus_NoBgCrossUpdate);
         offStatus(cStatus_266);
     }
 
@@ -287,7 +287,7 @@ void PlayerBase::HipAction_StandNormal()
             else
             {
                 setHipBlockBreak();
-                if (!Info::instance()->isTitle())
+                if (!CourseInfo::instance()->isTitle())
                 {
                     if (isNowBgCross(cBgCross_67))
                         mActionTimer = 15;

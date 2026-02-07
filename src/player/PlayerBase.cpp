@@ -81,7 +81,7 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mAirDriftSpeedF(0.0f)
     , mAirDriftSpeedFDecelStep(0.0f)
     , mAddBgSpeedF(0.0f)
-    , _1bb4(0)
+    , mJumpAddSpeedHoldTimer(0)
     , mCollisionCheck2_React()
     , mCollisionCheck3_React()
     , mCollisionCheck4_Attack()
@@ -240,17 +240,17 @@ bool PlayerBase::preExecute_()
     getPos2D() += mNextFrameSpeed;
     mNextFrameSpeed.set(0.0f, 0.0f, 0.0f);
 
-    offStatus(cStatus_1);
+    offStatus(cStatus_ActiveThisFrame);
 
     if (!Actor::preExecute_())
         return false;
 
-    if (isStatus(cStatus_2))
+    if (isStatus(cStatus_DisableUpdate))
         return false;
 
     mBgCheckPlayer.atFrameStart();
 
-    onStatus(cStatus_1);
+    onStatus(cStatus_ActiveThisFrame);
 
     offStatus(cStatus_270);
     offStatus(cStatus_71);
@@ -274,7 +274,7 @@ bool PlayerBase::preExecute_()
     offStatus(cStatus_EnableDokanIn);
 
     if (mSpeed.y <= 0.0f)
-        offStatus(cStatus_10);
+        offStatus(cStatus_NoGravityUntilFall);
 
     MathUtil::calcTimer(&_2a4);
 
@@ -383,7 +383,7 @@ void PlayerBase::postExecute_(MainState state)
         offStatus(cStatus_250);
 
         if (isStatus(cStatus_153) && isStatus(cStatus_DispOut))
-            onStatus(cStatus_2);
+            onStatus(cStatus_DisableUpdate);
 
         clearFollowMameKuribo();
         clearCcPlayerRev();
@@ -780,7 +780,7 @@ void PlayerBase::calcTimerProc()
     MathUtil::calcTimer(&_21e8);
     MathUtil::calcTimer(&_21d8);
     MathUtil::calcTimer(&_214c);
-    MathUtil::calcTimer(&_1bb4);
+    MathUtil::calcTimer(&mJumpAddSpeedHoldTimer);
     MathUtil::calcTimer(&mPenguinSlideCooldown);
 
     updateNoHitPlayer();
@@ -910,7 +910,7 @@ void PlayerBase::posMoveAnglePlayer(const sead::Vector3f& speed)
     }
 
     Angle wall_move_angle = 0;
-    if (isStatus(cStatus_36))
+    if (isStatus(cStatus_WallSlide))
         wall_move_angle = mWallAngle + (s32)sead::Mathi::cQuarterRoundIdx;
     f32 wall_move_sin_v, wall_move_cos_v;
     sead::Mathf::sinCosIdx(&wall_move_sin_v, &wall_move_cos_v, wall_move_angle);
@@ -1002,7 +1002,7 @@ void PlayerBase::calcPlayerSpeedXY()
         if (!isNowBgCross(cBgCross_IsFoot))
         {
             speed_x += base_add_speedF;
-            if (isStatus(cStatus_11) && _1bb4 == 0)
+            if (isStatus(cStatus_JumpAddSpeed) && mJumpAddSpeedHoldTimer == 0)
             {
                 MathUtil::addCalc(&base_add_speedF, 0.0f, 0.1f, 0.1f, 0.01f);
                 mAddSpeedF = base_add_speedF;
@@ -1010,7 +1010,7 @@ void PlayerBase::calcPlayerSpeedXY()
         }
         else
         {
-            if (getPowerChangeType(false) != cPowerChangeType_Ice)
+            if (getPowerChangeType() != cPowerChangeType_Ice)
             {
                 f32 add_speedF = base_add_speedF;
                 if (add_speedF * mSpeedF >= 0.0f)
@@ -1018,8 +1018,8 @@ void PlayerBase::calcPlayerSpeedXY()
                 mSpeedF += add_speedF;
             }
             mAddSpeedF = 0.0f;
-            offStatus(cStatus_11);
-            _1bb4 = 120;
+            offStatus(cStatus_JumpAddSpeed);
+            mJumpAddSpeedHoldTimer = 120;
         }
     }
 

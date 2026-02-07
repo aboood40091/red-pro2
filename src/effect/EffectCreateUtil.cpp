@@ -2,7 +2,7 @@
 #include <effect/EffectObj.h>
 #include <effect/FollowEffect.h>
 #include <effect/PtclMgr.h>
-#include <game/Info.h>
+#include <game_info/CourseInfo.h>
 #include <map/Bg.h>
 #include <map/BgGlobal.h>
 #include <map/LayerID.h>
@@ -57,9 +57,9 @@ bool EffectCreateUtil::createPlayerEffect(s32 player_no, FollowEffect* p_effect,
 
 bool EffectCreateUtil::isCreateAboveLayer0(const sead::Vector3f& effect_pos)
 {
-    if (Info::instance() != nullptr && BgGlobal::instance() != nullptr)
+    if (CourseInfo::instance() != nullptr && BgGlobal::instance() != nullptr)
     {
-        if (BgGlobal::instance()->getBgUnit(Info::instance()->getFileNo(), cLayerID_Layer0) == nullptr)
+        if (BgGlobal::instance()->getBgUnit(CourseInfo::instance()->getFileNo(), cLayerID_Layer0) == nullptr)
             return true;
 
         if (Bg::instance() != nullptr && Bg::instance()->getHitType(effect_pos.x, effect_pos.y, cLayerID_Layer0) == BgUnitCode::cHitType_None)

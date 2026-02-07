@@ -45,7 +45,7 @@ void PlayerBase::executeState_Jump()
             offStatus(cStatus_172);
     }
 
-    onStatus(cStatus_25);
+    onStatus(cStatus_Jump);
 }
 
 void PlayerBase::finalizeState_Jump()
@@ -55,8 +55,8 @@ void PlayerBase::finalizeState_Jump()
     if (isStatus(cStatus_172))
         mAudioObj.stopPlyJumpSound();
 
-    offStatus(cStatus_25);
-    offStatus(cStatus_35);
+    offStatus(cStatus_Jump);
+    offStatus(cStatus_UnkJumpGravity);
     offStatus(cStatus_147);
     offStatus(cStatus_172);
     offStatus(cStatus_200);
@@ -73,7 +73,7 @@ void PlayerBase::finalizeState_Jump()
 
 void PlayerBase::initializeState_Fall()
 {
-    onStatus(cStatus_26);
+    onStatus(cStatus_Fall);
     onStatus(cStatus_166);
     if (_21e0 != 0)
         onStatus(cStatus_116);
@@ -94,7 +94,7 @@ void PlayerBase::executeState_Fall()
 
 void PlayerBase::finalizeState_Fall()
 {
-    offStatus(cStatus_26);
+    offStatus(cStatus_Fall);
     offStatus(cStatus_147);
     offStatus(cStatus_166);
     offStatus(cStatus_116);
@@ -128,7 +128,7 @@ void PlayerBase::finalizeState_SitJump()
 
 void PlayerBase::initializeState_WaitJump()
 {
-    onStatus(cStatus_34);
+    onStatus(cStatus_WaitJump);
     mPlayerKey.onStatus(PlayerKey::cStatus_NoJump);
     mpModelBaseMgr->setAnm(PlayerAnmID::wait, 0.0f);
     mAngle.y() = getMukiAngle();
@@ -147,7 +147,7 @@ void PlayerBase::executeState_WaitJump()
 
 void PlayerBase::finalizeState_WaitJump()
 {
-    offStatus(cStatus_34);
+    offStatus(cStatus_WaitJump);
     mPlayerKey.offStatus(PlayerKey::cStatus_NoJump);
 }
 

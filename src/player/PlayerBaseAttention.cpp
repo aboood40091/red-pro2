@@ -128,7 +128,7 @@ bool PlayerBase::calcHeadAttentionAngle_(const sead::Vector2f& target_pos, sead:
 
 void PlayerBase::calcHeadAttentionAngle()
 {
-    if (isStatus(cStatus_3))
+    if (isStatus(cStatus_DisableAttention))
         return;
 
     if (isChange())

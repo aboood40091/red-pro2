@@ -116,7 +116,7 @@ void PlayerBase::clearCcData()
 
 bool PlayerBase::entryCollision()
 {
-    if (!isStatus(cStatus_14) && !isStatus(cStatus_17))
+    if (!isStatus(cStatus_OutOfPlay) && !isStatus(cStatus_Stunned))
     {
         mCollisionCheck.setLayer(mLayer);
         mCollisionCheck3_React.setLayer(mLayer);
@@ -429,7 +429,7 @@ void PlayerBase::setReductionScale()
 
 void PlayerBase::setStampReduction(PlayerBase* p_player_other)
 {
-    if (!isStatus(cStatus_84))
+    if (!isStatus(cStatus_Swim))
     {
         if (mSpeed.y > 0.0f)
             mSpeed.y = 0.0f;
@@ -447,7 +447,7 @@ void PlayerBase::setStampReduction(PlayerBase* p_player_other)
 
 void PlayerBase::setStampPlayerJump(bool allow_high_jump, f32 rev_y)
 {
-    if (!isStatus(cStatus_84))
+    if (!isStatus(cStatus_Swim))
     {
         f32 jump_speed = cJumpSpeed;
         if (isMameAction())
@@ -496,7 +496,7 @@ void PlayerBase::initStampReduction()
 
     mNoStampPlayerJumpTimer = 10;
 
-    if (!isStatus(cStatus_25) || mReductionStep == 0)
+    if (!isStatus(cStatus_Jump) || mReductionStep == 0)
         mReductionSimpleMoveTimer = 4;
 
     setStomped();

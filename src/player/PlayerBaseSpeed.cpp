@@ -108,9 +108,9 @@ void PlayerBase::setNormalJumpGravity()
 
 void PlayerBase::setJumpGravity()
 {
-    if (mNoGravityTimer != 0 || isStatus(cStatus_10))
+    if (mNoGravityTimer != 0 || isStatus(cStatus_NoGravityUntilFall))
         mAccelY = 0.0f;
-    else if (isStatus(cStatus_35))
+    else if (isStatus(cStatus_UnkJumpGravity))
         setUnkJumpGravity();
     else if (mPlayerKey.buttonJump())
         setButtonJumpGravity();
@@ -211,7 +211,7 @@ void PlayerBase::moveSpeedSet()
             mSpeedF = 0.0f;
         else if (!isStatus(cStatus_DemoControl))
         {
-            if (getPowerChangeType(false) == cPowerChangeType_Ice)
+            if (getPowerChangeType() == cPowerChangeType_Ice)
                 mMaxSpeedF = getIceSakaSlipOffSpeed();
             if (isStatus(cStatus_SlideSlope))
                 mMaxSpeedF = getIceSakaSlipOffSpeed();
@@ -259,7 +259,7 @@ void PlayerBase::simpleMoveSpeedSet()
 
 void PlayerBase::icePowerChange(bool slip)
 {
-    PowerChangeType power_change_type = getPowerChangeType(false);
+    PowerChangeType power_change_type = getPowerChangeType();
     if (power_change_type == cPowerChangeType_Ice || (power_change_type == cPowerChangeType_Snow && slip))
     {
         if (mMaxSpeedF != 0.0f)
@@ -316,7 +316,7 @@ void PlayerBase::slipPowerSet()
 
 void PlayerBase::getPowerData(PlayerPowerData& out_data)
 {
-    switch (getPowerChangeType(false))
+    switch (getPowerChangeType())
     {
     case cPowerChangeType_Ice:
         out_data = getSpeedData()->power_data_ice;
@@ -483,7 +483,7 @@ void PlayerBase::getPowerTurnData(PlayerPowerTurnData& out_data)
 {
     bool is_star = isStar();
     bool is_luigi_phys = isEnableRDashLuigiPhysics();
-    switch (getPowerChangeType(false))
+    switch (getPowerChangeType())
     {
     default:
         break;

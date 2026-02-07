@@ -391,7 +391,7 @@ s32 PlayerBase::calcGoalBonusCoinNum()
 
 bool PlayerBase::isGoalRingLand()
 {
-    if (isStatus(cStatus_84))
+    if (isStatus(cStatus_Swim))
         return true;
 
     if (isBossDemoLand())

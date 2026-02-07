@@ -68,7 +68,7 @@ void PlayerBase::finalizeState_DemoSubjectClearLand()
 
 void PlayerBase::initializeState_DemoSubjectClearAir()
 {
-    onStatus(cStatus_3);
+    onStatus(cStatus_DisableAttention);
     mDemoActionTimer = 180;
     mDemoAction = 0;
 }
@@ -84,7 +84,7 @@ void PlayerBase::executeState_DemoSubjectClearAir()
 
 void PlayerBase::finalizeState_DemoSubjectClearAir()
 {
-    offStatus(cStatus_3);
+    offStatus(cStatus_DisableAttention);
 }
 
 void PlayerBase::initializeState_DemoShadowFail()
@@ -213,7 +213,7 @@ void PlayerBase::initializeState_SubjectClear()
     onStatus(cStatus_183);
     if (mIsSubjectClear)
     {
-        bool unk = isStatus(cStatus_84);
+        bool unk = isStatus(cStatus_Swim);
         changeState(StateID_None, 0);
         CourseTask::instance()->setSubjectClear();
         PlayerMgr::instance()->setSubjectClear();

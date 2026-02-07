@@ -1,7 +1,7 @@
 #include <event/EventMgr.h>
 #include <event/EventStartCoinBattle.h>
 #include <game/CourseTimer.h>
-#include <game/Info.h>
+#include <game_info/CourseInfo.h>
 #include <input/InputMgr.h>
 #include <map/Next.h>
 #include <player/PlayerDemoMgr.h>
@@ -73,7 +73,7 @@ void PlayerBase::executeState_DemoNone()
     // if (checkTimeOut())
     //     return;
 
-    if (isNowBgCross(cBgCross_IsFoot) || isStatus(cStatus_84) || isStatus(cStatus_37))
+    if (isNowBgCross(cBgCross_IsFoot) || isStatus(cStatus_Swim) || isStatus(cStatus_37))
     {
         if (mPlayerKey.buttonRight())
             mDokanInTimerR = sead::Mathi::clampMax(mDokanInTimerR + 1, 100);
@@ -246,7 +246,7 @@ void PlayerBase::executeState_DemoNextGotoBlock()
             scene_already_changed = true;
         else
         {
-            file_no = Info::instance()->getFileNo();
+            file_no = CourseInfo::instance()->getFileNo();
             if (Next::instance()->isDifferentChangeSceneNextDat(file_no, mDstNextGotoID))
                 scene_already_changed = true;
         }
@@ -397,10 +397,10 @@ bool PlayerBase::isDispOutCheckOn()
     if (isDemoType(cDemoType_1))
         return false;
 
-    if (isStatus(cStatus_14))
+    if (isStatus(cStatus_OutOfPlay))
         return false;
 
-    if (isStatus(cStatus_17))
+    if (isStatus(cStatus_Stunned))
         return false;
 
     if (isStatus(cStatus_122))

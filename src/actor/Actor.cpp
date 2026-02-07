@@ -17,8 +17,8 @@
 #include <fukidashi/FukidashiMgr.h>
 #include <game/AreaTask.h>
 #include <game/CourseTask.h>
-#include <game/Info.h>
 #include <game/SubjectMgr.h>
+#include <game_info/CourseInfo.h>
 #include <map/Bg.h>
 #include <map/LayerID.h>
 #include <map_obj/ActorBlockMakeDRC.h>
@@ -311,7 +311,7 @@ Actor::Actor(const ActorCreateParam& param)
         param.p_profile->getActorCreateInfo().spawn_range.half_size_x * 2.0f,
         param.p_profile->getActorCreateInfo().spawn_range.half_size_y * 2.0f)
     , mSize(mVisibleAreaSize)
-    , mAreaNo(Info::instance()->getAreaNo())
+    , mAreaNo(CourseInfo::instance()->getAreaNo())
     , mActorType(cActorType_Generic)
     , mIsExecEnable(true)
     , mIsDrawEnable(true)
@@ -463,7 +463,7 @@ void Actor::splashEffect_(const sead::Vector3f& pos, EffectID effect_id, u8 wave
 
 void Actor::setAreaNo_()
 {
-    mAreaNo = Info::instance()->getAreaNo();
+    mAreaNo = CourseInfo::instance()->getAreaNo();
 }
 
 void Actor::calcSpeedX_()

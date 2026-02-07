@@ -563,7 +563,7 @@ void PlayerBase::checkBgCross_()
     mBgCheckPlayer.checkBg();
     offStatus(cStatus_CheckBg);
 
-    if (isStatus(cStatus_248))
+    if (isStatus(cStatus_NoBgCrossUpdate))
         return;
 
     mSpeedSakaAnglePrev = mSpeedSakaAngle;
@@ -1199,8 +1199,8 @@ void PlayerBase::setJumpAddSpeedF(f32 f)
         f = 2.0f;
 
     mAddSpeedF = f;
-    _1bb4 = 120;
-    onStatus(cStatus_11);
+    mJumpAddSpeedHoldTimer = 120;
+    onStatus(cStatus_JumpAddSpeed);
 }
 
 void PlayerBase::setAddLiftSpeedF()
@@ -1454,7 +1454,7 @@ void PlayerBase::checkDispOver()
     offStatus(cStatus_DispOutDanger);
     offStatus(cStatus_DispOutPosYAdj);
 
-    if (isStatus(cStatus_14) || isStatus(cStatus_122))
+    if (isStatus(cStatus_OutOfPlay) || isStatus(cStatus_122))
         return;
 
     if (PlayerDemoMgr::instance()->isPlayerGameStop())

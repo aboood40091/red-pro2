@@ -1,4 +1,4 @@
-#include <game/Info.h>
+#include <game_info/CourseInfo.h>
 #include <input/SysControllerMgr.h>
 #include <player/PlayerBase.h>
 #include <player/PlayerModelBaseMgr.h>
@@ -65,7 +65,7 @@ bool PlayerBase::isDisableSound(StartSoundType type)
     if (isStatus(cStatus_DisableSound))
         return true;
 
-    if (Info::instance()->isTitle())
+    if (CourseInfo::instance()->isTitle())
         return true;
 
     return false;
@@ -197,7 +197,7 @@ void PlayerBase::setFootSound()
     if (!(isDemoAll() || isNowBgCross(cBgCross_IsFoot)))
         return;
 
-    if (Info::instance()->isShortPlay() && mPlayerNo != 0)
+    if (CourseInfo::instance()->isShortPlay() && mPlayerNo != 0)
         return;
 
     if (isNowBgCross(cBgCross_IsUnderwater))

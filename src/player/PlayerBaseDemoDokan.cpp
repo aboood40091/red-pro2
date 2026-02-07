@@ -4,8 +4,8 @@
 #include <event/EventMgr.h>
 #include <game/BalloonMgr.h>
 #include <game/CourseTask.h>
-#include <game/Info.h>
 #include <game/SubjectMgr.h>
+#include <game_info/CourseInfo.h>
 #include <map/CourseData.h>
 #include <map/Next.h>
 #include <map_obj/MaskMgr.h>
@@ -188,7 +188,7 @@ void PlayerBase::initDemoOutDokanLR(DokanDir dir)
 {
     mDokanDir = dir;
     mIsDokanSwim = false;
-    if (isStatus(cStatus_84))
+    if (isStatus(cStatus_Swim))
     {
         if (!isCarry())
             mIsDokanSwim = true;
@@ -702,7 +702,7 @@ void PlayerBase::finalizeState_DemoInDokanL()
 bool PlayerBase::setDokanInNextGoto(s32 dst_next_goto_no)
 {
     mDstNextGotoID = dst_next_goto_no;
-    u8 file_no = Info::instance()->getFileNo();
+    u8 file_no = CourseInfo::instance()->getFileNo();
     const NextGoto* p_next_goto = CourseData::instance()->getFile(file_no)->getNextGoto(mDstNextGotoID);
     mDokanType = cDokanType_Normal;
     if ((p_next_goto->flag & (1 << 1)) != 0)
@@ -733,7 +733,7 @@ void PlayerBase::setObjDokanIn(ActorBoxBgCollision* p_bg_collision, const sead::
     if (setDokanInNextGoto(dst_next_goto_no))
     {
         Next::instance()->setChangeSceneNextDat(
-            Info::instance()->getFileNo(),
+            CourseInfo::instance()->getFileNo(),
             mDstNextGotoID
         );
         static const StateID* cDokanInActionRoll[] = {
@@ -853,7 +853,7 @@ bool PlayerBase::isEnableDokanInStatusBase()
     if (isDisableDokanInDemo())
         return false;
 
-    if (isStatus(cStatus_DispOut) || isStatus(cStatus_19) || isStatus(cStatus_122))
+    if (isStatus(cStatus_DispOut) || isStatus(cStatus_Quake) || isStatus(cStatus_122))
         return false;
 
     return true;
@@ -973,7 +973,7 @@ bool PlayerBase::setDemoOutDokanAction(s32 dst_next_goto_no, DokanDir dir)
             break;
         case cDokanType_Normal:
             Next::instance()->setChangeSceneNextDat(
-                Info::instance()->getFileNo(),
+                CourseInfo::instance()->getFileNo(),
                 mDstNextGotoID
             );
             changeState(StateID_None, 0);

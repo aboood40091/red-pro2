@@ -87,7 +87,7 @@ void PlayerBase::finalizeState_Turn()
 void PlayerBase::initializeState_Funsui()
 {
     onStatus(cStatus_58);
-    // onStatus(cStatus_248);
+    // onStatus(cStatus_NoBgCrossUpdate);
     onStatus(cStatus_255);
     mAccelY = 0.0f;
     mSpeedF *= 0.7f;
@@ -171,7 +171,7 @@ void PlayerBase::executeState_Funsui()
 void PlayerBase::finalizeState_Funsui()
 {
     offStatus(cStatus_58);
-    offStatus(cStatus_248);
+    offStatus(cStatus_NoBgCrossUpdate);
     offStatus(cStatus_255);
     mPlayerKey.offStatus(PlayerKey::cStatus_NoJump);
 }
@@ -260,8 +260,8 @@ void PlayerBase::changeStateImpl(const StateID& state_id, s32 param, const JumpI
     offStatus(cStatus_196);
     offStatus(cStatus_197);
     offStatus(cStatus_199);
-    offStatus(cStatus_35);
-    offStatus(cStatus_10);
+    offStatus(cStatus_UnkJumpGravity);
+    offStatus(cStatus_NoGravityUntilFall);
     mChangeStateParam = param;
     mpChangeStateJmpInf = p_jmp_inf;
     mStateMgr.changeState(state_id);
@@ -535,7 +535,7 @@ bool PlayerBase::releaseFunsui(f32 speed_y)
         mSpeed.y = speed_y;
         mAction = cFunsuiAction_Release;
         mPlayerKey.onStatus(PlayerKey::cStatus_NoJump);
-        offStatus(cStatus_248);
+        offStatus(cStatus_NoBgCrossUpdate);
     }
     return true;
 }

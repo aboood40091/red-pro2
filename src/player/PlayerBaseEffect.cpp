@@ -195,7 +195,7 @@ void PlayerBase::setStartJumpEffect(bool with_smoke)
     if (isOnSinkSand())
     {
         // setSandJumpEffect();
-        onStatus(cStatus_29);
+        onStatus(cStatus_SinkSandJumpSplash);
     }
     else
     {
