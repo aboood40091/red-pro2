@@ -225,7 +225,7 @@ void PlayerBase::setCcAtStar()
 
 bool PlayerBase::isActionRevisionY()
 {
-    if (isStatus(cStatus_78) || isStatus(cStatus_79))
+    if (isStatus(cStatus_Pole) || isStatus(cStatus_PoleRope))
         return true;
     return false;
 }

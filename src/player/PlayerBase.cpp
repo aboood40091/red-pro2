@@ -1075,7 +1075,7 @@ bool PlayerBase::setJump(u8 param, JumpSe jump_se_type)
 {
     if (!isNowBgCross(cBgCross_IsUnderwater) && !isStatus(cStatus_146))
     {
-        if ((mpModelBaseMgr->getAnmFlag(PlayerModelBase::cAnmFlagType_Main) >> PlayerModelBase::cAnmFlagBit_0 & 1) && checkStandUpRoof())
+        if (mpModelBaseMgr->isAnmFlag(PlayerModelBase::cAnmFlagType_Main, PlayerModelBase::cAnmFlagBit_Sit) && checkStandUpRoof())
             return setCrouchJump();
 
         if (mPlayerKey.triggerJump())
