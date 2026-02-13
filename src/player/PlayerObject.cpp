@@ -21,13 +21,13 @@ PlayerObject::PlayerObject(const ActorCreateParam& param)
     , mCarryStepPrev(cCarryStep_None)
     , mCarryStepTimer(0.0f)
     , mCarryStepLength(0.0f)
-    , _2798()
-    , _27a4()
+    , mInvalidKeyTimer()
+    , mInvalidKeyTimerType()
     , _27b0()
     , _27b8()
     , _27c0(mPos)
     , _27cc(0)
-    , mScrollMode(1)
+    , mScrollMode(cScrollMode_1)
     , mPropelParts()
     , mLight()
     , _2998(0)
@@ -67,10 +67,10 @@ PlayerObject::PlayerObject(const ActorCreateParam& param)
     , mWallSlideDir(cDirType_Right)
     , mLiftUpActorID()
     , _2a54(0.0f)
-    , _2a58(1.0f)
+    , mLiftUpOffsetRatio(1.0f)
     , _2a5c(0)
-    , _2a60(0)
-    , _2a64(0.0f)
+    , mLiftUpCounter(0)
+    , mLiftUpOffsetScale(0.0f)
     , _2a68(0)
     , _2a6c(0)
     , _2a70(0)
@@ -205,8 +205,8 @@ PlayerObject::PlayerObject(const ActorCreateParam& param)
     , mJumpAnmID(PlayerAnmID::cInvalid)
     , _34d4(10)
 {
-    _2798.fill(0);
-    _27a4.fill(0);
+    mInvalidKeyTimer.fill(0);
+    mInvalidKeyTimerType.fill(cInvalidKeyTimerType_Normal);
     _34b0.fill(0);
     _3498.fill(0);
 

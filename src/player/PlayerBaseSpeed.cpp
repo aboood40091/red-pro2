@@ -93,7 +93,7 @@ void PlayerBase::setUnkJumpGravity()
 
 void PlayerBase::setButtonJumpGravity()
 {
-    PlayerGravityHIO* p_gravity_data = getGravityData();
+    const PlayerGravityHIO* p_gravity_data = getGravityData();
     setJumpGravity(p_gravity_data->jump_data.thresholds, p_gravity_data->jump_data.button_gravity);
 }
 
@@ -102,7 +102,7 @@ void PlayerBase::setNormalJumpGravity()
     if (mSpeed.y <= 1.5f)
         mPlayerKey.offStatus(PlayerKey::cStatus_NoJump);
 
-    PlayerGravityHIO* p_gravity_data = getGravityData();
+    const PlayerGravityHIO* p_gravity_data = getGravityData();
     setJumpGravity(p_gravity_data->jump_data.thresholds, p_gravity_data->jump_data.normal_gravity);
 }
 
@@ -136,7 +136,7 @@ bool PlayerBase::setSandMoveSpeed()
         s32 walk_dir;
         if (mPlayerKey.buttonWalk(&walk_dir))
         {
-            if (isStatus(cStatus_69))
+            if (isStatus(cStatus_Spin))
                 mMaxSpeedF = cDirSpeed[walk_dir];
             else
                 mMaxSpeedF = 0.5f * cDirSpeed[walk_dir];
@@ -156,7 +156,7 @@ bool PlayerBase::setSandMoveSpeed()
 
 PlayerBase::PowerChangeType PlayerBase::getPowerChangeType(bool penguin_slide)
 {
-    if (penguin_slide || !isStatus(cStatus_205))
+    if (penguin_slide || !isStatus(cStatus_Penguin))
     {
         if (isNowBgCross(cBgCross_IsIce))
             return cPowerChangeType_Ice;

@@ -169,7 +169,7 @@ void PlayerBase::finalizeState_PlayerJumpDai()
 
 bool PlayerBase::setJumpDaiRide()
 {
-    if (isStatus(cStatus_107))
+    if (isStatus(cStatus_RidePlayer))
         return false;
 
     if (isNowBgCross(cBgCross_IsHead))

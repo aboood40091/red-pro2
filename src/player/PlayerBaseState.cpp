@@ -180,7 +180,7 @@ void PlayerBase::initializeState_Cloud()
 {
     SubjectMgr::instance()->setCloudOn();
     startSound("SE_PLY_RIDE_CLOUD");
-    onStatus(cStatus_119);
+    onStatus(cStatus_RideCloud);
     onStatus(cStatus_200);
     mAccelY = 0.0f;
     mSpeed.y = 0.1f;
@@ -202,7 +202,7 @@ void PlayerBase::finalizeState_Cloud()
 {
     mAngle.x() = 0;
     cancelCloudOn();
-    offStatus(cStatus_119);
+    offStatus(cStatus_RideCloud);
     offStatus(cStatus_121);
     offStatus(cStatus_200);
 }
@@ -498,7 +498,7 @@ bool PlayerBase::checkSitJumpRoof()
 
 bool PlayerBase::setFunsui(FunsuiType type)
 {
-    if (isStatus(cStatus_107))
+    if (isStatus(cStatus_RidePlayer))
         return false;
 
     if (isStatus(cStatus_207))
@@ -544,7 +544,7 @@ bool PlayerBase::setCloudOn(Actor* p_cloud_actor)
 {
     if (!isNowBgCross(cBgCross_IsFoot) &&
         !isStatus(cStatus_247) &&
-        !isStatus(cStatus_76) &&
+        !isStatus(cStatus_Vine) &&
         p_cloud_actor->getPos().y + getCloudOffsetY() + 6.0f >= mPos.y &&
         mSpeed.y < 0.0f &&
         !mRideActorID.isValid())
@@ -563,7 +563,7 @@ void PlayerBase::getCloudPos(sead::Vector3f& pos)
 
 Actor* PlayerBase::getCloud()
 {
-    if (isStatus(cStatus_119))
+    if (isStatus(cStatus_RideCloud))
         return sead::DynamicCast<Actor>(ActorMgr::instance()->getActorPtr(mRideActorID));
 
     return nullptr;
@@ -591,7 +591,7 @@ bool PlayerBase::updateCloudMove()
 
     mSpeed.y = 0.0f;
 
-    if (!isStatus(cStatus_69))
+    if (!isStatus(cStatus_Spin))
     {
         mAngle = p_cloud_actor->getAngle();
         mDirection = p_cloud_actor->getDirection();

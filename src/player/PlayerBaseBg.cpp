@@ -146,7 +146,7 @@ void PlayerBase::postBgCrossBase()
 {
     if (isNowBgCross(cBgCross_IsHead))
     {
-        if (_1b9c >= 5 && (mSpeed.y > 0.0f || isStatus(cStatus_119)))
+        if (_1b9c >= 5 && (mSpeed.y > 0.0f || isStatus(cStatus_RideCloud)))
             setHitBlockSE();
     }
 
@@ -274,7 +274,7 @@ void PlayerBase::setBcSensorFlags()
         mBgCheckPlayer.getSensorFlag(cDirType_Left).setBit(ActorBgCollisionCheck::SensorFlag::cBit_26);
     }
 
-    if (isStatus(cStatus_119) || isStatus(cStatus_98) || isStatus(cStatus_97))
+    if (isStatus(cStatus_RideCloud) || isStatus(cStatus_98) || isStatus(cStatus_97))
     {
         mBgCheckPlayer.getSensorFlag(cDirType_Down).setBit(ActorBgCollisionCheck::SensorFlag::cBit_22);
         mBgCheckPlayer.getSensorFlag(cDirType_Down).setBit(ActorBgCollisionCheck::SensorFlag::cBit_23);
@@ -465,7 +465,7 @@ bool PlayerBase::checkDispSideLemit_()
 
 void PlayerBase::checkSideViewLemit()
 {
-    if (isStatus(cStatus_122))
+    if (isStatus(cStatus_RideBalloon))
         return;
 
     if (isStatus(cStatus_227))
@@ -802,7 +802,7 @@ void PlayerBase::checkBgCross_()
         }
     }
 
-    if (mSpeed.y < 0.0f && (isStatus(cStatus_40) || isStatus(cStatus_41) || isStatus(cStatus_119)))
+    if (mSpeed.y < 0.0f && (isStatus(cStatus_40) || isStatus(cStatus_41) || isStatus(cStatus_RideCloud)))
     {
         onNowBgCross(cBgCross_IsFoot);
         onNowBgCross(cBgCross_OnRide);
@@ -988,7 +988,7 @@ void PlayerBase::checkDamageBg()
     if (isStatus(cStatus_247))
         return;
 
-    if (isStatus(cStatus_122))
+    if (isStatus(cStatus_RideBalloon))
         return;
 
     if (isStatus(cStatus_227))
@@ -1454,7 +1454,7 @@ void PlayerBase::checkDispOver()
     offStatus(cStatus_DispOutDanger);
     offStatus(cStatus_DispOutPosYAdj);
 
-    if (isStatus(cStatus_OutOfPlay) || isStatus(cStatus_122))
+    if (isStatus(cStatus_OutOfPlay) || isStatus(cStatus_RideBalloon))
         return;
 
     if (PlayerDemoMgr::instance()->isPlayerGameStop())

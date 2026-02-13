@@ -2,7 +2,7 @@
 #include <actor/ActorFindFunc.h>
 #include <actor/Profile.h>
 #include <item/ItemBase.h>
-#include <player/ChibiYoshi.h>
+#include <map_obj/ChibiYoshiBase.h>
 #include <player/Yoshi.h>
 
 #include <heap/seadFrameHeap.h>
@@ -280,7 +280,7 @@ void RequestDeleteNotPlayerYoshiItem(ActorBase* p_actor, u32)
             return;
     }
 
-    ChibiYoshi* p_chibiyoshi = sead::DynamicCast<ChibiYoshi>(p_actor);
+    ChibiYoshiBase* p_chibiyoshi = sead::DynamicCast<ChibiYoshiBase>(p_actor);
     if (p_chibiyoshi != nullptr && p_chibiyoshi->_1a78 != 0)
         return;
 

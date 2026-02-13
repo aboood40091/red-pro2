@@ -210,7 +210,7 @@ bool CarryEnemy::carryCheck(Actor* p_player)
         PlayerObject* p_player_obj = sead::DynamicCast<PlayerObject>(p_player);
         if (p_player_obj != nullptr)
         {
-            if (!p_player_obj->isStatus(PlayerObject::cStatus_69) && p_player_obj->setCarry(this, cCarryType_Carry))
+            if (!p_player_obj->isStatus(PlayerObject::cStatus_Spin) && p_player_obj->setCarry(this, cCarryType_Carry))
             {
                 setCarryActor_(p_player_obj);
                 return true;
@@ -379,7 +379,7 @@ bool CarryEnemy::sleepSpinFumiProcCheck_(ActorCollisionCheck* cc_self, ActorColl
 {
     Actor* p_player = cc_other->getOwner();
 
-    if (!sead::DynamicCast<PlayerObject>(p_player)->isStatus(PlayerObject::cStatus_69))
+    if (!sead::DynamicCast<PlayerObject>(p_player)->isStatus(PlayerObject::cStatus_Spin))
         return false;
 
     if (fumiCheck(cc_self, cc_other, cFumiSeType_Normal) != cFumiType_SpinFumi)

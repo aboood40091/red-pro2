@@ -365,7 +365,7 @@ bool PlayerBase::isEnableGoalCollision()
     if (mGoalYoshiSpitOutTimer != 0)
         return false;
 
-    if (isStatus(cStatus_122))
+    if (isStatus(cStatus_RideBalloon))
         return false;
 
     return true;

@@ -478,7 +478,7 @@ bool PlayerBase::vf154()
     if (isStatus(cStatus_210))
         return false;
 
-    if (isStatus(cStatus_122))
+    if (isStatus(cStatus_RideBalloon))
         return false;
 
     if (isStatus(cStatus_280))

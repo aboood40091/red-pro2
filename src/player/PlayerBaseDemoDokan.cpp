@@ -853,7 +853,7 @@ bool PlayerBase::isEnableDokanInStatusBase()
     if (isDisableDokanInDemo())
         return false;
 
-    if (isStatus(cStatus_DispOut) || isStatus(cStatus_Quake) || isStatus(cStatus_122))
+    if (isStatus(cStatus_DispOut) || isStatus(cStatus_Quake) || isStatus(cStatus_RideBalloon))
         return false;
 
     return true;

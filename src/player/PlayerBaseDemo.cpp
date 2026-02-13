@@ -403,7 +403,7 @@ bool PlayerBase::isDispOutCheckOn()
     if (isStatus(cStatus_Stunned))
         return false;
 
-    if (isStatus(cStatus_122))
+    if (isStatus(cStatus_RideBalloon))
         return false;
 
     if (isStatus(cStatus_227))
@@ -428,7 +428,7 @@ void PlayerBase::changeNormalAction()
 
 bool PlayerBase::setNextGotoBlockDemo(s32 dst_next_goto_no, s32 wait_timer, NextGotoBlockDelay delay, bool unk_rdash)
 {
-    if (isDemo() || isStatus(cStatus_122))
+    if (isDemo() || isStatus(cStatus_RideBalloon))
         return false;
 
     if (*mDemoStateMgr.getStateID() == StateID_DemoNextGotoBlock)
@@ -448,7 +448,7 @@ bool PlayerBase::setNextGotoBlockDemo(s32 dst_next_goto_no, s32 wait_timer, Next
             changeState(StateID_Fall, cAnmBlend_Enable);
     }
 
-    if (isStatus(cStatus_107))
+    if (isStatus(cStatus_RidePlayer))
         changeState(StateID_Fall, cAnmBlend_Enable);
 
     return true;
