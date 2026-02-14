@@ -158,7 +158,7 @@ void PlayerBase::executeState_DemoOutDokanU()
 
 void PlayerBase::endDemoOutDokan()
 {
-    offStatus(cStatus_68);
+    offStatus(cStatus_NoPropelRoll);
     offStatus(cStatus_210);
     offStatus(cStatus_FaderPosSet);
     offStatus(cStatus_133);
@@ -210,7 +210,7 @@ void PlayerBase::initDemoOutDokanLR(DokanDir dir)
         else
             mDokanPos.x -= 8.0f;
     }
-    onStatus(cStatus_68);
+    onStatus(cStatus_NoPropelRoll);
     initDemoOutDokan();
     stopOutDokanOther();
 }
@@ -496,7 +496,7 @@ void PlayerBase::initDemoInDokanUD_(DokanDir dir)
 {
     setDokanWaitAnm(false);
     mDokanFaderPos = mPos;
-    onStatus(cStatus_68);
+    onStatus(cStatus_NoPropelRoll);
     if (dir == cDokanDir_FaceUp)
     {
         if (mChangeDemoStateParam == 2)
@@ -523,8 +523,8 @@ bool PlayerBase::dokanMoveOut()
 {
     onStatus(cStatus_265);
 
-    if (isStatus(cStatus_68) && (mDokanDir == cDokanDir_ButtonLeft || mDokanDir == cDokanDir_ButtonRight) && sead::Mathf::abs(mPos.x - mDokanPos.x) <= 20.0f)
-        offStatus(cStatus_68);
+    if (isStatus(cStatus_NoPropelRoll) && (mDokanDir == cDokanDir_ButtonLeft || mDokanDir == cDokanDir_ButtonRight) && sead::Mathf::abs(mPos.x - mDokanPos.x) <= 20.0f)
+        offStatus(cStatus_NoPropelRoll);
 
     if (isStatus(cStatus_133) && sead::Mathf::abs(mPos.x - mDokanPos.x) <= 20.0f && sead::Mathf::abs(mPos.y - mDokanPos.y) <= 20.0f)
         offStatus(cStatus_133);
@@ -628,11 +628,11 @@ void PlayerBase::executeState_DemoInDokanU()
 
 void PlayerBase::endDemoInDokan()
 {
-    offStatus(cStatus_68);
+    offStatus(cStatus_NoPropelRoll);
     offStatus(cStatus_210);
     offStatus(cStatus_FaderPosSet);
     offStatus(cStatus_180);
-    _205c = 0;
+    mInvincibilityTimer = 0;
     _2060 = 0;
     offStatus(cStatus_133);
 
@@ -663,7 +663,7 @@ void PlayerBase::finalizeState_DemoInDokanD()
 void PlayerBase::initDemoInDokanLR(DokanDir dir)
 {
     mpModelBaseMgr->setAnm(PlayerAnmID::low_walk);
-    onStatus(cStatus_68);
+    onStatus(cStatus_NoPropelRoll);
     mDirection = (dir == cDokanDir_FaceLeft) ? cDirType_Left : cDirType_Right;
     mAngle.y() = getMukiAngle();
     initDemoInDokan(dir);
@@ -814,7 +814,7 @@ void PlayerBase::getDokanInLRWallBgPointData(ActorBgCollisionCheck::Sensor* p_se
 
 bool PlayerBase::checkButtonDokanIn(DokanDir dir)
 {
-    if (isStatus(cStatus_247))
+    if (isStatus(cStatus_IgnoreBgCross))
         return false;
 
     if (!isStatus(cStatus_EnableDokanIn))
@@ -1035,7 +1035,7 @@ void PlayerBase::initDemoInDokanBase(DokanDir dir)
     mSpeedF = 0.0f;
     mSpeed.y = 0.0f;
     setZPosition(-1800.0f);
-    _205c = mChangeDemoStateParam == 1 ? 0 : 35;
+    mInvincibilityTimer = mChangeDemoStateParam == 1 ? 0 : 35;
     mDemoAction = cDemoInDokanAction_CheckTurn;
     PlayerDemoMgr::instance()->setDemoMode(PlayerDemoMgr::cMode_Wait);
     setFaderPos(mDokanFaderPos);

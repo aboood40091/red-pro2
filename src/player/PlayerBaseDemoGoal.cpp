@@ -20,11 +20,11 @@ void PlayerBase::setDemoGoalMode(s32 demo_action, s32 demo_sub_action)
 void PlayerBase::initializeState_DemoGoal()
 {
     onStatus(cStatus_212);
-    onStatus(cStatus_DemoScript);
+    onStatus(cStatus_ControlledState);
     if (mChangeDemoStateParam == 0)
     {
         setGoalPoleCatchVoice();
-        onStatus(cStatus_247);
+        onStatus(cStatus_IgnoreBgCross);
     }
     clearJumpActionInfo();
     endStar();
@@ -234,7 +234,7 @@ void PlayerBase::executeDemoGoal_MultiJump()
     default:
         break;
     case 0:
-        offStatus(cStatus_247);
+        offStatus(cStatus_IgnoreBgCross);
         mAngle.y() = sead::Mathi::cQuarterRoundIdx;
         mDemoSubAction = 1;
         mpModelBaseMgr->setAnm(PlayerAnmID::goal_jump);
@@ -357,7 +357,7 @@ void PlayerBase::finalizeState_DemoGoal()
     offStatus(cStatus_224);
     offStatus(cStatus_225);
     offStatus(cStatus_226);
-    offStatus(cStatus_247);
+    offStatus(cStatus_IgnoreBgCross);
 }
 
 bool PlayerBase::isEnableGoalCollision()

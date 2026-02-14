@@ -247,7 +247,7 @@ void PlayerBase::executeState()
 
 void PlayerBase::changeStateImpl(const StateID& state_id, s32 param, const JumpInf* p_jmp_inf)
 {
-    if (isStatus(cStatus_DemoScript))
+    if (isStatus(cStatus_ControlledState))
         return;
 
     SubjectMgr::instance()->onPlChangeState();
@@ -543,7 +543,7 @@ bool PlayerBase::releaseFunsui(f32 speed_y)
 bool PlayerBase::setCloudOn(Actor* p_cloud_actor)
 {
     if (!isNowBgCross(cBgCross_IsFoot) &&
-        !isStatus(cStatus_247) &&
+        !isStatus(cStatus_IgnoreBgCross) &&
         !isStatus(cStatus_Vine) &&
         p_cloud_actor->getPos().y + getCloudOffsetY() + 6.0f >= mPos.y &&
         mSpeed.y < 0.0f &&

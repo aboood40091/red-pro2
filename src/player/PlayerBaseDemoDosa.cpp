@@ -27,7 +27,7 @@ void PlayerBase::initializeState_DemoControl()
     if (mDemoSubAction == cDemoControlSubAction_4)
     {
         mDemoActionTimer = 60;
-        onStatus(cStatus_266);
+        onStatus(cStatus_NoEntryReactCc);
     }
 }
 
@@ -89,7 +89,7 @@ void PlayerBase::finalizeState_DemoControl()
     offStatus(cStatus_240);
     offStatus(cStatus_64);
     if (mDemoSubAction == cDemoControlSubAction_4)
-        offStatus(cStatus_266);
+        offStatus(cStatus_NoEntryReactCc);
 }
 
 void PlayerBase::setControlDemoPos(const sead::Vector3f& pos)
@@ -216,7 +216,7 @@ bool PlayerBase::isControlDemoAnmSeq(AnimePlayType type)
 {
     if (isStatus(cStatus_DemoControl))
     {
-        if (mDemoSubAction == cDemoControlSubAction_AnmSeq && mAnimePlayType == type && isStatus(cStatus_DemoScript))
+        if (mDemoSubAction == cDemoControlSubAction_AnmSeq && mAnimePlayType == type && isStatus(cStatus_ControlledState))
             return true;
     }
     return false;
@@ -230,7 +230,7 @@ bool PlayerBase::isDemoLand()
     if (isStatus(cStatus_40))
         return false;
 
-    if (isStatus(cStatus_247))
+    if (isStatus(cStatus_IgnoreBgCross))
         return false;
 
     return true;
@@ -348,7 +348,7 @@ void PlayerBase::initializeState_AnimePlay()
 {
     mAnimePlayType = AnimePlayType(mChangeStateParam);
     if (mAnimePlayType != cAnimePlayType_Normal)
-        onStatus(cStatus_DemoScript);
+        onStatus(cStatus_ControlledState);
 }
 
 void PlayerBase::DemoAnmNormal()
@@ -369,7 +369,7 @@ void PlayerBase::DemoAnmBossSetUp()
     {
         mpModelBaseMgr->setAnm(PlayerAnmID::waitL3);
         mAction = cAnimePlayAction_End;
-        offStatus(cStatus_DemoScript);
+        offStatus(cStatus_ControlledState);
     }
 }
 
@@ -408,7 +408,7 @@ void PlayerBase::DemoAnmBossGlad()
         {
             mpModelBaseMgr->setAnm(PlayerAnmID::wait, 5.0f, 0.0f);
             mAction = cAnimePlayAction_End;
-            offStatus(cStatus_DemoScript);
+            offStatus(cStatus_ControlledState);
         }
         break;
     }
@@ -437,7 +437,7 @@ void PlayerBase::DemoAnmBossAttention()
             if (mAngle.y().chaseRest(target, step))
             {
                 mAction = cAnimePlayAction_End;
-                offStatus(cStatus_DemoScript);
+                offStatus(cStatus_ControlledState);
             }
         }
         break;
@@ -461,7 +461,7 @@ void PlayerBase::DemoAnmBossKeyGet()
             mpModelBaseMgr->setAnm(PlayerAnmID::boss_key_get, 0.0f);
             startGoalDemoVoice(cCourseClearType_Boss);
             mAction = cAnimePlayAction_End;
-            offStatus(cStatus_DemoScript);
+            offStatus(cStatus_ControlledState);
         }
         break;
     }
@@ -501,7 +501,7 @@ void PlayerBase::DemoAnmLastBoss2Glad()
         {
             mpModelBaseMgr->setAnm(PlayerAnmID::wait, 5.0f, 0.0f);
             mAction = cAnimePlayAction_End;
-            offStatus(cStatus_DemoScript);
+            offStatus(cStatus_ControlledState);
         }
         break;
     }
@@ -542,7 +542,7 @@ void PlayerBase::DemoAnmLastBoss1Glad()
         {
             mpModelBaseMgr->setAnm(PlayerAnmID::wait, 5.0f, 0.0f);
             mAction = cAnimePlayAction_End;
-            offStatus(cStatus_DemoScript);
+            offStatus(cStatus_ControlledState);
         }
         break;
     }
@@ -555,7 +555,7 @@ void PlayerBase::DemoAnmTitleSlip()
     default:
         break;
     case cAnimePlayAction_Start:
-        offStatus(cStatus_DemoScript);
+        offStatus(cStatus_ControlledState);
         mpModelBaseMgr->setAnm(PlayerAnmID::ice_slipF);
         mAction = cAnimePlayAction_TitleSlip_Move;
         // fallthrough
@@ -608,7 +608,7 @@ void PlayerBase::DemoAnmEndingGlad()
         {
             mpModelBaseMgr->setAnm(PlayerAnmID::dm_glad4_wait, 5.0f, 0.0f);
             mAction = cAnimePlayAction_End;
-            offStatus(cStatus_DemoScript);
+            offStatus(cStatus_ControlledState);
         }
         break;
     }
@@ -631,7 +631,7 @@ void PlayerBase::executeState_AnimePlay()
     maxFallSpeedSet();
     moveSpeedSet();
     powerSet();
-    if (isStatus(cStatus_DemoScript) || !checkWalkNextAction())
+    if (isStatus(cStatus_ControlledState) || !checkWalkNextAction())
     {
         switch (mAnimePlayType)
         {
@@ -677,7 +677,7 @@ void PlayerBase::executeState_AnimePlay()
 void PlayerBase::finalizeState_AnimePlay()
 {
     offStatus(cStatus_155);
-    offStatus(cStatus_DemoScript);
+    offStatus(cStatus_ControlledState);
     offStatus(cStatus_57);
     offStatus(cStatus_DemoAnmLoop);
 }

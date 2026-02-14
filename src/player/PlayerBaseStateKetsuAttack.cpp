@@ -19,7 +19,7 @@ void PlayerBase::initializeState_HipAttack()
     setHipAttack_Ready_();
     onStatus(cStatus_196);
     onStatus(cStatus_200);
-    onStatus(cStatus_203);
+    onStatus(cStatus_NoSwimAction);
     onStatus(cStatus_206);
 }
 
@@ -51,7 +51,7 @@ void PlayerBase::executeState_HipAttack()
         setCcAtHipAttack();
 
     if (isNowBgCross(cBgCross_IsCompletelyUnderwater))
-        offStatus(cStatus_203);
+        offStatus(cStatus_NoSwimAction);
 
     if (mAction >= cHipAction_StandNormal)
         if (checkJumpTrigger())
@@ -74,10 +74,10 @@ void PlayerBase::finalizeState_HipAttack()
     offStatus(cStatus_165);
     offStatus(cStatus_196);
     offStatus(cStatus_200);
-    offStatus(cStatus_203);
+    offStatus(cStatus_NoSwimAction);
     offStatus(cStatus_206);
     offStatus(cStatus_NoBgCrossUpdate);
-    offStatus(cStatus_266);
+    offStatus(cStatus_NoEntryReactCc);
 }
 
 void PlayerBase::setHipAttack_AttackStartBase()
@@ -190,7 +190,7 @@ void PlayerBase::HipAction_AttackFall()
     if (mActionTimer == 0 || isNowBgCross(cBgCross_IsFoot))
     {
         offStatus(cStatus_NoBgCrossUpdate);
-        offStatus(cStatus_266);
+        offStatus(cStatus_NoEntryReactCc);
     }
 
     if (!isNowBgCross(cBgCross_IsFoot))

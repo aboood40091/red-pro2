@@ -566,7 +566,7 @@ void CarryEnemy::adjustCarryCc(ActorCollisionCheck* p_cc, PlayerObject* p_player
             half_size.x += -1.0f;
             half_size.y += 1.0f;
         }
-        if (!p_player_obj->isStatus(PlayerObject::cStatus_247) && p_player_obj->isNowBgCross(PlayerObject::cBgCross_IsFoot))
+        if (!p_player_obj->isStatus(PlayerObject::cStatus_IgnoreBgCross) && p_player_obj->isNowBgCross(PlayerObject::cBgCross_IsFoot))
         {
             ActorBgCollisionCheck* p_bc_pl = p_player_obj->getBgCheck();
             if (p_bc_pl != nullptr && p_bc_pl->isSaka())

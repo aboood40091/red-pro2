@@ -42,7 +42,7 @@ void PlayerBase::offDemo()
 {
     if (mPlayerNo >= 0 && isStatus(cStatus_208))
     {
-        PlayerMgr::instance()->offDemo(mPlayerNo);
+        PlayerMgr::instance()->setPauseEnable(mPlayerNo);
         CourseTimer::instance()->offStopTimer(mPlayerNo);
         offStatus(cStatus_DemoMode);
         offStatus(cStatus_208);
@@ -123,7 +123,7 @@ void PlayerBase::onDemo()
 {
     if (mPlayerNo >= 0)
     {
-        PlayerMgr::instance()->onDemo(mPlayerNo);
+        PlayerMgr::instance()->setPauseDisable(mPlayerNo);
         CourseTimer::instance()->onStopTimer(mPlayerNo);
         onStatus(cStatus_DemoMode);
         onStatus(cStatus_208);
@@ -187,7 +187,7 @@ void PlayerBase::initializeState_DemoNextGotoBlock()
     onDemoType(cDemoType_3);
     mPlayerKey.onStatus(PlayerKey::cStatus_Demo);
     onStatus(cStatus_242);
-    onStatus(cStatus_266);
+    onStatus(cStatus_NoEntryReactCc);
     initializeDemoControl();
 }
 
@@ -271,7 +271,7 @@ void PlayerBase::finalizeState_DemoNextGotoBlock()
 {
     mPlayerKey.offStatus(PlayerKey::cStatus_Demo);
     offStatus(cStatus_242);
-    offStatus(cStatus_266);
+    offStatus(cStatus_NoEntryReactCc);
     offStatus(cStatus_243);
 }
 

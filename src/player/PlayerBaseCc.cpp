@@ -129,7 +129,7 @@ bool PlayerBase::entryCollision()
         if (mCollisionCheck5_Attack.getAttack() != ActorCollisionCheck::cAttack_None)
             ActorCollisionCheckMgr::instance()->entry(mCollisionCheck5_Attack);
 
-        if (!isStatus(cStatus_266))
+        if (!isStatus(cStatus_NoEntryReactCc))
         {
             if (isStatus(cStatus_264))
                 ActorCollisionCheckMgr::instance()->entry(mCollisionCheck2_React);

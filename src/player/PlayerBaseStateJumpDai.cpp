@@ -57,7 +57,7 @@ PlayerBase* PlayerBase::getPlayerJumpDai()
     if (isStatus(cStatus_41))
     {
         PlayerBase* p_player_other = sead::DynamicCast<PlayerBase>(ActorMgr::instance()->getActorPtr(mRideActorID));
-        if (p_player_other != nullptr && !p_player_other->isDemoMode() && !p_player_other->isStatus(cStatus_266))
+        if (p_player_other != nullptr && !p_player_other->isDemoMode() && !p_player_other->isStatus(cStatus_NoEntryReactCc))
             return p_player_other;
     }
 

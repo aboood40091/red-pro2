@@ -68,7 +68,7 @@ void PlayerBase::finalizeState_DemoSubjectClearLand()
 
 void PlayerBase::initializeState_DemoSubjectClearAir()
 {
-    onStatus(cStatus_DisableAttention);
+    onStatus(cStatus_DisableAnm);
     mDemoActionTimer = 180;
     mDemoAction = 0;
 }
@@ -84,7 +84,7 @@ void PlayerBase::executeState_DemoSubjectClearAir()
 
 void PlayerBase::finalizeState_DemoSubjectClearAir()
 {
-    offStatus(cStatus_DisableAttention);
+    offStatus(cStatus_DisableAnm);
 }
 
 void PlayerBase::initializeState_DemoShadowFail()
@@ -254,7 +254,7 @@ void PlayerBase::initializeState_SubjectClearWait()
     mSubjectClearWaitTimer = 10;
     startControlDemo(true);
     checkDemoControl();
-    onStatus(cStatus_266);
+    onStatus(cStatus_NoEntryReactCc);
 }
 
 void PlayerBase::executeState_SubjectClearWait()
@@ -267,7 +267,7 @@ void PlayerBase::executeState_SubjectClearWait()
 
 void PlayerBase::finalizeState_SubjectClearWait()
 {
-    offStatus(cStatus_266);
+    offStatus(cStatus_NoEntryReactCc);
 }
 
 void PlayerBase::executeSubjectState()

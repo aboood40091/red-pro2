@@ -305,7 +305,7 @@ void PlayerBase::revSideLimitCommon(f32 x)
     if (mPos.x >= x)
         dir = cDirType_Left;
 
-    if (!isStatus(cStatus_247))
+    if (!isStatus(cStatus_IgnoreBgCross))
     {
         Angle angle = mBgCheckPlayer.getSakaAngle(dir);
         if (angle != 0)
@@ -985,7 +985,7 @@ void PlayerBase::checkWater()
 
 void PlayerBase::checkDamageBg()
 {
-    if (isStatus(cStatus_247))
+    if (isStatus(cStatus_IgnoreBgCross))
         return;
 
     if (isStatus(cStatus_RideBalloon))
@@ -1044,7 +1044,7 @@ void PlayerBase::bgCheck(bool side_view_check)
     if (side_view_check)
         checkSideViewLemit();
 
-    if (!isStatus(cStatus_247))
+    if (!isStatus(cStatus_IgnoreBgCross))
     {
         checkBgCross_();
         checkBgCrossSub();
@@ -1460,7 +1460,7 @@ void PlayerBase::checkDispOver()
     if (PlayerDemoMgr::instance()->isPlayerGameStop())
         return;
 
-    if (!isStatus(cStatus_247))
+    if (!isStatus(cStatus_IgnoreBgCross))
     {
         upperOverCheck();
         underOverCheck_();

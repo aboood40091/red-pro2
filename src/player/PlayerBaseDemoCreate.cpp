@@ -38,7 +38,7 @@ void PlayerBase::resetBg()
     mStatus.reset();
     mNowBgCross.reset();
     mOldBgCross.reset();
-    _205c = 0;
+    mInvincibilityTimer = 0;
     _2060 = 0;
     _2064 = 0;
     _2068 = 0;

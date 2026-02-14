@@ -1,6 +1,6 @@
 #include <actor/ActorMgr.h>
 #include <actor/Profile.h>
-#include <event/EventDie.h>
+#include <event/EventDown.h>
 #include <event/EventPlayerChange.h>
 #include <game/CourseTask.h>
 #include <graphics/LightType.h>
@@ -59,7 +59,7 @@ PlayerObject::PlayerObject(const ActorCreateParam& param)
     , mChangeMgr()
     , _29d0(0.0f)
     , _29d4(0)
-    , mpEventDie(new EventDie(getParamPlayerNo(mParam0)))
+    , mpEventDown(new EventDown(getParamPlayerNo(mParam0)))
     , _29dc(0)
     , mPlayerEatDieNow(false)
     , _29e0(0.0f, 0.0f, 0.0f)
@@ -101,8 +101,8 @@ PlayerObject::PlayerObject(const ActorCreateParam& param)
     , _2a7c(0)
     , _2a80(0)
     , _2a84(0)
-    , _2a88(0)
-    , _2a8c(0)
+    , mBalloonHelpVoiceTimer(0)
+    , mBalloonCheckAllFadeTimer(0)
     , mBalloonControllerConnectStatus(0)
     , _2a94(0)
     , _2a98(0.0f, 0.0f, 0.0f)
@@ -1055,7 +1055,7 @@ bool PlayerObject::bouncePlayer2(f32 speed_y, f32 speed_F, bool enable_LR, Bounc
     if (isDemo())
         return false;
 
-    if (isStatus(cStatus_DemoScript) && isStatus(cStatus_RideBalloon))
+    if (isStatus(cStatus_ControlledState) && isStatus(cStatus_RideBalloon))
         return false;
 
     if (setSwimSpeed(speed_y * 0.5f, speed_F * 0.5f))

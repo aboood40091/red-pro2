@@ -87,7 +87,7 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , mCollisionCheck4_Attack()
     , mCollisionCheck5_Attack()
     , mDrcTouchCallback()
-    , _205c(0)
+    , mInvincibilityTimer(0)
     , _2060(0)
     , _2064(0)
     , _2068(0)
@@ -400,10 +400,10 @@ void PlayerBase::postExecute_(MainState state)
 
 bool PlayerBase::preDraw_()
 {
-    if (isStatus(cStatus_123))
+    if (isStatus(cStatus_RideBalloonSetVisible))
     {
         offStatus(cStatus_Invisible);
-        offStatus(cStatus_123);
+        offStatus(cStatus_RideBalloonSetVisible);
     }
 
     if (isStatus(cStatus_Invisible))
@@ -755,15 +755,15 @@ void PlayerBase::coinFunsuiOnDamageCB(s32 type, Actor* p_eat_die_actor)
 
 void PlayerBase::calcTimerProc()
 {
-    MathUtil::calcTimer(&_205c);
-    if (_205c < 60)
+    MathUtil::calcTimer(&mInvincibilityTimer);
+    if (mInvincibilityTimer < 60)
     {
-        if (_205c & 4)
+        if (mInvincibilityTimer & 4)
             onStatus(cStatus_HideTemporarily);
     }
     else
     {
-        if (_205c & 8)
+        if (mInvincibilityTimer & 8)
             onStatus(cStatus_HideTemporarily);
     }
 
