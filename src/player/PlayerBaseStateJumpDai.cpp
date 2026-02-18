@@ -101,7 +101,7 @@ void PlayerBase::executeState_PlayerJumpDai()
     }
 
     f32 roof_pos;
-    if (mBgCheckPlayer.checkRoof(mPos, 32.0f, &roof_pos))
+    if (mBgCheckPlayer.checkTenjou(mPos, 32.0f, &roof_pos))
     {
         f32 max_pos = roof_pos - (sead::Mathf::abs(getHeadBgPointData()->center_offset) + 1.0f);
         if (mPos.y > max_pos)
@@ -186,7 +186,7 @@ bool PlayerBase::setPlayerJumpDai(PlayerBase* p_player_other)
         f32 head_y = p_player_other->getHeadTopPosP()->y - 4.0f;
         sead::Vector3f check_pos(mPos.x, head_y, mPos.z);
         f32 roof_pos;
-        if (!mBgCheckPlayer.checkRoof(check_pos, 32.0f, &roof_pos) || roof_pos >= head_y + mHeight)
+        if (!mBgCheckPlayer.checkTenjou(check_pos, 32.0f, &roof_pos) || roof_pos >= head_y + mHeight)
         {
             u32 param = 0;
             if (isStatus(cStatus_48) || isStatus(cStatus_52))

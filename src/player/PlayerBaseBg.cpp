@@ -620,7 +620,7 @@ void PlayerBase::checkBgCross_()
         if (mSpeedSakaAngle > 0 && isNowBgCross(cBgCross_IsHead))
         {
             sead::Vector3f check_pos(mPos.x, mPos.y + getHeadBgPointData()->center_offset, mPos.z);
-            if (mBgCheckPlayer.checkRoof(check_pos, 8.0f))
+            if (mBgCheckPlayer.checkTenjou(check_pos, 8.0f))
                 onNowBgCross(cBgCross_OnSakaUnderRoof);
         }
 
@@ -1482,7 +1482,7 @@ void PlayerBase::upperOverCheck()
             {
                 sead::Vector3f check_pos(mPos.x, mPos.y - 32.0f, mPos.z);
                 f32 hit_pos_y;
-                if (mBgCheckPlayer.checkRoof(check_pos, 32.0f, &hit_pos_y))
+                if (mBgCheckPlayer.checkTenjou(check_pos, 32.0f, &hit_pos_y))
                 {
                     top -= 20.0f;
                     if (hit_pos_y < top)
@@ -1513,10 +1513,10 @@ bool PlayerBase::checkStandUpRoof()
         sead::Vector3f check_pos(mPos.x + p_head_sensor->p1, mPos.y + 4.0f, mPos.z);
         f32 check_distance = sead::Mathf::abs(stand_y - check_pos.y);
         f32 hit_pos_y;
-        if (mBgCheckPlayer.checkRoof(check_pos, check_distance, &hit_pos_y))
+        if (mBgCheckPlayer.checkTenjou(check_pos, check_distance, &hit_pos_y))
             return true;
         check_pos.x = mPos.x + p_head_sensor->p2;
-        if (mBgCheckPlayer.checkRoof(check_pos, check_distance, &hit_pos_y))
+        if (mBgCheckPlayer.checkTenjou(check_pos, check_distance, &hit_pos_y))
             return true;
     }
     return false;
