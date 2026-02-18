@@ -305,7 +305,7 @@ void PlayerBase::executeDemoGoal_Wait()
 
 void PlayerBase::executeDemoGoal_KimePose()
 {
-    if (execDemoKimePose(cCourseClearType_Normal))
+    if (updateDemoKimePose(cClearType_Normal))
         setDemoGoalMode(cDemoGoalAction_Wait, 0);
 }
 
@@ -400,7 +400,7 @@ bool PlayerBase::isGoalRingLand()
     return false;
 }
 
-void PlayerBase::setGoalDemoBase(const sead::Vector2f& pos, f32 walk_target_pos_x, bool secret_exit)
+void PlayerBase::setDemoGoalBase(const sead::Vector2f& pos, f32 walk_target_pos_x, bool secret_exit)
 {
     if (isDisableGoalDemo())
         return;
@@ -478,10 +478,10 @@ bool PlayerBase::setHideNotGoalPlayerBase()
     return false;
 }
 
-void PlayerBase::startGoalDemoVoice(CourseClearType course_clear_type)
+void PlayerBase::startKimePoseVoice(ClearType clear_type)
 {
     s32 demo_num =
-        course_clear_type == cCourseClearType_Normal
+        clear_type == cClearType_Normal
             ? PlayerDemoMgr::instance()->getGoalDemoNum()
             : PlayerDemoMgr::instance()->getControlDemoPlayerNum();
 
@@ -494,7 +494,7 @@ void PlayerBase::startGoalDemoVoice(CourseClearType course_clear_type)
     }
     else
     {
-        if (course_clear_type == cCourseClearType_LastBoss)
+        if (clear_type == cClearType_LastBoss)
             startVoiceSound(CLEAR_LAST_BOSS);
         else
         {
@@ -502,7 +502,7 @@ void PlayerBase::startGoalDemoVoice(CourseClearType course_clear_type)
                 startVoiceSound(CLEAR_MULTI);
             else
             {
-                if (course_clear_type == cCourseClearType_Normal)
+                if (clear_type == cClearType_Normal)
                 {
                     if (PlayerDemoMgr::instance()->isNormalExit())
                         startVoiceSound(CLEAR_NORMAL);

@@ -43,7 +43,7 @@ void PlayerBase::executeState_DemoSubjectClearLand()
         }
         break;
     case 1:
-        if (execDemoKimePose(cCourseClearType_Normal))
+        if (updateDemoKimePose(cClearType_Normal))
         {
             mDemoAction = 2;
             mDemoActionTimer = 60;

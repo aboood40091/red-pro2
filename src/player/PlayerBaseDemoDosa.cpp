@@ -393,7 +393,7 @@ void PlayerBase::DemoAnmBossGlad()
         }
         break;
     case cAnimePlayAction_Glad_PutOnCap:
-        if (execDemoKimePose(cCourseClearType_Boss))
+        if (updateDemoKimePose(cClearType_Boss))
             mAction = cAnimePlayAction_Glad_KimeWait;
         break;
     case cAnimePlayAction_Glad_KimeWait:
@@ -459,7 +459,7 @@ void PlayerBase::DemoAnmBossKeyGet()
         if (mActionTimer == 0)
         {
             mpModelBaseMgr->setAnm(PlayerAnmID::boss_key_get, 0.0f);
-            startGoalDemoVoice(cCourseClearType_Boss);
+            startKimePoseVoice(cClearType_Boss);
             mAction = cAnimePlayAction_End;
             offStatus(cStatus_ControlledState);
         }
@@ -486,7 +486,7 @@ void PlayerBase::DemoAnmLastBoss2Glad()
         }
         break;
     case cAnimePlayAction_Glad_PutOnCap:
-        if (execDemoKimePose(cCourseClearType_LastBoss))
+        if (updateDemoKimePose(cClearType_LastBoss))
             mAction = cAnimePlayAction_Glad_KimeWait;
         break;
     case cAnimePlayAction_Glad_KimeWait:
@@ -527,7 +527,7 @@ void PlayerBase::DemoAnmLastBoss1Glad()
         }
         break;
     case cAnimePlayAction_Glad_PutOnCap:
-        if (execDemoKimePose(cCourseClearType_Fanfare))
+        if (updateDemoKimePose(cClearType_Fanfare))
             mAction = cAnimePlayAction_Glad_KimeWait;
         break;
     case cAnimePlayAction_Glad_KimeWait:
@@ -593,7 +593,7 @@ void PlayerBase::DemoAnmEndingGlad()
         }
         break;
     case cAnimePlayAction_Glad_PutOnCap:
-        if (execDemoKimePose(cCourseClearType_Fanfare))
+        if (updateDemoKimePose(cClearType_Fanfare))
             mAction = cAnimePlayAction_Glad_KimeWait;
         break;
     case cAnimePlayAction_Glad_KimeWait:
