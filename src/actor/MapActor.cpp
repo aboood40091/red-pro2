@@ -142,7 +142,7 @@ const MapActor::Profile MapActor::cProfileID[] = {
     ProfileInfo::cProfileID_288,                                        // 137
     ProfileInfo::cProfileID_289,                                        // 138
     ProfileInfo::cProfileID_14F,                                        // 139
-    ProfileInfo::cProfileID_150,                                        // 140
+    ProfileInfo::cProfileID_ObjPipeDown,                                // 140
     ProfileInfo::cProfileID_14E,                                        // 141
     ProfileInfo::cProfileID_14D,                                        // 142
     ProfileInfo::cProfileID_1C2,                                        // 143
@@ -513,7 +513,7 @@ const MapActor::Profile MapActor::cProfileID[] = {
     ProfileInfo::cProfileID_101,                                        // 508
     ProfileInfo::cProfileID_155,                                        // 509
     ProfileInfo::cProfileID_156,                                        // 510
-    ProfileInfo::cProfileID_086,                                        // 511
+    ProfileInfo::cProfileID_ObjPipeDownNG,                              // 511
     ProfileInfo::cProfileID_0A6,                                        // 512
     ProfileInfo::cProfileID_340,                                        // 513
     ProfileInfo::cProfileID_341,                                        // 514
@@ -580,7 +580,7 @@ const MapActor::Profile MapActor::cProfileID[] = {
     ProfileInfo::cProfileID_152,                                        // 575
     ProfileInfo::cProfileID_151,                                        // 576
     ProfileInfo::cProfileID_153,                                        // 577
-    ProfileInfo::cProfileID_154,                                        // 578
+    ProfileInfo::cProfileID_ObjPipeDownGroup,                           // 578
     ProfileInfo::cProfileID_281,                                        // 579
     ProfileInfo::cProfileID_282,                                        // 580
     ProfileInfo::cProfileID_SearchKillerHoudai,                         // 581

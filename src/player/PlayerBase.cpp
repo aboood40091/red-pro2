@@ -258,10 +258,10 @@ bool PlayerBase::preExecute_()
     offStatus(cStatus_138);
     offStatus(cStatus_141);
 
-    if (isStatus(cStatus_256))
+    if (isStatus(cStatus_ControlledMoveReq))
     {
-        onStatus(cStatus_255);
-        offStatus(cStatus_256);
+        onStatus(cStatus_ControlledMove);
+        offStatus(cStatus_ControlledMoveReq);
     }
 
     offStatus(cStatus_117);
@@ -376,7 +376,7 @@ void PlayerBase::postExecute_(MainState state)
         offStatus(cStatus_106);
         offStatus(cStatus_93);
         offStatus(cStatus_63);
-        offStatus(cStatus_255);
+        offStatus(cStatus_ControlledMove);
 
         if (!isStatus(cStatus_250))
             mBgCheckPlayer.clearBg();
@@ -903,7 +903,7 @@ void PlayerBase::posMoveAnglePlayer(const sead::Vector3f& speed)
             base_speed.x = base_speed.x > 0.0f ? 2.5f : -2.5f;
     }
 
-    if (isStatus(cStatus_98) || isStatus(cStatus_97))
+    if (isStatus(cStatus_PenguinSwim) || isStatus(cStatus_97))
     {
         posMoveAnglePenguin(base_speed);
         return;
@@ -1075,7 +1075,7 @@ bool PlayerBase::setJump(u8 param, JumpSe jump_se_type)
 {
     if (!isNowBgCross(cBgCross_IsUnderwater) && !isStatus(cStatus_146))
     {
-        if (mpModelBaseMgr->isAnmFlag(PlayerModelBase::cAnmFlagType_Main, PlayerModelBase::cAnmFlagBit_Sit) && checkStandUpRoof())
+        if (mpModelBaseMgr->isSitAnm() && checkStandUpRoof())
             return setCrouchJump();
 
         if (mPlayerKey.triggerJump())

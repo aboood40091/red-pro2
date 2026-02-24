@@ -218,7 +218,7 @@ void PlayerBase::postBgCrossBase()
     }
 }
 
-void PlayerBase::setBcSensorFlags()
+void PlayerBase::setBcSensorFlagsBase()
 {
     mBgCheckPlayer.getSensorFlag(cDirType_Down).setBit(ActorBgCollisionCheck::SensorFlag::cBit_3);
     mBgCheckPlayer.getSensorFlag(cDirType_Down).setBit(ActorBgCollisionCheck::SensorFlag::cBit_4);
@@ -274,7 +274,7 @@ void PlayerBase::setBcSensorFlags()
         mBgCheckPlayer.getSensorFlag(cDirType_Left).setBit(ActorBgCollisionCheck::SensorFlag::cBit_26);
     }
 
-    if (isStatus(cStatus_RideCloud) || isStatus(cStatus_98) || isStatus(cStatus_97))
+    if (isStatus(cStatus_RideCloud) || isStatus(cStatus_PenguinSwim) || isStatus(cStatus_97))
     {
         mBgCheckPlayer.getSensorFlag(cDirType_Down).setBit(ActorBgCollisionCheck::SensorFlag::cBit_22);
         mBgCheckPlayer.getSensorFlag(cDirType_Down).setBit(ActorBgCollisionCheck::SensorFlag::cBit_23);
@@ -725,7 +725,7 @@ void PlayerBase::checkBgCross_()
 
             if (BgUnitCode::getType(bc_data_foot) == BgUnitCode::cType_Kani)
             {
-                if (isStatus(cStatus_99))
+                if (isStatus(cStatus_PenguinSlide))
                 {
                     BgCollisionCheckResultArea res;
                     sead::Vector3f check_pos(mPos.x, mPos.y + 2.0f, mPos.z);
@@ -1348,7 +1348,7 @@ bool PlayerBase::checkPressBgLR_()
             !(isNowBgCross(cBgCross_DispSideLimitR) && isNowBgCross(cBgCross_IsWallTouchL)) &&
             isEnablePressLR_(mBgCheckPlayer) && !setPressBreakLR_(mBgCheckPlayer))
         {
-            if (isStatus(cStatus_99))
+            if (isStatus(cStatus_PenguinSlide))
             {
                 forceSlipToStoop();
                 return true;
@@ -1506,7 +1506,7 @@ void PlayerBase::upperOverCheck()
 
 bool PlayerBase::checkStandUpRoof()
 {
-    ActorBgCollisionCheck::Sensor* p_head_sensor = getHeadBgPointData();
+    const ActorBgCollisionCheck::Sensor* p_head_sensor = getHeadBgPointData();
     if (p_head_sensor != nullptr)
     {
         f32 stand_y = mPos.y + getStandHeadBgPointY() - 1.0f;

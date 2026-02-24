@@ -444,7 +444,7 @@ bool PlayerBase::setNextGotoBlockDemo(s32 dst_next_goto_no, s32 wait_timer, Next
     if (mNextGotoDelay == cNextGotoBlockDelay_Normal)
     {
         offStatus(cStatus_DemoMode);
-        if (!isStatus(cStatus_99))
+        if (!isStatus(cStatus_PenguinSlide))
             changeState(StateID_Fall, cAnmBlend_Enable);
     }
 

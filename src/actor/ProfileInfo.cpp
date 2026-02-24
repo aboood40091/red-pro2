@@ -169,7 +169,7 @@ const s16 ProfileInfo::cDrawPriority[cProfileID_Max] = {
     ProfileInfo::cDrawPriority_083,                                     // ProfileInfo::cProfileID_083
     ProfileInfo::cDrawPriority_084,                                     // ProfileInfo::cProfileID_084
     ProfileInfo::cDrawPriority_085,                                     // ProfileInfo::cProfileID_085
-    ProfileInfo::cDrawPriority_086,                                     // ProfileInfo::cProfileID_086
+    ProfileInfo::cDrawPriority_ObjPipeDownNG,                           // ProfileInfo::cProfileID_ObjPipeDownNG
     ProfileInfo::cDrawPriority_087,                                     // ProfileInfo::cProfileID_087
     ProfileInfo::cDrawPriority_088,                                     // ProfileInfo::cProfileID_088
     ProfileInfo::cDrawPriority_089,                                     // ProfileInfo::cProfileID_089
@@ -371,11 +371,11 @@ const s16 ProfileInfo::cDrawPriority[cProfileID_Max] = {
     ProfileInfo::cDrawPriority_14D,                                     // ProfileInfo::cProfileID_14D
     ProfileInfo::cDrawPriority_14E,                                     // ProfileInfo::cProfileID_14E
     ProfileInfo::cDrawPriority_14F,                                     // ProfileInfo::cProfileID_14F
-    ProfileInfo::cDrawPriority_150,                                     // ProfileInfo::cProfileID_150
+    ProfileInfo::cDrawPriority_ObjPipeDown,                             // ProfileInfo::cProfileID_ObjPipeDown
     ProfileInfo::cDrawPriority_151,                                     // ProfileInfo::cProfileID_151
     ProfileInfo::cDrawPriority_152,                                     // ProfileInfo::cProfileID_152
     ProfileInfo::cDrawPriority_153,                                     // ProfileInfo::cProfileID_153
-    ProfileInfo::cDrawPriority_154,                                     // ProfileInfo::cProfileID_154
+    ProfileInfo::cDrawPriority_ObjPipeDownGroup,                        // ProfileInfo::cProfileID_ObjPipeDownGroup
     ProfileInfo::cDrawPriority_155,                                     // ProfileInfo::cProfileID_155
     ProfileInfo::cDrawPriority_156,                                     // ProfileInfo::cProfileID_156
     ProfileInfo::cDrawPriority_157,                                     // ProfileInfo::cProfileID_157
@@ -1087,7 +1087,7 @@ const s8 ProfileInfo::cResType[cProfileID_Max] = {
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_083
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_084
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_085
-    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_086
+    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_ObjPipeDownNG
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_087
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_088
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_089
@@ -1289,11 +1289,11 @@ const s8 ProfileInfo::cResType[cProfileID_Max] = {
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_14D
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_14E
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_14F
-    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_150
+    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_ObjPipeDown
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_151
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_152
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_153
-    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_154
+    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_ObjPipeDownGroup
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_155
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_156
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_157
@@ -2303,7 +2303,7 @@ static const sead::SafeString cRes_085[]  = {
     "obj_dokan"
 };
 
-static const sead::SafeString cRes_086[]  = {
+static const sead::SafeString cRes_ObjPipeDownNG[]  = {
     "obj_dokan",
     "obj_dokan_kaiga"
 };
@@ -3057,7 +3057,7 @@ static const sead::SafeString cRes_14F[]  = {
     "obj_dokan_kaiga"
 };
 
-static const sead::SafeString cRes_150[]  = {
+static const sead::SafeString cRes_ObjPipeDown[]  = {
     "obj_dokan",
     "obj_dokan_kaiga"
 };
@@ -3077,7 +3077,7 @@ static const sead::SafeString cRes_153[]  = {
     "obj_dokan_kaiga"
 };
 
-static const sead::SafeString cRes_154[]  = {
+static const sead::SafeString cRes_ObjPipeDownGroup[]  = {
     "obj_dokan",
     "obj_dokan_kaiga"
 };
@@ -5373,7 +5373,7 @@ const u8 ProfileInfo::cResNum[cProfileID_Max] = {
     GetResNum(cRes_083),                                        // ProfileInfo::cProfileID_083
     GetResNum(cRes_084),                                        // ProfileInfo::cProfileID_084
     GetResNum(cRes_085),                                        // ProfileInfo::cProfileID_085
-    GetResNum(cRes_086),                                        // ProfileInfo::cProfileID_086
+    GetResNum(cRes_ObjPipeDownNG),                              // ProfileInfo::cProfileID_ObjPipeDownNG
     GetResNum(cRes_087),                                        // ProfileInfo::cProfileID_087
     GetResNum(cRes_088),                                        // ProfileInfo::cProfileID_088
     GetResNum(cRes_089),                                        // ProfileInfo::cProfileID_089
@@ -5575,11 +5575,11 @@ const u8 ProfileInfo::cResNum[cProfileID_Max] = {
     GetResNum(cRes_14D),                                        // ProfileInfo::cProfileID_14D
     GetResNum(cRes_14E),                                        // ProfileInfo::cProfileID_14E
     GetResNum(cRes_14F),                                        // ProfileInfo::cProfileID_14F
-    GetResNum(cRes_150),                                        // ProfileInfo::cProfileID_150
+    GetResNum(cRes_ObjPipeDown),                                // ProfileInfo::cProfileID_ObjPipeDown
     GetResNum(cRes_151),                                        // ProfileInfo::cProfileID_151
     GetResNum(cRes_152),                                        // ProfileInfo::cProfileID_152
     GetResNum(cRes_153),                                        // ProfileInfo::cProfileID_153
-    GetResNum(cRes_154),                                        // ProfileInfo::cProfileID_154
+    GetResNum(cRes_ObjPipeDownGroup),                           // ProfileInfo::cProfileID_ObjPipeDownGroup
     GetResNum(cRes_155),                                        // ProfileInfo::cProfileID_155
     GetResNum(cRes_156),                                        // ProfileInfo::cProfileID_156
     GetResNum(cRes_157),                                        // ProfileInfo::cProfileID_157
@@ -6291,7 +6291,7 @@ const sead::SafeString* ProfileInfo::cResList[cProfileID_Max] = {
     cRes_083,                                       // ProfileInfo::cProfileID_083
     cRes_084,                                       // ProfileInfo::cProfileID_084
     cRes_085,                                       // ProfileInfo::cProfileID_085
-    cRes_086,                                       // ProfileInfo::cProfileID_086
+    cRes_ObjPipeDownNG,                             // ProfileInfo::cProfileID_ObjPipeDownNG
     cRes_087,                                       // ProfileInfo::cProfileID_087
     cRes_088,                                       // ProfileInfo::cProfileID_088
     cRes_089,                                       // ProfileInfo::cProfileID_089
@@ -6493,11 +6493,11 @@ const sead::SafeString* ProfileInfo::cResList[cProfileID_Max] = {
     cRes_14D,                                       // ProfileInfo::cProfileID_14D
     cRes_14E,                                       // ProfileInfo::cProfileID_14E
     cRes_14F,                                       // ProfileInfo::cProfileID_14F
-    cRes_150,                                       // ProfileInfo::cProfileID_150
+    cRes_ObjPipeDown,                               // ProfileInfo::cProfileID_ObjPipeDown
     cRes_151,                                       // ProfileInfo::cProfileID_151
     cRes_152,                                       // ProfileInfo::cProfileID_152
     cRes_153,                                       // ProfileInfo::cProfileID_153
-    cRes_154,                                       // ProfileInfo::cProfileID_154
+    cRes_ObjPipeDownGroup,                          // ProfileInfo::cProfileID_ObjPipeDownGroup
     cRes_155,                                       // ProfileInfo::cProfileID_155
     cRes_156,                                       // ProfileInfo::cProfileID_156
     cRes_157,                                       // ProfileInfo::cProfileID_157
@@ -7208,7 +7208,7 @@ const s32 ProfileInfo::cProfileID_082                                       = 13
 const s32 ProfileInfo::cProfileID_083                                       = 131;
 const s32 ProfileInfo::cProfileID_084                                       = 132;
 const s32 ProfileInfo::cProfileID_085                                       = 133;
-const s32 ProfileInfo::cProfileID_086                                       = 134;
+const s32 ProfileInfo::cProfileID_ObjPipeDownNG                             = 134;
 const s32 ProfileInfo::cProfileID_087                                       = 135;
 const s32 ProfileInfo::cProfileID_088                                       = 136;
 const s32 ProfileInfo::cProfileID_089                                       = 137;
@@ -7410,11 +7410,11 @@ const s32 ProfileInfo::cProfileID_14C                                       = 33
 const s32 ProfileInfo::cProfileID_14D                                       = 333;
 const s32 ProfileInfo::cProfileID_14E                                       = 334;
 const s32 ProfileInfo::cProfileID_14F                                       = 335;
-const s32 ProfileInfo::cProfileID_150                                       = 336;
+const s32 ProfileInfo::cProfileID_ObjPipeDown                               = 336;
 const s32 ProfileInfo::cProfileID_151                                       = 337;
 const s32 ProfileInfo::cProfileID_152                                       = 338;
 const s32 ProfileInfo::cProfileID_153                                       = 339;
-const s32 ProfileInfo::cProfileID_154                                       = 340;
+const s32 ProfileInfo::cProfileID_ObjPipeDownGroup                          = 340;
 const s32 ProfileInfo::cProfileID_155                                       = 341;
 const s32 ProfileInfo::cProfileID_156                                       = 342;
 const s32 ProfileInfo::cProfileID_157                                       = 343;

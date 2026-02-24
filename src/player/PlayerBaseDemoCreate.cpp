@@ -188,7 +188,7 @@ void PlayerBase::initialHipAttack(NextGotoType)
 
 void PlayerBase::initialSlip(NextGotoType)
 {
-    onStatus(cStatus_102);
+    onStatus(cStatus_InitialSlip);
     setSlipAction();
     changeDemoState(StateID_DemoWait, 1);
 }

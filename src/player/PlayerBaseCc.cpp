@@ -173,7 +173,7 @@ void PlayerBase::setCcAtSlip()
 
 void PlayerBase::setCcAtPenguinSlip()
 {
-    if (isStatus(cStatus_99))
+    if (isStatus(cStatus_PenguinSlide))
     {
         setCcAtBody(ActorCollisionCheck::cAttack_PenguinSlip);
         mCollisionCheck4_Attack.setDamage(

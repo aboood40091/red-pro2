@@ -631,7 +631,7 @@ void PlayerBase::endDemoInDokan()
     offStatus(cStatus_NoPropelRoll);
     offStatus(cStatus_210);
     offStatus(cStatus_FaderPosSet);
-    offStatus(cStatus_180);
+    offStatus(cStatus_CanWaterWalk);
     mInvincibilityTimer = 0;
     _2060 = 0;
     offStatus(cStatus_133);

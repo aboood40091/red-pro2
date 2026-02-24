@@ -74,8 +74,8 @@ bool PlayerBase::setSlipAction_ToEnd(AnmBlend blend)
         return false;
 
     offStatus(cStatus_73);
-    if (isStatus(cStatus_99))
-        offStatus(cStatus_99);
+    if (isStatus(cStatus_PenguinSlide))
+        offStatus(cStatus_PenguinSlide);
 
     mAction = cSlipAction_ToEnd;
     mSpeedF = 0.0f;
@@ -318,8 +318,8 @@ bool PlayerBase::checkCrouchSlip()
 void PlayerBase::setSlipAction_ToStoop()
 {
     offStatus(cStatus_73);
-    if (isStatus(cStatus_99))
-        offStatus(cStatus_99);
+    if (isStatus(cStatus_PenguinSlide))
+        offStatus(cStatus_PenguinSlide);
     mAction = cSlipAction_ToStoop;
     mpModelBaseMgr->setAnm(PlayerAnmID::slip_to_stoop, 0.0f);
 }

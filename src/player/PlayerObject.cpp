@@ -32,7 +32,7 @@ static const Profile cProfile_PlayerObject(TActorFactory<PlayerObject>, ProfileI
 PlayerObject::PlayerObject(const ActorCreateParam& param)
     : PlayerBase(param)
     , mModelMgr(getParamPlayerModelType(mParam0), PlayerModelBase::cSceneType_Course, getParamPlayerNo(mParam0))
-    , _2760()
+    , mBcSensorVine()
     , mModePrev(cPlayerMode_Small)
     , mModeNext(cPlayerMode_Small)
     , _2774(0.0f, 0.0f)
@@ -84,7 +84,7 @@ PlayerObject::PlayerObject(const ActorCreateParam& param)
     , _2a38(0)
     , _2a3c(0.0f)
     , _2a40(0)
-    , _2a44(0)
+    , mSlideAttackBgTimer(0)
     , _2a48(0.0f)
     , mWallSlideDir(cDirType_Right)
     , mLiftUpActorID()
@@ -159,7 +159,7 @@ PlayerObject::PlayerObject(const ActorCreateParam& param)
     , mRopeAngleOld()
     , mRopeAngleDiffOld()
     , _2d10(0)
-    , mMameWallWalkSpeed(0.0f)
+    , mWalkWallSpeed(0.0f)
     , _2d18(0.0f, 0.0f)
     , _2d20()
     , _2d24()
@@ -559,7 +559,7 @@ void PlayerObject::calcModel_()
         case PlayerAnmID::tree_climb:
         case PlayerAnmID::tree_pose:
         case PlayerAnmID::rope_swing:
-            model_center_y = getBcAreaCenterY();
+            model_center_y = getTarzanRopeCenterY();
             break;
         case PlayerAnmID::shoot:
             model_center_y = 5.0f;
@@ -698,12 +698,12 @@ void PlayerObject::setCenterOffset()
 
     mHeight = height[mMode];
 
-    if (mModelMgr.isAnmFlag(PlayerModelBase::cAnmFlagType_Main, PlayerModelBase::cAnmFlagBit_Sit))
+    if (mModelMgr.isSitAnm())
         mCenterOffset.set(0.0f, mHeight * 0.25f, 0.0f);
     else
     {
         f32 center_offset_y = mHeight * 0.5f;
-        if (mModelMgr.isAnmFlag(PlayerModelBase::cAnmFlagType_Main, PlayerModelBase::cAnmFlagBit_2))
+        if (mModelMgr.isHangAnm())
             center_offset_y = -center_offset_y;
         mCenterOffset.set(0.0f, center_offset_y, 0.0f);
     }

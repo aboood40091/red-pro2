@@ -88,7 +88,7 @@ void PlayerBase::initializeState_Funsui()
 {
     onStatus(cStatus_58);
     // onStatus(cStatus_NoBgCrossUpdate);
-    onStatus(cStatus_255);
+    onStatus(cStatus_ControlledMove);
     mAccelY = 0.0f;
     mSpeedF *= 0.7f;
     mSpeed.y = 0.1f;
@@ -172,7 +172,7 @@ void PlayerBase::finalizeState_Funsui()
 {
     offStatus(cStatus_58);
     offStatus(cStatus_NoBgCrossUpdate);
-    offStatus(cStatus_255);
+    offStatus(cStatus_ControlledMove);
     mPlayerKey.offStatus(PlayerKey::cStatus_NoJump);
 }
 
@@ -584,7 +584,7 @@ bool PlayerBase::updateCloudMove()
         return true;
     }
 
-    onStatus(cStatus_255);
+    onStatus(cStatus_ControlledMove);
 
     mPos = p_cloud_actor->getPos();
     mPos.y += getCloudOffsetY();
