@@ -17,7 +17,7 @@ void PlayerBase::releaseCcData()
 {
     ActorCollisionCheckMgr::instance()->release(mCollisionCheck);
     {
-        mCollisionCheck.setVsKind(
+        mCollisionCheck.setVsKind(ActorCollisionCheck::TargetKind(
             ActorCollisionCheck::cTargetKind_Enemy |
             ActorCollisionCheck::cTargetKind_Balloon |
             ActorCollisionCheck::cTargetKind_Item |
@@ -27,12 +27,11 @@ void PlayerBase::releaseCcData()
             ActorCollisionCheck::cTargetKind_ChibiYoshi |
             ActorCollisionCheck::cTargetKind_Unk10 |
             ActorCollisionCheck::cTargetKind_DrcTouch
-        );
+        ));
 
         mCollisionCheck.setAttack(ActorCollisionCheck::cAttack_None);
         mCollisionCheck.setDamage(
-            ~(ActorCollisionCheck::cDamageFrom_YoshiMouth |
-              ActorCollisionCheck::cDamageFrom_SpinLiftUp)
+            ActorCollisionCheck::cDamageFrom_All
         );
 
         mCollisionCheck.setDrcTouchCallback(&mDrcTouchCallback);
@@ -40,7 +39,7 @@ void PlayerBase::releaseCcData()
 
     ActorCollisionCheckMgr::instance()->release(mCollisionCheck2_React);
     {
-        mCollisionCheck2_React.setVsKind(
+        mCollisionCheck2_React.setVsKind(ActorCollisionCheck::TargetKind(
             ActorCollisionCheck::cTargetKind_Enemy |
             ActorCollisionCheck::cTargetKind_Balloon |
             ActorCollisionCheck::cTargetKind_Item |
@@ -50,12 +49,11 @@ void PlayerBase::releaseCcData()
             ActorCollisionCheck::cTargetKind_ChibiYoshi |
             ActorCollisionCheck::cTargetKind_Unk10 |
             ActorCollisionCheck::cTargetKind_DrcTouch
-        );
+        ));
 
         mCollisionCheck2_React.setAttack(ActorCollisionCheck::cAttack_None);
         mCollisionCheck2_React.setDamage(
-            ~(ActorCollisionCheck::cDamageFrom_YoshiMouth |
-              ActorCollisionCheck::cDamageFrom_SpinLiftUp)
+            ActorCollisionCheck::cDamageFrom_All
         );
 
         mCollisionCheck2_React.setDrcTouchCallback(&mDrcTouchCallback);
@@ -68,9 +66,10 @@ void PlayerBase::releaseCcData()
         );
 
         mCollisionCheck3_React.setAttack(ActorCollisionCheck::cAttack_None);
-        mCollisionCheck3_React.setDamage(
-            ~ActorCollisionCheck::cDamageFrom_YoshiMouth
-        );
+        mCollisionCheck3_React.setDamage(ActorCollisionCheck::DamageFrom(
+            ActorCollisionCheck::cDamageFrom_All |
+            ActorCollisionCheck::cDamageFrom_SpinLiftUp
+        ));
     }
 
     ActorCollisionCheckMgr::instance()->release(mCollisionCheck4_Attack);
@@ -87,7 +86,7 @@ void PlayerBase::releaseCcData()
 
     ActorCollisionCheckMgr::instance()->release(mCollisionCheck5_Attack);
     {
-        mCollisionCheck5_Attack.setVsKind(
+        mCollisionCheck5_Attack.setVsKind(ActorCollisionCheck::TargetKind(
             ActorCollisionCheck::cTargetKind_Enemy |
             ActorCollisionCheck::cTargetKind_Balloon |
             ActorCollisionCheck::cTargetKind_Item |
@@ -96,7 +95,7 @@ void PlayerBase::releaseCcData()
             ActorCollisionCheck::cTargetKind_GoalPole |
             ActorCollisionCheck::cTargetKind_ChibiYoshi |
             ActorCollisionCheck::cTargetKind_Unk10
-        );
+        ));
 
         mCollisionCheck5_Attack.setAttack(ActorCollisionCheck::cAttack_None);
         mCollisionCheck5_Attack.setDamage(

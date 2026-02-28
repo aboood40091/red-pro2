@@ -62,7 +62,7 @@ bool EffectCreateUtil::isCreateAboveLayer0(const sead::Vector3f& effect_pos)
         if (BgGlobal::instance()->getBgUnit(CourseInfo::instance()->getFileNo(), cLayerID_Layer0) == nullptr)
             return true;
 
-        if (Bg::instance() != nullptr && Bg::instance()->getHitType(effect_pos.x, effect_pos.y, cLayerID_Layer0) == BgUnitCode::cHitType_None)
+        if (Bg::instance() != nullptr && Bg::instance()->getUnitHitType(effect_pos.x, effect_pos.y, cLayerID_Layer0) == BgUnitCode::cHitType_None)
             return true;
     }
 

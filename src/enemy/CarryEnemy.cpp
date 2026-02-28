@@ -250,11 +250,11 @@ bool CarryEnemy::checkSleepEnd() const
 void CarryEnemy::setSlideCc()
 {
     mCollisionCheck.setAttack(ActorCollisionCheck::cAttack_Shell);
-    mCollisionCheck.onVsKind(
+    mCollisionCheck.onVsKind(ActorCollisionCheck::TargetKind(
         ActorCollisionCheck::cTargetKind_Balloon |
         ActorCollisionCheck::cTargetKind_Item |
         ActorCollisionCheck::cTargetKind_Killer
-    );
+    ));
     mCollisionCheck.onStatus(ActorCollisionCheck::cStatus_MoveKill);
 }
 
@@ -283,11 +283,11 @@ void CarryEnemy::startSlide()
 void CarryEnemy::resetSlideCc()
 {
     mCollisionCheck.setAttack(ActorCollisionCheck::cAttack_None);
-    mCollisionCheck.offVsKind(
+    mCollisionCheck.offVsKind(ActorCollisionCheck::TargetKind(
         ActorCollisionCheck::cTargetKind_Balloon |
         ActorCollisionCheck::cTargetKind_Item |
         ActorCollisionCheck::cTargetKind_Killer
-    );
+    ));
     mCollisionCheck.offStatus(ActorCollisionCheck::cStatus_MoveKill);
 }
 
