@@ -134,3 +134,10 @@ void Enemy::changeState(const StateID& state_id)
         mStateMgr.changeState(state_id);
     }
 }
+
+const f32 Enemy::cDieFallInitSpeedX[] = { 1.5f, -1.5f };
+const f32 Enemy::cFumiJumpSpeed = 0.2815f;
+const f32 Enemy::cDefaultGravity = -0.1875f;
+const f32 Enemy::cDefaultMaxFallSpeed = -4.0f;
+const Angle Enemy::cBaseAngleY[] = { 0x20000000, -0x20000000 };
+const s8 Enemy::cEnMuki[] = { 1, -1 };
