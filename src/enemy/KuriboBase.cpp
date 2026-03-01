@@ -4,10 +4,30 @@
 #include <collision/RyusaBgHitCheckCallback.h>
 #include <effect/EffectCreateUtil.h>
 #include <enemy/KuriboBase.h>
+#include <game/CourseTask.h>
+#include <graphics/BlendModel.h>
+#include <graphics/SkeletalAnimation.h>
+#include <graphics/TexturePatternAnimation.h>
+#include <input/InputMgr.h>
 #include <map/Bg.h>
 #include <map/LayerID.h>
+#include <player/PlayerBase.h>
+#include <utility/Mtx.h>
 
+static const sead::Vector3f unused(0.0f, 0.0f, 0.0f);
 
+CREATE_STATE_VIRTUAL_ID_BASE(KuriboBase, Walk)
+CREATE_STATE_VIRTUAL_ID_BASE(KuriboBase, Turn)
+CREATE_STATE_VIRTUAL_ID_BASE(KuriboBase, Touch)
+CREATE_STATE_VIRTUAL_ID_BASE(KuriboBase, TrplnJump)
+CREATE_STATE_VIRTUAL_ID_OVERRIDE(KuriboBase, Enemy, DieOther)
+CREATE_STATE_VIRTUAL_ID_OVERRIDE(KuriboBase, Enemy, DieFall)
+
+static const sead::SafeString cModelName = "kuribo";
+
+static const sead::SafeString cWalkAnm[] = {
+    "walk"
+};
 
 KuriboBase::KuriboBase(const ActorCreateParam& param)
     : Enemy(param)
@@ -314,6 +334,575 @@ bool KuriboBase::execute_()
     calcJumpSpeedF_();
     return true;
 }
+
+bool KuriboBase::draw_()
+{
+    drawModel();
+    return true;
+}
+
+ActorBase::Result KuriboBase::doDelete_()
+{
+    return cResult_Success;
+}
+
+void KuriboBase::calcMdl_Base()
+{
+    calcModel();
+}
+
+void KuriboBase::normal_collcheck(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
+{
+    KuriboBase* p_kuribo_self = cc_self->getOwner<KuriboBase>();
+    if (p_kuribo_self != nullptr)
+        p_kuribo_self->vf53C(*cc_other);
+
+    Enemy::normal_collcheck(cc_self, cc_other);
+}
+
+void KuriboBase::vsEnemyHitCheck_Normal(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
+{
+    Actor* actor_other = cc_other->getOwner();
+    if (actor_other != nullptr && actor_other->getProfileID() != ProfileInfo::cProfileID_Maruta)
+    {
+        if (actor_other->getActorType() == cActorType_Enemy)
+            _1a14 = cc_self->getRevisionX(ActorCollisionCheck::cKind_Enemy);
+        else if (actor_other->getActorType() == cActorType_ChibiYoshi)
+            _1a14 = cc_self->getRevisionX(ActorCollisionCheck::cKind_ChibiYoshi);
+        setTurnByEnemyHit(cc_self->getOwner(), actor_other);
+    }
+}
+
+void KuriboBase::vsPlayerHitCheck_Normal(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
+{
+    Actor* actor_other = cc_other->getOwner();
+    FumiType fumi_type = fumiCheck(cc_self, cc_other, cFumiSeType_Normal);
+    if (fumi_type == cFumiType_Fumi)
+    {
+        reactFumiProc(actor_other);
+        Actor* actor_self = cc_self->getOwner();
+        if (actor_self != nullptr)
+        {
+            KuriboBase* p_kuribo_self = static_cast<KuriboBase*>(actor_self);
+            if (p_kuribo_self->getProfileID() == ProfileInfo::cProfileID_Kuribo && !p_kuribo_self->mIsKakibo)
+                CourseTask::instance()->getGameData()->getStatsData().incKuriboFumi();
+        }
+    }
+    else if (fumi_type == cFumiType_MameFumi)
+    {
+        return;
+    }
+    else if (fumi_type == cFumiType_SpinFumi)
+    {
+        reactSpinFumiProc(actor_other);
+        Actor* actor_self = cc_self->getOwner();
+        if (actor_self != nullptr)
+        {
+            KuriboBase* p_kuribo_self = static_cast<KuriboBase*>(actor_self);
+            if (p_kuribo_self->getProfileID() == ProfileInfo::cProfileID_Kuribo && !p_kuribo_self->mIsKakibo)
+                CourseTask::instance()->getGameData()->getStatsData().incKuriboFumi();
+        }
+    }
+    else
+    {
+        Enemy::vsPlayerHitCheck_Normal(cc_self, cc_other);
+    }
+}
+
+void KuriboBase::vsYoshiHitCheck_Normal(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
+{
+    PlayerBase* p_player_other = cc_other->getOwner<PlayerBase>();
+    Actor* actor_self = cc_self->getOwner();
+    switch (fumiCheck(cc_self, cc_other, cFumiSeType_Normal))
+    {
+    case cFumiType_Fumi:
+        reactYoshiFumiProc(p_player_other);
+        if (actor_self != nullptr)
+        {
+            KuriboBase* p_kuribo_self = static_cast<KuriboBase*>(actor_self);
+            if (p_kuribo_self->getProfileID() == ProfileInfo::cProfileID_Kuribo && !p_kuribo_self->mIsKakibo)
+                CourseTask::instance()->getGameData()->getStatsData().incKuriboFumi();
+        }
+        break;
+    case cFumiType_Hit:
+        Enemy::vsPlayerHitCheck_Normal(cc_self, cc_other);
+        break;
+    }
+}
+
+void KuriboBase::hitYoshiEat(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
+{
+    Actor* actor_self = cc_self->getOwner();
+    if (actor_self != nullptr)
+    {
+        KuriboBase* p_kuribo_self = sead::DynamicCast<KuriboBase>(actor_self);
+        if (p_kuribo_self != nullptr)
+            if (p_kuribo_self->mpParentMiddleKuribo != nullptr)
+                p_kuribo_self->mpParentMiddleKuribo->_1b0c++;
+    }
+    Enemy::hitYoshiEat(cc_self, cc_other);
+}
+
+bool KuriboBase::hitCallback_YoshiHipAttk(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
+{
+    Actor* actor_self = cc_self->getOwner();
+    if (actor_self != nullptr)
+    {
+        KuriboBase* p_kuribo_self = sead::DynamicCast<KuriboBase>(actor_self);
+        if (p_kuribo_self != nullptr)
+        {
+            if (p_kuribo_self->mpParentMiddleKuribo != nullptr)
+                p_kuribo_self->mpParentMiddleKuribo->_1b0c++;
+
+            if (p_kuribo_self->getProfileID() == ProfileInfo::cProfileID_Kuribo && !p_kuribo_self->mIsKakibo)
+                CourseTask::instance()->getGameData()->getStatsData().incKuriboFumi();
+        }
+    }
+    return Enemy::hitCallback_YoshiHipAttk(cc_self, cc_other);
+}
+
+void KuriboBase::vsChibiYoshiHitCheck_Normal(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
+{
+    vsEnemyHitCheck_Normal(cc_self, cc_other);
+}
+
+bool KuriboBase::hitCallback_ChibiYoshiUnk(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
+{
+    Actor* actor_self = cc_self->getOwner();
+    if (actor_self != nullptr)
+    {
+        KuriboBase* p_kuribo_self = sead::DynamicCast<KuriboBase>(actor_self);
+        if (p_kuribo_self != nullptr)
+            if (p_kuribo_self->mpParentMiddleKuribo != nullptr)
+                p_kuribo_self->mpParentMiddleKuribo->_1b0c++;
+    }
+    return Enemy::hitCallback_ChibiYoshiUnk(cc_self, cc_other);
+}
+
+void KuriboBase::setAwaHit(Actor* p_awa)
+{
+    if (mpParentMiddleKuribo != nullptr)
+        mpParentMiddleKuribo->_1b0c++;
+
+    Enemy::setAwaHit(p_awa);
+}
+
+void KuriboBase::calcModel_(BlendModel* p_blend_model)
+{
+    {
+        sead::Vector3f pos = mPos;
+        Angle3 angle = mAngle;
+
+        Mtxf mtx;
+        mtx.makeT(pos);
+
+        mtx.YrotM(angle.y());
+
+        mtx.multTranslationLocal(sead::Vector3f(0.0f, mCenterOffset.y, 0.0f));
+        mtx.XrotM(angle.x());
+        mtx.multTranslationLocal(sead::Vector3f(0.0f, -mCenterOffset.y, 0.0f));
+
+        mtx.ZrotM(angle.z());
+
+        p_blend_model->getModel()->setMtxRT(mtx);
+
+        if (!isState(StateID_Ice))
+        {
+            p_blend_model->playAnmFrameCtrl();
+            p_blend_model->getModel()->setScale(mBoyoMgr.getScale());
+        }
+        else
+        {
+            p_blend_model->getModel()->setScale(mScale);
+        }
+    }
+
+    if (mType == 0)
+        p_blend_model->calcBlend();
+    else if (mType == 1)
+        mCalcRatio.calc();
+
+    p_blend_model->getModel()->calcAnm();
+
+    if (mType == 1)
+    {
+        // 1
+        {
+            sead::Vector3f scale(0.0f, 0.0f, 0.0f);
+            s32 bone_index = p_blend_model->getModel()->searchBoneIndex("ha_1");
+            Mtxf mtx;
+            p_blend_model->getModel()->getBoneLocalMatrix(bone_index, &mtx, &scale);
+            mtx.ZrotM(-_1a04);
+            scale *= _1a00;
+            p_blend_model->getModel()->setBoneLocalMatrix(bone_index, mtx, scale);
+        }
+        // 2
+        {
+            sead::Vector3f scale(0.0f, 0.0f, 0.0f);
+            s32 bone_index = p_blend_model->getModel()->searchBoneIndex("ha_2");
+            Mtxf mtx;
+            p_blend_model->getModel()->getBoneLocalMatrix(bone_index, &mtx, &scale);
+            mtx.ZrotM(-_1a04);
+            scale *= _1a00;
+            p_blend_model->getModel()->setBoneLocalMatrix(bone_index, mtx, scale);
+        }
+        // 3
+        {
+            sead::Vector3f scale(0.0f, 0.0f, 0.0f);
+            s32 bone_index = p_blend_model->getModel()->searchBoneIndex("ha_3");
+            Mtxf mtx;
+            p_blend_model->getModel()->getBoneLocalMatrix(bone_index, &mtx, &scale);
+            mtx.ZrotM(-_1a04);
+            scale *= _1a00;
+            p_blend_model->getModel()->setBoneLocalMatrix(bone_index, mtx, scale);
+        }
+        // 4
+        {
+            sead::Vector3f scale(0.0f, 0.0f, 0.0f);
+            s32 bone_index = p_blend_model->getModel()->searchBoneIndex("ha_4");
+            Mtxf mtx;
+            p_blend_model->getModel()->getBoneLocalMatrix(bone_index, &mtx, &scale);
+            mtx.ZrotM(-_1a04);
+            scale *= _1a00;
+            p_blend_model->getModel()->setBoneLocalMatrix(bone_index, mtx, scale);
+        }
+        mCalcRatio.applyTo(p_blend_model->getModel());
+    }
+
+    p_blend_model->getModel()->calcMdl();
+}
+
+void KuriboBase::setTurnByPlayerHit(Actor*)
+{
+    mDirection = getPlayerDirLR();
+    if (isState(StateID_Turn))
+        changeState(StateID_Walk);
+    mAngle.y() = cBaseAngleY[mDirection];
+    setWalkSpeed();
+    calcModel_(mpBlendModel);
+}
+
+void KuriboBase::reactFumiProc(Actor* p_player)
+{
+    setDeathInfo_FumiOther(p_player, mSpeed);
+}
+
+void KuriboBase::yoganSplashEffect(const sead::Vector3f& pos)
+{
+    sead::Vector3f effect_pos = pos;
+    effect_pos.z = 6500.0f;
+    if (mBgCheckObj.checkFoot() || checkGround_())
+        splashEffect_(effect_pos, RP_Cmn_LavaSplash_04, 16, "SE_OBJ_CMN_SPLASH_LAVA");
+}
+
+void KuriboBase::initializeState_Walk()
+{
+    if (!isOldState(StateID_Turn) && !vf554())
+        setWalkAnm();
+    setWalkSpeed();
+    mAccelY = cDefaultGravity;
+    mSpeedMax.set(0.0f, -4.0f, 0.0f);
+}
+
+void KuriboBase::executeState_Walk()
+{
+    calcSpeedY_();
+    posMove_();
+    bgCheck_();
+    mAngle.y().chaseRest(cBaseAngleY[mDirection], 0x2000000);
+    walkEffect();
+    if (mBgCheckObj.checkFoot())
+    {
+        mSpeed.y = 0.0f;
+        if (mBgCheckObj.isOnTrampoline())
+            changeState(StateID_TrplnJump);
+        else
+        {
+            if (isBgmSync() && InputMgr::instance()->isBgmAccentSign(1 << 0))
+                mSpeed.y = 2.0f;
+        }
+    }
+    if (mBgCheckObj.checkWall(mDirection))
+        changeState(StateID_Turn);
+}
+
+void KuriboBase::finalizeState_Walk()
+{
+}
+
+void KuriboBase::initializeState_Turn()
+{
+    if (!isOldState(StateID_TrplnJump))
+    {
+        mDirection = InvDirX(mDirection);
+        mSpeed.x = 0.0f;
+    }
+}
+
+void KuriboBase::executeState_Turn()
+{
+    calcSpeedY_();
+    posMove_();
+    bgCheck_();
+    if (mBgCheckObj.checkFoot())
+    {
+        mSpeed.y = 0.0f;
+        if (mBgCheckObj.isOnTrampoline())
+            changeState(StateID_TrplnJump);
+        else
+        {
+            if (isBgmSync() && InputMgr::instance()->isBgmAccentSign(1 << 0))
+                mSpeed.y = 2.0f;
+        }
+    }
+    if (mAngle.y().chaseRest(cBaseAngleY[mDirection], 0x2000000))
+        changeState(StateID_Walk);
+}
+
+void KuriboBase::finalizeState_Turn()
+{
+}
+
+void KuriboBase::initializeState_Touch()
+{
+    const f32 c_speed[cDirType_NumX] = { -0.5f, 0.5f };
+    mSpeed.x = c_speed[mDirection];
+    mSpeedMax.x = mSpeed.x;
+    mSpeed.y = 3.0f;
+    mAllowDrcTouchInAir = false;
+    _1a0f = 1;
+}
+
+void KuriboBase::executeState_Touch()
+{
+    calcSpeedX_();
+    calcSpeedY_();
+    posMove_();
+    mAngle.y().chaseRest(cBaseAngleY[mDirection], 0x2000000);
+    mBgCheckObj.checkBg();
+    if (mBgCheckObj.checkHead())
+        mSpeed.y *= -1.0f;
+    if (mBgCheckObj.checkWall(cDirType_Right) || mBgCheckObj.checkWall(cDirType_Left))
+        mSpeed.x = 0.0f;
+    if (mSpeed.y <= mSpeedMax.y && _1a09)
+    {
+        vf5F4();
+        return;
+    }
+    switch (_1a0f)
+    {
+    default:
+        break;
+    case 0:
+        break;
+    case 1:
+        if (mSpeed.y < 0.0f && mBgCheckObj.checkFoot())
+        {
+            _1a0f = 2;
+            mAllowDrcTouchInAir = true;
+            mSpeed.y *= -0.75f;
+        }
+        break;
+    case 2:
+        if (mSpeed.y < 0.0f && mBgCheckObj.checkFoot())
+        {
+            _1a0f = 3;
+            mSpeed.y *= -0.75f;
+        }
+        break;
+    case 3:
+        if (mBgCheckObj.checkFoot())
+        {
+            _1a0f = 4;
+            mAccelF = sead::Mathf::abs(mSpeed.x) / 10;
+            _186c = 10;
+            mSpeed.y = 0.0f;
+            mSpeedMax.x = 0.0f;
+        }
+        break;
+    case 4:
+        if (mBgCheckObj.checkFoot())
+            mSpeed.y = 0.0f;
+        if (_186c == 0)
+            vf5F4();
+        break;
+    }
+    vf5EC();
+}
+
+void KuriboBase::finalizeState_Touch()
+{
+    mAllowDrcTouchInAir = false;
+}
+
+void KuriboBase::initializeState_TrplnJump()
+{
+    setWalkSpeed();
+    mSpeed.y = 5.5f;
+}
+
+void KuriboBase::executeState_TrplnJump()
+{
+    calcSpeedY_();
+    posMove_();
+    bool turned = mAngle.y().chaseRest(cBaseAngleY[mDirection], 0x2000000);
+    bgCheck_();
+    if (mBgCheckObj.checkWall(mDirection))
+    {
+        mSpeed.x *= -1.0f;
+        mDirection = InvDirX(mDirection);
+    }
+    if (mBgCheckObj.checkFoot())
+    {
+        mSpeed.y = 0.0f;
+        if (mBgCheckObj.isOnTrampoline())
+            initializeState_TrplnJump();
+        else if (turned)
+            changeState(StateID_Walk);
+        else
+            changeState(StateID_Turn);
+    }
+}
+
+void KuriboBase::finalizeState_TrplnJump()
+{
+}
+
+void KuriboBase::initializeState_DieOther()
+{
+    if (mType == 0)
+        mpBlendModel->setAnm(mpModelResource, "damage", 2.0f);
+    else if (mType == 1)
+    {
+        mCalcRatio.set(2.0f);
+        mpBlendModel->getCurSklAnim()->play(mpModelResource, "damage");
+    }
+    mpBlendModel->getCurSklAnim()->getFrameCtrl().setPlayMode(FrameCtrl::cMode_NoRepeat);
+    mpBlendModel->getCurSklAnim()->getFrameCtrl().setRate(1.0f);
+    mSpeed.set(0.0f, 0.0f, 0.0f);
+    mAccelY = cDefaultGravity;
+    removeCollisionCheck();
+    ActorCollisionCheckMgr::instance()->release(mCollisionCheckDrcTouch);
+    _1a00 = 1.0f;
+    _1a04 = 0;
+    mAngle.y() = 0;
+    _186c = 30;
+    if (mpParentMiddleKuribo != nullptr)
+        mpParentMiddleKuribo->_1b0c++;
+}
+
+void KuriboBase::executeState_DieOther()
+{
+    if (_186c == 0)
+        deleteRequest();
+    mBgCheckObj.checkBg();
+}
+
+void KuriboBase::finalizeState_DieOther()
+{
+    Enemy::finalizeState_DieOther();
+}
+
+void KuriboBase::initializeState_DieFall()
+{
+    Enemy::initializeState_DieFall();
+    ActorCollisionCheckMgr::instance()->release(mCollisionCheckDrcTouch);
+    if (mpParentMiddleKuribo != nullptr)
+        mpParentMiddleKuribo->_1b0c++;
+    _1a00 = 1.0f;
+    _1a04 = 0;
+    _1a08 = false;
+}
+
+void KuriboBase::executeState_DieFall()
+{
+    Enemy::executeState_DieFall();
+    landonEffect_();
+}
+
+void KuriboBase::finalizeState_DieFall()
+{
+    Enemy::finalizeState_DieFall();
+}
+
+BlendModel* KuriboBase::createModel(ModelResource* p_mdl_res, const sead::SafeString& name, bool not_set_walk_anm)
+{
+    BlendModel* p_blend_model = BlendModel::create(p_mdl_res, name, 2, 1, 0, 0, 0);
+    if (!not_set_walk_anm)
+        p_blend_model->setAnm(p_mdl_res, cWalkAnm[0], 0.0f);
+    return p_blend_model;
+}
+
+void KuriboBase::setWalkAnm()
+{
+    mpBlendModel->setAnm(mpModelResource, "walk", 2.0f);
+    mpBlendModel->getCurSklAnim()->getFrameCtrl().setPlayMode(FrameCtrl::cMode_Repeat);
+    mpBlendModel->getCurSklAnim()->getFrameCtrl().setRate(2.0f);
+    mWalkAnmRate = 2.0f;
+    if (mType == 0)
+        mpTexAnim->play(mpModelResource, "walk");
+    mpTexAnim->getFrameCtrl().setRate(1.0f);
+    if (mType == 0)
+        mpTexAnim->getFrameCtrl().setFrame(GAME_RANDOM.getU32(180));
+    else
+    {
+        mpTexAnim->getFrameCtrl().setRate(2.0f);
+        mpTexAnim->getFrameCtrl().setFrame(0.0f);
+    }
+}
+
+void KuriboBase::reviveCollisionCheck()
+{
+    ActorCollisionCheckMgr::instance()->entry(mCollisionCheck);
+    ActorCollisionCheckMgr::instance()->entry(mCollisionCheckDrcTouch);
+}
+
+void KuriboBase::removeCollisionCheck()
+{
+    ActorCollisionCheckMgr::instance()->release(mCollisionCheck);
+    ActorCollisionCheckMgr::instance()->release(mCollisionCheckDrcTouch);
+}
+
+bool KuriboBase::setDamage(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
+{
+    PlayerBase* p_player_other = cc_other->getOwner<PlayerBase>();
+    if (p_player_other != nullptr)
+    {
+        if (p_player_other->setNormalDamage(cc_self))
+        {
+            setTurnByPlayerHit(p_player_other);
+            return true;
+        }
+    }
+    return false;
+}
+
+void KuriboBase::allEnemyDeathEffSet()
+{
+    sead::Vector3f effect_pos;
+    effect_pos.setAdd(mPos, mCenterOffset);
+    EffectCreateUtil::createEffect(RP_Cmn_EnemyBurst_00, &effect_pos);
+}
+
+bool KuriboBase::DrcTouchCB::ccSetTouchNormal(ActorCollisionCheck* p_cc, const sead::Vector2f& pos)
+{
+    KuriboBase* p_kuribo_self = p_cc->getOwner<KuriboBase>();
+    if (p_kuribo_self != nullptr)
+        p_kuribo_self->onDrcTouch();
+    return true;
+}
+
+void KuriboBase::DrcTouchCB::ccOnTouch(ActorCollisionCheck* p_cc, const sead::Vector2f& pos)
+{
+    if (p_cc->getOwner()->getProfileID() == ProfileInfo::cProfileID_PataKuribo)
+        return;
+    ActorCollisionDrcTouchCallback::ccOnTouch(p_cc, pos);
+}
+
+const f32 KuriboBase::cPataTurnMaxSpeedX = 1.0f;
+const f32 KuriboBase::cPataWalkMaxSpeedY = -4.0f;
+
+const ActorCreateInfo KuriboBase::cActorCreateInfo = { 8, -16, { 0, 8, 8, 8 }, { 0, 0, 0, 0 }, ActorCreateInfo::cFlag_Unknown };
 
 const ActorCollisionCheck::CollisionData KuriboBase::cCcData_Normal = {
     { 0.0f, 8.0f },
