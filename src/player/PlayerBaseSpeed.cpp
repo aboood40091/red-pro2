@@ -2,7 +2,7 @@
 #include <player/PlayerHIO_Air.h>
 #include <scroll/BgScrollMgr.h>
 
-ActorBgCollisionCheck::SakaType PlayerBase::getSakaType(s32 dir)
+ActorBgCollisionCheck::SakaType PlayerBase::getSakaType(DirType dir)
 {
     s32 saka_type = mSakaType;
     if (isNowBgCross(cBgCross_IsSaka) && BgUnitCode::getSlipAttr(mBgCheckPlayer.getBgCheckData(cDirType_Down)) == BgUnitCode::cSlipAttr_SakaLowPow)
@@ -52,7 +52,7 @@ static const f32 cSakaSlipOffSpeed[ActorBgCollisionCheck::cSakaType_Num] = {
     0.4f    // cSakaType_VerySteep
 };
 
-f32 PlayerBase::getSakaMaxSpeedRatio(s32 dir)
+f32 PlayerBase::getSakaMaxSpeedRatio(DirType dir)
 {
     if (isNowBgCross(cBgCross_IsSaka))
         return cSakaMaxSpeedRatio[getSakaType(dir)][getSakaUpDown(dir)];
@@ -60,7 +60,7 @@ f32 PlayerBase::getSakaMaxSpeedRatio(s32 dir)
         return 1.0000f;
 }
 
-f32 PlayerBase::getSakaStopAccele(s32 dir)
+f32 PlayerBase::getSakaStopAccele(DirType dir)
 {
     if (isNowBgCross(cBgCross_IsSaka))
         return cSakaStopAccele[getSakaType(dir)][getSakaUpDown(dir)];
@@ -68,7 +68,7 @@ f32 PlayerBase::getSakaStopAccele(s32 dir)
         return 0.0350f;
 }
 
-float PlayerBase::getSakaMoveAccele(s32 dir)
+float PlayerBase::getSakaMoveAccele(DirType dir)
 {
     if (isNowBgCross(cBgCross_IsSaka))
         return cSakaMoveAccele[getSakaType(dir)][getSakaUpDown(dir)];
@@ -133,7 +133,7 @@ bool PlayerBase::setSandMoveSpeed()
 {
     if (!isStatus(cStatus_135) && isOnSinkSand())
     {
-        s32 walk_dir;
+        DirType walk_dir;
         if (mPlayerKey.buttonWalk(&walk_dir))
         {
             if (isStatus(cStatus_Spin))
@@ -175,7 +175,7 @@ void PlayerBase::moveSpeedSet()
     if (isStatus(cStatus_195))
         return;
 
-    s32 walk_dir;
+    DirType walk_dir;
     if (mPlayerKey.buttonWalk(&walk_dir))
     {
         if (_4e8)
@@ -238,7 +238,7 @@ void PlayerBase::simpleMoveSpeedSet()
     if (setSandMoveSpeed())
         return;
 
-    s32 walk_dir;
+    DirType walk_dir;
     if (mPlayerKey.buttonWalk(&walk_dir))
     {
         if (_4e8)
@@ -296,11 +296,11 @@ void PlayerBase::slipPowerSet()
 {
     if (isNowBgCross(cBgCross_IsSaka))
     {
-        s32 dir = cDirType_Right;
+        DirType dir = cDirType_Right;
         if (mSpeedF < 0.0f)
             dir = cDirType_Left;
         mAccelF = getSakaMoveAccele(dir);
-        s32 walk_dir;
+        DirType walk_dir;
         if (mPlayerKey.buttonWalk(&walk_dir))
             mAccelF *= cSakaMoveAcceleRatio[getSakaUpDown(walk_dir)];
     }
@@ -339,12 +339,12 @@ void PlayerBase::normalPowerSet()
         PlayerPowerData power_data;
         getPowerData(power_data);
 
-        s32 walk_dir;
+        DirType walk_dir;
         if (!mPlayerKey.buttonWalk(&walk_dir))
         {
             if (isNowBgCross(cBgCross_IsSaka))
             {
-                s32 dir = cDirType_Right;
+                DirType dir = cDirType_Right;
                 if (mSpeedF < 0.0f)
                     dir = cDirType_Left;
                 mAccelF = getSakaStopAccele(dir);
@@ -375,7 +375,7 @@ void PlayerBase::normalPowerSet()
             }
             else if (isNowBgCross(cBgCross_IsSaka))
             {
-                s32 dir = cDirType_Right;
+                DirType dir = cDirType_Right;
                 if (mSpeedF < 0.0f)
                     dir = cDirType_Left;
                 mAccelF = getSakaMoveAccele(dir) * cSakaMoveAcceleRatio[getSakaUpDown(walk_dir)];
@@ -435,7 +435,7 @@ void PlayerBase::airPowerSet()
         mAccelF = 0.2f;
     else
     {
-        s32 walk_dir;
+        DirType walk_dir;
         if (mPlayerKey.buttonWalk(&walk_dir))
         {
             if (mSpeedF * cDirSpeed[walk_dir] < 0.0f)

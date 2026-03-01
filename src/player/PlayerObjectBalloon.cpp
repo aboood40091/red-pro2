@@ -258,7 +258,7 @@ bool PlayerObject::setBalloonInDamage()
         return false;
     changeDemoState(StateID_DemoNone, 1);
     setPlayerModeForce(cPlayerMode_Small);
-    if (*mStateMgr.getStateID() != StateID_Balloon)
+    if (!isState(StateID_Balloon))
         changeState(StateID_Balloon, 0);
     return true;
 }
@@ -272,7 +272,7 @@ bool PlayerObject::setBalloonDispOutBase()
     if (isStatus(cStatus_RideBalloon))
         return false;
     changeDemoState(StateID_DemoNone, 1);
-    if (*mStateMgr.getStateID() != StateID_Balloon)
+    if (!isState(StateID_Balloon))
         changeState(StateID_Balloon, 6);
     return true;
 }
@@ -307,7 +307,7 @@ bool PlayerObject::setBalloonButtonA()
         return false;
     }
     changeDemoState(StateID_DemoNone, 1);
-    if (*mStateMgr.getStateID() != StateID_Balloon)
+    if (!isState(StateID_Balloon))
         changeState(StateID_Balloon, 4);
     return true;
 }
@@ -354,7 +354,7 @@ bool PlayerObject::setBalloonInNextgoto()
     if (isStatus(cStatus_RideBalloon))
         return false;
     changeDemoState(StateID_DemoNone, 0);
-    if (*mStateMgr.getStateID() != StateID_Balloon)
+    if (!isState(StateID_Balloon))
         changeState(StateID_Balloon, 1);
     return true;
 }

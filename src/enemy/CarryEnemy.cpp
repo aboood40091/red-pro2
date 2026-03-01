@@ -225,7 +225,7 @@ bool CarryEnemy::checkSleepEnd() const
     if (isDead())
         return false;
 
-    if (*mStateMgr.getStateID() == StateID_Ice)
+    if (isState(StateID_Ice))
         return false;
 
     if (checkEat())
@@ -320,10 +320,10 @@ DirType CarryEnemy::getRevisionDir(ActorCollisionCheck* cc_self, ActorCollisionC
 
 void CarryEnemy::vsPlayerHitCheck_Normal(ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
 {
-    if (*mStateMgr.getStateID() == StateID_Sleep)
+    if (isState(StateID_Sleep))
         return playerHitCheck_Sleep(cc_self, cc_other);
 
-    if (*mStateMgr.getStateID() == StateID_Carry)
+    if (isState(StateID_Carry))
         return playerHitCheck_Carry(cc_self, cc_other);
 
     return playerHitCheck_Awake(cc_self, cc_other);
@@ -438,7 +438,7 @@ bool CarryEnemy::hitCallback_Shell(ActorCollisionCheck* cc_self, ActorCollisionC
         !cc_other->hasStatus(ActorCollisionCheck::cStatus_SlideKill) &&
         (p_actor_other->getActorType() != cActorType_Generic || (p_actor_other->getProfFlag() & Profile::cFlag_Unk7)))
     {
-        u32 fall_dir = ActorUtil::getTrgToSrcDir(*this, *p_actor_other);
+        DirType fall_dir = ActorUtil::getTrgToSrcDir(*this, *p_actor_other);
 
         s32 kill_player_no = -1;
         bool carried = checkCarried(&kill_player_no);
@@ -507,7 +507,7 @@ bool CarryEnemy::hitCallback_Shell(ActorCollisionCheck* cc_self, ActorCollisionC
 
 bool CarryEnemy::hitCallback_AttackUnk27(bool* p_dead, ActorCollisionCheck* cc_self, ActorCollisionCheck* cc_other)
 {
-    if (cc_self->getAttack() == ActorCollisionCheck::cAttack_Shell && *mStateMgr.getStateID() == StateID_Carry)
+    if (cc_self->getAttack() == ActorCollisionCheck::cAttack_Shell && isState(StateID_Carry))
         *p_dead = hitCallback_Shell(cc_self, cc_other);
     return true;
 }

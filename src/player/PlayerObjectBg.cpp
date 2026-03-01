@@ -782,7 +782,7 @@ bool PlayerObject::checkChibiYoshiLiftUpBlocked()
     return false;
 }
 
-bool PlayerObject::checkCancelTarzanRopeLR(u8 dir)
+bool PlayerObject::checkCancelTarzanRopeLR(DirType dir)
 {
     if (mBgCheckPlayer.checkWall(dir))
     {

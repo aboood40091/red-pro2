@@ -2,8 +2,8 @@
 #include <actor/ProfileInfo.h>
 
 const MapActor::Profile MapActor::cProfileID[] = {
-    ProfileInfo::cProfileID_1D3,                                        //   0
-    ProfileInfo::cProfileID_1D5,                                        //   1
+    ProfileInfo::cProfileID_Kuribo,                                     //   0
+    ProfileInfo::cProfileID_PataKuribo,                                 //   1
     ProfileInfo::cProfileID_1DF,                                        //   2
     ProfileInfo::cProfileID_1E0,                                        //   3
     ProfileInfo::cProfileID_1E1,                                        //   4
@@ -242,7 +242,7 @@ const MapActor::Profile MapActor::cProfileID[] = {
     ProfileInfo::cProfileID_2EC,                                        // 237
     ProfileInfo::cProfileID_033,                                        // 238
     ProfileInfo::cProfileID_0AD,                                        // 239
-    ProfileInfo::cProfileID_0DE,                                        // 240
+    ProfileInfo::cProfileID_Maruta,                                     // 240
     ProfileInfo::cProfileID_0C5,                                        // 241
     ProfileInfo::cProfileID_0C6,                                        // 242
     ProfileInfo::cProfileID_1BF,                                        // 243
@@ -439,8 +439,8 @@ const MapActor::Profile MapActor::cProfileID[] = {
     ProfileInfo::cProfileID_0A3,                                        // 434
     ProfileInfo::cProfileID_BossKKDemo,                                 // 435
     ProfileInfo::cProfileID_05E,                                        // 436
-    ProfileInfo::cProfileID_1D3,                                        // 437
-    ProfileInfo::cProfileID_1D3,                                        // 438
+    ProfileInfo::cProfileID_Kuribo,                                     // 437
+    ProfileInfo::cProfileID_Kuribo,                                     // 438
     ProfileInfo::cProfileID_0A1,                                        // 439
     ProfileInfo::cProfileID_23D,                                        // 440
     ProfileInfo::cProfileID_284,                                        // 441

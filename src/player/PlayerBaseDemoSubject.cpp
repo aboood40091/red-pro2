@@ -308,7 +308,7 @@ void PlayerBase::setDownFinishSubject()
 
 bool PlayerBase::setFumiSubjectCoinEndClear()
 {
-    if (*mSubjectStateMgr.getStateID() == StateID_SubjectCoinEndWait)
+    if (isSubjectState(StateID_SubjectCoinEndWait))
     {
         subjectClearRequest();
         return true;

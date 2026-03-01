@@ -564,8 +564,8 @@ void PlayerBase::executeDemoInDokan()
                 onNowBgCross(cBgCross_IsUnderwater);
             if (isNowBgCross(cBgCross_IsUnderwater))
             {
-                if (*mDemoStateMgr.getStateID() == StateID_DemoOutDokanL || // Typo by Nintendo!!! Should be "StateID_DemoInDokanL"
-                    *mDemoStateMgr.getStateID() == StateID_DemoOutDokanR)   // Typo by Nintendo!!! Should be "StateID_DemoInDokanR"
+                if (isDemoState(StateID_DemoOutDokanL) || // Typo by Nintendo!!! Should be "StateID_DemoInDokanL"
+                    isDemoState(StateID_DemoOutDokanR))   // Typo by Nintendo!!! Should be "StateID_DemoInDokanR"
                 {
                     mpModelBaseMgr->setAnm(PlayerAnmID::swim_pipe);
                     if (mChangeDemoStateParam != 1)

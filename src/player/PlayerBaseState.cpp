@@ -104,7 +104,7 @@ void PlayerBase::initializeState_Funsui()
     }
 }
 
-Angle PlayerBase::getMukiAngle(s32 dir)
+Angle PlayerBase::getMukiAngle(DirType dir)
 {
     if (dir == cDirType_Right)
         return  0x30000000; //  67.5 degrees
@@ -156,7 +156,7 @@ void PlayerBase::executeState_Funsui()
     f32 base_speed = c_funsui_walk_target_speeds[mFunsuiType];
     f32 target_speed = 0.0f;
 
-    s32 walk_dir;
+    DirType walk_dir;
     if (mPlayerKey.buttonWalk(&walk_dir))
         target_speed = base_speed * cDirSpeed[walk_dir];
 
@@ -419,7 +419,7 @@ void PlayerBase::setCrouchActionAnm()
 
 void PlayerBase::setCrouchWallSpeed()
 {
-    s32 walk_dir;
+    DirType walk_dir;
     if (mPlayerKey.buttonWalk(&walk_dir))
     {
         if (walk_dir == cDirType_Left)
@@ -482,7 +482,7 @@ bool PlayerBase::checkSitJumpRoof()
     {
         mSpeed.y = 0.0f;
 
-        s32 walk_dir;
+        DirType walk_dir;
         if (mPlayerKey.buttonWalk(&walk_dir))
         {
             mPos.x += cDirSpeed[walk_dir];
@@ -504,7 +504,7 @@ bool PlayerBase::setFunsui(FunsuiType type)
     if (isStatus(cStatus_207))
         return false;
 
-    if (*mStateMgr.getStateID() == StateID_Funsui)
+    if (isState(StateID_Funsui))
         return false;
 
     if (isDemoAll())
@@ -517,7 +517,7 @@ bool PlayerBase::setFunsui(FunsuiType type)
 
 bool PlayerBase::updateFunsuiPos(f32 x, f32 y)
 {
-    if (*mStateMgr.getStateID() == StateID_Funsui)
+    if (isState(StateID_Funsui))
     {
         mFunsuiPos.x = x;
         mFunsuiPos.y = y;
@@ -528,7 +528,7 @@ bool PlayerBase::updateFunsuiPos(f32 x, f32 y)
 
 bool PlayerBase::releaseFunsui(f32 speed_y)
 {
-    if (*mStateMgr.getStateID() == StateID_Funsui)
+    if (isState(StateID_Funsui))
     {
         if (mFunsuiType == cFunsuiType_Water)
             mpModelBaseMgr->setAnm(PlayerAnmID::jump);
@@ -606,7 +606,7 @@ Angle PlayerBase::addCalcAngleY(const Angle& target, f32 rate)
     return mAngle.y() - target;
 }
 
-Angle PlayerBase::getBesideMukiAngle(s32 dir)
+Angle PlayerBase::getBesideMukiAngle(DirType dir)
 {
     static const Angle c_beside_muki_angle[] = {
          0x40b60b60, //  91 degrees
@@ -615,7 +615,7 @@ Angle PlayerBase::getBesideMukiAngle(s32 dir)
     return c_beside_muki_angle[dir];
 }
 
-bool PlayerBase::turnBesideAngle(s32 dir)
+bool PlayerBase::turnBesideAngle(DirType dir)
 {
     Angle target = getBesideMukiAngle(dir);
     Angle step = 0x20000000; // 45 degrees

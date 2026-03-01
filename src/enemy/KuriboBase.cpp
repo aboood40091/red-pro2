@@ -7,37 +7,7 @@
 #include <map/Bg.h>
 #include <map/LayerID.h>
 
-static const ActorCollisionCheck::CollisionData cCcData_Normal = {
-    { 0.0f, 8.0f },
-    { 8.0f, 8.0f },
-    ActorCollisionCheck::cShapeType_Box,
-    ActorCollisionCheck::cKind_Enemy,
-    ActorCollisionCheck::cAttack_None,
-    ActorCollisionCheck::TargetKind(
-        ActorCollisionCheck::cTargetKind_Player |
-        ActorCollisionCheck::cTargetKind_Enemy |
-        ActorCollisionCheck::cTargetKind_Item |
-        ActorCollisionCheck::cTargetKind_Tama |
-        ActorCollisionCheck::cTargetKind_ChibiYoshi |
-        ActorCollisionCheck::cTargetKind_Unk10 |
-        ActorCollisionCheck::cTargetKind_DrcTouch
-    ),
-    ActorCollisionCheck::cDamageFrom_All,
-    ActorCollisionCheck::cStatus_None,
-    KuriboBase::normal_collcheck
-};
 
-static const ActorCollisionCheck::CollisionData cCcData_DrcTouch = {
-    { 0.0f, 8.0f },
-    { 8.0f, 8.0f },
-    ActorCollisionCheck::cShapeType_Box,
-    ActorCollisionCheck::cKind_Enemy,
-    ActorCollisionCheck::cAttack_None,
-    ActorCollisionCheck::cTargetKind_DrcTouch,
-    ActorCollisionCheck::cDamageFrom_None,
-    ActorCollisionCheck::cStatus_None,
-    nullptr
-};
 
 KuriboBase::KuriboBase(const ActorCreateParam& param)
     : Enemy(param)
@@ -76,10 +46,10 @@ ActorBase::Result KuriboBase::create_()
 
     mSpeedMax.y = -4.0f;
 
-    mDirection = directionToPlayerH(mPos);
+    mDirection = getPlayerDirLR();
     mAngle.y() = cBaseAngleY[mDirection];
 
-    _1868 = 0;
+    mFumiProc.fumi_check._8 = 0;
 
     mZOffset = 0.0f;
 
@@ -324,14 +294,14 @@ void KuriboBase::setDeathInfo_Hasami_()
 bool KuriboBase::execute_()
 {
     mIsOnGround = mBgCheckObj.checkFoot();
-    mStateMgr.executeState();
+    executeState();
     if (!mManualDeletedFlag)
     {
         setCcLine_();
-        if (!isWakidashi() && *mStateMgr.getStateID() != StateID_Ice)
+        if (!isWakidashi() && !isState(StateID_Ice))
         {
             setLayerPos_();
-            if (!checkRyusa_() && *mStateMgr.getStateID() != StateID_TrplnJump)
+            if (!checkRyusa_() && !isState(StateID_TrplnJump))
                 landonEffect_();
             if (hasamareBgCheck_() || checkBgIn_())
                 setDeathInfo_Hasami_();
@@ -344,3 +314,35 @@ bool KuriboBase::execute_()
     calcJumpSpeedF_();
     return true;
 }
+
+const ActorCollisionCheck::CollisionData KuriboBase::cCcData_Normal = {
+    { 0.0f, 8.0f },
+    { 8.0f, 8.0f },
+    ActorCollisionCheck::cShapeType_Box,
+    ActorCollisionCheck::cKind_Enemy,
+    ActorCollisionCheck::cAttack_None,
+    ActorCollisionCheck::TargetKind(
+        ActorCollisionCheck::cTargetKind_Player |
+        ActorCollisionCheck::cTargetKind_Enemy |
+        ActorCollisionCheck::cTargetKind_Item |
+        ActorCollisionCheck::cTargetKind_Tama |
+        ActorCollisionCheck::cTargetKind_ChibiYoshi |
+        ActorCollisionCheck::cTargetKind_Unk10 |
+        ActorCollisionCheck::cTargetKind_DrcTouch
+    ),
+    ActorCollisionCheck::cDamageFrom_All,
+    ActorCollisionCheck::cStatus_None,
+    KuriboBase::normal_collcheck
+};
+
+const ActorCollisionCheck::CollisionData KuriboBase::cCcData_DrcTouch = {
+    { 0.0f, 8.0f },
+    { 8.0f, 8.0f },
+    ActorCollisionCheck::cShapeType_Box,
+    ActorCollisionCheck::cKind_Enemy,
+    ActorCollisionCheck::cAttack_None,
+    ActorCollisionCheck::cTargetKind_DrcTouch,
+    ActorCollisionCheck::cDamageFrom_None,
+    ActorCollisionCheck::cStatus_None,
+    nullptr
+};

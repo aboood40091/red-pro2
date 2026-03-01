@@ -48,7 +48,7 @@ PlayerBase::BgAttr PlayerBase::getFootBgAttr(BgUnitCode::Attr attr)
 
 bool PlayerBase::checkLedge()
 {
-    if (*mStateMgr.getStateID() != StateID_Walk)
+    if (!isState(StateID_Walk))
         return false;
 
     if (sead::Mathf::abs(mSpeedF) < 2.0f)
@@ -97,7 +97,7 @@ bool PlayerBase::checkLedge()
 
 bool PlayerBase::vsPlayerCarryPush()
 {
-    static const u32 c_dir_type[cDirType_NumX] = { cDirType_Left, cDirType_Right };
+    static const DirType c_dir_type[cDirType_NumX] = { cDirType_Left, cDirType_Right };
 
     for (s32 i = 0; i < cDirType_NumX; i++)
     {
@@ -301,7 +301,7 @@ void PlayerBase::revSideLimitCommon(f32 x)
     if (mPos.x == x)
         return;
 
-    s32 dir = cDirType_Right;
+    DirType dir = cDirType_Right;
     if (mPos.x >= x)
         dir = cDirType_Left;
 
@@ -527,7 +527,7 @@ bool PlayerBase::checkSinkSand()
     }
 }
 
-bool PlayerBase::checkBgWall(u8 dir)
+bool PlayerBase::checkBgWall(DirType dir)
 {
     if (!mBgCheckPlayer.checkWall(dir))
         return false;
@@ -545,7 +545,7 @@ struct DirBits
 {
     u32 bits[cDirType_NumX];
 
-    u32 get(s32 dir) const
+    u32 get(DirType dir) const
     {
         return bits[dir];
     }
@@ -876,7 +876,7 @@ void PlayerBase::checkBgCross_()
     }
 }
 
-void PlayerBase::checkCarryObjBgCarried_(const ActorBgCollisionCheck::Output& output, u8 dir)
+void PlayerBase::checkCarryObjBgCarried_(const ActorBgCollisionCheck::Output& output, DirType dir)
 {
     static const DirBits c_bg_check_out_bit_carry_related = { { ActorBgCollisionCheck::Output::cBit_CarryRelatedR, ActorBgCollisionCheck::Output::cBit_CarryRelatedL } };
     static const DirBits c_bg_cross_bit_carry_related = { { PlayerBase::cBgCross_CarryRelatedR, PlayerBase::cBgCross_CarryRelatedL } };
@@ -1080,7 +1080,7 @@ bool PlayerBase::isSlipSaka()
     return false;
 }
 
-bool PlayerBase::checkBGCrossWall(s32 dir)
+bool PlayerBase::checkBGCrossWall(DirType dir)
 {
     static const u32 c_bg_cross_wall_bit[cDirType_NumX] = { cBgCross_IsWallTouchR, cBgCross_IsWallTouchL };
     return isNowBgCross(c_bg_cross_wall_bit[dir]);
@@ -1104,7 +1104,7 @@ void PlayerBase::setJumpSandSinkRate()
     mSandSinkRate = -0.6f;
 }
 
-Angle PlayerBase::getSakaAngle(s32 dir)
+Angle PlayerBase::getSakaAngle(DirType dir)
 {
     Angle angle = mBgCheckPlayer.getSakaBaseAngle();
     if (dir == cDirType_Left)
@@ -1112,7 +1112,7 @@ Angle PlayerBase::getSakaAngle(s32 dir)
     return angle;
 }
 
-PlayerBase::SakaUpDown PlayerBase::getSakaUpDown(s32 dir)
+PlayerBase::SakaUpDown PlayerBase::getSakaUpDown(DirType dir)
 {
     SakaUpDown ret;
     if (dir == cDirType_Right)

@@ -202,7 +202,7 @@ void PlayerBase::HipAction_AttackFall()
 
         mAccelY = getGravityData()->gravity;
 
-        s32 walk_dir;
+        DirType walk_dir;
         if (mPlayerKey.buttonWalk(&walk_dir))
             mMaxSpeedF = cDirSpeed[walk_dir] * 0.3f;
 

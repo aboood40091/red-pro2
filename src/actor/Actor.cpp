@@ -107,7 +107,7 @@ s32 Actor::searchNearPlayer(sead::Vector2f& out)
     return ActorUtil::searchNearPlayer_Main(out, getCenterPos());
 }
 
-u32 Actor::directionToPlayerH(const sead::Vector3f& position)
+DirType Actor::getPlayerDirLR(const sead::Vector3f& position)
 {
     sead::Vector2f pl_position;
     s32 player_no = ActorUtil::searchNearPlayer_Main(pl_position, position);
@@ -130,7 +130,7 @@ u32 Actor::directionToPlayerH(const sead::Vector3f& position)
     }
 }
 
-u32 Actor::directionToPlayerV(const sead::Vector3f& position)
+DirType Actor::getPlayerDirUD(const sead::Vector3f& position)
 {
     sead::Vector2f pl_position;
     s32 player_no = ActorUtil::searchNearPlayer_Main(pl_position, position);
@@ -156,7 +156,7 @@ bool Actor::screenOutCheck(u16 flag)
     if (mpChibiYoshiEatData != nullptr && mpChibiYoshiEatData->getState() == 2)
         return false;
 
-    if (mpChibiYoshiAwaData != nullptr && mpChibiYoshiAwaData->getState() != 0)
+    if (mpChibiYoshiAwaData != nullptr && mpChibiYoshiAwaData->getState() != ChibiYoshiAwaData::cState_None)
         return false;
 
     if (!(flag & 8))
@@ -724,11 +724,11 @@ bool Actor::canPress_(const BgCollision* p_bg_collision)
     return true;
 }
 
-bool Actor::checkPressLR_(const ActorBgCollisionCheck& bc, u32 direction)
+bool Actor::checkPressLR_(const ActorBgCollisionCheck& bc, DirType direction)
 {
     static const u32 c_hit_dir_bit[cDirType_NumX] = { ActorBgCollisionCheck::cHitDirBit_Right, ActorBgCollisionCheck::cHitDirBit_Left };
     static const f32 c_dir_sign[cDirType_NumX] = { 1.0f, -1.0f };
-    static const u32 c_dir_type[cDirType_NumX] = { cDirType_Right, cDirType_Left };
+    static const DirType c_dir_type[cDirType_NumX] = { cDirType_Right, cDirType_Left };
 
     if (bc.isHit(1 << c_hit_dir_bit[direction])) // If has been actively hit on this specific frame
         return true;
@@ -737,7 +737,7 @@ bool Actor::checkPressLR_(const ActorBgCollisionCheck& bc, u32 direction)
     {
         for (s32 i = 0; i < cDirType_NumX; i++)
         {
-            u32 direction = c_dir_type[i];
+            DirType direction = c_dir_type[i];
             const BgCollision* p_bg_collision = bc.getHitBgCollisionWall(direction);
             if (p_bg_collision != nullptr &&
                 (p_bg_collision->getTypePos().x - p_bg_collision->getTypePosPrev().x) * c_dir_sign[direction] < 0.0f)

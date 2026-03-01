@@ -44,15 +44,15 @@ void PlayerBase::executeState_DemoControl()
             onStatus(cStatus_239);
             if (isNowBgCross(cBgCross_IsFoot))
             {
-                if (*mStateMgr.getStateID() != StateID_Walk)
+                if (!isState(StateID_Walk))
                 {
-                    if (*mStateMgr.getStateID() != StateID_Turn)
+                    if (!isState(StateID_Turn))
                         changeState(StateID_Walk, cAnmBlend_Enable);
                 }
             }
             else
             {
-                if (*mStateMgr.getStateID() != StateID_Fall)
+                if (!isState(StateID_Fall))
                     changeState(StateID_Fall, cAnmBlend_Enable);
             }
             if (sead::Mathf::abs(mPos.x - _2100.x) < _2108.x)
@@ -109,12 +109,12 @@ void PlayerBase::setControlDemoPos(const sead::Vector3f& pos)
     if (!isNowBgCross(cBgCross_IsUnderwater))
     {
         onNowBgCross(cBgCross_IsFoot);
-        if (*mStateMgr.getStateID() != StateID_Walk)
+        if (!isState(StateID_Walk))
             changeState(StateID_Walk, cAnmBlend_Disable);
     }
 }
 
-void PlayerBase::setControlDemoDir(s32 dir)
+void PlayerBase::setControlDemoDir(DirType dir)
 {
     if (!isStatus(cStatus_DemoControl))
         return;
@@ -124,7 +124,7 @@ void PlayerBase::setControlDemoDir(s32 dir)
     if (!isNowBgCross(cBgCross_IsUnderwater))
     {
         onNowBgCross(cBgCross_IsFoot);
-        if (*mStateMgr.getStateID() != StateID_Walk)
+        if (!isState(StateID_Walk))
             changeState(StateID_Walk, cAnmBlend_Enable);
     }
 }
@@ -315,7 +315,7 @@ void PlayerBase::checkDemoControl()
     if (!isStatus(cStatus_DemoControlReq))
         return;
 
-    if (*mDemoStateMgr.getStateID() != StateID_DemoNone)
+    if (!isDemoState(StateID_DemoNone))
         return;
 
     bool change_state = false;

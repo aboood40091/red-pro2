@@ -289,7 +289,7 @@ bool PlayerBase::executeDemoState()
     checkDemoControl();
 
     EventStartCoinBattle* p_event = sead::DynamicCast<EventStartCoinBattle>(EventMgr::instance()->getCurrentEvent());
-    if (p_event != nullptr && *mDemoStateMgr.getStateID() == StateID_DemoNone)
+    if (p_event != nullptr && isDemoState(StateID_DemoNone))
         changeDemoState(StateID_DemoStartCoinBattle, 0);
 
     if (isStatus(cStatus_DemoMode) || is_demo_mode_old)
@@ -431,7 +431,7 @@ bool PlayerBase::setNextGotoBlockDemo(s32 dst_next_goto_no, s32 wait_timer, Next
     if (isDemo() || isStatus(cStatus_RideBalloon))
         return false;
 
-    if (*mDemoStateMgr.getStateID() == StateID_DemoNextGotoBlock)
+    if (isDemoState(StateID_DemoNextGotoBlock))
         return true;
 
     mNextGotoDelay = delay;

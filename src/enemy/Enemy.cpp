@@ -131,7 +131,7 @@ void Enemy::changeState(const StateID& state_id)
     }
     else
     {
-        mStateMgr.changeState(state_id);
+        ActorMultiState::changeState(state_id);
     }
 }
 

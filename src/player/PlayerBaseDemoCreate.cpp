@@ -6,7 +6,7 @@
 #include <scene/Scene.h>
 #include <utility/MathUtil.h>
 
-void PlayerBase::setCreate(const sead::Vector3f& pos, NextGotoType next_goto_type, s32 dir)
+void PlayerBase::setCreate(const sead::Vector3f& pos, NextGotoType next_goto_type, DirType dir)
 {
     if (CourseTask::instance() && CourseTask::instance()->getGameMode() == FieldGameMode::cCoinEdit)
         return;
@@ -51,7 +51,7 @@ void PlayerBase::resetBg()
     clearBgAndSakaAngle();
 }
 
-void PlayerBase::setPosAndDir(const sead::Vector3f& pos, s32 dir)
+void PlayerBase::setPosAndDir(const sead::Vector3f& pos, DirType dir)
 {
     mPos = pos;
     mPosPrev = pos;

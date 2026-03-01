@@ -257,7 +257,7 @@ const s16 ProfileInfo::cDrawPriority[cProfileID_Max] = {
     ProfileInfo::cDrawPriority_0DB,                                     // ProfileInfo::cProfileID_0DB
     ProfileInfo::cDrawPriority_0DC,                                     // ProfileInfo::cProfileID_0DC
     ProfileInfo::cDrawPriority_0DD,                                     // ProfileInfo::cProfileID_0DD
-    ProfileInfo::cDrawPriority_0DE,                                     // ProfileInfo::cProfileID_0DE
+    ProfileInfo::cDrawPriority_Maruta,                                  // ProfileInfo::cProfileID_Maruta
     ProfileInfo::cDrawPriority_0DF,                                     // ProfileInfo::cProfileID_0DF
     ProfileInfo::cDrawPriority_Burner,                                  // ProfileInfo::cProfileID_Burner
     ProfileInfo::cDrawPriority_0E1,                                     // ProfileInfo::cProfileID_0E1
@@ -502,9 +502,9 @@ const s16 ProfileInfo::cDrawPriority[cProfileID_Max] = {
     ProfileInfo::cDrawPriority_1D0,                                     // ProfileInfo::cProfileID_1D0
     ProfileInfo::cDrawPriority_1D1,                                     // ProfileInfo::cProfileID_1D1
     ProfileInfo::cDrawPriority_1D2,                                     // ProfileInfo::cProfileID_1D2
-    ProfileInfo::cDrawPriority_1D3,                                     // ProfileInfo::cProfileID_1D3
+    ProfileInfo::cDrawPriority_Kuribo,                                  // ProfileInfo::cProfileID_Kuribo
     ProfileInfo::cDrawPriority_1D4,                                     // ProfileInfo::cProfileID_1D4
-    ProfileInfo::cDrawPriority_1D5,                                     // ProfileInfo::cProfileID_1D5
+    ProfileInfo::cDrawPriority_PataKuribo,                              // ProfileInfo::cProfileID_PataKuribo
     ProfileInfo::cDrawPriority_1D6,                                     // ProfileInfo::cProfileID_1D6
     ProfileInfo::cDrawPriority_1D7,                                     // ProfileInfo::cProfileID_1D7
     ProfileInfo::cDrawPriority_1D8,                                     // ProfileInfo::cProfileID_1D8
@@ -1175,7 +1175,7 @@ const s8 ProfileInfo::cResType[cProfileID_Max] = {
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_0DB
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_0DC
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_0DD
-    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_0DE
+    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_Maruta
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_0DF
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_Burner
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_0E1
@@ -1420,9 +1420,9 @@ const s8 ProfileInfo::cResType[cProfileID_Max] = {
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D0
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D1
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D2
-    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D3
+    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_Kuribo
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D4
-    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D5
+    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_PataKuribo
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D6
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D7
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D8
@@ -2705,7 +2705,7 @@ static const sead::SafeString cRes_0DD[]  = {
     "R_lift_kinoko_shiso"
 };
 
-static const sead::SafeString cRes_0DE[]  = {
+static const sead::SafeString cRes_Maruta[]  = {
     "lift_maruta"
 };
 
@@ -3588,7 +3588,7 @@ static const sead::SafeString cRes_1D2[]  = {
     "obj_coin"
 };
 
-static const sead::SafeString cRes_1D3[]  = {
+static const sead::SafeString cRes_Kuribo[]  = {
     "kuribo"
 };
 
@@ -3596,7 +3596,7 @@ static const sead::SafeString cRes_1D4[]  = {
     "kakibo"
 };
 
-static const sead::SafeString cRes_1D5[]  = {
+static const sead::SafeString cRes_PataKuribo[]  = {
     "kuribo",
     "wing"
 };
@@ -5461,7 +5461,7 @@ const u8 ProfileInfo::cResNum[cProfileID_Max] = {
     GetResNum(cRes_0DB),                                        // ProfileInfo::cProfileID_0DB
     GetResNum(cRes_0DC),                                        // ProfileInfo::cProfileID_0DC
     GetResNum(cRes_0DD),                                        // ProfileInfo::cProfileID_0DD
-    GetResNum(cRes_0DE),                                        // ProfileInfo::cProfileID_0DE
+    GetResNum(cRes_Maruta),                                     // ProfileInfo::cProfileID_Maruta
     GetResNum(cRes_0DF),                                        // ProfileInfo::cProfileID_0DF
     GetResNum(cRes_Burner),                                     // ProfileInfo::cProfileID_Burner
     GetResNum(cRes_0E1),                                        // ProfileInfo::cProfileID_0E1
@@ -5706,9 +5706,9 @@ const u8 ProfileInfo::cResNum[cProfileID_Max] = {
     GetResNum(cRes_1D0),                                        // ProfileInfo::cProfileID_1D0
     GetResNum(cRes_1D1),                                        // ProfileInfo::cProfileID_1D1
     GetResNum(cRes_1D2),                                        // ProfileInfo::cProfileID_1D2
-    GetResNum(cRes_1D3),                                        // ProfileInfo::cProfileID_1D3
+    GetResNum(cRes_Kuribo),                                     // ProfileInfo::cProfileID_Kuribo
     GetResNum(cRes_1D4),                                        // ProfileInfo::cProfileID_1D4
-    GetResNum(cRes_1D5),                                        // ProfileInfo::cProfileID_1D5
+    GetResNum(cRes_PataKuribo),                                 // ProfileInfo::cProfileID_PataKuribo
     GetResNum(cRes_1D6),                                        // ProfileInfo::cProfileID_1D6
     GetResNum(cRes_1D7),                                        // ProfileInfo::cProfileID_1D7
     GetResNum(cRes_1D8),                                        // ProfileInfo::cProfileID_1D8
@@ -6379,7 +6379,7 @@ const sead::SafeString* ProfileInfo::cResList[cProfileID_Max] = {
     cRes_0DB,                                       // ProfileInfo::cProfileID_0DB
     cRes_0DC,                                       // ProfileInfo::cProfileID_0DC
     cRes_0DD,                                       // ProfileInfo::cProfileID_0DD
-    cRes_0DE,                                       // ProfileInfo::cProfileID_0DE
+    cRes_Maruta,                                    // ProfileInfo::cProfileID_Maruta
     cRes_0DF,                                       // ProfileInfo::cProfileID_0DF
     cRes_Burner,                                    // ProfileInfo::cProfileID_Burner
     cRes_0E1,                                       // ProfileInfo::cProfileID_0E1
@@ -6624,9 +6624,9 @@ const sead::SafeString* ProfileInfo::cResList[cProfileID_Max] = {
     cRes_1D0,                                       // ProfileInfo::cProfileID_1D0
     cRes_1D1,                                       // ProfileInfo::cProfileID_1D1
     cRes_1D2,                                       // ProfileInfo::cProfileID_1D2
-    cRes_1D3,                                       // ProfileInfo::cProfileID_1D3
+    cRes_Kuribo,                                    // ProfileInfo::cProfileID_Kuribo
     cRes_1D4,                                       // ProfileInfo::cProfileID_1D4
-    cRes_1D5,                                       // ProfileInfo::cProfileID_1D5
+    cRes_PataKuribo,                                // ProfileInfo::cProfileID_PataKuribo
     cRes_1D6,                                       // ProfileInfo::cProfileID_1D6
     cRes_1D7,                                       // ProfileInfo::cProfileID_1D7
     cRes_1D8,                                       // ProfileInfo::cProfileID_1D8
@@ -7296,7 +7296,7 @@ const s32 ProfileInfo::cProfileID_0DA                                       = 21
 const s32 ProfileInfo::cProfileID_0DB                                       = 219;
 const s32 ProfileInfo::cProfileID_0DC                                       = 220;
 const s32 ProfileInfo::cProfileID_0DD                                       = 221;
-const s32 ProfileInfo::cProfileID_0DE                                       = 222;
+const s32 ProfileInfo::cProfileID_Maruta                                    = 222;
 const s32 ProfileInfo::cProfileID_0DF                                       = 223;
 const s32 ProfileInfo::cProfileID_Burner                                    = 224;
 const s32 ProfileInfo::cProfileID_0E1                                       = 225;
@@ -7541,9 +7541,9 @@ const s32 ProfileInfo::cProfileID_QuestPrizeItem                            = 46
 const s32 ProfileInfo::cProfileID_1D0                                       = 464;
 const s32 ProfileInfo::cProfileID_1D1                                       = 465;
 const s32 ProfileInfo::cProfileID_1D2                                       = 466;
-const s32 ProfileInfo::cProfileID_1D3                                       = 467;
+const s32 ProfileInfo::cProfileID_Kuribo                                    = 467;
 const s32 ProfileInfo::cProfileID_1D4                                       = 468;
-const s32 ProfileInfo::cProfileID_1D5                                       = 469;
+const s32 ProfileInfo::cProfileID_PataKuribo                                = 469;
 const s32 ProfileInfo::cProfileID_1D6                                       = 470;
 const s32 ProfileInfo::cProfileID_1D7                                       = 471;
 const s32 ProfileInfo::cProfileID_1D8                                       = 472;

@@ -255,7 +255,7 @@ bool ActorCollision::bgCheckFoot_() const
 
 bool ActorCollision::bgCheckWall_() const
 {
-    s32 direction = cDirType_Right;
+    DirType direction = cDirType_Right;
     if (mSpeed.x < 0.0f)
         direction = cDirType_Left;
 
