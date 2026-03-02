@@ -38,18 +38,18 @@ KuriboBase::KuriboBase(const ActorCreateParam& param)
     , mpParentMiddleKuribo(nullptr)
     , mWalkAnmRate(1.0f)
     , mZOffset(0.0f)
-    , _1a00(1.0f)
-    , _1a04(0)
-    , _1a08(true)
-    , _1a09(false)
+    , mKakiboHaScale(1.0f)
+    , mKakiboHaAngleZ(0)
+    , mHasLanded(true)
+    , mForceLanded(false)
     , mAllowDrcTouchInAir(false)
-    , _1a0b(0)
-    , _1a0c(0)
+    , mBlockHitImmune(false)
+    , mIsDrcTouch(false)
     , mIsKakibo(false)
-    , mType(0)
-    , _1a0f(0)
-    , _1a10(0)
-    , _1a14(0.0f)
+    , mModelType(cModelType_Normal)
+    , mSubstate(0)
+    , mDisableScreenOutCheck(false)
+    , mEnemyHitRevX(0.0f)
     , mEatData(mActorUniqueID)
     , mChibiYoshiEatData(mActorUniqueID)
     , mBoyoMgr(this)
@@ -167,7 +167,7 @@ bool KuriboBase::checkGround_()
 
 void KuriboBase::landonEffect_()
 {
-    if (!_1a08)
+    if (!mHasLanded)
     {
         sead::Vector3f pos(
             mPos.x,
@@ -177,7 +177,7 @@ void KuriboBase::landonEffect_()
         if (mBgCheckObj.checkFoot())
         {
             pos.z = getEffectZPos();
-            _1a08 = true;
+            mHasLanded = true;
             switch (BgUnitCode::getAttr(mBgCheckObj.getBgCheckData(cDirType_Down)))
             {
             default:
@@ -208,7 +208,7 @@ void KuriboBase::landonEffect_()
             WaterType water_type = ActorBgCollisionCheck::checkWater(&pos.y, check_pos, mLayer);
             if (water_type != cWaterType_None)
             {
-                _1a08 = true;
+                mHasLanded = true;
                 pos.z = 6500.0f;
                 switch (water_type)
                 {
@@ -228,9 +228,9 @@ void KuriboBase::landonEffect_()
             }
             else
             {
-                if (_1a09)
+                if (mForceLanded)
                 {
-                    _1a08 = true;
+                    mHasLanded = true;
                     sead::Vector3f pos(
                         mPos.x,
                         mPos.y,
@@ -243,24 +243,24 @@ void KuriboBase::landonEffect_()
     }
     else if (!mBgCheckObj.checkFoot() && !checkGround_())
     {
-        _1a08 = false;
+        mHasLanded = false;
 
         sead::Vector3f check_pos = mPos;
         check_pos.y -= 2.0f;
         WaterType water_type = ActorBgCollisionCheck::checkWater(nullptr, check_pos, mLayer);
         if (water_type != cWaterType_None)
         {
-            _1a08 = true;
-            if (_1a09)
+            mHasLanded = true;
+            if (mForceLanded)
             {
-                _1a09 = false;
-                _1a08 = false;
+                mForceLanded = false;
+                mHasLanded = false;
             }
         }
         else
         {
-            if (_1a09)
-                _1a08 = true;
+            if (mForceLanded)
+                mHasLanded = true;
         }
     }
 }
@@ -329,7 +329,7 @@ bool KuriboBase::execute_()
     }
     mBoyoMgr.execute();
     calcMdl_Normal();
-    if (!disallowDrcTouchOnGround() && !_1a10)
+    if (!disallowDrcTouchOnGround() && !mDisableScreenOutCheck)
         screenOutCheck(0);
     calcJumpSpeedF_();
     return true;
@@ -366,9 +366,9 @@ void KuriboBase::vsEnemyHitCheck_Normal(ActorCollisionCheck* cc_self, ActorColli
     if (actor_other != nullptr && actor_other->getProfileID() != ProfileInfo::cProfileID_Maruta)
     {
         if (actor_other->getActorType() == cActorType_Enemy)
-            _1a14 = cc_self->getRevisionX(ActorCollisionCheck::cKind_Enemy);
+            mEnemyHitRevX = cc_self->getRevisionX(ActorCollisionCheck::cKind_Enemy);
         else if (actor_other->getActorType() == cActorType_ChibiYoshi)
-            _1a14 = cc_self->getRevisionX(ActorCollisionCheck::cKind_ChibiYoshi);
+            mEnemyHitRevX = cc_self->getRevisionX(ActorCollisionCheck::cKind_ChibiYoshi);
         setTurnByEnemyHit(cc_self->getOwner(), actor_other);
     }
 }
@@ -487,7 +487,7 @@ void KuriboBase::setAwaHit(Actor* p_awa)
     Enemy::setAwaHit(p_awa);
 }
 
-void KuriboBase::calcModel_(BlendModel* p_blend_model)
+void KuriboBase::calcModelBase_(BlendModel* p_blend_model)
 {
     {
         sead::Vector3f pos = mPos;
@@ -517,14 +517,14 @@ void KuriboBase::calcModel_(BlendModel* p_blend_model)
         }
     }
 
-    if (mType == 0)
+    if (mModelType == cModelType_Normal)
         p_blend_model->calcBlend();
-    else if (mType == 1)
+    else if (mModelType == cModelType_Kakibo)
         mCalcRatio.calc();
 
     p_blend_model->getModel()->calcAnm();
 
-    if (mType == 1)
+    if (mModelType == cModelType_Kakibo)
     {
         // 1
         {
@@ -532,8 +532,8 @@ void KuriboBase::calcModel_(BlendModel* p_blend_model)
             s32 bone_index = p_blend_model->getModel()->searchBoneIndex("ha_1");
             Mtxf mtx;
             p_blend_model->getModel()->getBoneLocalMatrix(bone_index, &mtx, &scale);
-            mtx.ZrotM(-_1a04);
-            scale *= _1a00;
+            mtx.ZrotM(-mKakiboHaAngleZ);
+            scale *= mKakiboHaScale;
             p_blend_model->getModel()->setBoneLocalMatrix(bone_index, mtx, scale);
         }
         // 2
@@ -542,8 +542,8 @@ void KuriboBase::calcModel_(BlendModel* p_blend_model)
             s32 bone_index = p_blend_model->getModel()->searchBoneIndex("ha_2");
             Mtxf mtx;
             p_blend_model->getModel()->getBoneLocalMatrix(bone_index, &mtx, &scale);
-            mtx.ZrotM(-_1a04);
-            scale *= _1a00;
+            mtx.ZrotM(-mKakiboHaAngleZ);
+            scale *= mKakiboHaScale;
             p_blend_model->getModel()->setBoneLocalMatrix(bone_index, mtx, scale);
         }
         // 3
@@ -552,8 +552,8 @@ void KuriboBase::calcModel_(BlendModel* p_blend_model)
             s32 bone_index = p_blend_model->getModel()->searchBoneIndex("ha_3");
             Mtxf mtx;
             p_blend_model->getModel()->getBoneLocalMatrix(bone_index, &mtx, &scale);
-            mtx.ZrotM(-_1a04);
-            scale *= _1a00;
+            mtx.ZrotM(-mKakiboHaAngleZ);
+            scale *= mKakiboHaScale;
             p_blend_model->getModel()->setBoneLocalMatrix(bone_index, mtx, scale);
         }
         // 4
@@ -562,8 +562,8 @@ void KuriboBase::calcModel_(BlendModel* p_blend_model)
             s32 bone_index = p_blend_model->getModel()->searchBoneIndex("ha_4");
             Mtxf mtx;
             p_blend_model->getModel()->getBoneLocalMatrix(bone_index, &mtx, &scale);
-            mtx.ZrotM(-_1a04);
-            scale *= _1a00;
+            mtx.ZrotM(-mKakiboHaAngleZ);
+            scale *= mKakiboHaScale;
             p_blend_model->getModel()->setBoneLocalMatrix(bone_index, mtx, scale);
         }
         mCalcRatio.applyTo(p_blend_model->getModel());
@@ -579,7 +579,7 @@ void KuriboBase::setTurnByPlayerHit(Actor*)
         changeState(StateID_Walk);
     mAngle.y() = cBaseAngleY[mDirection];
     setWalkSpeed();
-    calcModel_(mpBlendModel);
+    calcModelBase_();
 }
 
 void KuriboBase::reactFumiProc(Actor* p_player)
@@ -670,7 +670,7 @@ void KuriboBase::initializeState_Touch()
     mSpeedMax.x = mSpeed.x;
     mSpeed.y = 3.0f;
     mAllowDrcTouchInAir = false;
-    _1a0f = 1;
+    mSubstate = 1;
 }
 
 void KuriboBase::executeState_Touch()
@@ -684,21 +684,19 @@ void KuriboBase::executeState_Touch()
         mSpeed.y *= -1.0f;
     if (mBgCheckObj.checkWall(cDirType_Right) || mBgCheckObj.checkWall(cDirType_Left))
         mSpeed.x = 0.0f;
-    if (mSpeed.y <= mSpeedMax.y && _1a09)
+    if (mSpeed.y <= mSpeedMax.y && mForceLanded)
     {
         vf5F4();
         return;
     }
-    switch (_1a0f)
+    switch (mSubstate)
     {
     default:
-        break;
-    case 0:
         break;
     case 1:
         if (mSpeed.y < 0.0f && mBgCheckObj.checkFoot())
         {
-            _1a0f = 2;
+            mSubstate = 2;
             mAllowDrcTouchInAir = true;
             mSpeed.y *= -0.75f;
         }
@@ -706,14 +704,14 @@ void KuriboBase::executeState_Touch()
     case 2:
         if (mSpeed.y < 0.0f && mBgCheckObj.checkFoot())
         {
-            _1a0f = 3;
+            mSubstate = 3;
             mSpeed.y *= -0.75f;
         }
         break;
     case 3:
         if (mBgCheckObj.checkFoot())
         {
-            _1a0f = 4;
+            mSubstate = 4;
             mAccelF = sead::Mathf::abs(mSpeed.x) / 10;
             _186c = 10;
             mSpeed.y = 0.0f;
@@ -770,9 +768,9 @@ void KuriboBase::finalizeState_TrplnJump()
 
 void KuriboBase::initializeState_DieOther()
 {
-    if (mType == 0)
+    if (mModelType == cModelType_Normal)
         mpBlendModel->setAnm(mpModelResource, "damage", 2.0f);
-    else if (mType == 1)
+    else if (mModelType == cModelType_Kakibo)
     {
         mCalcRatio.set(2.0f);
         mpBlendModel->getCurSklAnim()->play(mpModelResource, "damage");
@@ -783,8 +781,8 @@ void KuriboBase::initializeState_DieOther()
     mAccelY = cDefaultGravity;
     removeCollisionCheck();
     ActorCollisionCheckMgr::instance()->release(mCollisionCheckDrcTouch);
-    _1a00 = 1.0f;
-    _1a04 = 0;
+    mKakiboHaScale = 1.0f;
+    mKakiboHaAngleZ = 0;
     mAngle.y() = 0;
     _186c = 30;
     if (mpParentMiddleKuribo != nullptr)
@@ -809,9 +807,9 @@ void KuriboBase::initializeState_DieFall()
     ActorCollisionCheckMgr::instance()->release(mCollisionCheckDrcTouch);
     if (mpParentMiddleKuribo != nullptr)
         mpParentMiddleKuribo->_1b0c++;
-    _1a00 = 1.0f;
-    _1a04 = 0;
-    _1a08 = false;
+    mKakiboHaScale = 1.0f;
+    mKakiboHaAngleZ = 0;
+    mHasLanded = false;
 }
 
 void KuriboBase::executeState_DieFall()
@@ -839,10 +837,10 @@ void KuriboBase::setWalkAnm()
     mpBlendModel->getCurSklAnim()->getFrameCtrl().setPlayMode(FrameCtrl::cMode_Repeat);
     mpBlendModel->getCurSklAnim()->getFrameCtrl().setRate(2.0f);
     mWalkAnmRate = 2.0f;
-    if (mType == 0)
+    if (mModelType == cModelType_Normal)
         mpTexAnim->play(mpModelResource, "walk");
     mpTexAnim->getFrameCtrl().setRate(1.0f);
-    if (mType == 0)
+    if (mModelType == cModelType_Normal)
         mpTexAnim->getFrameCtrl().setFrame(GAME_RANDOM.getU32(180));
     else
     {
