@@ -32,3 +32,11 @@ Model* ModelUtil::createG3d(const ModelResource& res, const sead::SafeString& na
     );
     return p_model;
 }
+
+void ModelUtil::getBoneLocalMatrix(const Model& model, s32 index, sead::Matrix34f* mtx)
+{
+    sead::Matrix34f rt;
+    sead::Vector3f scale;
+    model.getBoneLocalMatrix(index, &rt, &scale);
+    mtx->setMultScaleLocal(rt, scale);
+}
