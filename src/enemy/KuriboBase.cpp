@@ -355,7 +355,7 @@ void KuriboBase::normal_collcheck(ActorCollisionCheck* cc_self, ActorCollisionCh
 {
     KuriboBase* p_kuribo_self = cc_self->getOwner<KuriboBase>();
     if (p_kuribo_self != nullptr)
-        p_kuribo_self->vf53C(*cc_other);
+        p_kuribo_self->balloonCollCheck(cc_other);
 
     Enemy::normal_collcheck(cc_self, cc_other);
 }
@@ -609,7 +609,7 @@ void KuriboBase::executeState_Walk()
     calcSpeedY_();
     posMove_();
     bgCheck_();
-    mAngle.y().chaseRest(cBaseAngleY[mDirection], 0x2000000);
+    mAngle.y().chaseRest(cBaseAngleY[mDirection], cTurnSpeed);
     walkEffect();
     if (mBgCheckObj.checkFoot())
     {
@@ -655,7 +655,7 @@ void KuriboBase::executeState_Turn()
                 mSpeed.y = 2.0f;
         }
     }
-    if (mAngle.y().chaseRest(cBaseAngleY[mDirection], 0x2000000))
+    if (mAngle.y().chaseRest(cBaseAngleY[mDirection], cTurnSpeed))
         changeState(StateID_Walk);
 }
 
@@ -678,7 +678,7 @@ void KuriboBase::executeState_Touch()
     calcSpeedX_();
     calcSpeedY_();
     posMove_();
-    mAngle.y().chaseRest(cBaseAngleY[mDirection], 0x2000000);
+    mAngle.y().chaseRest(cBaseAngleY[mDirection], cTurnSpeed);
     mBgCheckObj.checkBg();
     if (mBgCheckObj.checkHead())
         mSpeed.y *= -1.0f;
@@ -686,7 +686,7 @@ void KuriboBase::executeState_Touch()
         mSpeed.x = 0.0f;
     if (mSpeed.y <= mSpeedMax.y && mForceLanded)
     {
-        vf5F4();
+        setWalkState();
         return;
     }
     switch (mSubstate)
@@ -722,10 +722,10 @@ void KuriboBase::executeState_Touch()
         if (mBgCheckObj.checkFoot())
             mSpeed.y = 0.0f;
         if (_186c == 0)
-            vf5F4();
+            setWalkState();
         break;
     }
-    vf5EC();
+    calcDrcTouch();
 }
 
 void KuriboBase::finalizeState_Touch()
@@ -743,7 +743,7 @@ void KuriboBase::executeState_TrplnJump()
 {
     calcSpeedY_();
     posMove_();
-    bool turned = mAngle.y().chaseRest(cBaseAngleY[mDirection], 0x2000000);
+    bool turned = mAngle.y().chaseRest(cBaseAngleY[mDirection], cTurnSpeed);
     bgCheck_();
     if (mBgCheckObj.checkWall(mDirection))
     {
@@ -897,8 +897,8 @@ void KuriboBase::DrcTouchCB::ccOnTouch(ActorCollisionCheck* p_cc, const sead::Ve
     ActorCollisionDrcTouchCallback::ccOnTouch(p_cc, pos);
 }
 
-const f32 KuriboBase::cPataTurnMaxSpeedX = 1.0f;
-const f32 KuriboBase::cPataWalkMaxSpeedY = -4.0f;
+const f32 KuriboBase::cMaxSpeedX = 1.0f;
+const f32 KuriboBase::cMaxSpeedY = -4.0f;
 
 const ActorCreateInfo KuriboBase::cActorCreateInfo = { 8, -16, { 0, 8, 8, 8 }, { 0, 0, 0, 0 }, ActorCreateInfo::cFlag_Unknown };
 

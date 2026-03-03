@@ -31,14 +31,14 @@ void CoinOrigin::initialize(sead::Heap* heap)
 {
     ResMgr::instance()->loadArchiveRes("obj_coin", "actor/obj_coin.sarc", heap, false);
     ModelResourceMgr::instance()->loadResFile("obj_coin", "obj_coin", heap);
-    mpModelCoin = Model::createG3d(
+    mpModelCoin = ModelUtil::createG3d(
         *ModelResourceMgr::instance()->getResource("obj_coin"),
         "obj_coin",
         1, 1, 1, 1, 0,
         Model::cBoundingMode_Disable,
         heap
     );
-    mpModelBlueCoin = Model::createG3d(
+    mpModelBlueCoin = ModelUtil::createG3d(
         *ModelResourceMgr::instance()->getResource("obj_coin"),
         "obj_coin_blue",
         1, 1, 1, 1, 0,

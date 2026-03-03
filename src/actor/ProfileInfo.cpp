@@ -503,7 +503,7 @@ const s16 ProfileInfo::cDrawPriority[cProfileID_Max] = {
     ProfileInfo::cDrawPriority_1D1,                                     // ProfileInfo::cProfileID_1D1
     ProfileInfo::cDrawPriority_1D2,                                     // ProfileInfo::cProfileID_1D2
     ProfileInfo::cDrawPriority_Kuribo,                                  // ProfileInfo::cProfileID_Kuribo
-    ProfileInfo::cDrawPriority_1D4,                                     // ProfileInfo::cProfileID_1D4
+    ProfileInfo::cDrawPriority_Kakibo,                                  // ProfileInfo::cProfileID_Kakibo
     ProfileInfo::cDrawPriority_PataKuribo,                              // ProfileInfo::cProfileID_PataKuribo
     ProfileInfo::cDrawPriority_1D6,                                     // ProfileInfo::cProfileID_1D6
     ProfileInfo::cDrawPriority_1D7,                                     // ProfileInfo::cProfileID_1D7
@@ -1421,7 +1421,7 @@ const s8 ProfileInfo::cResType[cProfileID_Max] = {
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D1
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D2
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_Kuribo
-    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D4
+    ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_Kakibo
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_PataKuribo
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D6
     ProfileInfo::cResType_Course,       // ProfileInfo::cProfileID_1D7
@@ -3592,7 +3592,7 @@ static const sead::SafeString cRes_Kuribo[]  = {
     "kuribo"
 };
 
-static const sead::SafeString cRes_1D4[]  = {
+static const sead::SafeString cRes_Kakibo[]  = {
     "kakibo"
 };
 
@@ -5707,7 +5707,7 @@ const u8 ProfileInfo::cResNum[cProfileID_Max] = {
     GetResNum(cRes_1D1),                                        // ProfileInfo::cProfileID_1D1
     GetResNum(cRes_1D2),                                        // ProfileInfo::cProfileID_1D2
     GetResNum(cRes_Kuribo),                                     // ProfileInfo::cProfileID_Kuribo
-    GetResNum(cRes_1D4),                                        // ProfileInfo::cProfileID_1D4
+    GetResNum(cRes_Kakibo),                                     // ProfileInfo::cProfileID_Kakibo
     GetResNum(cRes_PataKuribo),                                 // ProfileInfo::cProfileID_PataKuribo
     GetResNum(cRes_1D6),                                        // ProfileInfo::cProfileID_1D6
     GetResNum(cRes_1D7),                                        // ProfileInfo::cProfileID_1D7
@@ -6625,7 +6625,7 @@ const sead::SafeString* ProfileInfo::cResList[cProfileID_Max] = {
     cRes_1D1,                                       // ProfileInfo::cProfileID_1D1
     cRes_1D2,                                       // ProfileInfo::cProfileID_1D2
     cRes_Kuribo,                                    // ProfileInfo::cProfileID_Kuribo
-    cRes_1D4,                                       // ProfileInfo::cProfileID_1D4
+    cRes_Kakibo,                                    // ProfileInfo::cProfileID_Kakibo
     cRes_PataKuribo,                                // ProfileInfo::cProfileID_PataKuribo
     cRes_1D6,                                       // ProfileInfo::cProfileID_1D6
     cRes_1D7,                                       // ProfileInfo::cProfileID_1D7
@@ -7542,7 +7542,7 @@ const s32 ProfileInfo::cProfileID_1D0                                       = 46
 const s32 ProfileInfo::cProfileID_1D1                                       = 465;
 const s32 ProfileInfo::cProfileID_1D2                                       = 466;
 const s32 ProfileInfo::cProfileID_Kuribo                                    = 467;
-const s32 ProfileInfo::cProfileID_1D4                                       = 468;
+const s32 ProfileInfo::cProfileID_Kakibo                                    = 468;
 const s32 ProfileInfo::cProfileID_PataKuribo                                = 469;
 const s32 ProfileInfo::cProfileID_1D6                                       = 470;
 const s32 ProfileInfo::cProfileID_1D7                                       = 471;

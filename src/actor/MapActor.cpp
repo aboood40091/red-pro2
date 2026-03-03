@@ -597,7 +597,7 @@ const MapActor::Profile MapActor::cProfileID[] = {
     ProfileInfo::cProfileID_21F,                                        // 592
     ProfileInfo::cProfileID_299,                                        // 593
     ProfileInfo::cProfileID_29C,                                        // 594
-    ProfileInfo::cProfileID_1D4,                                        // 595
+    ProfileInfo::cProfileID_Kakibo,                                     // 595
     ProfileInfo::cProfileID_32D,                                        // 596
     ProfileInfo::cProfileID_220,                                        // 597
     ProfileInfo::cProfileID_0B6,                                        // 598
