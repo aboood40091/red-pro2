@@ -1,30 +1,30 @@
-#include <graphics/BlendModel.h>
+#include <graphics/JointBlendModel.h>
 #include <graphics/SkeletalAnimation.h>
 
-BlendModel::BlendModel(Model* p_model, u32 skl_anim_num, u32 tex_anim_num, u32 shu_anim_num, u32 vis_anim_num, u32 sha_anim_num)
+JointBlendModel::JointBlendModel(Model* p_model, u32 skl_anim_num, u32 tex_anim_num, u32 shu_anim_num, u32 vis_anim_num, u32 sha_anim_num)
     : AnimModel(p_model, skl_anim_num, tex_anim_num, shu_anim_num, vis_anim_num, sha_anim_num)
     , mCurAnmIdx(0)
 {
     // Need to assert that skl_anim_num <= 2
 }
 
-void BlendModel::init(ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
+void JointBlendModel::init(ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
 {
     AnimModel::init(p_mdl_res, p_anim_mdl_res_array, heap);
 }
 
-void BlendModel::playAnmFrameCtrl()
+void JointBlendModel::playAnmFrameCtrl()
 {
     AnimModel::playAnmFrameCtrl();
 }
 
-void BlendModel::calcMdl()
+void JointBlendModel::calcMdl()
 {
     calcBlend();
     AnimModel::calcMdl();
 }
 
-void BlendModel::calcBlend()
+void JointBlendModel::calcBlend()
 {
     if (mCalcRatio.isActive())
     {
@@ -36,7 +36,7 @@ void BlendModel::calcBlend()
     }
 }
 
-void BlendModel::setAnm(
+void JointBlendModel::setAnm(
     ModelResource* p_mdl_res,
     const sead::SafeString& name,
     f32 blend_duration
@@ -45,7 +45,7 @@ void BlendModel::setAnm(
     setAnm_(p_mdl_res, name, blend_duration);
 }
 
-void BlendModel::setAnm(
+void JointBlendModel::setAnm(
     const sead::SafeString& name,
     f32 blend_duration,
     FrameCtrl::PlayMode mode,
@@ -56,7 +56,7 @@ void BlendModel::setAnm(
     setAnm_(getModelResource(), name, blend_duration, mode, rate, frame);
 }
 
-void BlendModel::setAnm(
+void JointBlendModel::setAnm(
     const sead::SafeString& name,
     FrameCtrl::PlayMode mode,
     f32 rate,
@@ -66,7 +66,7 @@ void BlendModel::setAnm(
     setAnm_(getModelResource(), name, 0.0f, mode, rate, frame);
 }
 
-void BlendModel::setAnm_(
+void JointBlendModel::setAnm_(
     ModelResource* p_mdl_res,
     const sead::SafeString& name,
     f32 blend_duration,

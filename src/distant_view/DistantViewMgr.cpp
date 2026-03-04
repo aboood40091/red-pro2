@@ -11,8 +11,8 @@
 #include <graphics/GfxParameter.h>
 #include <graphics/ModelResource.h>
 #include <graphics/ModelResourceMgr.h>
-#include <graphics/RenderMgr.h>
 #include <graphics/RenderObjLayer.h>
+#include <graphics/RenderObjRenderMgr.h>
 #include <graphics/ShaderParamAnimation.h>
 #include <graphics/SkeletalAnimation.h>
 #include <graphics/TexturePatternAnimation.h>

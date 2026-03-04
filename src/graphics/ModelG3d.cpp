@@ -1,7 +1,7 @@
 #include <graphics/CullViewFrustum.h>
 #include <graphics/ModelG3d.h>
 #include <graphics/ModelG3dShadowUtil.h>
-#include <graphics/RenderMgr.h>
+#include <graphics/RenderObjRenderMgr.h>
 #include <graphics/ShaderHolder.h>
 
 #include <gfx/seadGraphics.h>
@@ -628,24 +628,24 @@ void ModelG3d::calc()
     }
 }
 
-void ModelG3d::calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelG3d::calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
     mModelEx.CalcView(view_index, reinterpret_cast<const nw::g3d::math::Mtx34&>(view_mtx));
 }
 
-void ModelG3d::drawOpa_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const
+void ModelG3d::drawOpa_(DrawInfo& draw_info, const RenderObjRenderMgr* p_render_mgr) const
 {
     for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mOpaShapeInfo.constBegin(), it_end = mOpaShapeInfo.constEnd(); it != it_end; ++it)
         drawShape_(draw_info, *it, p_render_mgr);
 }
 
-void ModelG3d::drawXlu_(DrawInfo& draw_info, const RenderMgr* p_render_mgr) const
+void ModelG3d::drawXlu_(DrawInfo& draw_info, const RenderObjRenderMgr* p_render_mgr) const
 {
     for (sead::PtrArray<ShapeRenderInfo>::constIterator it = mXluShapeInfo.constBegin(), it_end = mXluShapeInfo.constEnd(); it != it_end; ++it)
         drawShape_(draw_info, *it, p_render_mgr);
 }
 
-void ModelG3d::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info, const RenderMgr* p_render_mgr) const
+void ModelG3d::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_info, const RenderObjRenderMgr* p_render_mgr) const
 {
     s32 idx_shape = render_info.idx_shape;
     const nw::g3d::ShapeObj* p_shape = mModelEx.GetShape(idx_shape);
@@ -807,7 +807,7 @@ void ModelG3d::drawShape_(DrawInfo& draw_info, const ShapeRenderInfo& render_inf
     }
 }
 
-void ModelG3d::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelG3d::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
     if (mShapeFlag.isOff(1 << 0))
         return;
@@ -840,7 +840,7 @@ void ModelG3d::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const se
     agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
 }
 
-void ModelG3d::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelG3d::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
     if (mShapeFlag.isOff(1 << 0))
         return;
@@ -873,7 +873,7 @@ void ModelG3d::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const se
     agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
 }
 
-void ModelG3d::drawShadowOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelG3d::drawShadowOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
     if (mShapeFlag.isOff(1 << 2) || mViewDepthShadowEnableFlag.isOff(1 << view_index))
         return;
@@ -971,7 +971,7 @@ void ModelG3d::drawShadowOpa(s32 view_index, const sead::Matrix34f& view_mtx, co
     agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
 }
 
-void ModelG3d::drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelG3d::drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
     if (mShapeFlag.isOff(1 << 1))
         return;
@@ -1004,7 +1004,7 @@ void ModelG3d::drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx
     agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
 }
 
-void ModelG3d::drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelG3d::drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
     if (mShapeFlag.isOff(1 << 1))
         return;
@@ -1307,7 +1307,7 @@ bool ModelG3d::isBoneVisible(s32 index) const
     return mModelEx.IsBoneVisible(index);
 }
 
-void ModelG3d::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjLayerBase* p_shadow_layer, RenderMgr* p_render_mgr)
+void ModelG3d::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjLayerBase* p_shadow_layer, RenderObjRenderMgr* p_render_mgr)
 {
     if (!isBoundingEnable())
         return;

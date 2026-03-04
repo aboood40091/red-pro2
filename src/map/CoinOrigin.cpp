@@ -2,7 +2,7 @@
 #include <game/AreaLayerMgr.h>
 #include <graphics/Model.h>
 #include <graphics/ModelResourceMgr.h>
-#include <graphics/RenderMgr.h>
+#include <graphics/RenderObjRenderMgr.h>
 #include <map/BgTexMgr.h>
 #include <map/CoinOrigin.h>
 #include <map/UnitID.h>

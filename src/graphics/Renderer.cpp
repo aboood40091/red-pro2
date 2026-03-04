@@ -2,8 +2,8 @@
 #include <graphics/AnimModel.h>
 #include <graphics/ModelG3d.h>
 #include <graphics/Renderer.h>
-#include <graphics/RenderMgr.h>
 #include <graphics/RenderObjLayer.h>
+#include <graphics/RenderObjRenderMgr.h>
 #include <map/BgRenderer.h>
 #include <map/LayerID.h>
 #include <map/UnitID.h>

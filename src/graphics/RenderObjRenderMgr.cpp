@@ -1,12 +1,12 @@
 #include <graphics/LayerMgr.h>
 #include <graphics/Model.h>
-#include <graphics/RenderMgr.h>
 #include <graphics/RenderObj.h>
+#include <graphics/RenderObjRenderMgr.h>
 
 #include <common/aglRenderBuffer.h>
 #include <gfx/seadViewport.h>
 
-RenderMgr::RenderMgr(const sead::SafeString& name)
+RenderObjRenderMgr::RenderObjRenderMgr(const sead::SafeString& name)
     : sead::INamable(name)
     , _18(false)
     , mpCallback(nullptr)
@@ -16,22 +16,22 @@ RenderMgr::RenderMgr(const sead::SafeString& name)
 {
 }
 
-RenderMgr::~RenderMgr()
+RenderObjRenderMgr::~RenderObjRenderMgr()
 {
     LayerMgr::instance()->removeRenderMgr(this);
 }
 
-bool RenderMgr::isFull() const
+bool RenderObjRenderMgr::isFull() const
 {
     return mRenderObj.isFull();
 }
 
-void RenderMgr::updateEnvObjMgr()
+void RenderObjRenderMgr::updateEnvObjMgr()
 {
     mEnvObjMgr.update();
 }
 
-void RenderMgr::clear()
+void RenderObjRenderMgr::clear()
 {
     mRenderObj.clear();
 
@@ -46,7 +46,7 @@ void RenderMgr::clear()
     _18 = false;
 }
 
-int RenderMgr::compare_(const RenderObj* a, const RenderObj* b)
+int RenderObjRenderMgr::compare_(const RenderObj* a, const RenderObj* b)
 {
     f32 z = a->getOrderPos().z - b->getOrderPos().z;
     if (z < 0)
@@ -55,7 +55,7 @@ int RenderMgr::compare_(const RenderObj* a, const RenderObj* b)
     return z > 0;
 }
 
-void RenderMgr::calcView(s32 view_index, const sead::Camera& camera, const sead::Projection& projection, const sead::Matrix44f* p_depth_shadow_mtx, const CullViewFrustum* p_cull, void* param_6)
+void RenderObjRenderMgr::calcView(s32 view_index, const sead::Camera& camera, const sead::Projection& projection, const sead::Matrix44f* p_depth_shadow_mtx, const CullViewFrustum* p_cull, void* param_6)
 {
     ViewInfo& view_info = getViewInfo(view_index);
     view_info.view_mtx = camera.getViewMatrix();
@@ -77,12 +77,12 @@ void RenderMgr::calcView(s32 view_index, const sead::Camera& camera, const sead:
         itr->heapSort(compare_);
 }
 
-void RenderMgr::enable_18_()
+void RenderObjRenderMgr::enable_18_()
 {
     _18 = true;
 }
 
-void RenderMgr::calcGPU(s32 view_index)
+void RenderObjRenderMgr::calcGPU(s32 view_index)
 {
     if (!_18)
         enable_18_();
@@ -97,7 +97,7 @@ void RenderMgr::calcGPU(s32 view_index)
         itr->calcGPU(view_index, view_info.view_mtx, view_info.proj_mtx, this);
 }
 
-void RenderMgr::drawOpa(s32 view_index, const agl::lyr::RenderInfo& render_info)
+void RenderObjRenderMgr::drawOpa(s32 view_index, const agl::lyr::RenderInfo& render_info)
 {
     const ViewInfo& view_info = getViewInfo(view_index);
 
@@ -119,7 +119,7 @@ void RenderMgr::drawOpa(s32 view_index, const agl::lyr::RenderInfo& render_info)
     }
 }
 
-void RenderMgr::drawXlu(s32 view_index, const agl::lyr::RenderInfo& render_info)
+void RenderObjRenderMgr::drawXlu(s32 view_index, const agl::lyr::RenderInfo& render_info)
 {
     const ViewInfo& view_info = getViewInfo(view_index);
 
@@ -141,7 +141,7 @@ void RenderMgr::drawXlu(s32 view_index, const agl::lyr::RenderInfo& render_info)
     }
 }
 
-void RenderMgr::drawShadowOpa(s32 view_index, const agl::lyr::RenderInfo& render_info)
+void RenderObjRenderMgr::drawShadowOpa(s32 view_index, const agl::lyr::RenderInfo& render_info)
 {
     mDrawShadow = true;
 
@@ -153,7 +153,7 @@ void RenderMgr::drawShadowOpa(s32 view_index, const agl::lyr::RenderInfo& render
     mDrawShadow = false;
 }
 
-void RenderMgr::drawReflectionOpa(s32 view_index, const agl::lyr::RenderInfo& render_info)
+void RenderObjRenderMgr::drawReflectionOpa(s32 view_index, const agl::lyr::RenderInfo& render_info)
 {
     const ViewInfo& view_info = getViewInfo(view_index);
 
@@ -162,7 +162,7 @@ void RenderMgr::drawReflectionOpa(s32 view_index, const agl::lyr::RenderInfo& re
             itr_obj->drawReflectionOpa(view_index, view_info.view_mtx, view_info.proj_mtx, this);
 }
 
-void RenderMgr::drawReflectionXlu(s32 view_index, const agl::lyr::RenderInfo& render_info)
+void RenderObjRenderMgr::drawReflectionXlu(s32 view_index, const agl::lyr::RenderInfo& render_info)
 {
     const ViewInfo& view_info = getViewInfo(view_index);
 
@@ -171,7 +171,7 @@ void RenderMgr::drawReflectionXlu(s32 view_index, const agl::lyr::RenderInfo& re
             itr_obj->drawReflectionXlu(view_index, view_info.view_mtx, view_info.proj_mtx, this);
 }
 
-void RenderMgr::pushBackRenderObj(RenderObj* obj, s32 opa_buffer_index, s32 xlu_buffer_index)
+void RenderObjRenderMgr::pushBackRenderObj(RenderObj* obj, s32 opa_buffer_index, s32 xlu_buffer_index)
 {
     mRenderObj.pushBack(obj);
 
@@ -185,13 +185,13 @@ void RenderMgr::pushBackRenderObj(RenderObj* obj, s32 opa_buffer_index, s32 xlu_
         mRenderObjShadow.pushBack(obj);
 }
 
-void RenderMgr::pushBackRenderObj(RenderObj* obj, s32 opa_buffer_index, s32 xlu_buffer_index, const sead::Vector3f& order_pos)
+void RenderObjRenderMgr::pushBackRenderObj(RenderObj* obj, s32 opa_buffer_index, s32 xlu_buffer_index, const sead::Vector3f& order_pos)
 {
     obj->getOrderPos().set(order_pos);
     pushBackRenderObj(obj, opa_buffer_index, xlu_buffer_index);
 }
 
-s32 RenderMgr::createView(RenderObjLayerBase* p_layer)
+s32 RenderObjRenderMgr::createView(RenderObjLayerBase* p_layer)
 {
     for (sead::Buffer<ViewInfo>::iterator itr = mViewInfo.begin(), itr_end = mViewInfo.end(); itr != itr_end; ++itr)
     {
@@ -208,12 +208,12 @@ s32 RenderMgr::createView(RenderObjLayerBase* p_layer)
     return -1;
 }
 
-void RenderMgr::loadEnvRes(const void* p_file)
+void RenderObjRenderMgr::loadEnvRes(const void* p_file)
 {
     mEnvObjMgr.applyResource(agl::utl::ResParameterArchive(p_file));
 }
 
-void RenderMgr::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjLayerBase* p_shadow_layer)
+void RenderObjRenderMgr::calcViewShapeShadowFlags(agl::sdw::DepthShadow* p_depth_shadow, RenderObjLayerBase* p_shadow_layer)
 {
     for (sead::PtrArray<RenderObj>::iterator itr = mRenderObjShadow.begin(), itr_end = mRenderObjShadow.end(); itr != itr_end; ++itr)
     {

@@ -107,15 +107,15 @@ void ModelFFL::calc()
 {
 }
 
-void ModelFFL::updateView(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelFFL::updateView(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
 }
 
-void ModelFFL::calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelFFL::calcGPU(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
 }
 
-void ModelFFL::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelFFL::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
     if (mDrawOpaWithXlu)
         return;
@@ -128,7 +128,7 @@ void ModelFFL::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const se
         drawOpaNormal_();
 }
 
-void ModelFFL::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelFFL::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
     setEnvViewUniformWithLightmapEnable_(mMtxSRT, view_mtx, proj_mtx, p_render_mgr);
 
@@ -244,7 +244,7 @@ bool ModelFFL::allocBuffer_()
     return true;
 }
 
-void ModelFFL::setEnvUniform_(RenderMgr* p_render_mgr)
+void ModelFFL::setEnvUniform_(RenderObjRenderMgr* p_render_mgr)
 {
     Mii::CentralMgr::instance()->getShader().activate();
     Mii::CentralMgr::instance()->getShader().setExRegColorUniform(&mExLightRegColor);
@@ -252,13 +252,13 @@ void ModelFFL::setEnvUniform_(RenderMgr* p_render_mgr)
     Mii::CentralMgr::instance()->getShader().setFogUniform(p_render_mgr);
 }
 
-void ModelFFL::setEnvViewUniform_(const sead::Matrix34f& model_mtx, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelFFL::setEnvViewUniform_(const sead::Matrix34f& model_mtx, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
     setEnvUniform_(p_render_mgr);
     Mii::CentralMgr::instance()->getShader().setViewUniform(model_mtx, view_mtx, proj_mtx);
 }
 
-void ModelFFL::setEnvViewUniformWithLightmapEnable_(const sead::Matrix34f& model_mtx, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderMgr* p_render_mgr)
+void ModelFFL::setEnvViewUniformWithLightmapEnable_(const sead::Matrix34f& model_mtx, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
     setEnvViewUniform_(model_mtx, view_mtx, proj_mtx, p_render_mgr);
     Mii::CentralMgr::instance()->getShader().setLightmapEnableUniform(true);

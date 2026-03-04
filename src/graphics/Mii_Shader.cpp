@@ -1,7 +1,7 @@
 #include <graphics/LightMapMgr.h>
 #include <graphics/Mii_Shader.h>
 #include <graphics/ModelFFL.h>
-#include <graphics/RenderMgr.h>
+#include <graphics/RenderObjRenderMgr.h>
 #include <graphics/ShaderHolder.h>
 
 #include <environment/aglFog.h>
@@ -204,7 +204,7 @@ void Shader::setLightmapEnableUniform(bool enable) const
     mpShaderProgram->getUniformLocation(cUniform_LightmapEnable).setBool(enable);
 }
 
-void Shader::setFogUniform(RenderMgr* p_render_mgr) const
+void Shader::setFogUniform(RenderObjRenderMgr* p_render_mgr) const
 {
     const agl::env::Fog* p_fog = p_render_mgr->getEnvObjMgr().getEnvObj<agl::env::Fog>(1);
     if (p_fog != nullptr)

@@ -1,8 +1,8 @@
-#include <graphics/CalcRatio.h>
+#include <graphics/JointBlendModelCalcRatio.h>
 
 #include <math/seadMathCalcCommon.h>
 
-CalcRatio::CalcRatio()
+JointBlendModelCalcRatio::JointBlendModelCalcRatio()
     : mRatioA(1.0f)
     , mRatioB(0.0f)
     , mCounter(0.0f)
@@ -11,12 +11,12 @@ CalcRatio::CalcRatio()
 {
 }
 
-bool CalcRatio::isZero_(f32 v)
+bool JointBlendModelCalcRatio::isZero_(f32 v)
 {
     return sead::Mathf::abs(v) < 0.001f;
 }
 
-void CalcRatio::set(f32 duration)
+void JointBlendModelCalcRatio::set(f32 duration)
 {
     if (isZero_(duration))
     {
@@ -32,7 +32,7 @@ void CalcRatio::set(f32 duration)
     mIsActive = true;
 }
 
-void CalcRatio::reset_()
+void JointBlendModelCalcRatio::reset_()
 {
     mRatioA         = 0.0f;
     mRatioB         = 1.0f;
@@ -40,13 +40,13 @@ void CalcRatio::reset_()
     mInvDuration    = 0.0f;
 }
 
-void CalcRatio::reset()
+void JointBlendModelCalcRatio::reset()
 {
     reset_();
     mIsActive = false;
 }
 
-void CalcRatio::calc()
+void JointBlendModelCalcRatio::calc()
 {
     if (isZero_(mRatioA))
         return;

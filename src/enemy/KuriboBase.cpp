@@ -5,7 +5,7 @@
 #include <effect/EffectCreateUtil.h>
 #include <enemy/KuriboBase.h>
 #include <game/CourseTask.h>
-#include <graphics/BlendModel.h>
+#include <graphics/JointBlendModel.h>
 #include <graphics/SkeletalAnimation.h>
 #include <graphics/TexturePatternAnimation.h>
 #include <input/InputMgr.h>
@@ -487,7 +487,7 @@ void KuriboBase::setAwaHit(Actor* p_awa)
     Enemy::setAwaHit(p_awa);
 }
 
-void KuriboBase::calcModelBase_(BlendModel* p_blend_model)
+void KuriboBase::calcModelBase_(JointBlendModel* p_blend_model)
 {
     {
         sead::Vector3f pos = mPos;
@@ -823,9 +823,9 @@ void KuriboBase::finalizeState_DieFall()
     Enemy::finalizeState_DieFall();
 }
 
-BlendModel* KuriboBase::createModel(ModelResource* p_mdl_res, const sead::SafeString& name, bool not_set_walk_anm)
+JointBlendModel* KuriboBase::createModel(ModelResource* p_mdl_res, const sead::SafeString& name, bool not_set_walk_anm)
 {
-    BlendModel* p_blend_model = BlendModel::create(p_mdl_res, name, 2, 1, 0, 0, 0);
+    JointBlendModel* p_blend_model = JointBlendModel::create(p_mdl_res, name, 2, 1, 0, 0, 0);
     if (!not_set_walk_anm)
         p_blend_model->setAnm(p_mdl_res, cWalkAnm[0], 0.0f);
     return p_blend_model;

@@ -48,43 +48,43 @@ void CullViewFrustum::update(const sead::Camera& camera, const sead::Perspective
     f32 fovy_tan = sead::Mathf::tan(projection.getFovy() * 0.5f);
     f32 fovx_tan = projection.getAspect() * fovy_tan;
 
-    sead::Vector3f v0[4];
+    sead::Vector3f planes[4];
 
-    v0[2].z = fovy_tan + fovy_tan * projection.getOffset().y * 2;
-    f32 v1 = sead::Mathf::sqrt(sead::Mathf::square(v0[2].z) + 1.0f);
+    planes[2].z = fovy_tan + fovy_tan * projection.getOffset().y * 2;
+    f32 v1 = sead::Mathf::sqrt(sead::Mathf::square(planes[2].z) + 1.0f);
     f32 inv_v1 = 1.0f / v1;
-    v0[2].y = -inv_v1;
-    v0[2].z *= inv_v1;
+    planes[2].y = -inv_v1;
+    planes[2].z *= inv_v1;
 
-    v0[3].z = fovy_tan - fovy_tan * projection.getOffset().y * 2;
-    f32 v2 = sead::Mathf::sqrt(sead::Mathf::square(v0[3].z) + 1.0f);
+    planes[3].z = fovy_tan - fovy_tan * projection.getOffset().y * 2;
+    f32 v2 = sead::Mathf::sqrt(sead::Mathf::square(planes[3].z) + 1.0f);
     f32 inv_v2 = 1.0f / v2;
-    v0[3].y =  inv_v2;
-    v0[3].z *= inv_v2;
+    planes[3].y =  inv_v2;
+    planes[3].z *= inv_v2;
 
-    v0[1].z = fovx_tan - fovx_tan * projection.getOffset().x * 2;
-    f32 v3 = sead::Mathf::sqrt(sead::Mathf::square(v0[1].z) + 1.0f);
+    planes[1].z = fovx_tan - fovx_tan * projection.getOffset().x * 2;
+    f32 v3 = sead::Mathf::sqrt(sead::Mathf::square(planes[1].z) + 1.0f);
     f32 inv_v3 = 1.0f / v3;
-    v0[1].x =  inv_v3;
-    v0[1].z *= inv_v3;
+    planes[1].x =  inv_v3;
+    planes[1].z *= inv_v3;
 
-    v0[0].z = fovx_tan + fovx_tan * projection.getOffset().x * 2;
-    f32 v4 = sead::Mathf::sqrt(sead::Mathf::square(v0[0].z) + 1.0f);
+    planes[0].z = fovx_tan + fovx_tan * projection.getOffset().x * 2;
+    f32 v4 = sead::Mathf::sqrt(sead::Mathf::square(planes[0].z) + 1.0f);
     f32 inv_v4 = 1.0f / v4;
-    v0[0].x = -inv_v4;
-    v0[0].z *= inv_v4;
+    planes[0].x = -inv_v4;
+    planes[0].z *= inv_v4;
 
-    v0[0].y = 0.0f;
-    v0[1].y = 0.0f;
-    v0[2].x = 0.0f;
-    v0[3].x = 0.0f;
+    planes[0].y = 0.0f;
+    planes[1].y = 0.0f;
+    planes[2].x = 0.0f;
+    planes[3].x = 0.0f;
 
     billboard_mtx.setTranslation(0.0f, 0.0f, 0.0f);
 
     for (s32 i = 0; i < 4; i++)
     {
-        v0[i].setMul(billboard_mtx, v0[i]);
-        _0[i]._0 = v0[i];
-        _0[i]._c = _0[i]._0.dot(pos);
+        planes[i].setMul(billboard_mtx, planes[i]);
+        mPlane[i].normal = planes[i];
+        mPlane[i].distance = mPlane[i].normal.dot(pos);
     }
 }
