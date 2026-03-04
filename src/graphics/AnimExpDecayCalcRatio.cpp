@@ -1,7 +1,7 @@
-#include <graphics/AnimBlendSklCalcRatio.h>
+#include <graphics/AnimExpDecayCalcRatio.h>
 #include <graphics/Model.h>
 
-AnimBlendSklCalcRatio::AnimBlendSklCalcRatio(s32 bone_num_max)
+AnimExpDecayCalcRatio::AnimExpDecayCalcRatio(s32 bone_num_max)
     : mBoneNumMax(bone_num_max)
     , mBlendWeight(0.0f)
     , mCounter(0.0f)
@@ -19,11 +19,11 @@ AnimBlendSklCalcRatio::AnimBlendSklCalcRatio(s32 bone_num_max)
     mBoneFlag.fill(cBoneFlag_BlendEnable);
 }
 
-AnimBlendSklCalcRatio::~AnimBlendSklCalcRatio()
+AnimExpDecayCalcRatio::~AnimExpDecayCalcRatio()
 {
 }
 
-void AnimBlendSklCalcRatio::reset()
+void AnimExpDecayCalcRatio::reset()
 {
     mBlendWeight = 0.0f;
     mCounter = 1.0f;
@@ -31,7 +31,7 @@ void AnimBlendSklCalcRatio::reset()
     mRatioB = 1.0f;
 }
 
-void AnimBlendSklCalcRatio::set(f32 duration)
+void AnimExpDecayCalcRatio::set(f32 duration)
 {
     if (duration == 0.0f)
         reset();
@@ -46,7 +46,7 @@ void AnimBlendSklCalcRatio::set(f32 duration)
     }
 }
 
-void AnimBlendSklCalcRatio::calc()
+void AnimExpDecayCalcRatio::calc()
 {
     if (mBlendWeight == 0.0f)
         return;
@@ -70,7 +70,7 @@ void AnimBlendSklCalcRatio::calc()
     }
 }
 
-bool AnimBlendSklCalcRatio::isFramesPrepared() const
+bool AnimExpDecayCalcRatio::isFramesPrepared() const
 {
     if (!mIsFramesPrepared)
         return false;
@@ -81,12 +81,12 @@ bool AnimBlendSklCalcRatio::isFramesPrepared() const
     return true;
 }
 
-bool AnimBlendSklCalcRatio::isBlendDisable(s32 bone_index) const
+bool AnimExpDecayCalcRatio::isBlendDisable(s32 bone_index) const
 {
     return mBoneFlag[bone_index] != cBoneFlag_BlendEnable;
 }
 
-void AnimBlendSklCalcRatio::applyTo(sead::Matrixf* p_bone_rt, sead::Vector3f* p_bone_scale, s32 bone_index)
+void AnimExpDecayCalcRatio::applyTo(sead::Matrixf* p_bone_rt, sead::Vector3f* p_bone_scale, s32 bone_index)
 {
     if (!isFramesPrepared() || isBlendDisable(bone_index))
     {
@@ -124,13 +124,13 @@ void AnimBlendSklCalcRatio::applyTo(sead::Matrixf* p_bone_rt, sead::Vector3f* p_
     *p_bone_scale = scale;
 }
 
-void AnimBlendSklCalcRatio::offUpdate()
+void AnimExpDecayCalcRatio::offUpdate()
 {
     mIsFramesPrepared = true;
     mIsActive = false;
 }
 
-void AnimBlendSklCalcRatio::applyTo(Model* p_model)
+void AnimExpDecayCalcRatio::applyTo(Model* p_model)
 {
     s32 bone_num = p_model->getBoneNum();
     for (s32 i = 0; i < bone_num; i++)
@@ -144,7 +144,7 @@ void AnimBlendSklCalcRatio::applyTo(Model* p_model)
     offUpdate();
 }
 
-void AnimBlendSklCalcRatio::setBlendDisable(s32 bone_index)
+void AnimExpDecayCalcRatio::setBlendDisable(s32 bone_index)
 {
     mBoneFlag[bone_index] = cBoneFlag_BlendDisable;
 }
