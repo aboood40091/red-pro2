@@ -159,7 +159,7 @@ void PlayerBase::executeState_DemoOutDokanU()
 void PlayerBase::endDemoOutDokan()
 {
     offStatus(cStatus_NoPropelRoll);
-    offStatus(cStatus_210);
+    offStatus(cStatus_DemoDokan);
     offStatus(cStatus_FaderPosSet);
     offStatus(cStatus_133);
 }
@@ -629,7 +629,7 @@ void PlayerBase::executeState_DemoInDokanU()
 void PlayerBase::endDemoInDokan()
 {
     offStatus(cStatus_NoPropelRoll);
-    offStatus(cStatus_210);
+    offStatus(cStatus_DemoDokan);
     offStatus(cStatus_FaderPosSet);
     offStatus(cStatus_CanWaterWalk);
     mInvincibilityTimer = 0;
@@ -1020,7 +1020,7 @@ void PlayerBase::initDemoOutDokanBase()
     mSpeedF = 0.0f;
     mMaxSpeedF = 0.0f;
     setZPosition(-1800.0f);
-    onStatus(cStatus_210);
+    onStatus(cStatus_DemoDokan);
     if (!isStatus(cStatus_129))
         setFaderPos(mDokanFaderPos);
     mBgAttr = cBgAttr_Rock;
@@ -1031,7 +1031,7 @@ void PlayerBase::initDemoInDokanBase(DokanDir dir)
     onDemoType(cDemoType_3);
     mDokanDir = dir;
     resetLight();
-    onStatus(cStatus_210);
+    onStatus(cStatus_DemoDokan);
     mSpeedF = 0.0f;
     mSpeed.y = 0.0f;
     setZPosition(-1800.0f);

@@ -93,12 +93,12 @@ PlayerObject::PlayerObject(const ActorCreateParam& param)
     , _2a5c(0)
     , mLiftUpCounter(0)
     , mLiftUpOffsetScale(0.0f)
-    , _2a68(0)
+    , mThrowHard(false)
     , _2a6c(0)
-    , _2a70(0)
+    , mBalloonChibiYoshiFlyAscendGravityTimer(0)
     , _2a74(0)
     , _2a78(0)
-    , _2a7c(0)
+    , mIsBubbleChibiYoshiShake(false)
     , _2a80(0)
     , _2a84(0)
     , mBalloonHelpVoiceTimer(0)
@@ -890,7 +890,7 @@ void PlayerObject::getMaskCaveCheckPos(sead::Vector3f* p_pos, f32* p_y_offset)
 bool PlayerObject::vf154()
 {
     Yoshi* p_ride_yoshi = getRideYoshi();
-    if (p_ride_yoshi != nullptr && p_ride_yoshi->isStatus(cStatus_210))
+    if (p_ride_yoshi != nullptr && p_ride_yoshi->isStatus(cStatus_DemoDokan))
         return false;
 
     return PlayerBase::vf154();
@@ -1167,14 +1167,14 @@ bool PlayerObject::bouncePlayerSpin(f32 speed_y, f32 speed_F)
             BalloonChibiYoshi* p_cy_balloon = sead::DynamicCast<BalloonChibiYoshi>(ActorMgr::instance()->getActorPtr(mCarryActorID));
             if (p_cy_balloon != nullptr)
             {
-                p_cy_balloon->setSpin(this);
+                p_cy_balloon->setShakeAction(this);
                 changeState(StateID_BalloonChibiYoshiFly, 0);
             }
         }
         break;
     case cSpinActionMode_ChibiYoshiBubble:
         _2a24 = 0;
-        setChibiYoshiBubbleSpin();
+        setBubbleChibiYoshiShake();
         bouncePlayer1(speed_y, speed_F, true, cBounceType_1, cJumpSe_None);
         break;
     case cSpinActionMode_Musa:

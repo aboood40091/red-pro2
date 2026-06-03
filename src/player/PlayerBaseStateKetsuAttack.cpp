@@ -71,7 +71,7 @@ void PlayerBase::finalizeState_HipAttack()
     offStatus(cStatus_HipAttackOnEnemy);
     offStatus(cStatus_56);
     offStatus(cStatus_160);
-    offStatus(cStatus_165);
+    offStatus(cStatus_EnableSpin);
     offStatus(cStatus_196);
     offStatus(cStatus_200);
     offStatus(cStatus_NoSwimAction);
@@ -110,7 +110,7 @@ void PlayerBase::setHipAttack_StandNormal()
     onStatus(cStatus_50);
     offStatus(cStatus_48);
     onStatus(cStatus_160);
-    onStatus(cStatus_165);
+    onStatus(cStatus_EnableSpin);
     mAccelY = getGravityData()->gravity;
     mMaxFallSpeed = -6.0f;
     mSpeed.y = 0.0f;

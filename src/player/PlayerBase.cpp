@@ -475,7 +475,7 @@ sead::Vector3f* PlayerBase::getHeadPosP()
 
 bool PlayerBase::vf154()
 {
-    if (isStatus(cStatus_210))
+    if (isStatus(cStatus_DemoDokan))
         return false;
 
     if (isStatus(cStatus_RideBalloon))
@@ -498,7 +498,7 @@ void PlayerBase::setMaskPosInterpType(s32 src_type)
 
 void PlayerBase::dokanAdjustMaskPos(sead::Vector3f& mask_pos)
 {
-    if (!isStatus(cStatus_210))
+    if (!isStatus(cStatus_DemoDokan))
         return;
 
     switch (mDokanDir)
@@ -1132,7 +1132,7 @@ s8 PlayerBase::calcComboCount(s32 max)
 }
 
 const f32 PlayerBase::cDirSpeed[] = { 1.0f, -1.0f };
-const f32 PlayerBase::cJumpSpeed = 3.628f;
+const f32 PlayerBase::cJumpSpeed = PLAYER_JUMP_SPEED;
 const f32 PlayerBase::cUnkZero = 0.0f;
 const f32 PlayerBase::cWaterNumaJumpSpeed = 0.75f;
 const f32 PlayerBase::cMaxFallSpeed = -4.0f;
