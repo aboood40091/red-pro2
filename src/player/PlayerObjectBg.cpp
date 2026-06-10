@@ -360,7 +360,7 @@ void PlayerObject::setBcSensorFlagsPlayer()
         mSlideAttackBgTimer = 3;
     }
 
-    if (isStatus(cStatus_CannonJump))
+    if (isStatus(cStatus_CannonShot))
     {
         mSlideAttackBgTimer = 5;
 
