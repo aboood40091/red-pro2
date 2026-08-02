@@ -909,14 +909,14 @@ void Kuribo::finalizeState_Dokan_Down()
 
 void Kuribo::initializeState_BlockAppear()
 {
-    _186c = 40;
+    mStateTimer = 40;
     ActorCollisionCheckMgr::instance()->release(mCollisionCheck);
     ActorCollisionCheckMgr::instance()->release(mCollisionCheckDrcTouch);
 }
 
 void Kuribo::executeState_BlockAppear()
 {
-    if (_186c == 0)
+    if (mStateTimer == 0)
     {
         if (mIsKakibo)
             changeState(StateID_KakiboWalk);
@@ -997,7 +997,7 @@ void Kuribo::executeState_Born_Split2()
         {
             mSubstate = 3;
             mAccelF = sead::Mathf::abs(mSpeed.x) / 10;
-            _186c = 10;
+            mStateTimer = 10;
             mSpeed.y = 0.0f;
             mSpeedMax.x = 0.0f;
         }
@@ -1005,7 +1005,7 @@ void Kuribo::executeState_Born_Split2()
     case 3:
         if (mBgCheckObj.checkFoot())
             mSpeed.y = 0.0f;
-        if (_186c == 0)
+        if (mStateTimer == 0)
         {
             mSubstate = 4;
             mDirection = InvDirX(mDirection);

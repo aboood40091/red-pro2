@@ -713,7 +713,7 @@ void KuriboBase::executeState_Touch()
         {
             mSubstate = 4;
             mAccelF = sead::Mathf::abs(mSpeed.x) / 10;
-            _186c = 10;
+            mStateTimer = 10;
             mSpeed.y = 0.0f;
             mSpeedMax.x = 0.0f;
         }
@@ -721,7 +721,7 @@ void KuriboBase::executeState_Touch()
     case 4:
         if (mBgCheckObj.checkFoot())
             mSpeed.y = 0.0f;
-        if (_186c == 0)
+        if (mStateTimer == 0)
             setWalkState();
         break;
     }
@@ -784,14 +784,14 @@ void KuriboBase::initializeState_DieOther()
     mKakiboHaScale = 1.0f;
     mKakiboHaAngleZ = 0;
     mAngle.y() = 0;
-    _186c = 30;
+    mStateTimer = 30;
     if (mpParentMiddleKuribo != nullptr)
         mpParentMiddleKuribo->_1b0c++;
 }
 
 void KuriboBase::executeState_DieOther()
 {
-    if (_186c == 0)
+    if (mStateTimer == 0)
         deleteRequest();
     mBgCheckObj.checkBg();
 }
