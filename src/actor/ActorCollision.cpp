@@ -195,14 +195,14 @@ bool ActorCollision::preExecute_()
     mBgCheckObj.atFrameStart();
     calcBgSpeed_();
 
-    if (!mManualDeletedFlag && vf13C())
+    if (!mManualDeletedFlag && isQuakeEnable_())
     {
-        if (Quake::instance()->getFlag() & (1 << 1))
-            vf144(0);
-        else if (Quake::instance()->getFlag() & (1 << 2))
-            vf144(1);
-      //else if (Quake::instance()->getFlag() & (1 << 0)) // Present in NSMB2, but removed from NSMBU
-      //    vf144(2);
+        if (Quake::instance()->getFlag() & Quake::cTypeFlag_Normal)
+            setQuake_(cQuakeType_Normal);
+        else if (Quake::instance()->getFlag() & Quake::cTypeFlag_Big)
+            setQuake_(cQuakeType_Big);
+      //else if (Quake::instance()->getFlag() & Quake::cTypeFlag_Small) // Present in NSMB2, but removed from NSMBU
+      //    setQuake_(cQuakeType_Small);
     }
 
     return true;
@@ -223,22 +223,14 @@ ActorBase::Result ActorCollision::doDelete_()
     return Actor::doDelete_();
 }
 
-bool ActorCollision::vf13C()
+bool ActorCollision::isQuakeEnable_()
 {
     return false;
 }
 
-void ActorCollision::vf144(s32 param)
+void ActorCollision::setQuake_(QuakeType type)
 {
-    switch (param)
-    {
-    case 0:
-        break;
-    case 1:
-        break;
-  //case 2: // Present in NSMB2, but removed from NSMBU
-  //    break;
-    }
+    (void)type;
 }
 
 void ActorCollision::setSmokeDamage_(Actor* p_actor)
@@ -352,7 +344,7 @@ void ActorCollision::calcSpeedY_()
     }
     else
     {
-        Actor::calcSpeedY_(mAccelY, speed_max_y);
+        Actor::calcSpeedY_(mGravity, speed_max_y);
     }
 }
 
@@ -370,7 +362,7 @@ void ActorCollision::calcFallSpeed_()
     }
     else
     {
-        Actor::calcFallSpeed_(mAccelY, max_fall_speed);
+        Actor::calcFallSpeed_(mGravity, max_fall_speed);
     }
 }
 

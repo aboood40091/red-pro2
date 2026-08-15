@@ -133,13 +133,13 @@ void PlayerBase::executeState_PlayerJumpDai()
         else
         {
             if (isMameAction())
-                bouncePlayer1(cJumpSpeed - 0.35f, mJumpDaiSpeedFReserve, true, cBounceType_Normal, cJumpSe_None);
+                bouncePlayer1(cJumpSpeedBase - 0.35f, mJumpDaiSpeedFReserve, true, cBounceType_Normal, cJumpSe_None);
             else if (mChangeStateParam == 1)
-                bouncePlayer1(cJumpSpeed + 0.2f, mJumpDaiSpeedFReserve, true, cBounceType_1, cJumpSe_None);
+                bouncePlayer1(cJumpSpeedBase + 0.2f, mJumpDaiSpeedFReserve, true, cBounceType_1, cJumpSe_None);
             else if (mPlayerKey.buttonJump())
-                bouncePlayer1(cJumpSpeed + 0.2f, mJumpDaiSpeedFReserve, true, cBounceType_Normal, cJumpSe_High);
+                bouncePlayer1(cJumpSpeedBase + 0.2f, mJumpDaiSpeedFReserve, true, cBounceType_Normal, cJumpSe_High);
             else
-                bouncePlayer1(cJumpSpeed + 1.0f, mJumpDaiSpeedFReserve, true, cBounceType_2, cJumpSe_None);
+                bouncePlayer1(cJumpSpeedBase + 1.0f, mJumpDaiSpeedFReserve, true, cBounceType_2, cJumpSe_None);
             setHopAirDrift();
             return;
         }
@@ -147,9 +147,9 @@ void PlayerBase::executeState_PlayerJumpDai()
     case cPlayerJumpDaiAction_1:
         if (mActionSubTimer > sPlayerJumpDaiReductionScaleNumFrame)
         {
-            f32 jump_speed = cJumpSpeed + 0.8f;
+            f32 jump_speed = cJumpSpeedBase + 0.8f;
             if (isMameAction())
-                jump_speed = cJumpSpeed + 0.2f;
+                jump_speed = cJumpSpeedBase + 0.2f;
             bouncePlayer1(jump_speed, 0.0f, true, cBounceType_1, cJumpSe_High);
             setHopAirDrift();
             return;

@@ -17,7 +17,7 @@ Boss::Boss(const ActorCreateParam& param)
     , mAccelY_PreIce(0.0f)
     , mAccelF_PreIce(0.0f)
     , mStateTimer_PreIce(0)
-    , _186e_PreIce(0)
+    , mStateSubTimer_PreIce(0)
 {
     _1890.fill(0);
 }

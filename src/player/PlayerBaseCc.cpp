@@ -448,9 +448,9 @@ void PlayerBase::setStampPlayerJump(bool allow_high_jump, f32 rev_y)
 {
     if (!isStatus(cStatus_Swim))
     {
-        f32 jump_speed = cJumpSpeed;
+        f32 jump_speed = cJumpSpeedBase;
         if (isMameAction())
-            jump_speed = cJumpSpeed - 0.35f;
+            jump_speed = cJumpSpeedBase - 0.35f;
 
         f32 move_speed = mSpeedF;
 
@@ -459,7 +459,7 @@ void PlayerBase::setStampPlayerJump(bool allow_high_jump, f32 rev_y)
             Quake::instance()->shockMotor(mPlayerNo, Quake::cShockType_PlayerImpact);
 
             if (mPlayerKey.buttonJump())
-                jump_speed = cJumpSpeed + 0.5f;
+                jump_speed = cJumpSpeedBase + 0.5f;
 
             bouncePlayer1(jump_speed, move_speed, true, cBounceType_1, cJumpSe_None);
         }

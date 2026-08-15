@@ -11,7 +11,7 @@ PlayerBase* PlayerBase::searchPlayerAttention_(const sead::Vector2f& src_pos)
     PlayerBase* p_player_ret = nullptr;
     f32 dist_sq_min = sead::MathCalcCommon<u16>::maxNumber();
 
-    for (s32 i = 0; i < 4; i++)
+    for (s32 i = 0; i < cPlayerNum; i++)
     {
         if (!PlayerMgr::instance()->isAcceptQuake(i))
             continue;

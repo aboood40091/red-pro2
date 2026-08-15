@@ -20,7 +20,7 @@ void PlayerBase::reset()
 {
     mSpeedF = 0.0f;
     mSpeed.set(0.0f, 0.0f, 0.0f);
-    mAccelY = 0.0f;
+    mGravity = 0.0f;
 
     onStatus(cStatus_DisableSound);
     {
@@ -43,7 +43,7 @@ void PlayerBase::resetBg()
     _2064 = 0;
     _2068 = 0;
     _206c = 0;
-    _2070 = 0;
+    mCcEnemyFumiRevExtendTimer = 0;
     mIsBgDamageEnable = false;
     mDamageBgTypeInfo = BgUnitCode::TypeInfo_Damage();
     _2190 = 0.0f;

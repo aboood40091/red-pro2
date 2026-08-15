@@ -247,8 +247,8 @@ void ActorMgr::doDeleteActors_(bool destroy)
 
 void ActorMgr::initialize(sead::Heap* heap)
 {
-    mpPlayerUnitHeap = sead::UnitHeap::tryCreateWithBlockNum(0x001A0000 + 0x200,   4, "PlayerUnitHeap", 4, heap);
-    mpActorUnitHeap  = sead::UnitHeap::tryCreateWithBlockNum(0x00020000 + 0x200, 512, "ActorUnitHeap",  4, heap);
+    mpPlayerUnitHeap = sead::UnitHeap::tryCreateWithBlockNum(0x001A0000 + 0x200, cPlayerNum, "PlayerUnitHeap", 4, heap);
+    mpActorUnitHeap  = sead::UnitHeap::tryCreateWithBlockNum(0x00020000 + 0x200, 512,        "ActorUnitHeap",  4, heap);
 }
 
 void ActorMgr::createAdditionalHeap(sead::Heap** pp_heap)

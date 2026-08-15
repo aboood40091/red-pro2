@@ -100,16 +100,16 @@ void PlayerObject::executeState_CannonJump()
             setCcAtCannon();
             if (mCannonJumpTimer != 0)
             {
-                mAccelF = 0.0f;
-                mAccelY = 0.0f;
+                mPow = 0.0f;
+                mGravity = 0.0f;
             }
             else
             {
-                mAccelY = -0.5f;
+                mGravity = -0.5f;
                 if (sead::Mathf::abs(mSpeedF) >= 1.0f)
-                    mAccelF = 0.03f;
+                    mPow = 0.03f;
                 else
-                    mAccelF = 0.0f;
+                    mPow = 0.0f;
             }
             maxFallSpeedSet();
             sead::Vector3f dist = mCannonJumpStartPos - mPos;
@@ -231,8 +231,8 @@ void PlayerObject::initializeState_DemoBossCannonWarp()
 {
     initCannonJump();
     onStatus(cStatus_CannonWarp);
-    mAccelF = 0.0f;
-    mAccelY = 0.0f;
+    mPow = 0.0f;
+    mGravity = 0.0f;
     mCannonJumpStartPos = mPos;
 }
 

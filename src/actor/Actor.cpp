@@ -30,8 +30,6 @@
 #include <scroll/BgScrollMgr.h>
 #include <system/MainGame.h>
 
-#define COMBO_CNT_MAX 9
-
 const f32 Actor::cCullXLimit = 80.0f;
 const f32 Actor::cCullYLimit = 256.0f;
 
@@ -47,7 +45,7 @@ void Actor::reviveCollisionCheck()
 
 bool Actor::checkCarried(s32* p_player_no)
 {
-    for (s32 i = 0; i < 4; i++)
+    for (s32 i = 0; i < cPlayerNum; i++)
     {
         PlayerObject* p_player = PlayerMgr::instance()->getPlayerObject(i);
         if (p_player != nullptr && p_player->getCarryActorID() == mActorUniqueID)
@@ -70,7 +68,7 @@ void Actor::clrComboCnt()
 
 void Actor::incComboCnt()
 {
-    mComboCnt = sead::Mathi::min(mComboCnt + 1, COMBO_CNT_MAX - 1);
+    mComboCnt = sead::Mathi::min(mComboCnt + 1, ScoreMgr::cScoreType_Base_Num - 1);
     SubjectMgr::instance()->onComboCntInc(mComboCnt, SubjectMgr::cComoType_AcCombo);
 }
 
@@ -87,15 +85,15 @@ void Actor::slideComboSE(s32 combo_cnt, bool combo_type_2)
         "SE_EMY_KAME_HIT_7",
         "SE_EMY_KAME_HIT_7"
     };
-    static_assert((sizeof(cs_combo_se) / sizeof(GameAudio::SoundID)) == COMBO_CNT_MAX);
+    static_assert((sizeof(cs_combo_se) / sizeof(GameAudio::SoundID)) == ScoreMgr::cScoreType_Base_Num);
 
-    if (!(0 <= mPlayerNo && mPlayerNo < 4))
+    if (!(0 <= mPlayerNo && mPlayerNo < cPlayerNum))
         return;
 
-    if (combo_cnt >= COMBO_CNT_MAX)
-        combo_cnt = COMBO_CNT_MAX - 1;
+    if (combo_cnt >= ScoreMgr::cScoreType_Base_Num)
+        combo_cnt = ScoreMgr::cScoreType_Base_Num - 1;
 
-    s32 clap_combo = combo_type_2 ? 4 : 7;
+    s32 clap_combo = combo_type_2 ? (ScoreMgr::cScoreType2_Point_Num - 1) : (ScoreMgr::cScoreType_Point_Num - 1);
     if (combo_cnt >= clap_combo)
         GameAudio::setClapSE();
 
@@ -112,7 +110,7 @@ DirType Actor::getPlayerDirLR(const sead::Vector3f& position)
     sead::Vector2f pl_position;
     s32 player_no = ActorUtil::searchNearPlayer_Main(pl_position, position);
 
-    if (0 <= player_no && player_no < 4)
+    if (0 <= player_no && player_no < cPlayerNum)
     {
         if (pl_position.x < 0.0)
             return cDirType_Left;
@@ -135,7 +133,7 @@ DirType Actor::getPlayerDirUD(const sead::Vector3f& position)
     sead::Vector2f pl_position;
     s32 player_no = ActorUtil::searchNearPlayer_Main(pl_position, position);
 
-    if (0 <= player_no && player_no < 4)
+    if (0 <= player_no && player_no < cPlayerNum)
     {
         if (pl_position.y < 0.0)
             return cDirType_Down;
@@ -238,10 +236,10 @@ f32 Actor::getEffectZPos() const
             if (bg_check.checkPointUnit(&res, check_pos))
             {
                 if (BgUnitCode::getType(res.bg_check_data) != BgUnitCode::cType_None || BgUnitCode::getHitType(res.bg_check_data) != BgUnitCode::cHitType_None)
-                    return 3300.0f;
+                    return EFFECT_Z_POS_BEHIND_LAYER_0;
             }
         }
-        return 4500.0f;
+        return EFFECT_Z_POS_DEFAULT;
     }
     else
     {
@@ -294,8 +292,8 @@ Actor::Actor(const ActorCreateParam& param)
     , mSpeedF(0.0f)
     , mMaxSpeedF(0.0f)
     , mMaxFallSpeed(0.0f)
-    , mAccelY(0.0f)
-    , mAccelF(0.0f)
+    , mGravity(0.0f)
+    , mPow(0.0f)
     , mPos(param.position)
     , mSpeed(0.0f, 0.0f, 0.0f)
     , mSpeedMax(0.0f, 0.0f, 0.0f)
@@ -312,7 +310,7 @@ Actor::Actor(const ActorCreateParam& param)
         param.p_profile->getActorCreateInfo().spawn_range.half_size_y * 2.0f)
     , mSize(mVisibleAreaSize)
     , mAreaNo(CourseInfo::instance()->getAreaNo())
-    , mActorType(cActorType_Generic)
+    , mActorKind(cActorKind_Generic)
     , mIsExecEnable(true)
     , mIsDrawEnable(true)
     , mManualDeletedFlag(false)
@@ -321,8 +319,8 @@ Actor::Actor(const ActorCreateParam& param)
     , mSwitchFlag0(param.param_ex_0.course.switch_flag_0)
     , mSwitchFlag1(param.param_ex_0.course.switch_flag_1)
     , mCreateFlag(param.p_profile->getActorCreateInfo().flag)
-    , mBumpDamageTimer(0)
-    , mBumpDirection(cDirType_Right)
+    , mBlockHitTimer(0)
+    , mBlockHitDirection(cDirType_Right)
     , _220(0)
     , mCarryDirection(cDirType_Right)
     , mThrowPlayerNo(0)
@@ -385,14 +383,14 @@ bool Actor::preExecute_()
 
     getPos2D() += mPosDelta;
 
-    if (mBumpDamageTimer == 8)
+    if (mBlockHitTimer == 8)
     {
-        SubjectMgr::instance()->onAcBlockHit();
+        SubjectMgr::instance()->onAcDamage();
         blockHitInit_();
     }
 
-    if (mBumpDamageTimer > 0)
-        mBumpDamageTimer--;
+    if (mBlockHitTimer > 0)
+        mBlockHitTimer--;
 
     return true;
 }
@@ -473,13 +471,13 @@ void Actor::calcSpeedX_()
 
     if (speed_x < speed_max_x)
     {
-        speed_x += mAccelF;
+        speed_x += mPow;
         if (speed_x > speed_max_x)
             speed_x = speed_max_x;
     }
     else if (speed_x > speed_max_x)
     {
-        speed_x -= mAccelF;
+        speed_x -= mPow;
         if (speed_x < speed_max_x)
             speed_x = speed_max_x;
     }
@@ -543,7 +541,7 @@ Actor* Actor::searchCarryFukidashiPlayer_(s32 action)
     Actor* p_actor_player = nullptr;
     f32 dist = sead::Mathf::maxNumber();
 
-    for (s32 i = 0; i < 4; i++)
+    for (s32 i = 0; i < cPlayerNum; i++)
     {
         if (!PlayerMgr::instance()->isPlayerActive(i))
             continue;
@@ -579,13 +577,13 @@ void Actor::carryFukidashiCheck_(s32 action, const sead::Vector2f& range)
             ? *CourseTask::instance()->getGameData()
             : FieldGame::instance()->getGameData();
 
-    if ((0 <= mControllerLytPlayerNo && mControllerLytPlayerNo < 4) &&
+    if ((0 <= mControllerLytPlayerNo && mControllerLytPlayerNo < cPlayerNum) &&
         game_data.getPlayerData(mControllerLytPlayerNo).fukidashi_flag.isOnBit(action))
     {
         mControllerLytPlayerNo = -1;
     }
 
-    if (0 <= mControllerLytPlayerNo && mControllerLytPlayerNo < 4)
+    if (0 <= mControllerLytPlayerNo && mControllerLytPlayerNo < cPlayerNum)
     {
         PlayerObject* p_player = PlayerMgr::instance()->getPlayerObject(mControllerLytPlayerNo);
         if (p_player == nullptr)
@@ -648,7 +646,7 @@ void Actor::carryFukidashiCheck_(s32 action, const sead::Vector2f& range)
 
 void Actor::carryFukidashiCancel_(s32 action, s32 player_no)
 {
-    for (s32 i = 0; i < 4; i++)
+    for (s32 i = 0; i < cPlayerNum; i++)
     {
         if (i == player_no)
         {

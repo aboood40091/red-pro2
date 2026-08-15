@@ -109,7 +109,7 @@ void PlayerBase::setNormalJumpGravity()
 void PlayerBase::setJumpGravity()
 {
     if (mNoGravityTimer != 0 || isStatus(cStatus_NoGravityUntilFall))
-        mAccelY = 0.0f;
+        mGravity = 0.0f;
     else if (isStatus(cStatus_UnkJumpGravity))
         setUnkJumpGravity();
     else if (mPlayerKey.buttonJump())
@@ -124,7 +124,7 @@ void PlayerBase::gravitySet()
         return;
 
     if (isNowBgCross(cBgCross_IsFoot))
-        mAccelY = getGravityData()->gravity;
+        mGravity = getGravityData()->gravity;
     else
         setJumpGravity();
 }
@@ -265,24 +265,24 @@ void PlayerBase::icePowerChange(bool slip)
         if (mMaxSpeedF != 0.0f)
         {
             if (mSpeedF * mMaxSpeedF < 0.0f)
-                mAccelF *= 0.375f;
+                mPow *= 0.375f;
             else
             {
                 if (!slip)
                 {
                     if (isNowBgCross(cBgCross_IsSaka))
-                        mAccelF *= 0.375f;
+                        mPow *= 0.375f;
                     else if (sead::Mathf::abs(mSpeedF) < 0.5f)
-                        mAccelF *= 0.25f;
+                        mPow *= 0.25f;
                 }
             }
         }
         else
         {
             if (!isNowBgCross(cBgCross_IsSaka) && sead::Mathf::abs(mSpeedF) < 0.5f)
-                mAccelF = 0.004f;
+                mPow = 0.004f;
             else
-                mAccelF *= 0.375f;
+                mPow *= 0.375f;
         }
     }
 }
@@ -299,17 +299,17 @@ void PlayerBase::slipPowerSet()
         DirType dir = cDirType_Right;
         if (mSpeedF < 0.0f)
             dir = cDirType_Left;
-        mAccelF = getSakaMoveAccele(dir);
+        mPow = getSakaMoveAccele(dir);
         DirType walk_dir;
         if (mPlayerKey.buttonWalk(&walk_dir))
-            mAccelF *= cSakaMoveAcceleRatio[getSakaUpDown(walk_dir)];
+            mPow *= cSakaMoveAcceleRatio[getSakaUpDown(walk_dir)];
     }
     else
     {
         if (isStatus(cStatus_74))
-            mAccelF = 0.05f;
+            mPow = 0.05f;
         else
-            mAccelF = 0.09f;
+            mPow = 0.09f;
     }
     icePowerChange(true);
 }
@@ -333,7 +333,7 @@ void PlayerBase::getPowerData(PlayerPowerData& out_data)
 void PlayerBase::normalPowerSet()
 {
     if (sead::Mathf::abs(mSpeedF) > getSpeedData()->max_run_speed_hi)
-        mAccelF = 0.75f;
+        mPow = 0.75f;
     else
     {
         PlayerPowerData power_data;
@@ -347,21 +347,21 @@ void PlayerBase::normalPowerSet()
                 DirType dir = cDirType_Right;
                 if (mSpeedF < 0.0f)
                     dir = cDirType_Left;
-                mAccelF = getSakaStopAccele(dir);
+                mPow = getSakaStopAccele(dir);
             }
             else if (mSpeedF * cDirSpeed[mDirection] < 0.0f)
             {
-                mAccelF = power_data.stop_turn_decel;
+                mPow = power_data.stop_turn_decel;
             }
             else
             {
                 if (sead::Mathf::abs(mSpeedF) < getSpeedData()->max_run_speed_lo)
-                    mAccelF = power_data.stop_x_accel;
+                    mPow = power_data.stop_x_accel;
                 else
-                    mAccelF = power_data.x_accel_def;
+                    mPow = power_data.x_accel_def;
             }
             if (isStatus(cStatus_148))
-                mAccelF *= cTurnPowerUpRate;
+                mPow *= cTurnPowerUpRate;
 
             icePowerChange(false);
         }
@@ -369,16 +369,16 @@ void PlayerBase::normalPowerSet()
         {
             if (mSpeedF * cDirSpeed[mDirection] < 0.0f)
             {
-                mAccelF = power_data.turn_decel;
+                mPow = power_data.turn_decel;
                 if (isStatus(cStatus_148))
-                    mAccelF *= cTurnPowerUpRate;
+                    mPow *= cTurnPowerUpRate;
             }
             else if (isNowBgCross(cBgCross_IsSaka))
             {
                 DirType dir = cDirType_Right;
                 if (mSpeedF < 0.0f)
                     dir = cDirType_Left;
-                mAccelF = getSakaMoveAccele(dir) * cSakaMoveAcceleRatio[getSakaUpDown(walk_dir)];
+                mPow = getSakaMoveAccele(dir) * cSakaMoveAcceleRatio[getSakaUpDown(walk_dir)];
                 icePowerChange(false);
             }
             else
@@ -386,27 +386,27 @@ void PlayerBase::normalPowerSet()
                 f32 base_speed = sead::Mathf::abs(mSpeedF);
                 f32 base_max_speed = sead::Mathf::abs(mMaxSpeedF);
                 if (base_speed < 0.5f) // Stage 0
-                    mAccelF = power_data.x_accel_stage0;
+                    mPow = power_data.x_accel_stage0;
                 else if (base_speed < getSpeedData()->max_run_speed_lo) // Stage 1
                 {
                     if (mPlayerKey.buttonDush())
-                        mAccelF = power_data.x_accel_stage1_dush;
+                        mPow = power_data.x_accel_stage1_dush;
                     else
-                        mAccelF = power_data.x_accel_stage1;
+                        mPow = power_data.x_accel_stage1;
                 }
                 else if (base_speed < getSpeedData()->max_run_speed_md) // Stage 2
                 {
                     if (base_max_speed < getSpeedData()->max_run_speed_md)
-                        mAccelF = power_data.x_accel_def;
+                        mPow = power_data.x_accel_def;
                     else
-                        mAccelF = power_data.x_accel_stage2;
+                        mPow = power_data.x_accel_stage2;
                 }
                 else // Stage 3
                 {
                     if (base_max_speed < getSpeedData()->max_run_speed_md)
-                        mAccelF = power_data.x_accel_def;
+                        mPow = power_data.x_accel_def;
                     else
-                        mAccelF = power_data.x_accel_stage3;
+                        mPow = power_data.x_accel_stage3;
                 }
             }
         }
@@ -416,7 +416,7 @@ void PlayerBase::normalPowerSet()
 void PlayerBase::grandPowerSet()
 {
     if (isOnSinkSand())
-        mAccelF = getSpeedData()->power_data_normal.x_accel_stage0;
+        mPow = getSpeedData()->power_data_normal.x_accel_stage0;
     else
     {
         if (isStatus(cStatus_73))
@@ -432,41 +432,41 @@ void PlayerBase::airPowerSet()
     bool is_luigi_phys = isEnableRDashLuigiPhysics();
     const PlayerAirHIO& air_data = cPlayerAirData[is_luigi_phys][is_star];
     if (_4e8 && sead::Mathf::abs(mSpeedF) > 1.0f)
-        mAccelF = 0.2f;
+        mPow = 0.2f;
     else
     {
         DirType walk_dir;
         if (mPlayerKey.buttonWalk(&walk_dir))
         {
             if (mSpeedF * cDirSpeed[walk_dir] < 0.0f)
-                mAccelF = air_data.turn_decel;
+                mPow = air_data.turn_decel;
             else
             {
                 f32 base_speed = sead::Mathf::abs(mSpeedF);
                 if (base_speed < 0.5f) // Stage 0
                 {
-                    mAccelF = air_data.x_accel_stage0;
+                    mPow = air_data.x_accel_stage0;
                 }
                 else if (base_speed < getSpeedData()->max_run_speed_lo) // Stage 1
                 {
                     if (mPlayerKey.buttonDush())
-                        mAccelF = air_data.x_accel_stage1_dush;
+                        mPow = air_data.x_accel_stage1_dush;
                     else
-                        mAccelF = air_data.x_accel_stage1;
+                        mPow = air_data.x_accel_stage1;
                 }
                 else if (base_speed < getSpeedData()->max_run_speed_md) // Stage 2
                 {
-                    mAccelF = air_data.x_accel_stage2;
+                    mPow = air_data.x_accel_stage2;
                 }
                 else // Stage 3
                 {
-                    mAccelF = air_data.x_accel_stage3;
+                    mPow = air_data.x_accel_stage3;
                 }
             }
         }
         else
         {
-            mAccelF = air_data.x_accel_def;
+            mPow = air_data.x_accel_def;
         }
     }
 }

@@ -35,7 +35,7 @@ void PlayerBase::initializeState_DemoGoal()
     mSpeed.x = 0.0f;
     mSpeedF = 0.0f;
     mSpeed.y = 0.0f;
-    mAccelY = 0.0f;
+    mGravity = 0.0f;
     mMaxFallSpeed = -4.0f;
 }
 
@@ -188,7 +188,7 @@ void PlayerBase::initGoalJump_(const sead::Vector3f& land_pos, f32 jump_speed)
     mGoalLandPos = land_pos;
     mGoalLandTimer = frame_num;
     mSpeed.y = jump_speed;
-    mAccelY = GOAL_JUMP_GRAVITY;
+    mGravity = GOAL_JUMP_GRAVITY;
 }
 
 void PlayerBase::initGoalMultiJump()
@@ -202,9 +202,9 @@ void PlayerBase::initGoalMultiJump()
     if (mBgCheckPlayer.checkGround(land_pos, 256.0f, &res))
         land_pos.y = res.hit_pos.y;
 
-    f32 jump_speed = cJumpSpeed + 1.3f;
+    f32 jump_speed = cJumpSpeedBase + 1.3f;
     if (PlayerDemoMgr::instance()->getGoalDemoNum() > 1)
-        jump_speed = cJumpSpeed + 1.5f;
+        jump_speed = cJumpSpeedBase + 1.5f;
 
     initGoalJump_(land_pos, jump_speed);
 }
@@ -216,8 +216,8 @@ bool PlayerBase::calcGoalJump()
         sead::Mathf::chase(&mPos.x, mGoalLandPos.x, (mGoalLandPos.x - mPos.x) / mGoalLandTimer);
         mGoalLandTimer--;
     }
-    mAccelY = GOAL_JUMP_GRAVITY;
-    mSpeed.y = sead::Mathf::clampMin(mSpeed.y + mAccelY, GOAL_JUMP_MAX_FALL_SPEED);
+    mGravity = GOAL_JUMP_GRAVITY;
+    mSpeed.y = sead::Mathf::clampMin(mSpeed.y + mGravity, GOAL_JUMP_MAX_FALL_SPEED);
     mPos.y += mSpeed.y;
     if (mSpeed.y < 0.0f && isNowBgCross(cBgCross_IsFoot))
     {
@@ -441,7 +441,7 @@ void PlayerBase::setDemoGoalBase(const sead::Vector2f& pos, f32 walk_target_pos_
         sead::Vector3f hanabi_pos(
             walk_target_pos_x - 112.0f,
             pos.y + 122.0f,
-            4500.0f
+            EFFECT_Z_POS_DEFAULT
         );
         BgCollisionCheckResultArea res;
         if (mBgCheckPlayer.checkGround(hanabi_pos, 128.0f, &res))
@@ -528,7 +528,7 @@ bool PlayerBase::vf51C_Base(u32)
     else if (speed > 1.5f)
         speed = 1.5f;
     mSpeedF = speed;
-    mAccelF = 0.0f;
+    mPow = 0.0f;
     mMaxSpeedF = 0.0f;
     return startControlDemo(false);
 }

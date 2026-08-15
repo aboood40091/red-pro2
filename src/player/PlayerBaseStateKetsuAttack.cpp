@@ -15,7 +15,7 @@ void PlayerBase::initializeState_HipAttack()
     mAngle.y() = getMukiAngle();
     mSpeedF = 0.0f;
     mMaxSpeedF = 0.0f;
-    mAccelY = 0.0f;
+    mGravity = 0.0f;
     setHipAttack_Ready_();
     onStatus(cStatus_196);
     onStatus(cStatus_200);
@@ -93,9 +93,9 @@ void PlayerBase::setHipAttack_AttackStartBase()
 void PlayerBase::setHipAttack_AttackFall()
 {
     mAction = cHipAction_AttackFall;
-    mAccelF = 0.1f;
+    mPow = 0.1f;
     mMaxSpeedF = 0.0f;
-    mAccelY = getGravityData()->gravity;
+    mGravity = getGravityData()->gravity;
     mMaxFallSpeed = -6.0f;
     mSpeed.y = -6.0f;
     onStatus(cStatus_48);
@@ -111,7 +111,7 @@ void PlayerBase::setHipAttack_StandNormal()
     offStatus(cStatus_48);
     onStatus(cStatus_160);
     onStatus(cStatus_EnableSpin);
-    mAccelY = getGravityData()->gravity;
+    mGravity = getGravityData()->gravity;
     mMaxFallSpeed = -6.0f;
     mSpeed.y = 0.0f;
 }
@@ -200,7 +200,7 @@ void PlayerBase::HipAction_AttackFall()
         else
             mMaxFallSpeed = -6.0f;
 
-        mAccelY = getGravityData()->gravity;
+        mGravity = getGravityData()->gravity;
 
         DirType walk_dir;
         if (mPlayerKey.buttonWalk(&walk_dir))
@@ -254,7 +254,7 @@ void PlayerBase::HipAction_AttackFall()
             mMaxSpeedF = 0.0f;
             mSpeedF = 0.0f;
             mSpeed.y = 0.0f;
-            mAccelY = 0.0f;
+            mGravity = 0.0f;
             mAction = cHipAction_Ground;
             mPos.y -= 0.1f;
             onStatus(cStatus_51);

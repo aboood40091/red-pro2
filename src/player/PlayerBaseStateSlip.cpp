@@ -167,7 +167,7 @@ void PlayerBase::slipActionMove(bool turned)
                 if (getSakaUpDown() == cSakaUpDown_Downhill)
                 {
                     if (!turned)
-                        mAccelF *= 0.5f;
+                        mPow *= 0.5f;
                     if (sead::Mathf::abs(mSpeedF) < 1.0f &&
                         ((mCollisionCheck3_React.getRevisionX(ActorCollisionCheck::cKind_PlayerBody) < 0.0f && mSpeedF >= 0.0f) ||
                          (mCollisionCheck3_React.getRevisionX(ActorCollisionCheck::cKind_PlayerBody) > 0.0f && mSpeedF <= 0.0f)))
@@ -201,7 +201,7 @@ void PlayerBase::slipActionMove(bool turned)
     {
         if (mActionTimer != 0)
         {
-            mAccelY = 0.0f;
+            mGravity = 0.0f;
             onStatus(cStatus_197);
         }
         else

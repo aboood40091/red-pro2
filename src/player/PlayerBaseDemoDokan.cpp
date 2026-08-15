@@ -65,7 +65,7 @@ void PlayerBase::initDemoOutDokanUD(DokanDir dir)
             mDokanMoveYOffset = 2.0f;
         else
         {
-            if (mActorType == cActorType_Yoshi)
+            if (mActorKind == cActorKind_Yoshi)
                 mDokanMoveYOffset = -16.0f;
             else
                 mDokanMoveYOffset = -10.0f;
@@ -223,7 +223,7 @@ void PlayerBase::initializeState_DemoOutDokanR()
 f32 PlayerBase::getWaterDokanCenterOffset(f32 pos_y)
 {
     f32 character_center_offset = 16.0f;
-    if (mActorType == cActorType_Player && sead::DynamicCast<PlayerObject>(this) != nullptr)
+    if (mActorKind == cActorKind_Player && sead::DynamicCast<PlayerObject>(this) != nullptr)
     {
         static const f32 c_character_center_offset_table[cPlayerCharacter_NumStory] = {
             12.0f,  // Mario

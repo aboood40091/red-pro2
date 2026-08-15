@@ -241,7 +241,7 @@ PlayerObject::PlayerObject(const ActorCreateParam& param)
 
     mpModelBaseMgr = &mModelMgr;
 
-    setKind(cActorType_Player);
+    setKind(cActorKind_Player);
 
     const FieldPlayerData* p_player_data = CourseTask::instance()->getPlayerData(mPlayerNo);
     if (p_player_data != nullptr)
@@ -270,7 +270,7 @@ ActorBase::Result PlayerObject::create_()
 
     mSpeedMax.set(0.0f, 0.0f, 0.0f);
     mMaxFallSpeed = cMaxFallSpeed;
-    mAccelY = getGravityData()->gravity;
+    mGravity = getGravityData()->gravity;
 
     mScale.set(1.0f, 1.0f, 1.0f);
 
@@ -669,9 +669,7 @@ void PlayerObject::executeLastAll()
 
 void PlayerObject::setPlayerNo(s8 player_no)
 {
-    if (0 <= player_no && player_no < 4)
-    {
-    }
+    (void)player_no;
 }
 
 void PlayerObject::setPlayerData_()
@@ -750,7 +748,7 @@ void PlayerObject::setPlayerModeImpl(PlayerMode mode, bool temporary)
     setPlayerData_();
     setCenterOffset();
     setSpeedData();
-    mAccelF = getSpeedData()->power_data_normal.x_accel_stage1;
+    mPow = getSpeedData()->power_data_normal.x_accel_stage1;
     setModeGravity();
 
     offStatus(cStatus_Penguin);

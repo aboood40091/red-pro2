@@ -42,7 +42,7 @@ bool CarryEnemy::preExecute_()
 
 PlayerObject* CarryEnemy::getCarryPlayerObject_() const
 {
-    if (0 <= mCarryPlayerNo && mCarryPlayerNo < 4)
+    if (0 <= mCarryPlayerNo && mCarryPlayerNo < cPlayerNum)
         return PlayerMgr::instance()->getPlayerObject(mCarryPlayerNo);
 
     return nullptr;
@@ -184,7 +184,7 @@ void CarryEnemy::setDeathInfo_CarryBgIn(Actor* p_player, bool eff_set)
 
 PlayerObject* CarryEnemy::getCarryPlayerObject() const
 {
-    if (0 <= mCarryPlayerNo && mCarryPlayerNo < 4)
+    if (0 <= mCarryPlayerNo && mCarryPlayerNo < cPlayerNum)
         return PlayerMgr::instance()->getPlayerObject(mCarryPlayerNo);
 
     return nullptr;
@@ -192,7 +192,7 @@ PlayerObject* CarryEnemy::getCarryPlayerObject() const
 
 PlayerObject* CarryEnemy::getCarryPlayerObject2() const
 {
-    if (0 <= mCarryPlayerNo && mCarryPlayerNo < 4)
+    if (0 <= mCarryPlayerNo && mCarryPlayerNo < cPlayerNum)
         return PlayerMgr::instance()->getPlayerObject2(mCarryPlayerNo);
 
     return nullptr;
@@ -436,7 +436,7 @@ bool CarryEnemy::hitCallback_Shell(ActorCollisionCheck* cc_self, ActorCollisionC
 
     if (cc_self->getAttack() == ActorCollisionCheck::cAttack_Shell &&
         !cc_other->hasStatus(ActorCollisionCheck::cStatus_SlideKill) &&
-        (p_actor_other->getActorType() != cActorType_Generic || (p_actor_other->getProfFlag() & Profile::cFlag_Unk7)))
+        (p_actor_other->getKind() != cActorKind_Generic || (p_actor_other->getProfFlag() & Profile::cFlag_Unk7)))
     {
         DirType fall_dir = ActorUtil::getTrgToSrcDir(*this, *p_actor_other);
 
@@ -446,7 +446,7 @@ bool CarryEnemy::hitCallback_Shell(ActorCollisionCheck* cc_self, ActorCollisionC
             kill_player_no = p_actor_other->getPlayerNo();
 
         ScoreMgr::ScoreType combo_score = ScoreMgr::cScoreType_Invalid;
-        if (0 <= kill_player_no && kill_player_no < 4)
+        if (0 <= kill_player_no && kill_player_no < cPlayerNum)
         {
             p_actor_other->incComboCnt();
             combo_score = mCombo.getComboScore(p_actor_other->getComboCnt());
@@ -486,10 +486,10 @@ bool CarryEnemy::hitCallback_Shell(ActorCollisionCheck* cc_self, ActorCollisionC
         if (eff_set)
         {
             sead::Vector2f center_point = (cc_self->getCenterPos() + cc_other->getCenterPos()) * 0.5f;
-            hitdamageEffect(sead::Vector3f(center_point, 0.0f));
+            hitdamageEffect(center_point);
 
-            if ((0 <= kill_player_no && kill_player_no < 4) &&
-                (0 <= p_actor_other->getPlayerNo() && p_actor_other->getPlayerNo() < 4))
+            if ((0 <= kill_player_no && kill_player_no < cPlayerNum) &&
+                (0 <= p_actor_other->getPlayerNo() && p_actor_other->getPlayerNo() < cPlayerNum))
             {
                 p_actor_other->slideComboSE(p_actor_other->getComboCnt() - 1, false);
                 return true;
@@ -688,7 +688,7 @@ void CarryEnemy::finalizeState_Sleep()
 void CarryEnemy::initializeState_Slide()
 {
     startSlide();
-    mNoHitPlayerTimer[mPlayerNo] = cShellSlideNoHitTimer;
+    mPlayerNoHitTimer.reset(mPlayerNo, cShellSlideNoHitTimer);
 }
 
 void CarryEnemy::executeState_Slide()

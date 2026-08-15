@@ -29,7 +29,7 @@ bool PtclEmitterUserDataUtil::isCalcGroup(s32 group_id)
             case 4:
             case 5:
             case 6:
-            case 7:
+            case 7: // TODO: cPlayerNum
                 if (EventMgr::instance()->getCurrentEvent() != nullptr)
                 {
                     if (PlayerMgr::instance() != nullptr)
@@ -56,7 +56,7 @@ s32 PtclEmitterUserDataUtil::getEmitterSetGroupID(u16 user_data_bit, s32 player_
     if (user_data_bit & 0x1000)
         return 3;
 
-    if (0 <= player_no && player_no < 4)
+    if (0 <= player_no && player_no < 4) // TODO: cPlayerNum
         return 4 + player_no;
 
     if (user_data_bit & 0x4000)

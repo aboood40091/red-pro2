@@ -627,7 +627,7 @@ void PlayerBase::DemoAnmEndingGladWait()
 
 void PlayerBase::executeState_AnimePlay()
 {
-    mAccelY = getGravityData()->gravity;
+    mGravity = getGravityData()->gravity;
     maxFallSpeedSet();
     moveSpeedSet();
     powerSet();

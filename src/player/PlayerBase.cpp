@@ -92,7 +92,7 @@ PlayerBase::PlayerBase(const ActorCreateParam& param)
     , _2064(0)
     , _2068(0)
     , _206c(0)
-    , _2070(0)
+    , mCcEnemyFumiRevExtendTimer(0)
     , mCcPlayerRevSpeedFScale(0.0f)
     , mCcPlayerRevSpeedFStart(0.0f)
     , mCcPlayerRevSpeedF(0.0f)
@@ -771,7 +771,7 @@ void PlayerBase::calcTimerProc()
     MathUtil::calcTimer(&_2064);
     MathUtil::calcTimer(&_2068);
     MathUtil::calcTimer(&_206c);
-    MathUtil::calcTimer(&_2070);
+    MathUtil::calcTimer(&mCcEnemyFumiRevExtendTimer);
     MathUtil::calcTimer(&mNoGravityTimer);
     MathUtil::calcTimer(&mGoalYoshiSpitOutTimer);
     MathUtil::calcTimer(&mReductionSimpleMoveTimer);
@@ -944,7 +944,7 @@ void PlayerBase::calcPlayerSpeedXY()
     {
         if (isNowBgCross(cBgCross_IsFoot))
         {
-            mSpeed.y += mAccelY;
+            mSpeed.y += mGravity;
             mPos.y += mSpeed.y;
         }
         return;
@@ -969,7 +969,7 @@ void PlayerBase::calcPlayerSpeedXY()
         scale_accelF = (sead::Mathf::abs(target_speedF) < sead::Mathf::abs(mSpeedF)) ? 1.0f : 1.8f;
     }
 
-    calcSpeedF_(mAccelF * scale_accelF, target_speedF);
+    calcSpeedF_(mPow * scale_accelF, target_speedF);
   //calcWindSpeed(); // Removed in NSMBU
 
     f32 speedF = mSpeedF;
@@ -1034,7 +1034,7 @@ void PlayerBase::calcPlayerSpeedXY()
         mSpeedF = 0.0f;
 
     _4c8 = mSpeed;
-    mSpeed.y += mAccelY;
+    mSpeed.y += mGravity;
 
     f32 max_fall_speed = mMaxFallSpeed; // Negative
     if (isOnSinkSand())
@@ -1132,7 +1132,7 @@ s8 PlayerBase::calcComboCount(s32 max)
 }
 
 const f32 PlayerBase::cDirSpeed[] = { 1.0f, -1.0f };
-const f32 PlayerBase::cJumpSpeed = PLAYER_JUMP_SPEED;
+const f32 PlayerBase::cJumpSpeedBase = PLAYER_JUMP_SPEED;
 const f32 PlayerBase::cUnkZero = 0.0f;
 const f32 PlayerBase::cWaterNumaJumpSpeed = 0.75f;
 const f32 PlayerBase::cMaxFallSpeed = -4.0f;

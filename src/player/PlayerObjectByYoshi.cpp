@@ -252,7 +252,7 @@ void PlayerObject::executeState_BalloonChibiYoshiFly()
     DirType walk_dir;
     if (!mPlayerKey.buttonWalk(&walk_dir))
     {
-        mAccelF = cBalloonChibiYoshiFlyAccelF;
+        mPow = cBalloonChibiYoshiFlyAccelF;
         f32 max_speed_F = sead::Mathf::abs(mSpeedF);
         if (max_speed_F > cBalloonChibiYoshiFlyMaxSpeedF)
             max_speed_F = cBalloonChibiYoshiFlyMaxSpeedF;
@@ -260,7 +260,7 @@ void PlayerObject::executeState_BalloonChibiYoshiFly()
     }
     else
     {
-        mAccelF = cBalloonChibiYoshiFlyAccelF;
+        mPow = cBalloonChibiYoshiFlyAccelF;
         mMaxSpeedF = cBalloonChibiYoshiFlyMaxSpeedF * cDirSpeed[walk_dir];
     }
     mMaxFallSpeed = cBalloonChibiYoshiFlyMaxFallSpeed;
@@ -268,15 +268,15 @@ void PlayerObject::executeState_BalloonChibiYoshiFly()
     switch (mAction)
     {
     case cBalloonChibiYoshiFlyAction_Fall:
-        mAccelY = cBalloonChibiYoshiFlyDescendGravity;
+        mGravity = cBalloonChibiYoshiFlyDescendGravity;
         break;
     default:
         break;
     case cBalloonChibiYoshiFlyAction_Fly:
         if (mBalloonChibiYoshiFlyAscendGravityTimer == 0)
-            mAccelY = cBalloonChibiYoshiFlyAscendEndGravity;
+            mGravity = cBalloonChibiYoshiFlyAscendEndGravity;
         else
-            mAccelY = cBalloonChibiYoshiFlyAscendGravity[0];
+            mGravity = cBalloonChibiYoshiFlyAscendGravity[0];
         if (mActionTimer == 0 && mSpeed.y < cBalloonChibiYoshiFlyDescendStartSpeedY)
         {
             mAction = cBalloonChibiYoshiFlyAction_Fall;

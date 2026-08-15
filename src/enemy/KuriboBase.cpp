@@ -64,12 +64,12 @@ ActorBase::Result KuriboBase::create_()
     mCollisionCheckDrcTouch.set(this, cCcData_DrcTouch);
     ActorCollisionCheckMgr::instance()->entry(mCollisionCheckDrcTouch);
 
-    mSpeedMax.y = -4.0f;
+    mSpeedMax.y = ENEMY_DEFAULT_MAX_FALL_SPEED;
 
     mDirection = getPlayerDirLR();
     mAngle.y() = cBaseAngleY[mDirection];
 
-    mFumiProc.fumi_check._8 = 0;
+    mFumiProc.setFumiRevType(0);
 
     mZOffset = 0.0f;
 
@@ -172,7 +172,7 @@ void KuriboBase::landonEffect_()
         sead::Vector3f pos(
             mPos.x,
             mPos.y,
-            4500.0f
+            EFFECT_Z_POS_DEFAULT
         );
         if (mBgCheckObj.checkFoot())
         {
@@ -234,7 +234,7 @@ void KuriboBase::landonEffect_()
                     sead::Vector3f pos(
                         mPos.x,
                         mPos.y,
-                        4500.0f
+                        EFFECT_Z_POS_DEFAULT
                     );
                     EffectCreateUtil::createEffect(RP_Cmn_LandingSmoke_08, &pos);
                 }
@@ -299,10 +299,10 @@ void KuriboBase::setDeathInfo_Hasami_()
 {
     u8 dir = mPos.x - mPosPrev.x < 0.0f ? cDirType_Left : cDirType_Right;
 
-    hitdamageEffect(sead::Vector3f(mPos.x, mPos.y, 0.0f));
+    hitdamageEffect(getPos2D());
     GameAudio::getAudioObjEmy()->startSound("SE_EMY_DOWN", mPos);
 
-    ENEMY_MAKE_DEATH_INFO_ARG_FALL(arg);
+    ENEMY_MAKE_DEATH_INFO_ARG_FALL_NO_PLAYER(arg);
     arg.speed.x = cDieFallInitSpeedX[dir];
     arg.speed.y = cDieFallInitSpeedY;
     arg.max_fall_speed = cDieFallMaxFallSpeed;
@@ -365,9 +365,9 @@ void KuriboBase::vsEnemyHitCheck_Normal(ActorCollisionCheck* cc_self, ActorColli
     Actor* actor_other = cc_other->getOwner();
     if (actor_other != nullptr && actor_other->getProfileID() != ProfileInfo::cProfileID_Maruta)
     {
-        if (actor_other->getActorType() == cActorType_Enemy)
+        if (actor_other->getKind() == cActorKind_Enemy)
             mEnemyHitRevX = cc_self->getRevisionX(ActorCollisionCheck::cKind_Enemy);
-        else if (actor_other->getActorType() == cActorType_ChibiYoshi)
+        else if (actor_other->getKind() == cActorKind_ChibiYoshi)
             mEnemyHitRevX = cc_self->getRevisionX(ActorCollisionCheck::cKind_ChibiYoshi);
         setTurnByEnemyHit(cc_self->getOwner(), actor_other);
     }
@@ -600,8 +600,8 @@ void KuriboBase::initializeState_Walk()
     if (!isOldState(StateID_Turn) && !vf554())
         setWalkAnm();
     setWalkSpeed();
-    mAccelY = cDefaultGravity;
-    mSpeedMax.set(0.0f, -4.0f, 0.0f);
+    mGravity = cDefaultGravity;
+    mSpeedMax.set(0.0f, ENEMY_DEFAULT_MAX_FALL_SPEED, 0.0f);
 }
 
 void KuriboBase::executeState_Walk()
@@ -712,7 +712,7 @@ void KuriboBase::executeState_Touch()
         if (mBgCheckObj.checkFoot())
         {
             mSubstate = 4;
-            mAccelF = sead::Mathf::abs(mSpeed.x) / 10;
+            mPow = sead::Mathf::abs(mSpeed.x) / 10;
             mStateTimer = 10;
             mSpeed.y = 0.0f;
             mSpeedMax.x = 0.0f;
@@ -778,7 +778,7 @@ void KuriboBase::initializeState_DieOther()
     mpBlendModel->getCurSklAnim()->getFrameCtrl().setPlayMode(FrameCtrl::cMode_NoRepeat);
     mpBlendModel->getCurSklAnim()->getFrameCtrl().setRate(1.0f);
     mSpeed.set(0.0f, 0.0f, 0.0f);
-    mAccelY = cDefaultGravity;
+    mGravity = cDefaultGravity;
     removeCollisionCheck();
     ActorCollisionCheckMgr::instance()->release(mCollisionCheckDrcTouch);
     mKakiboHaScale = 1.0f;
@@ -898,7 +898,7 @@ void KuriboBase::DrcTouchCB::ccOnTouch(ActorCollisionCheck* p_cc, const sead::Ve
 }
 
 const f32 KuriboBase::cMaxSpeedX = 1.0f;
-const f32 KuriboBase::cMaxSpeedY = -4.0f;
+const f32 KuriboBase::cMaxSpeedY = ENEMY_DEFAULT_MAX_FALL_SPEED;
 
 const ActorCreateInfo KuriboBase::cActorCreateInfo = { 8, -16, { 0, 8, 8, 8 }, { 0, 0, 0, 0 }, ActorCreateInfo::cFlag_Unknown };
 

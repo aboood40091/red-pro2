@@ -185,7 +185,7 @@ void PlayerBase::setJumpSpeed()
 
 f32 PlayerBase::getJumpSpeedBase()
 {
-    f32 speed = cJumpSpeed;
+    f32 speed = cJumpSpeedBase;
     if (isOnSinkSand())
     {
         if (mPos.y >= mSinkSandSurfacePosY - 7.0f)

@@ -89,7 +89,7 @@ void PlayerBase::initializeState_Funsui()
     onStatus(cStatus_58);
     // onStatus(cStatus_NoBgCrossUpdate);
     onStatus(cStatus_ControlledMove);
-    mAccelY = 0.0f;
+    mGravity = 0.0f;
     mSpeedF *= 0.7f;
     mSpeed.y = 0.1f;
 
@@ -163,9 +163,9 @@ void PlayerBase::executeState_Funsui()
     mMaxSpeedF = target_speed;
 
     if (sead::Mathf::abs(mSpeedF) > base_speed)
-        mAccelF = 0.1f;
+        mPow = 0.1f;
     else
-        mAccelF = 0.04f;
+        mPow = 0.04f;
 }
 
 void PlayerBase::finalizeState_Funsui()
@@ -182,7 +182,7 @@ void PlayerBase::initializeState_Cloud()
     startSound("SE_PLY_RIDE_CLOUD");
     onStatus(cStatus_RideCloud);
     onStatus(cStatus_200);
-    mAccelY = 0.0f;
+    mGravity = 0.0f;
     mSpeed.y = 0.1f;
     mSpeedF = 0.0f;
     mMaxSpeedF = 0.0f;
@@ -210,7 +210,7 @@ void PlayerBase::finalizeState_Cloud()
 void PlayerBase::initializeState_Cloud2()
 {
     onStatus(cStatus_143);
-    mAccelY = 0.0f;
+    mGravity = 0.0f;
     mSpeed.y = 0.0f;
     mSpeedF = 0.0f;
     mMaxSpeedF = 0.0f;
@@ -365,7 +365,7 @@ void PlayerBase::calcAccOnIceLift()
         !mPlayerKey.buttonWalk() &&
         sead::Mathf::abs(mPosDelta.x) > 1.0f)
     {
-        mAccelF *= 3.0f;
+        mPow *= 3.0f;
     }
 }
 

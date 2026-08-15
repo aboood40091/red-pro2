@@ -45,9 +45,9 @@ void PlayerObject::initializeState_Balloon()
     onStatus(cStatus_NoPropelRoll);
     onStatus(cStatus_ControlledState);
     onStatus(cStatus_RideBalloon);
-    mAccelY = 0.0f;
+    mGravity = 0.0f;
     mMaxFallSpeed = cMaxFallSpeed;
-    mAccelF = 0.0f;
+    mPow = 0.0f;
     mSpeed.y = 0.0f;
     mSpeedF = 0.0f;
     mAction = mChangeStateParam;
@@ -402,7 +402,7 @@ void PlayerObject::setBreakBalloonJump(Angle angle)
         f32 sin_v, cos_v;
         sead::Mathf::sinCosIdx(&sin_v, &cos_v, angle);
         f32 speed_F = 4.0f * sin_v;
-        f32 speed_y = cJumpSpeed * cos_v;
+        f32 speed_y = cJumpSpeedBase * cos_v;
         bouncePlayer1(
             sead::Mathf::clampMin(speed_y, 0.0f),
             speed_F,

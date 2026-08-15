@@ -193,7 +193,7 @@ void PlayerBase::initializeState_DemoNextGotoBlock()
 
 bool PlayerBase::isDemo5Any()
 {
-    for (s32 i = 0; i < 4; i++)
+    for (s32 i = 0; i < cPlayerNum; i++)
     {
         PlayerObject* p_player_obj = PlayerMgr::instance()->getPlayerObject(i);
         if (p_player_obj != nullptr && p_player_obj->isDemoType(cDemoType_5))
@@ -361,7 +361,7 @@ bool PlayerBase::isDisableDokanInDemo()
 
 bool PlayerBase::isDemo3Any()
 {
-    for (s32 i = 0; i < 4; i++)
+    for (s32 i = 0; i < cPlayerNum; i++)
     {
         PlayerObject* p_player_obj = PlayerMgr::instance()->getPlayerObject(i);
         if (p_player_obj != nullptr && p_player_obj->isDemoType(cDemoType_3))

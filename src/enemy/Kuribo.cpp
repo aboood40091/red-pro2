@@ -679,7 +679,7 @@ void Kuribo::initializeState_KakiboWalk()
 {
     setKakiboAnm(checkKakiboTurnSaka_() ? cKakiboAnmID_Walk1 : cKakiboAnmID_Walk0);
     setWalkSpeed();
-    mAccelY = cDefaultGravity;
+    mGravity = cDefaultGravity;
     mSpeedMax.set(0.0f, cMaxSpeedY, 0.0f);
 }
 
@@ -951,7 +951,7 @@ void Kuribo::initializeState_Born_Split1()
     mDirection = mSpeed.x < 0.0f ? cDirType_Left : cDirType_Right;
     mAngle.y() = cBaseAngleY[InvDirX(mDirection)];
 
-    mAccelF = 0.0f;
+    mPow = 0.0f;
     mSpeedMax.x = mSpeed.x;
 
     mBlockHitImmune = true;
@@ -996,7 +996,7 @@ void Kuribo::executeState_Born_Split2()
         if (mBgCheckObj.checkFoot())
         {
             mSubstate = 3;
-            mAccelF = sead::Mathf::abs(mSpeed.x) / 10;
+            mPow = sead::Mathf::abs(mSpeed.x) / 10;
             mStateTimer = 10;
             mSpeed.y = 0.0f;
             mSpeedMax.x = 0.0f;
@@ -1052,7 +1052,7 @@ void Kuribo::initializeState_Born_Split2()
     mDirection = mSpeed.x < 0.0f ? cDirType_Left : cDirType_Right;
     mAngle.y() = cBaseAngleY[InvDirX(mDirection)];
 
-    mAccelF = 0.0f;
+    mPow = 0.0f;
     mSpeedMax.x = mSpeed.x;
 
     mBlockHitImmune = true;
@@ -1085,7 +1085,7 @@ void Kuribo::executeState_EatOut_Ready()
         mEatData.setState(4);
         ActorCollisionCheckMgr::instance()->entry(mCollisionCheck);
         ActorCollisionCheckMgr::instance()->entry(mCollisionCheckDrcTouch);
-        mNoHitPlayerTimer[mParam0 >> 20 & 3] = 16;
+        mPlayerNoHitTimer.reset(mParam0 >> 20 & 3, 16);
         changeState(StateID_EatOut);
     }
 }
