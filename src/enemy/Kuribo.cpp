@@ -1073,7 +1073,7 @@ void Kuribo::finalizeState_Born_Split2()
 
 void Kuribo::initializeState_EatOut_Ready()
 {
-    mEatData.setState(2);
+    mEatData.setState(EatData::cState_EatMouth);
     ActorCollisionCheckMgr::instance()->release(mCollisionCheck);
     ActorCollisionCheckMgr::instance()->release(mCollisionCheckDrcTouch);
 }
@@ -1082,7 +1082,7 @@ void Kuribo::executeState_EatOut_Ready()
 {
     if (mEatData.getYoshiID().isValid())
     {
-        mEatData.setState(4);
+        mEatData.setState(EatData::cState_SpitOut);
         ActorCollisionCheckMgr::instance()->entry(mCollisionCheck);
         ActorCollisionCheckMgr::instance()->entry(mCollisionCheckDrcTouch);
         mPlayerNoHitTimer.reset(mParam0 >> 20 & 3, 16);

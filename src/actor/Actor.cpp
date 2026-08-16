@@ -148,10 +148,10 @@ DirType Actor::getPlayerDirUD(const sead::Vector3f& position)
 
 bool Actor::screenOutCheck(u16 flag)
 {
-    if (mpEatData != nullptr && mpEatData->getState() == 2)
+    if (mpEatData != nullptr && mpEatData->getState() == EatData::cState_EatMouth)
         return false;
 
-    if (mpChibiYoshiEatData != nullptr && mpChibiYoshiEatData->getState() == 2)
+    if (mpChibiYoshiEatData != nullptr && mpChibiYoshiEatData->getState() == ChibiYoshiEatData::cState_EatMouth)
         return false;
 
     if (mpChibiYoshiAwaData != nullptr && mpChibiYoshiAwaData->getState() != ChibiYoshiAwaData::cState_None)
@@ -249,10 +249,10 @@ f32 Actor::getEffectZPos() const
 
 bool Actor::checkEat() const
 {
-    if (mpEatData != nullptr && (mpEatData->getState() == 1 || mpEatData->getState() == 2))
+    if (mpEatData != nullptr && (mpEatData->getState() == EatData::cState_EatTongue || mpEatData->getState() == EatData::cState_EatMouth))
         return true;
 
-    if (mpChibiYoshiEatData != nullptr && (mpChibiYoshiEatData->getState() == 1 || mpChibiYoshiEatData->getState() == 2))
+    if (mpChibiYoshiEatData != nullptr && (mpChibiYoshiEatData->getState() == ChibiYoshiEatData::cState_EatTongue || mpChibiYoshiEatData->getState() == ChibiYoshiEatData::cState_EatMouth))
         return true;
 
     return false;
@@ -424,10 +424,10 @@ bool Actor::preDraw_()
     if (!mIsDrawEnable)
         return false;
 
-    if (mpEatData != nullptr && mpEatData->getState() == 2)
+    if (mpEatData != nullptr && mpEatData->getState() == EatData::cState_EatMouth)
         return false;
 
-    if (mpChibiYoshiEatData != nullptr && mpChibiYoshiEatData->getState() == 2)
+    if (mpChibiYoshiEatData != nullptr && mpChibiYoshiEatData->getState() == ChibiYoshiEatData::cState_EatMouth)
         return false;
 
     if ((mProfFlag & Profile::cFlag_DrawCullCheck) && drawCullCheck_())

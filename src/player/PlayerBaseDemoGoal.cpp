@@ -36,7 +36,7 @@ void PlayerBase::initializeState_DemoGoal()
     mSpeedF = 0.0f;
     mSpeed.y = 0.0f;
     mGravity = 0.0f;
-    mMaxFallSpeed = -4.0f;
+    mMaxFallSpeed = ACTOR_DEFAULT_MAX_FALL_SPEED;
 }
 
 void PlayerBase::executeDemoGoal_Pole()
@@ -164,7 +164,7 @@ f32 PlayerBase::getDemoGoalLandPos()
 }
 
 #define GOAL_JUMP_GRAVITY -0.28f
-#define GOAL_JUMP_MAX_FALL_SPEED -4.0f
+#define GOAL_JUMP_MAX_FALL_SPEED ACTOR_DEFAULT_MAX_FALL_SPEED
 
 s32 PlayerBase::calcGoalLandNumFrame(f32 pos, f32 land_pos, f32 jump_speed)
 {

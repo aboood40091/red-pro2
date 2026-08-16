@@ -64,7 +64,7 @@ ActorBase::Result KuriboBase::create_()
     mCollisionCheckDrcTouch.set(this, cCcData_DrcTouch);
     ActorCollisionCheckMgr::instance()->entry(mCollisionCheckDrcTouch);
 
-    mSpeedMax.y = ENEMY_DEFAULT_MAX_FALL_SPEED;
+    mSpeedMax.y = ACTOR_DEFAULT_MAX_FALL_SPEED;
 
     mDirection = getPlayerDirLR();
     mAngle.y() = cBaseAngleY[mDirection];
@@ -601,7 +601,7 @@ void KuriboBase::initializeState_Walk()
         setWalkAnm();
     setWalkSpeed();
     mGravity = cDefaultGravity;
-    mSpeedMax.set(0.0f, ENEMY_DEFAULT_MAX_FALL_SPEED, 0.0f);
+    mSpeedMax.set(0.0f, ACTOR_DEFAULT_MAX_FALL_SPEED, 0.0f);
 }
 
 void KuriboBase::executeState_Walk()
@@ -898,7 +898,7 @@ void KuriboBase::DrcTouchCB::ccOnTouch(ActorCollisionCheck* p_cc, const sead::Ve
 }
 
 const f32 KuriboBase::cMaxSpeedX = 1.0f;
-const f32 KuriboBase::cMaxSpeedY = ENEMY_DEFAULT_MAX_FALL_SPEED;
+const f32 KuriboBase::cMaxSpeedY = ACTOR_DEFAULT_MAX_FALL_SPEED;
 
 const ActorCreateInfo KuriboBase::cActorCreateInfo = { 8, -16, { 0, 8, 8, 8 }, { 0, 0, 0, 0 }, ActorCreateInfo::cFlag_Unknown };
 

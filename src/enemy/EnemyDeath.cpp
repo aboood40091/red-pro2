@@ -139,7 +139,7 @@ void Enemy::setDeathInfo_Fall(const sead::Vector2f* speeds, DirType direction, s
 {
     ENEMY_MAKE_DEATH_INFO_ARG_FALL(arg);
     arg.speed = speeds[direction];
-    arg.max_fall_speed = ENEMY_DEFAULT_MAX_FALL_SPEED;
+    arg.max_fall_speed = ACTOR_DEFAULT_MAX_FALL_SPEED;
     arg.gravity = cDieFallGravity;
     arg.score_type = score_type;
     arg.direction = direction;
@@ -374,7 +374,7 @@ void Enemy::setDeathInfo_Fumi(Actor* p_player, const sead::Vector2f& speed, cons
 
     ENEMY_MAKE_DEATH_INFO_ARG_CUSTOM_NO_SCORE(arg);
     arg.speed = speed;
-    arg.max_fall_speed = ENEMY_DEFAULT_MAX_FALL_SPEED;
+    arg.max_fall_speed = ACTOR_DEFAULT_MAX_FALL_SPEED;
     arg.gravity = cDieFallGravity;
     arg.p_state_id = &state_id;
     arg.direction = kill_dir;
@@ -399,7 +399,7 @@ void Enemy::setDeathInfo_Quake(QuakeDeathType type)
 
     ENEMY_MAKE_DEATH_INFO_ARG_FALL_ALL_PLAYER(arg);
     arg.speed = c_die_fall_init_speed[type];
-    arg.max_fall_speed = ENEMY_DEFAULT_MAX_FALL_SPEED;
+    arg.max_fall_speed = ACTOR_DEFAULT_MAX_FALL_SPEED;
     arg.gravity = cDieFallGravity;
     arg.score_type = combo_score;
     arg.direction = mDirection;
@@ -749,7 +749,7 @@ static const sead::Vector3f unused(0.0f, 0.0f, 0.0f);
 
 const f32 Enemy::cDieFallGravity = 1.3f * Enemy::cDefaultGravity;
 const f32 Enemy::cDieFallInitSpeedY = ENEMY_DIE_FALL_INIT_SPEED_Y;
-const f32 Enemy::cDieFallMaxFallSpeed = ENEMY_DEFAULT_MAX_FALL_SPEED;
+const f32 Enemy::cDieFallMaxFallSpeed = ACTOR_DEFAULT_MAX_FALL_SPEED;
 
 CREATE_STATE_VIRTUAL_ID_BASE(Enemy, DieFumi)
 CREATE_STATE_VIRTUAL_ID_BASE(Enemy, DieFall)

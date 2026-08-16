@@ -22,8 +22,8 @@ Enemy::Enemy(const ActorCreateParam& param)
     , mIsSpinFumiFrame(false)
     , _187e(8)
 {
-    mGravity = ENEMY_DEFAULT_GRAVITY;
-    mSpeedMax.set(0.0f, ENEMY_DEFAULT_MAX_FALL_SPEED, 0.0f);
+    mGravity = ACTOR_DEFAULT_GRAVITY;
+    mSpeedMax.set(0.0f, ACTOR_DEFAULT_MAX_FALL_SPEED, 0.0f);
 
     setKind(cActorKind_Enemy);
 
@@ -110,8 +110,8 @@ void Enemy::blockHitInit_()
 
     ENEMY_MAKE_DEATH_INFO_ARG_FALL_NO_SCORE(arg);
     arg.speed = c_die_fall_init_speed[mBlockHitDirection];
-    arg.max_fall_speed = ENEMY_DEFAULT_MAX_FALL_SPEED;
-    arg.gravity = ENEMY_DEFAULT_GRAVITY;
+    arg.max_fall_speed = ACTOR_DEFAULT_MAX_FALL_SPEED;
+    arg.gravity = ACTOR_DEFAULT_GRAVITY;
     arg.direction = mBlockHitDirection;
     arg.player_no = mPlayerNo;
     mDeathInfo.kill(arg);
@@ -826,11 +826,11 @@ void Enemy::setAwaInvalid(Actor* p_awa)
 static const sead::Vector3f unused(0.0f, 0.0f, 0.0f);
 
 const f32 Enemy::cFumiJumpSpeed = ENEMY_FUMI_JUMP_SPEED;
-const f32 Enemy::cDefaultGravity = ENEMY_DEFAULT_GRAVITY;
+const f32 Enemy::cDefaultGravity = ACTOR_DEFAULT_GRAVITY;
 const f32 Enemy::cDieFallBoundSpeedY = ENEMY_DIE_FALL_BOUND_SPEED_Y;
-const f32 Enemy::cDefaultMaxFallSpeed = ENEMY_DEFAULT_MAX_FALL_SPEED;
+const f32 Enemy::cDefaultMaxFallSpeed = ACTOR_DEFAULT_MAX_FALL_SPEED;
 const f32 Enemy::cDefaultMaxSpeedF = 4.0f;
-const f32 Enemy::cDefaultMaxSpeedY = ENEMY_DEFAULT_MAX_FALL_SPEED;
+const f32 Enemy::cDefaultMaxSpeedY = ACTOR_DEFAULT_MAX_FALL_SPEED;
 
 const Angle Enemy::cBaseAngleY[] = { 0x20000000, -0x20000000 };
 const Angle Enemy::cBaseAngleYAdd[] = { 0x4000000, -0x4000000 };
@@ -838,7 +838,7 @@ const s8 Enemy::cEnMuki[] = { 1, -1 };
 const f32 Enemy::cDieFallInitSpeedX[] = { ENEMY_DIE_FALL_INIT_SPEED_X, -ENEMY_DIE_FALL_INIT_SPEED_X };
 const f32 Enemy::cDeadNetSpeedX[] = { getDeadNetSpeedX(), -getDeadNetSpeedX() };
 
-const f32 Enemy::cWaterGravity = ENEMY_DEFAULT_GRAVITY / 3;
+const f32 Enemy::cWaterGravity = ACTOR_DEFAULT_GRAVITY / 3;
 const f32 Enemy::cWaterBoundSpeedY = 1.5f;
 const f32 Enemy::cWaterMaxFallSpeed = -1.5f;
 const f32 Enemy::cWaterRollDecRate = 0.5f;
