@@ -302,7 +302,7 @@ void KuriboBase::setDeathInfo_Hasami_()
     hitdamageEffect(getPos2D());
     GameAudio::getAudioObjEmy()->startSound("SE_EMY_DOWN", mPos);
 
-    ENEMY_MAKE_DEATH_INFO_ARG_FALL_NO_PLAYER(arg);
+    ENEMY_MAKE_DEATH_INFO_ARG_FALL_NO_SCORE_NO_PLAYER(arg);
     arg.speed.x = cDieFallInitSpeedX[dir];
     arg.speed.y = cDieFallInitSpeedY;
     arg.max_fall_speed = cDieFallMaxFallSpeed;

@@ -235,9 +235,7 @@ void ActorCollision::setQuake_(QuakeType type)
 
 void ActorCollision::setSmokeDamage_(Actor* p_actor)
 {
-    if (p_actor != nullptr)
-    {
-    }
+    (void)p_actor;
 }
 
 bool ActorCollision::bgCheckFoot_() const

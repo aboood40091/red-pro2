@@ -659,17 +659,13 @@ void PlayerBase::coinJumpOnStampCB(s32 coin_num)
 
     reduceCoinNum_(coin_num);
 
-    ActorCoinMgr::CoinJumpArg arg;
-    arg.pos = getCenterPos();
-    arg.dir = mDirection;
-    arg.count = coin_num;
-    arg.layer = cLayerID_Layer1;
-    arg.spawn_height = 0;
-    arg._13 = 0;
-    arg.spacing_decrease = 0;
-    arg._15 = 0;
-    arg.curve_type = 0;
-    ActorCoinMgr::instance()->spawnCoinJump(arg, true, mPlayerNo);
+    ActorCoinMgr::UpCoinArg arg = {
+        getCenterPos(),
+        mDirection,
+        coin_num,
+        cLayerID_Layer1
+    };
+    ActorCoinMgr::instance()->createUpCoinCB(arg, true, mPlayerNo);
 }
 
 static inline s32 GetBaseDamageCoinNumCB(s32 type, s32 diff_from_min)
