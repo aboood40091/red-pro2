@@ -420,7 +420,7 @@ void PlayerBase::blockHitInit_()
     if (isStatus(cStatus_60))
         return;
 
-    bouncePlayer1(Enemy::cFumiJumpSpeed + 3.628f, mSpeedF, true, cBounceType_Normal, cJumpSe_None);
+    bouncePlayer1(Enemy::cFumiJumpSpeed + PLAYER_JUMP_SPEED, mSpeedF, true, cBounceType_Normal, cJumpSe_None);
 }
 
 void PlayerBase::setDrawTypeInDistantView()
