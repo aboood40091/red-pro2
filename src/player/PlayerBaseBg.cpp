@@ -917,7 +917,7 @@ f32 PlayerBase::getWaterOffsetY()
 
 f32 PlayerBase::getWaterCheckPosY()
 {
-    return mPos.x + getWaterOffsetY();
+    return mPos.y + getWaterOffsetY();
 }
 
 void PlayerBase::checkWater()
