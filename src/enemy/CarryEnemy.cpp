@@ -529,7 +529,7 @@ void CarryEnemy::calcCarryPos(sead::Vector3f* p_pos, PlayerObject* p_player_obj)
         if (p_player_obj->getCarryMtx(&carry_mtx))
         {
             sead::Vector3f carry_add_offset = sead::Vector3f::zero;
-            if (p_player_obj->getCarryStep() == PlayerObject::cCarryStep_Carry)
+            if (p_player_obj->getCarryStep() == PlayerObject::cCarryStep_CarryLong)
             {
                 f32 t = 1.0f - p_player_obj->getCarryStepRatio();
                 if (t < 0.0f)
