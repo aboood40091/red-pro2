@@ -11,7 +11,7 @@ ActorBgCollisionCheck::SakaType PlayerBase::getSakaType(DirType dir)
     {
         if (getSakaUpDown(dir) == cSakaUpDown_Downhill)
         {
-            saka_type--;
+            saka_type--; // treat the slope as one grade gentler
             if (saka_type < 0)
                 saka_type = 0;
         }
