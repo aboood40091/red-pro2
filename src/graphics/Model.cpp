@@ -1,11 +1,12 @@
 #include <graphics/Model.h>
 #include <graphics/ModelG3d.h>
 #include <graphics/ModelResource.h>
+#include <graphics/Renderer.h>
 
 Model::Model()
     : RenderObj()
-    , mOpaBufferIdx(-2)
-    , mXluBufferIdx(-2)
+    , mOpaRenderPass(Renderer::cDefaultRenderPass)
+    , mXluRenderPass(Renderer::cDefaultRenderPass)
 {
 }
 

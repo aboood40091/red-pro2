@@ -35,10 +35,10 @@ void RenderObjRenderMgr::clear()
 {
     mRenderObj.clear();
 
-    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr = mRenderObjOpa.begin(), itr_end = mRenderObjOpa.end(); itr != itr_end; ++itr)
+    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr = mOpaRenderPassObj.begin(), itr_end = mOpaRenderPassObj.end(); itr != itr_end; ++itr)
         itr->clear();
 
-    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr = mRenderObjXlu.begin(), itr_end = mRenderObjXlu.end(); itr != itr_end; ++itr)
+    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr = mXluRenderPassObj.begin(), itr_end = mXluRenderPassObj.end(); itr != itr_end; ++itr)
         itr->clear();
 
     mRenderObjShadow.clear();
@@ -73,7 +73,7 @@ void RenderObjRenderMgr::calcView(s32 view_index, const sead::Camera& camera, co
     for (sead::PtrArray<RenderObj>::iterator itr = mRenderObj.begin(), itr_end = mRenderObj.end(); itr != itr_end; ++itr)
         itr->updateView(view_index, view_info.view_mtx, view_info.proj_mtx, this);
 
-    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr = mRenderObjXlu.begin(), itr_end = mRenderObjXlu.end(); itr != itr_end; ++itr)
+    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr = mXluRenderPassObj.begin(), itr_end = mXluRenderPassObj.end(); itr != itr_end; ++itr)
         itr->heapSort(compare_);
 }
 
@@ -106,7 +106,7 @@ void RenderObjRenderMgr::drawOpa(s32 view_index, const agl::lyr::RenderInfo& ren
 
     p_viewport->apply(*p_render_buffer);
 
-    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr_buffer = mRenderObjOpa.begin(), itr_buffer_end = mRenderObjOpa.end(); itr_buffer != itr_buffer_end; ++itr_buffer)
+    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr_buffer = mOpaRenderPassObj.begin(), itr_buffer_end = mOpaRenderPassObj.end(); itr_buffer != itr_buffer_end; ++itr_buffer)
     {
         if (mpCallback)
             mpCallback->preDrawOpa(view_index, itr_buffer.getIndex(), render_info);
@@ -128,7 +128,7 @@ void RenderObjRenderMgr::drawXlu(s32 view_index, const agl::lyr::RenderInfo& ren
 
     p_viewport->apply(*p_render_buffer);
 
-    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr_buffer = mRenderObjXlu.begin(), itr_buffer_end = mRenderObjXlu.end(); itr_buffer != itr_buffer_end; ++itr_buffer)
+    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr_buffer = mXluRenderPassObj.begin(), itr_buffer_end = mXluRenderPassObj.end(); itr_buffer != itr_buffer_end; ++itr_buffer)
     {
         if (mpCallback)
             mpCallback->preDrawXlu(view_index, itr_buffer.getIndex(), render_info);
@@ -157,7 +157,7 @@ void RenderObjRenderMgr::drawReflectionOpa(s32 view_index, const agl::lyr::Rende
 {
     const ViewInfo& view_info = getViewInfo(view_index);
 
-    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr_buffer = mRenderObjOpa.begin(), itr_buffer_end = mRenderObjOpa.end(); itr_buffer != itr_buffer_end; ++itr_buffer)
+    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr_buffer = mOpaRenderPassObj.begin(), itr_buffer_end = mOpaRenderPassObj.end(); itr_buffer != itr_buffer_end; ++itr_buffer)
         for (sead::PtrArray<RenderObj>::iterator itr_obj = itr_buffer->begin(), itr_obj_end = itr_buffer->end(); itr_obj != itr_obj_end; ++itr_obj)
             itr_obj->drawReflectionOpa(view_index, view_info.view_mtx, view_info.proj_mtx, this);
 }
@@ -166,29 +166,29 @@ void RenderObjRenderMgr::drawReflectionXlu(s32 view_index, const agl::lyr::Rende
 {
     const ViewInfo& view_info = getViewInfo(view_index);
 
-    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr_buffer = mRenderObjXlu.begin(), itr_buffer_end = mRenderObjXlu.end(); itr_buffer != itr_buffer_end; ++itr_buffer)
+    for (sead::Buffer< sead::PtrArray<RenderObj> >::iterator itr_buffer = mXluRenderPassObj.begin(), itr_buffer_end = mXluRenderPassObj.end(); itr_buffer != itr_buffer_end; ++itr_buffer)
         for (sead::PtrArray<RenderObj>::iterator itr_obj = itr_buffer->begin(), itr_obj_end = itr_buffer->end(); itr_obj != itr_obj_end; ++itr_obj)
             itr_obj->drawReflectionXlu(view_index, view_info.view_mtx, view_info.proj_mtx, this);
 }
 
-void RenderObjRenderMgr::pushBackRenderObj(RenderObj* obj, s32 opa_buffer_index, s32 xlu_buffer_index)
+void RenderObjRenderMgr::pushBackRenderObj(RenderObj* obj, s32 opa_render_pass, s32 xlu_render_pass)
 {
     mRenderObj.pushBack(obj);
 
-    if (opa_buffer_index >= 0)
-        mRenderObjOpa[opa_buffer_index].pushBack(obj);
+    if (opa_render_pass >= 0)
+        mOpaRenderPassObj[opa_render_pass].pushBack(obj);
 
-    if (xlu_buffer_index >= 0)
-        mRenderObjXlu[xlu_buffer_index].pushBack(obj);
+    if (xlu_render_pass >= 0)
+        mXluRenderPassObj[xlu_render_pass].pushBack(obj);
 
     if (obj->hasShadow())
         mRenderObjShadow.pushBack(obj);
 }
 
-void RenderObjRenderMgr::pushBackRenderObj(RenderObj* obj, s32 opa_buffer_index, s32 xlu_buffer_index, const sead::Vector3f& order_pos)
+void RenderObjRenderMgr::pushBackRenderObj(RenderObj* obj, s32 opa_render_pass, s32 xlu_render_pass, const sead::Vector3f& order_pos)
 {
     obj->getOrderPos().set(order_pos);
-    pushBackRenderObj(obj, opa_buffer_index, xlu_buffer_index);
+    pushBackRenderObj(obj, opa_render_pass, xlu_render_pass);
 }
 
 s32 RenderObjRenderMgr::createView(RenderObjLayerBase* p_layer)

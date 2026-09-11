@@ -29,7 +29,7 @@ ModelG3d::ModelG3d()
     , mMtxRT(sead::Matrix34f::ident)
     , mScale(sead::Vector3f::ones)
     , _128(0)
-    , mRenderFlag(3)
+    , mRenderFlag(cRenderFlag_Default)
     , mBoundingEnableFlag(0)
     , mViewShapeShadowFlagBuffer()
     , mBounding(sead::Vector3f::zero, 1.0f)
@@ -831,10 +831,10 @@ void ModelG3d::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const se
     draw_info.polygon_offset = -1;
     draw_info.p_cull = p_cull;
 
-    if (mRenderFlag.isOn(1 << 0))
+    if (mRenderFlag.isOn(cRenderFlag_DrawOpa))
         drawOpa_(draw_info, p_render_mgr);
 
-    if (mRenderFlag.isOn(1 << 3))
+    if (mRenderFlag.isOn(cRenderFlag_DrawXluAtOpa))
         drawXlu_(draw_info, p_render_mgr);
 
     agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
@@ -864,10 +864,10 @@ void ModelG3d::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const se
     draw_info.polygon_offset = -1;
     draw_info.p_cull = p_cull;
 
-    if (mRenderFlag.isOn(1 << 2))
+    if (mRenderFlag.isOn(cRenderFlag_DrawOpaAtXlu))
         drawOpa_(draw_info, p_render_mgr);
 
-    if (mRenderFlag.isOn(1 << 1))
+    if (mRenderFlag.isOn(cRenderFlag_DrawXlu))
         drawXlu_(draw_info, p_render_mgr);
 
     agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
@@ -995,10 +995,10 @@ void ModelG3d::drawReflectionOpa(s32 view_index, const sead::Matrix34f& view_mtx
     draw_info.polygon_offset = -1;
     draw_info.p_cull = p_cull;
 
-    if (mRenderFlag.isOn(1 << 0))
+    if (mRenderFlag.isOn(cRenderFlag_DrawOpa))
         drawOpa_(draw_info, p_render_mgr);
 
-    if (mRenderFlag.isOn(1 << 3))
+    if (mRenderFlag.isOn(cRenderFlag_DrawXluAtOpa))
         drawXlu_(draw_info, p_render_mgr);
 
     agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
@@ -1028,10 +1028,10 @@ void ModelG3d::drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx
     draw_info.polygon_offset = -1;
     draw_info.p_cull = p_cull;
 
-    if (mRenderFlag.isOn(1 << 1))
+    if (mRenderFlag.isOn(cRenderFlag_DrawXlu))
         drawXlu_(draw_info, p_render_mgr);
 
-    if (mRenderFlag.isOn(1 << 2))
+    if (mRenderFlag.isOn(cRenderFlag_DrawOpaAtXlu))
         drawOpa_(draw_info, p_render_mgr);
 
     agl::ShaderProgram::changeShaderMode(agl::cShaderMode_UniformRegister);
@@ -1041,14 +1041,14 @@ void ModelG3d::drawReflectionXlu(s32 view_index, const sead::Matrix34f& view_mtx
 
 bool ModelG3d::hasOpa() const
 {
-    return (mRenderFlag.isOn(1 << 0) && !mOpaShapeInfo.isEmpty()) ||
-           (mRenderFlag.isOn(1 << 3) && !mXluShapeInfo.isEmpty());
+    return (mRenderFlag.isOn(cRenderFlag_DrawOpa) && !mOpaShapeInfo.isEmpty()) ||
+           (mRenderFlag.isOn(cRenderFlag_DrawXluAtOpa) && !mXluShapeInfo.isEmpty());
 }
 
 bool ModelG3d::hasXlu() const
 {
-    return (mRenderFlag.isOn(1 << 2) && !mOpaShapeInfo.isEmpty()) ||
-           (mRenderFlag.isOn(1 << 1) && !mXluShapeInfo.isEmpty());
+    return (mRenderFlag.isOn(cRenderFlag_DrawOpaAtXlu) && !mOpaShapeInfo.isEmpty()) ||
+           (mRenderFlag.isOn(cRenderFlag_DrawXlu) && !mXluShapeInfo.isEmpty());
 }
 
 // ----------------------------------------------------------------------

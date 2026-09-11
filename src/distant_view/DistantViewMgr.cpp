@@ -231,8 +231,8 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
     AnimModel* p_anm_mdl = AnimModel::create(p_mdl_res, dv_fname, 1, 1, 1, 2, 0, 0, Model::cBoundingMode_Enable);
     mpAnimModel = p_anm_mdl;
 
-    mpAnimModel->getModel()->setOpaBufferIdx(0);
-    mpAnimModel->getModel()->setXluBufferIdx(0);
+    mpAnimModel->getModel()->setOpaRenderPass(0);
+    mpAnimModel->getModel()->setXluRenderPass(0);
 
     // TODO: mpEffectMgr = new DistantViewEffectMgr(sead::HeapMgr::instance()->getCurrentHeap(), mpAnimModel->getModel(), this);
     // TODO: mpFFLMgr = ...

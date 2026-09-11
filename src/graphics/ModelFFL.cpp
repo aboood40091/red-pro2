@@ -18,7 +18,7 @@ static const sead::Color4f cExDarkRegColorDefault(
 
 }
 
-ModelFFL::ModelFFL(s32 opa_buffer_idx, s32 xlu_buffer_idx)
+ModelFFL::ModelFFL(s32 opa_render_pass, s32 xlu_render_pass)
     : mpHeap(nullptr)
     , mpHeapTmp(nullptr)
     , _814(0)
@@ -33,8 +33,8 @@ ModelFFL::ModelFFL(s32 opa_buffer_idx, s32 xlu_buffer_idx)
     , mInitializeStep(cInitializeStep_NeedInitializeCpu)
     , mDrawType(cDrawType_Normal)
     , mpWmModeDBModel(nullptr)
-    , mOpaBufferIdx(opa_buffer_idx)
-    , mXluBufferIdx(xlu_buffer_idx)
+    , mOpaRenderPass(opa_render_pass)
+    , mXluRenderPass(xlu_render_pass)
 {
     initExRegColor();
 }

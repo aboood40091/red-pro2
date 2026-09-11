@@ -14,8 +14,8 @@ SEAD_SINGLETON_DISPOSER_IMPL(Renderer)
 
 Renderer::Renderer()
     : mpLayer(nullptr)
-    , mDefaultOpaBufferIdx(3)
-    , mDefaultXluBufferIdx(6)
+    , mDefaultOpaRenderPass(3)
+    , mDefaultXluRenderPass(6)
 {
 }
 
@@ -88,24 +88,24 @@ void Renderer::calcForAreaTask()
     }
 }
 
-void Renderer::setLayer(agl::lyr::Layer* p_layer, GatherType type)
+void Renderer::setLayer(agl::lyr::Layer* p_layer, RenderPassType render_pass_type)
 {
     mpLayer = sead::DynamicCast<RenderObjLayerBase>(p_layer);
 
-    switch (type)
+    switch (render_pass_type)
     {
-    case cGatherType_0:
-        mDefaultOpaBufferIdx = 3;
-        mDefaultXluBufferIdx = 6;
+    case cRenderPassType_Course:
+        mDefaultOpaRenderPass = 3;
+        mDefaultXluRenderPass = 6;
         break;
-    case cGatherType_1:
-        mDefaultOpaBufferIdx = 1;
-        mDefaultXluBufferIdx = 0;
+    case cRenderPassType_CourseSelect:
+        mDefaultOpaRenderPass = 1;
+        mDefaultXluRenderPass = 0;
         break;
-    case cGatherType_2:
-    case cGatherType_3:
-        mDefaultOpaBufferIdx = 0;
-        mDefaultXluBufferIdx = 0;
+    case cRenderPassType_DemoScene:
+    case cRenderPassType_Misc:
+        mDefaultOpaRenderPass = 0;
+        mDefaultXluRenderPass = 0;
         break;
     }
 }
@@ -117,34 +117,34 @@ void Renderer::resetLayer()
 
 void Renderer::drawModel(Model* p_model)
 {
-    s32 opa_buffer_idx;
-    s32 xlu_buffer_idx;
+    s32 opa_render_pass;
+    s32 xlu_render_pass;
 
     if (p_model->hasOpa())
     {
-        opa_buffer_idx = p_model->getOpaBufferIdx();
-        if (opa_buffer_idx == -2)
-            opa_buffer_idx = mDefaultOpaBufferIdx;
+        opa_render_pass = p_model->getOpaRenderPass();
+        if (opa_render_pass == cDefaultRenderPass)
+            opa_render_pass = mDefaultOpaRenderPass;
     }
     else
     {
-        opa_buffer_idx = -1;
+        opa_render_pass = -1;
     }
 
     if (p_model->hasXlu())
     {
-        xlu_buffer_idx = p_model->getXluBufferIdx();
-        if (xlu_buffer_idx == -2)
-            xlu_buffer_idx = mDefaultXluBufferIdx;
+        xlu_render_pass = p_model->getXluRenderPass();
+        if (xlu_render_pass == cDefaultRenderPass)
+            xlu_render_pass = mDefaultXluRenderPass;
     }
     else
     {
-        xlu_buffer_idx = -1;
+        xlu_render_pass = -1;
     }
 
     p_model->getMtxRT().getTranslation(p_model->getOrderPos());
 
-    mpLayer->getRenderMgr()->pushBackRenderObj(p_model, opa_buffer_idx, xlu_buffer_idx);
+    mpLayer->getRenderMgr()->pushBackRenderObj(p_model, opa_render_pass, xlu_render_pass);
 }
 
 void Renderer::drawModel(const AnimModel* p_model)
@@ -156,20 +156,20 @@ void Renderer::drawModel(const AnimModel* p_model)
 /*
 void Renderer::drawModel(ModelFFL* p_model)
 {
-    s32 opa_buffer_idx;
-    s32 xlu_buffer_idx;
+    s32 opa_render_pass;
+    s32 xlu_render_pass;
 
-    opa_buffer_idx = p_model->getOpaBufferIdx();
-    if (opa_buffer_idx == -2)
-        opa_buffer_idx = mDefaultOpaBufferIdx;
+    opa_render_pass = p_model->getOpaRenderPass();
+    if (opa_render_pass == cDefaultRenderPass)
+        opa_render_pass = mDefaultOpaRenderPass;
 
-    xlu_buffer_idx = p_model->getXluBufferIdx();
-    if (xlu_buffer_idx == -2)
-        xlu_buffer_idx = mDefaultXluBufferIdx;
+    xlu_render_pass = p_model->getXluRenderPass();
+    if (xlu_render_pass == cDefaultRenderPass)
+        xlu_render_pass = mDefaultXluRenderPass;
 
     p_model->getMtxRT().getTranslation(p_model->getOrderPos());
 
-    mpLayer->getRenderMgr()->pushBackRenderObj(p_model, opa_buffer_idx, xlu_buffer_idx);
+    mpLayer->getRenderMgr()->pushBackRenderObj(p_model, opa_render_pass, xlu_render_pass);
 }
 */
 
