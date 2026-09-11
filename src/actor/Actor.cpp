@@ -533,10 +533,7 @@ Actor* Actor::searchCarryFukidashiPlayer_(s32 action)
 {
     const sead::Vector2f& center_pos = getCenterPos();
 
-    const FieldGameData& game_data = 
-        (CourseTask::instance() != nullptr)
-            ? *CourseTask::instance()->getGameData()
-            : FieldGame::instance()->getGameData();
+    const FieldGameData& game_data = CourseTask::getActiveGameData();
 
     Actor* p_actor_player = nullptr;
     f32 dist = sead::Mathf::maxNumber();
@@ -572,10 +569,7 @@ void Actor::carryFukidashiCheck_(s32 action, const sead::Vector2f& range)
         center_pos.x + range.x, center_pos.y + range.y
     );
 
-    const FieldGameData& game_data = 
-        (CourseTask::instance() != nullptr)
-            ? *CourseTask::instance()->getGameData()
-            : FieldGame::instance()->getGameData();
+    const FieldGameData& game_data = CourseTask::getActiveGameData();
 
     if ((0 <= mControllerLytPlayerNo && mControllerLytPlayerNo < cPlayerNum) &&
         game_data.getPlayerData(mControllerLytPlayerNo).fukidashi_flag.isOnBit(action))
