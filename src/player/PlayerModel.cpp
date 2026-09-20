@@ -1115,7 +1115,7 @@ PlayerModel::EnvType PlayerModel::getEnvType() const
 
 bool PlayerModel::checkChange_MusaPtoNml()
 {
-    ShaderParamAnimation* p_shu_anm = mpModel->getShuAnim(cShuAnm_2);
+    ShaderParamAnimation* p_shu_anm = mpModel->getShuAnim(cShuAnm_Color_PtoNml);
     if (mPlayerMode != cPlayerMode_PSquirrel && mPlayerMode != cPlayerMode_Squirrel)
         return true;
     if (p_shu_anm->getFrameCtrl().checkFrame(30.0f))
@@ -1127,8 +1127,8 @@ bool PlayerModel::checkChange_MusaPtoNml()
     }
     if (p_shu_anm->getFrameCtrl().isStop())
     {
-        mpHeadModel->getShuAnim(cShuAnm_2)->unbind();
-        mpModel->getShuAnim(cShuAnm_2)->unbind();
+        mpHeadModel->getShuAnim(cShuAnm_Color_PtoNml)->unbind();
+        mpModel->getShuAnim(cShuAnm_Color_PtoNml)->unbind();
         return true;
     }
     return false;
