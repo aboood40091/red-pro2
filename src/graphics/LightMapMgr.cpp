@@ -344,7 +344,7 @@ void LightMapMgr::setModelLightMap(ModelG3d* p_model, bool set_mdl_dl_dirty) con
     if (!mOverrideModelLightMap)
         return;
 
-    agl::g3d::ModelEx& model = p_model->getModelEx();
+    agl::g3d::ModelEx& model = *p_model->getModelEx();
 
     for (s32 idx_shape = 0, num_shape = model.GetShapeCount(); idx_shape < num_shape; idx_shape++)
     {
@@ -459,7 +459,7 @@ void LightMapMgr::getAmbColor(sead::Color4f* p_color, AmbColorType type) const
 
 void LightMapMgr::setModelLightMapWithName_(ModelG3d* p_model, const sead::SafeString& name, s32 idx_lghtmap, s32 model_light_map_index) const
 {
-    agl::g3d::ModelEx& model = p_model->getModelEx();
+    agl::g3d::ModelEx& model = *p_model->getModelEx();
 
     for (s32 idx_shape = 0, num_shape = model.GetShapeCount(); idx_shape < num_shape; idx_shape++)
     {

@@ -15,7 +15,7 @@ SkeletalAnimation::SkeletalAnimation()
 bool SkeletalAnimation::init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
 {
     nw::g3d::SkeletalAnimObj::InitArg arg;
-    arg.SetMaxBoneCount(p_model->getModelEx().GetResource()->GetSkeleton()->GetBoneCount());
+    arg.SetMaxBoneCount(p_model->getModelEx()->GetResource()->GetSkeleton()->GetBoneCount());
     arg.SetMaxBoneAnimCount(0);
     arg.SetMaxCurveCount(0);
 
@@ -58,7 +58,7 @@ void SkeletalAnimation::unbindModel()
 void SkeletalAnimation::bindAnimObj_()
 {
     if (mpRes)
-        mAnimObj.Bind(mpModel->getModelEx().GetSkeleton()->GetResource());
+        mAnimObj.Bind(mpModel->getModelEx()->GetSkeleton()->GetResource());
 }
 
 void SkeletalAnimation::play(const ModelResource* p_mdl_res, const sead::SafeString& name)
@@ -103,7 +103,7 @@ void SkeletalAnimation::disableBindFlag()
 void SkeletalAnimation::enableBindFlag(s32 idx_bone)
 {
     if (mpModel)
-        mAnimObj.SetBindFlag(mpModel->getModelEx().GetSkeleton()->GetResource(), idx_bone, nw::g3d::AnimObj::ENABLED);
+        mAnimObj.SetBindFlag(mpModel->getModelEx()->GetSkeleton()->GetResource(), idx_bone, nw::g3d::AnimObj::ENABLED);
 }
 
 void SkeletalAnimation::calc()

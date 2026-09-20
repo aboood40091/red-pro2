@@ -15,7 +15,7 @@ ShaderParamAnimation::ShaderParamAnimation()
 bool ShaderParamAnimation::init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
 {
     nw::g3d::ShaderParamAnimObj::InitArg arg;
-    arg.SetMaxMatCount(p_model->getModelEx().GetResource()->GetMaterialCount());
+    arg.SetMaxMatCount(p_model->getModelEx()->GetResource()->GetMaterialCount());
     arg.SetMaxMatAnimCount(0);
     arg.SetMaxParamAnimCount(0);
     arg.SetMaxCurveCount(0);
@@ -62,7 +62,7 @@ void ShaderParamAnimation::unbindModel()
 void ShaderParamAnimation::bindAnimObj_()
 {
     if (mpRes)
-        mAnimObj.Bind(mpModel->getModelEx().GetResource());
+        mAnimObj.Bind(mpModel->getModelEx()->GetResource());
 }
 
 void ShaderParamAnimation::playColorAnim(const ModelResource* p_mdl_res, const sead::SafeString& name)

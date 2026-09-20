@@ -43,7 +43,7 @@ void PlayerObject::calcCarryStep()
             carry_step_length = 10.0f;
             carry_step = cCarryStep_LiftUp;
         }
-        else if (mModelMgr.isCarryLongAnm())
+        else if (mModelMgr.isMusaPersonalAnm())
         {
             carry_step_length = 5.0f;
             carry_step = cCarryStep_CarryLong;

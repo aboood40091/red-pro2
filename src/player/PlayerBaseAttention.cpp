@@ -138,9 +138,9 @@ void PlayerBase::calcHeadAttentionAngle()
     if (isLiftUp() || isStatus(cStatus_71))
         reset = true;
 
-    if (!reset && !(mpModelBaseMgr->isAnmFlag(PlayerModelBase::cAnmFlagType_Body, PlayerModelBase::cAnmFlagBit_7) ||
-                    mpModelBaseMgr->isAnmFlag(PlayerModelBase::cAnmFlagType_Body, PlayerModelBase::cAnmFlagBit_8) ||
-                    mpModelBaseMgr->isAnmFlag(PlayerModelBase::cAnmFlagType_Body, PlayerModelBase::cAnmFlagBit_9)))
+    if (!reset && !(mpModelBaseMgr->isBodyAnmFlagBit(PlayerModelBase::cAnmFlagBit_7) ||
+                    mpModelBaseMgr->isBodyAnmFlagBit(PlayerModelBase::cAnmFlagBit_8) ||
+                    mpModelBaseMgr->isBodyAnmFlagBit(PlayerModelBase::cAnmFlagBit_9)))
         reset = true;
 
     if (!reset)
@@ -150,7 +150,7 @@ void PlayerBase::calcHeadAttentionAngle()
             f32 src_x = getLookatPos().x;
             f32 src_y = getLookatPos().y;
             sead::Vector2f src_pos(src_x, src_y);
-            if (mpModelBaseMgr->isAnmFlag(PlayerModelBase::cAnmFlagType_Body, PlayerModelBase::cAnmFlagBit_8))
+            if (mpModelBaseMgr->isBodyAnmFlagBit(PlayerModelBase::cAnmFlagBit_8))
             {
                 if (isStatus(cStatus_156))
                 {
@@ -166,7 +166,7 @@ void PlayerBase::calcHeadAttentionAngle()
                     }
                 }
             }
-            else if (mpModelBaseMgr->isAnmFlag(PlayerModelBase::cAnmFlagType_Body, PlayerModelBase::cAnmFlagBit_7))
+            else if (mpModelBaseMgr->isAnmFlagBit(PlayerModelBase::cAnmFlagType_Body, PlayerModelBase::cAnmFlagBit_7))
             {
                 const AttentionLookat* p_attention_lookat = AttentionMgr::instance()->search(*this, src_pos);
                 if (p_attention_lookat != nullptr)

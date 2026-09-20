@@ -104,7 +104,7 @@ void PlayerModelBase::setAnm(s32 anm_id, f32 rate, f32 blend_duration, f32 frame
     FrameCtrl::PlayMode play_mode = anm_data.play_mode;
 
     if (frame == 0.0f &&
-        isAnmFlag(cAnmFlagBit_6) &&
+        isAnmFlagBit(cAnmFlagBit_6) &&
         prev_anm_id != PlayerAnmID::cInvalid && (PlayerHIO_Anm::cData[prev_anm_id].flag & 1 << cAnmFlagBit_6))
     {
         frame = getFrame();
@@ -115,7 +115,7 @@ void PlayerModelBase::setAnm(s32 anm_id, f32 rate, f32 blend_duration, f32 frame
         if (isLiftUp())
             setLinkAnm(anm_id, rate, blend_duration, frame);
 
-        if (!isAnmFlag(cAnmFlagBit_1) || isBubbleChibiYoshiShake())
+        if (!isCarryAnm() || isBubbleChibiYoshiShake())
         {
             setFootAnmImpl(p_anm_res, anm_name, play_mode, rate, frame, blend_duration);
             setCarryBodyAnm(blend_duration, false);
@@ -124,7 +124,7 @@ void PlayerModelBase::setAnm(s32 anm_id, f32 rate, f32 blend_duration, f32 frame
     }
 
     if ((mFlag.isOn(cFlag_Bit5) || mFlag.isOn(cFlag_Bit6)) &&
-        mBodyAnm != PlayerAnmID::cInvalid && !isBodyAnmFlag(cAnmFlagBit_5))
+        mBodyAnm != PlayerAnmID::cInvalid && !isBodyAnmFlagBit(cAnmFlagBit_5))
     {
         setFootAnmImpl(p_anm_res, anm_name, play_mode, rate, frame, 0.0f);
         setBodyAnm(mBodyAnm, getBodyRate(), getBodyFrame());
@@ -160,7 +160,7 @@ void PlayerModelBase::setFrame(f32 frame)
 
 f32 PlayerModelBase::getFrame()
 {
-    return getFrameImpl(0);
+    return getFrameImpl(cSklAnm_Main);
 }
 
 bool PlayerModelBase::isCarry()
@@ -181,7 +181,7 @@ void PlayerModelBase::setLinkAnm(s32 anm_id, f32 rate, f32 blend_duration, f32 f
     if (mpLinkPlayer->mFlag.isOn(cFlag_Bit9))
         return;
 
-    if (isAnmFlag(cAnmFlagBit_1) || isSwimAnm() || isAnmFlagMulti(1 << cAnmFlagBit_14 | 1 << cAnmFlagBit_15))
+    if (isCarryAnm() || isSwimAnm() || isDirAnm())
         mpLinkPlayer->releaseBodyAnm(blend_duration);
     else
     {
@@ -192,7 +192,7 @@ void PlayerModelBase::setLinkAnm(s32 anm_id, f32 rate, f32 blend_duration, f32 f
 
 f32 PlayerModelBase::getBodyRate()
 {
-    return getRateImpl(1);
+    return getRateImpl(cSklAnm_Body);
 }
 
 f32 PlayerModelBase::getRateImpl(s32 skl_anm_idx)
@@ -232,7 +232,7 @@ void PlayerModelBase::copyLinkAnm(f32 blend_duration)
 
 f32 PlayerModelBase::getRate()
 {
-    return getRateImpl(0);
+    return getRateImpl(cSklAnm_Main);
 }
 
 void PlayerModelBase::setRideAnm(s32 anm_id, f32 rate, f32 blend_duration, f32 frame)
@@ -273,6 +273,10 @@ void PlayerModelBase::setRideAnm(s32 anm_id, f32 rate, f32 blend_duration, f32 f
 
 bool PlayerModelBase::getJumpAnmName(sead::BufferedSafeString* p_anm_name, s32 anm_id, bool body)
 {
+    static_assert(sizeof(cJumpAnmVarDt) / sizeof(sead::SafeString) == cJumpMax);
+    static_assert(sizeof(c2JumpAnmVarDt) / sizeof(sead::SafeString) == cJumpMax);
+    static_assert(sizeof(c2JumpedAnmVarDt) / sizeof(sead::SafeString) == cJumpMax);
+
     bool is_jump_anm = false;
     if (body)
     {
@@ -337,12 +341,12 @@ void PlayerModelBase::setJumpAnmRand(RndType rnd_type)
 
 f32 PlayerModelBase::getRateDirect()
 {
-    return getRateImpl(0);
+    return getRateImpl(cSklAnm_Main);
 }
 
 void PlayerModelBase::setRateDirect(f32 rate)
 {
-    setRateImpl(0, rate);
+    setRateImpl(cSklAnm_Main, rate);
 }
 
 void PlayerModelBase::setRateImpl(s32 skl_anm_idx, f32 rate)
@@ -360,12 +364,12 @@ void PlayerModelBase::setRateImpl(s32 skl_anm_idx, f32 rate)
 
 void PlayerModelBase::setBodyRate(f32 rate)
 {
-    setRateImpl(1, rate);
+    setRateImpl(cSklAnm_Body, rate);
 }
 
 bool PlayerModelBase::isAnmStop()
 {
-    return isAnmStopImpl(0);
+    return isAnmStopImpl(cSklAnm_Main);
 }
 
 bool PlayerModelBase::isAnmStopImpl(s32 skl_anm_idx)
@@ -375,12 +379,12 @@ bool PlayerModelBase::isAnmStopImpl(s32 skl_anm_idx)
 
 bool PlayerModelBase::isBodyAnmStop()
 {
-    return isAnmStopImpl(1);
+    return isAnmStopImpl(cSklAnm_Body);
 }
 
 f32 PlayerModelBase::getBodyFrame()
 {
-    return getFrameImpl(1);
+    return getFrameImpl(cSklAnm_Body);
 }
 
 f32 PlayerModelBase::getFrameImpl(s32 skl_anm_idx)
@@ -390,7 +394,7 @@ f32 PlayerModelBase::getFrameImpl(s32 skl_anm_idx)
 
 void PlayerModelBase::setFrameDirect(f32 frame)
 {
-    setFrameImpl(0, frame);
+    setFrameImpl(cSklAnm_Main, frame);
 }
 
 void PlayerModelBase::setFrameImpl(s32 skl_anm_idx, f32 frame)
@@ -402,12 +406,12 @@ void PlayerModelBase::setFrameImpl(s32 skl_anm_idx, f32 frame)
 
 void PlayerModelBase::setBodyFrame(f32 frame)
 {
-    setFrameImpl(1, frame);
+    setFrameImpl(cSklAnm_Body, frame);
 }
 
 bool PlayerModelBase::checkFrame(f32 frame)
 {
-    return checkFrameImpl(0, frame);
+    return checkFrameImpl(cSklAnm_Main, frame);
 }
 
 bool PlayerModelBase::checkFrameImpl(s32 skl_anm_idx, f32 frame)
@@ -417,12 +421,12 @@ bool PlayerModelBase::checkFrameImpl(s32 skl_anm_idx, f32 frame)
 
 bool PlayerModelBase::checkBodyFrame(f32 frame)
 {
-    return checkFrameImpl(1, frame);
+    return checkFrameImpl(cSklAnm_Body, frame);
 }
 
 bool PlayerModelBase::isAnmLoopFrame()
 {
-    return isAnmLoopFrameImpl(0);
+    return isAnmLoopFrameImpl(cSklAnm_Main);
 }
 
 bool PlayerModelBase::isAnmLoopFrameImpl(s32 skl_anm_idx)
@@ -432,12 +436,12 @@ bool PlayerModelBase::isAnmLoopFrameImpl(s32 skl_anm_idx)
 
 bool PlayerModelBase::isBodyAnmLoopFrame()
 {
-    return isAnmLoopFrameImpl(1);
+    return isAnmLoopFrameImpl(cSklAnm_Body);
 }
 
 f32 PlayerModelBase::getFrameEnd()
 {
-    return mpModel->getSklAnim(0)->getFrameCtrl().getFrameEnd();
+    return mpModel->getSklAnim(cSklAnm_Main)->getFrameCtrl().getFrameEnd();
 }
 
 bool PlayerModelBase::isBodyAnmOn()

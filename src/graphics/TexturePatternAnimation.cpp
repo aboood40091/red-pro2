@@ -15,7 +15,7 @@ TexturePatternAnimation::TexturePatternAnimation()
 bool TexturePatternAnimation::init(const ModelG3d* p_model, const ModelResource* p_mdl_res, const sead::PtrArray<ModelResource>* p_anim_mdl_res_array, sead::Heap* heap)
 {
     nw::g3d::TexPatternAnimObj::InitArg arg;
-    arg.SetMaxMatCount(p_model->getModelEx().GetResource()->GetMaterialCount());
+    arg.SetMaxMatCount(p_model->getModelEx()->GetResource()->GetMaterialCount());
     arg.SetMaxMatAnimCount(0);
     arg.SetMaxPatAnimCount(0);
     arg.SetMaxCurveCount(0);
@@ -60,7 +60,7 @@ void TexturePatternAnimation::bindAnimObj_()
 {
     if (mpRes)
     {
-        mAnimObj.Bind(mpModel->getModelEx().GetResource());
+        mAnimObj.Bind(mpModel->getModelEx()->GetResource());
         mAnimObj.ClearResult();
     }
 }

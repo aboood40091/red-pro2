@@ -11,6 +11,8 @@ AnimExpDecayCalcRatio::AnimExpDecayCalcRatio(s32 bone_num_max)
     , mIsFramesPrepared(false)
     , mIsActive(false)
 {
+    // NSMBW: m3d::mdl_c::mdlCallback_c::create
+
     mBoneTrans.allocBuffer(bone_num_max);
     mBoneRot.allocBuffer(bone_num_max);
     mBoneScale.allocBuffer(bone_num_max);
@@ -25,6 +27,8 @@ AnimExpDecayCalcRatio::~AnimExpDecayCalcRatio()
 
 void AnimExpDecayCalcRatio::reset()
 {
+    // NSMBW: m3d::calcRatio_c::reset
+
     mBlendWeight = 0.0f;
     mCounter = 1.0f;
     mRatioA = 0.0f;
@@ -33,6 +37,8 @@ void AnimExpDecayCalcRatio::reset()
 
 void AnimExpDecayCalcRatio::set(f32 duration)
 {
+    // NSMBW: m3d::calcRatio_c::set
+
     if (duration == 0.0f)
         reset();
     else
@@ -48,6 +54,8 @@ void AnimExpDecayCalcRatio::set(f32 duration)
 
 void AnimExpDecayCalcRatio::calc()
 {
+    // NSMBW: m3d::calcRatio_c::calc
+
     if (mBlendWeight == 0.0f)
         return;
 
@@ -70,12 +78,14 @@ void AnimExpDecayCalcRatio::calc()
     }
 }
 
-bool AnimExpDecayCalcRatio::isFramesPrepared() const
+bool AnimExpDecayCalcRatio::isRunning() const
 {
+    // Inline in NSMBW
+
     if (!mIsFramesPrepared)
         return false;
 
-    if (mBlendWeight == 0.0f)
+    if (isEnd())
         return false;
 
     return true;
@@ -88,7 +98,9 @@ bool AnimExpDecayCalcRatio::isBlendDisable(s32 bone_index) const
 
 void AnimExpDecayCalcRatio::applyTo(sead::Matrixf* p_bone_rt, sead::Vector3f* p_bone_scale, s32 bone_index)
 {
-    if (!isFramesPrepared() || isBlendDisable(bone_index))
+    // NSMBW: m3d::mdl_c::mdlCallback_c::ExecCallbackA
+
+    if (!isRunning() || isBlendDisable(bone_index))
     {
         p_bone_rt->getTranslation(mBoneTrans[bone_index]);
         p_bone_rt->toQuat(mBoneRot[bone_index]);
@@ -107,7 +119,7 @@ void AnimExpDecayCalcRatio::applyTo(sead::Matrixf* p_bone_rt, sead::Vector3f* p_
     sead::Quatf quat_B;
     p_bone_rt->toQuat(quat_B);
     sead::Quatf quat;
-    quat.setSlerp(quat_A, quat_B, mRatioB);
+    quat.setSlerp(quat_A, quat_B, ratio());
 
     sead::Vector3f trans_A = mBoneTrans[bone_index];
     trans_A *= mRatioA;
@@ -126,12 +138,16 @@ void AnimExpDecayCalcRatio::applyTo(sead::Matrixf* p_bone_rt, sead::Vector3f* p_
 
 void AnimExpDecayCalcRatio::offUpdate()
 {
+    // NSMBW: m3d::calcRatio_c::offUpdate
+
     mIsFramesPrepared = true;
     mIsActive = false;
 }
 
 void AnimExpDecayCalcRatio::applyTo(Model* p_model)
 {
+    // NSMBW: Automatically done through callback registration
+
     s32 bone_num = p_model->getBoneNum();
     for (s32 i = 0; i < bone_num; i++)
     {
