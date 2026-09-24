@@ -233,7 +233,7 @@ void MarioModel::calcImpl()
 
         sead::Matrixf mtx;
         mpModel->getModel()->getBoneWorldMatrix(mJointMap[cJointID_CapPosition], &mtx);
-        p_bonus_cap_model->setMtxRT(mtx); // This function is not intended to account for scale, but they use it anyway
+        p_bonus_cap_model->setBaseModelMtx(mtx);
 
         p_bonus_cap_model->calcAnm();
         p_bonus_cap_model->calcMdl();

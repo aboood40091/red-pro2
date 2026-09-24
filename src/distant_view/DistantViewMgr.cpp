@@ -136,7 +136,7 @@ void DistantViewMgr::calcModelMtx_()
     sead::Matrix34f model_mtx;
     mpCameraParam->getModelMtx(&model_mtx);
 
-    p_model->setMtxRT(model_mtx);
+    p_model->setBaseModelMtx(model_mtx);
 }
 
 void DistantViewMgr::drawParticle_(const agl::lyr::RenderInfo& render_info) const
@@ -269,7 +269,7 @@ void DistantViewMgr::initialize(u8 course_file, u8 area, const sead::BoundBox2f&
     calcView_();
     calcModelMtx_();
 
-    mpAnimModel->calcMdl();
+    mpAnimModel->calc();
 
     // TODO: mpEffectMgr
     mIsDrawParticle = true;

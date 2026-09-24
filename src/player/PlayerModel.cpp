@@ -492,7 +492,7 @@ void PlayerModel::calcBody()
     calcBlendRate();
 
     Model* p_body_model = mpModel->getModel();
-    p_body_model->setMtxRT(mMtxSrt); // This function is not intended to account for scale, but they use it anyway
+    p_body_model->setBaseModelMtx(mMtxSrt);
 
     calcMusaWing();
 
@@ -790,7 +790,7 @@ void PlayerModel::calcHead()
     {
         sead::Matrixf mtx;
         getFaceMtx(&mtx);
-        p_head_model->setMtxRT(mtx);
+        p_head_model->setBaseModelMtx(mtx);
     }
 
     p_head_model->calcAnm();

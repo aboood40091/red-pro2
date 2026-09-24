@@ -142,7 +142,7 @@ void Renderer::drawModel(Model* p_model)
         xlu_render_pass = -1;
     }
 
-    p_model->getMtxRT().getTranslation(p_model->getOrderPos());
+    p_model->getBaseModelMtx().getTranslation(p_model->getOrderPos());
 
     mpLayer->getRenderMgr()->pushBackRenderObj(p_model, opa_render_pass, xlu_render_pass);
 }
@@ -167,7 +167,7 @@ void Renderer::drawModel(ModelFFL* p_model)
     if (xlu_render_pass == cDefaultRenderPass)
         xlu_render_pass = mDefaultXluRenderPass;
 
-    p_model->getMtxRT().getTranslation(p_model->getOrderPos());
+    p_model->getBaseModelMtx().getTranslation(p_model->getOrderPos());
 
     mpLayer->getRenderMgr()->pushBackRenderObj(p_model, opa_render_pass, xlu_render_pass);
 }

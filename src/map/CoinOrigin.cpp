@@ -100,19 +100,19 @@ void CoinOrigin::calcMdl_()
         sead::Vector3u r = getCoinRotation();
         sead::Vector3f t((cUnitID_Coin              % cUnitPerRow) * cUnitSize + x, cTexHeight - (cUnitID_Coin              / cUnitPerRow + 1.5f) * cUnitSize + y, -500.0f);
         mtx.makeRzxyTIdx(r, t);
-        mpModelCoin->setMtxRT(mtx);
+        mpModelCoin->setBaseModelMtx(mtx);
     }
     {
         sead::Vector3u r = getCoinRotation();
         sead::Vector3f t((cUnitID_BlueCoin_CoreCoin % cUnitPerRow) * cUnitSize + x, cTexHeight - (cUnitID_BlueCoin_CoreCoin / cUnitPerRow + 1.5f) * cUnitSize + y, -500.0f);
         mtx.makeRzxyTIdx(r, t);
-        mpModelBlueCoin->setMtxRT(mtx);
+        mpModelBlueCoin->setBaseModelMtx(mtx);
     }
 
     f32 scale = 1.5f * cUnitSizeNoPad / 24;
 
-    mpModelCoin->setScale(sead::Vector3f(scale, scale, scale));
-    mpModelBlueCoin->setScale(sead::Vector3f(scale, scale, scale));
+    mpModelCoin->setLocalScale(sead::Vector3f(scale, scale, scale));
+    mpModelBlueCoin->setLocalScale(sead::Vector3f(scale, scale, scale));
 
     mpModelCoin->calcMdl();
     mpModelBlueCoin->calcMdl();

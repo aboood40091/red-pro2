@@ -125,7 +125,7 @@ void AnimModel::playAnmFrameCtrl()
     }
 }
 
-void AnimModel::calcMdl()
+void AnimModel::calc()
 {
     mpModel->calcAnm();
     mpModel->calcMdl();

@@ -504,16 +504,16 @@ void KuriboBase::calcModelBase_(JointBlendModel* p_blend_model)
 
         mtx.ZrotM(angle.z());
 
-        p_blend_model->getModel()->setMtxRT(mtx);
+        p_blend_model->getModel()->setBaseModelMtx(mtx);
 
         if (!isState(StateID_Ice))
         {
             p_blend_model->playAnmFrameCtrl();
-            p_blend_model->getModel()->setScale(mBoyoMgr.getScale());
+            p_blend_model->getModel()->setLocalScale(mBoyoMgr.getScale());
         }
         else
         {
-            p_blend_model->getModel()->setScale(mScale);
+            p_blend_model->getModel()->setLocalScale(mScale);
         }
     }
 

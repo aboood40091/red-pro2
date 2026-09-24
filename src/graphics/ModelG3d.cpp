@@ -26,8 +26,8 @@ ModelG3d::ModelG3d()
     , mShaderAssign()
     , mpMaterial()
     , mShape()
-    , mMtxRT(sead::Matrix34f::ident)
-    , mScale(sead::Vector3f::ones)
+    , mBaseModelMtx(sead::Matrix34f::ident)
+    , mLocalScale(sead::Vector3f::ones)
     , _128(0)
     , mRenderFlag(cRenderFlag_Default)
     , mBoundingEnableFlag(0)
@@ -1184,8 +1184,8 @@ void ModelG3d::calcAnm()
 
 void ModelG3d::calcMdl()
 {
-    sead::Matrix34f world_mtx = getMtxRT();
-    world_mtx.scaleBases(getScale().x, getScale().y, getScale().z);
+    sead::Matrix34f world_mtx = getBaseModelMtx();
+    world_mtx.scaleBases(getLocalScale().x, getLocalScale().y, getLocalScale().z);
 
     mModelEx.CalcWorld(reinterpret_cast<const nw::g3d::math::Mtx34&>(world_mtx));
 

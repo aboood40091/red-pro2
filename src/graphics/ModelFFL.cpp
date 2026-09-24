@@ -22,9 +22,9 @@ ModelFFL::ModelFFL(s32 opa_render_pass, s32 xlu_render_pass)
     : mpHeap(nullptr)
     , mpHeapTmp(nullptr)
     , _814(0)
-    , mMtxRT(sead::Matrix34f::ident)
-    , mScale(sead::Vector3f::ones)
-    , mMtxSRT(sead::Matrix34f::ident)
+    , mBaseModelMtx(sead::Matrix34f::ident)
+    , mLocalScale(sead::Vector3f::ones)
+    , mModelMtx(sead::Matrix34f::ident)
     , mEnvTexture_Star(nullptr)
     , mEnvTexture_P(nullptr)
     , mEnvType(cEnvType_Normal)
@@ -50,7 +50,7 @@ bool ModelFFL::initialize(const FFLCharModelDesc* p_desc, const sead::Vector3f& 
         mpHeapTmp = mpHeap;
 
     mCharModelDesc = *p_desc;
-    mScale.set(scale);
+    mLocalScale.set(scale);
 
     return allocBuffer_();
 }
@@ -90,12 +90,12 @@ void ModelFFL::setExRegColor(const sead::Color4f& light, const sead::Color4f& da
     mExDarkRegColor = dark;
 }
 
-void ModelFFL::updateMtxSRT()
+void ModelFFL::calcModelMtx()
 {
-    sead::Vector3f scale = mScale;  // ???
+    sead::Vector3f scale = mLocalScale;  // ???
 
-    mMtxSRT = mMtxRT;
-    mMtxSRT.scaleBases(scale.x, scale.y, scale.z);
+    mModelMtx = mBaseModelMtx;
+    mModelMtx.scaleBases(scale.x, scale.y, scale.z);
 }
 
 void ModelFFL::setSpecialDrawType()
@@ -120,7 +120,7 @@ void ModelFFL::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const se
     if (mDrawOpaWithXlu)
         return;
 
-    setEnvViewUniformWithLightmapEnable_(mMtxSRT, view_mtx, proj_mtx, p_render_mgr);
+    setEnvViewUniformWithLightmapEnable_(mModelMtx, view_mtx, proj_mtx, p_render_mgr);
 
     if (mDrawType == cDrawType_Special)
         drawOpaSpecial_();
@@ -130,7 +130,7 @@ void ModelFFL::drawOpa(s32 view_index, const sead::Matrix34f& view_mtx, const se
 
 void ModelFFL::drawXlu(s32 view_index, const sead::Matrix34f& view_mtx, const sead::Matrix44f& proj_mtx, RenderObjRenderMgr* p_render_mgr)
 {
-    setEnvViewUniformWithLightmapEnable_(mMtxSRT, view_mtx, proj_mtx, p_render_mgr);
+    setEnvViewUniformWithLightmapEnable_(mModelMtx, view_mtx, proj_mtx, p_render_mgr);
 
     if (mDrawOpaWithXlu)
     {

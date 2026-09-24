@@ -18,10 +18,10 @@ void JointBlendModel::playAnmFrameCtrl()
     AnimModel::playAnmFrameCtrl();
 }
 
-void JointBlendModel::calcMdl()
+void JointBlendModel::calc()
 {
     calcBlend();
-    AnimModel::calcMdl();
+    AnimModel::calc();
 }
 
 void JointBlendModel::calcBlend()
