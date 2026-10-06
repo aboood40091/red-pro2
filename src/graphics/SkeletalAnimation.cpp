@@ -106,6 +106,12 @@ void SkeletalAnimation::enableBindFlag(s32 idx_bone)
         mAnimObj.SetBindFlag(mpModel->getModelEx()->GetSkeleton()->GetResource(), idx_bone, nw::g3d::AnimObj::ENABLED);
 }
 
+void SkeletalAnimation::disableBindFlag(s32 idx_bone)
+{
+    if (mpModel)
+        mAnimObj.SetBindFlag(mpModel->getModelEx()->GetSkeleton()->GetResource(), idx_bone, nw::g3d::AnimObj::DISABLED);
+}
+
 void SkeletalAnimation::calc()
 {
     if (!isValid())
