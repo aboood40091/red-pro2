@@ -138,10 +138,17 @@ Skinned draws load it with `LoadVertexUniforms` (`0x02AB4C44`) from skeleton+`0x
 `ModelG3d::calcGPU` runs while `LayerMgr::calcDL` records the display list, after `procDraw_` has already queued the previous picture.
 Writing the uniform block there changes the next picture only.
 A hold present repeats that list and does not call `calcGPU` again.
-The port records the world matrices at the end of a logic `calcGPU`, then before the next course `procDraw_` writes the blended matrices, calls `0x02AAAD18` and `0x02AA56F4`, and copies the exact world matrices back.
+The port records the world matrices at the end of a logic `calcGPU`.
+Before and after the course `procDraw_` it writes this present's matrices, calls `0x02AAAD18` and `0x02AA56F4`, copies the exact world matrices back, and writes this present's camera projection.
 The display list keeps the uniform-block address.
-The render thread copies those bytes when it runs the draw.
-The port waits for that copy at the end of the course `procDraw_` so the next `calcGPU` does not replace the pose still in the picture.
+The port then waits for the render thread to copy that picture before `procCalc_` replaces it.
+An in-between present uses the halfway pose and the halfway projection for that copy.
+A hold does not call `calcGPU`, so the port rebuilds `ModelEnvView` from that projection before the copy.
+A model whose uniform block is larger than `bones * 0x40` is still recorded.
+The player head is one of those.
+The port writes the halfway pose into that block too.
+If that model runs `calcGPU` again on the hold, the port writes the halfway pose once more before the draw.
+The model uniform otherwise keeps the full camera step while the bone is only halfway.
 A second `LayerMgr::calcDL` (`0x024E0F84`) crashes in the layer builder (`0x02509488`, null+4).
 
 `getBoneNum` (`0x024F4820`) reads the bone count from the u16 at `*(*(model+0x40))+8`.
