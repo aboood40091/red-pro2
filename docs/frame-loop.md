@@ -135,8 +135,19 @@ Its data pointer is the word at +`0x18` and its size is the word at +`0x1C`.
 `0x02AAAD18` writes that block from the world matrices at skeleton+`0x10`, multiplied by the matrix at `0x101B7750`.
 Skinned draws load it with `LoadVertexUniforms` (`0x02AB4C44`) from skeleton+`0x18`.
 
-On the title course the scanned picture does not follow later writes to that block or to the world matrices.
-Clearing either one inside `calcGPU` leaves the runners in place.
-The in-between present repeats the picture the logic step already drew.
-The port does not rewrite those buffers from `calcGPU`.
+`ModelG3d::calcGPU` runs while `LayerMgr::calcDL` records the display list, after `procDraw_` has already queued the previous picture.
+Writing the uniform block there changes the next picture only.
+A hold present repeats that list and does not call `calcGPU` again.
+The port records the world matrices at the end of a logic `calcGPU`, then before the next course `procDraw_` writes the blended matrices, calls `0x02AAAD18` and `0x02AA56F4`, and copies the exact world matrices back.
+The display list keeps the uniform-block address.
+The render thread copies those bytes when it runs the draw.
+The port waits for that copy at the end of the course `procDraw_` so the next `calcGPU` does not replace the pose still in the picture.
 A second `LayerMgr::calcDL` (`0x024E0F84`) crashes in the layer builder (`0x02509488`, null+4).
+
+`getBoneNum` (`0x024F4820`) reads the bone count from the u16 at `*(*(model+0x40))+8`.
+World matrices are the pointer at `*(model+0x40)+0x10`, one `0x30`-byte matrix per bone.
+Bone visibility is the bit array at `ModelG3d+0x2C`.
+The bone index shifted right by 5 selects the word, and the low 5 bits select the bit from the least significant bit.
+A set bit is visible.
+Shapes are the array at `ModelG3d+0x44`, count in the u16 at `+0x3C`, stride `0x28`.
+The shape object is the first word of each entry, and its bone index is the u16 at `+0x10`.
