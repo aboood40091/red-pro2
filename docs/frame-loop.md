@@ -144,10 +144,13 @@ The display list keeps the uniform-block address.
 The port then waits for the render thread to copy that picture before `procCalc_` replaces it.
 An in-between present uses the halfway pose and the halfway projection for that copy.
 A hold does not call `calcGPU`, so the port rebuilds `ModelEnvView` from that projection before the copy.
-A model whose uniform block is larger than `bones * 0x40` is still recorded.
-The player head is one of those.
-The port writes the halfway pose into that block too.
-If that model runs `calcGPU` again on the hold, the port writes the halfway pose once more before the draw.
+Mario's head is a separate model at `PlayerModel+0x11C`.
+It has one bone and no skeleton uniform.
+`calcGPU` does not run for it, so the port records its world matrix at the end of the logic step.
+The draw is rigid.
+Shape byte `+0x16` is 0, and the matrix uniform is the shape block written by `0x02AA56F4`.
+On an in-between present the port blends that world matrix and uploads the shape block.
+Rebuilding the head with `calcMdl` from the face bone leaves the head on the current logic step.
 The model uniform otherwise keeps the full camera step while the bone is only halfway.
 A second `LayerMgr::calcDL` (`0x024E0F84`) crashes in the layer builder (`0x02509488`, null+4).
 
