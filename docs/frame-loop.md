@@ -144,7 +144,8 @@ The display list keeps the uniform-block address.
 The port then waits for the render thread to copy that picture before `procCalc_` replaces it.
 An in-between present uses the halfway pose and the halfway projection for that copy.
 A hold does not call `calcGPU`, so the port rebuilds `ModelEnvView` from that projection before the copy.
-Mario's head is a separate model at `PlayerModel+0x11C`.
+Each player's head is a separate model at `PlayerModel+0x11C`.
+`PlayerMgr` stores the four actors at `+0x20`.
 It has one bone and no skeleton uniform.
 `calcGPU` does not run for it, so the port records its world matrix at the end of the logic step.
 The draw is rigid.
