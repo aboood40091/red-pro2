@@ -59,13 +59,38 @@ s32 sub_02ADB290(
     u32 total_size,
     void* holder);
 
+// Address: 0x02ADAD00
+u32 sub_02ADAD00(void* sound_startable, void* archive_slice);
+
+// Address: 0x02AE03FC
+s32 sub_02AE03FC(void* player_ext, u32 size_a, u32 size_b, u32 aux, void* tail);
+
 // Address: 0x02ADB470
 s32 sub_02ADB470(
     void* sound_startable,
     void* archive_slice,
     u32 size_a,
     u32 size_b,
-    void* tail_holder);
+    void* tail_holder)
+{
+    if ((size_a & 0x4u) == 0)
+    {
+        u32 required = sub_02ADAD00(sound_startable, archive_slice);
+        if (size_b < required)
+            return 0;
+    }
+
+    u8 block[0x28] = {};
+    if (sub_02AD6CF0(archive_slice, block + 8) == 0)
+        return 0;
+
+    u32 aux = reinterpret_cast<u32*>(block + 8)[4];
+    u8* player = reinterpret_cast<u8*>(sound_startable);
+    if (sub_02AE03FC(player + 0x90, size_a, size_b, aux, tail_holder) == 0)
+        return 0;
+
+    return 1;
+}
 
 // Address: 0x02ADB338
 s32 sub_02ADB338(

@@ -54,7 +54,10 @@ A soft restart must:
      An earlier note wrote the table as `0x1018C814`; the correct address is `0x1017C814`.
      `src/sound/SndAudioMgr.cpp` is the decompiled `startSound` and `startSystemSe`.
      `src/audio/seadAudioPlayerCafeInit.cpp` decompiles bootstrap slot **`0x029E8324`** and buffer setup **`0x029E6C38`** (SoundStartable at child **`+4`**, Setup via **`0x02ADB634`**).
-     `src/nw/snd/SoundArchivePlayerSetup.cpp` decompiles **`0x02ADB530`**, **`0x02ADB338`**, and the **`0x02ADB634`** wrapper (Setup core still calls forward **`0x02ADAE50`** / carve helpers).
+     `src/nw/snd/SoundArchivePlayerArchive.cpp` decompiles archive slice resolve **`0x029E779C`**.
+     `src/nw/snd/SoundArchivePlayerBuffer.cpp` decompiles buffer sizing **`0x02ADABBC`** / **`0x02ADAD00`** and archive read helpers **`0x02AD6968`**–**`0x02AD6CF0`**.
+     `src/nw/snd/SoundArchivePlayerCarve.cpp` decompiles sound-info table carve **`0x02ADAE50`**.
+     `src/nw/snd/SoundArchivePlayerSetup.cpp` decompiles **`0x02ADB470`**, **`0x02ADB530`**, **`0x02ADB338`**, and **`0x02ADB634`** (Setup sub-steps **`0x02ADAF9C`** onward remain forward-declared).
      `AudAudioMgr` is not polymorphic (its ctor `0x029B1AAC` sets no vptr), so `+0x3D0` is the only method table `SndAudioMgr` has.
      Bootstrap order (USA v1.3.0, static sweep):
      - **`0x029E8324`** is the first `{0, fn}` slot in **`.rodata 0x1017C284`**.
