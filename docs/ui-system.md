@@ -75,7 +75,7 @@ Bad for pause-style windows that must respect DRC vs TV, `PaCursor`, or game fon
 **Guest layout system (this document).**
 Pause, file-select chrome, course stock HUD, and most menus run here.
 Integration means hooking guest functions or (later) calling them through `nsmbu.Hooks.call`.
-Addresses below are USA v1.3.0; hook files and `GC(0x…)` use the same digits ([names.md](../../../docs/names.md)).
+Addresses below are USA v1.3.0; hook files and `GC(0x…)` use the same digits ([names.md](../../../docs/developer/names.md)).
 
 **Content replacement (`content_dir`).**
 Live for archive paths the game resolves at runtime ([content.md](../../../docs/modding/content.md)).
@@ -89,7 +89,7 @@ Plan mod packages against both docs.
 ### Hook targets (USA v1.3.0)
 
 Use the address as the key.
-Add a name in a comment when you edit `tools/recomp/hooks.txt` ([names.md](../../../docs/names.md)).
+Add a name in a comment when you edit `tools/recomp/hooks.txt` ([names.md](../../../docs/developer/names.md)).
 
 **Modal UI (pause, quit confirm, save prompts).**
 
@@ -197,7 +197,7 @@ Good for always-on mod panels in levels.
 ### Runtime hook workflow (C++ today)
 
 1. Pick a USA address from the list above; confirm in `tools/recomp/headers_names.txt`.
-2. Add a line to `tools/recomp/hooks.txt` (function entry) or `@XXXXXXXX` for a site hook ([names.md](../../../docs/names.md)).
+2. Add a line to `tools/recomp/hooks.txt` (function entry) or `@XXXXXXXX` for a site hook ([names.md](../../../docs/developer/names.md)).
 3. `nsmbu game usa-1.3.0 --recomp` then `nsmbu build` (hook list change forces recomp).
 4. Implement `hook_XXXXXXXX` in `runtime/src/hooks/` (pattern in existing hook files).
 5. Call `f_XXXXXXXX_orig` when wrapping; respect game thread only.
@@ -225,7 +225,7 @@ Use guest hooks when you need native fonts, layout animation, or GamePad focus.
 - **Allocator heap.** Each `Multi2D` owns a `LayoutAllocator`; `setHeap` must point at valid guest heap before `createLayoutObj`.
 - **TV vs DRC.** Modal UI splits `draw` and `drawDRC`; pause on GamePad-only flows needs both or DRC-only hooks.
 - **Pad focus.** `PaCursor` and `CommonWindowMgr` controller slots (`SysControllerWrapper` array on the mgr) consume input while open; overlay `nsmbu.Gui` does not participate in that focus model.
-- **European builds.** Hook addresses move with the regional map ([builds.md](../../../docs/builds.md)); object layouts do not.
+- **European builds.** Hook addresses move with the regional map ([builds.md](../../../docs/developer/builds.md)); object layouts do not.
 - **Message text.** `setTextBoxMessageFromTextID` pulls from the game MSBT pipeline; custom strings need layout text or a hook on `TextBox::setMessageParam_` (`0x02681BFC`).
 - **Recomp cost.** Each new hooked function stays recompiled in the mod build; keep hooks on high-level `execute` / `draw`, not per-pane inner loops.
 
