@@ -21,7 +21,6 @@ const StateID* CourseCameraUpdater::getStateID() const
     return nullptr;
 }
 
-// Address: 0x02A031A0
 void CourseCameraUpdater::execute()
 {
     u32 lock_word = *reinterpret_cast<u32*>(kGfxLockWordAddr);

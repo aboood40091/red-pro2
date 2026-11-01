@@ -20,6 +20,28 @@ void sub_028F21DC(void* mgr, s32 player_no);
 // Address: 0x02918780
 bool sub_02918780(PlayerMgr* mgr, s32 player_no);
 
+// Address: 0x029167BC
+void sub_029167BC(PlayerMgr* mgr);
+
+// Address: 0x02916F7C
+void sub_02916F7C(PlayerMgr* mgr);
+
+// Address: 0x029170BC
+void sub_029170BC(PlayerMgr* mgr);
+
+}
+
+// Address: 0x0291713C
+void PlayerMgr::initializeForCourseSetup()
+{
+    u32 zero = 0;
+    _84 = zero;
+    sub_029167BC(this);
+    _88 = 0;
+    _a8 = zero;
+    sub_02916F7C(this);
+    sub_029170BC(this);
+    _a8 = zero;
 }
 
 // Address: 0x02917D58

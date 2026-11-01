@@ -111,8 +111,10 @@ Those are **not** written in `0x0250C3EC`.
 `setupCourse` does **not** load player fields from save itself.
 Near the end (`0x024BE210`):
 
-- **`PlayerMgr::sInstance`** (`0x101E6994`) — `bl 0x0291713C` with **`&mGameData`** (`CourseTask+0x124`).
-- **`bl 0x02742F9C`** — second helper with the same **`FieldGameData*`**.
+- **`PlayerMgr::initializeForCourseSetup`** (`0x0291713C`) — clears course-local player mgr fields, then rebuilds player slots.
+  Decomp: `vendor/decomp/src/player/PlayerMgr.cpp`.
+- **`sub_02742F9C`** (`0x02742F9C`) — second helper with the same **`FieldGameData*`**; first argument is `*(0x101EC398)` (course owner singleton; symbol not in `headers_names.txt`).
+  Decomp: `vendor/decomp/src/game/CourseFieldGameApply.cpp`.
 - **`sub_02918780`** (`PlayerMgr.cpp`) reads **`getGameData()->getPlayerData(n).is_entry`** once actors exist.
 
 Until that init, **`PlayerMgr::getGameData()`** falls back to **`FieldGame::instance()`** if **`CourseTask`** is null (`0x02918758`).

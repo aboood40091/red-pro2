@@ -19,6 +19,7 @@
 
 #include <actor/ActorMgr.h>
 #include <actor/ActorStatus.h>
+#include <player/PlayerMgr.h>
 #include <enemy/TottenMgr.h>
 #include <event/EventMgr.h>
 #include <fukidashi/FukidashiMgr.h>
@@ -31,6 +32,9 @@
 #include <cstring>
 
 namespace {
+
+// Address: 0x02742F9C
+void sub_02742F9C(void* course_owner, void* game_data);
 
 // Address: 0x02A0A2FC
 extern void sub_02A0A2FC(void* self);
@@ -622,8 +626,8 @@ void CourseTask::setupCourse()
     }
 
     ActorMgr::initialize(loadSingletonAt(0x101C30C8), 0);
-    f_0291713C(loadSingletonAt(0x101E6994), &mGameData);
-    f_02742F9C(loadSingletonAt(0x101EC398), &mGameData);
+    PlayerMgr::instance()->initializeForCourseSetup();
+    sub_02742F9C(loadSingletonAt(0x101EC398), &mGameData);
     f_0269BC94(loadSingletonAt(0x101EB06C));
     f_0268E888(loadSingletonAt(0x101EAFC0), 0);
     f_0268F7F0(loadSingletonAt(0x101EAFE8), 0);
