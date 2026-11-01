@@ -114,6 +114,7 @@ Near the end (`0x024BE210`):
 
 - **`PlayerMgr::initializeForCourseSetup`** (`0x0291713C`) — clears course-local player mgr fields, then rebuilds player slots.
   Decomp: `vendor/decomp/src/player/PlayerMgr.cpp`.
+  `sub_02916F7C` clears entry `+0x1D`, runs staff-credit (`0x02916CB8`), title (`0x02916EDC`), or per-entry `sub_02916BF8` spawn paths, then `sub_029170BC` clears `+0x1E` when `0x02917040` allows.
 - **`sub_02742F9C`** (`0x02742F9C`) — second helper with the same **`FieldGameData*`**; first argument is `*(0x101EC398)` (course owner singleton; symbol not in `headers_names.txt`).
   Decomp: `vendor/decomp/src/game/CourseFieldGameApply.cpp`.
   Helpers `sub_02742DD0`, `sub_024C21DC`, `sub_024C2198`, and `sub_02742DA8` are in the same file.
