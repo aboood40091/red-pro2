@@ -15,6 +15,7 @@ Ctor is `0x029C4DC0`-family; it sets `mCalcPassCount = 1` and `mSkippedCalcCount
 Addresses (USA v1.3.0): `runImpl_` `0x02A02EB4`, `mainLoop_` `0x02A02F48`, `procFrame_` `0x02A031A0`, base `procDraw_` `0x02A0358C`, `waitForNextFrame_` `0x02A03748`, base `swapBuffer_` `0x02A03798`.
 
 Decompiled bodies live in `vendor/decomp/src/sead/cafe/seadGameFrameworkCafeFrameLoop.cpp` and `vendor/decomp/src/sead/seadMethodTreeNode.cpp` / `seadDualScreenMethodTreeMgr.cpp`.
+Base `procDraw_` calls `GameFrameworkCafe_drawTvScreen_` (`0x02A032C8`), `GameFrameworkCafe_drawDrcScreen_` (`0x02A03394`), TV/DRC copy helpers `sub_02A03464` / `sub_02A034F8`, and framebuffer bind `sub_02A058F0` in that same file.
 `TaskMgr::afterCalc` (`0x02A01730`) is in `vendor/decomp/src/sead/seadTaskMgrAfterCalc.cpp`.
 `gpuMesureEnd_` (`0x02A02F74`) is in `seadGameFrameworkCafeFrameLoop.cpp`.
 Base `swapBuffer_` (`0x02A03798`) is in the same file.

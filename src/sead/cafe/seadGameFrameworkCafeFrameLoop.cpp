@@ -1,4 +1,5 @@
 #include <cafe/base/PPCArch.h>
+#include <gx2/context.h>
 #include <gx2/event.h>
 #include <gx2/swap.h>
 
@@ -6,6 +7,10 @@ namespace sead {
 
 class GameFrameworkCafe;
 class TaskMgr;
+class DualScreenMethodTreeMgr;
+
+void DualScreenMethodTreeMgr_drawTop_(DualScreenMethodTreeMgr* self);
+void DualScreenMethodTreeMgr_drawBtm_(DualScreenMethodTreeMgr* self);
 
 namespace {
 
@@ -39,11 +44,249 @@ bool shouldRunHalfFrameSwap_(GameFrameworkCafe* self)
 
 using SwapFn = void (*)(GameFrameworkCafe*, s32);
 
+constexpr u32 kLayerMgrInitFlag = 0x101F9BE4u;
+constexpr u32 kLayerMgrInitWord = 0x101FBFCu;
+constexpr u32 kLayerMgrInitValue = 0x10190688u;
+
+using DrawSlotFn = void (*)(GameFrameworkCafe*, s32);
+
+DrawSlotFn loadDrawSlot_(GameFrameworkCafe* self)
+{
+    u8* bytes = reinterpret_cast<u8*>(self);
+    u32 table = *reinterpret_cast<u32*>(bytes + 0x24);
+    return reinterpret_cast<DrawSlotFn>(*reinterpret_cast<u32*>(table + 0xF4));
+}
+
+void initLayerMgrDrawOnce_(DualScreenMethodTreeMgr* mgr)
+{
+    (void)mgr;
+    u32* flag = reinterpret_cast<u32*>(kLayerMgrInitFlag);
+    if (*flag != 0)
+        return;
+    *flag = 1;
+    *reinterpret_cast<u32*>(kLayerMgrInitWord) = kLayerMgrInitValue;
+}
+
+DualScreenMethodTreeMgr* prepareMethodTreeForDraw_(DualScreenMethodTreeMgr* mgr)
+{
+    if (mgr == nullptr)
+        return nullptr;
+
+    u8* bytes = reinterpret_cast<u8*>(mgr);
+    void* cs = *reinterpret_cast<void**>(bytes + 0x3C);
+    if (cs == nullptr)
+        return mgr;
+
+    u32 vtable = *reinterpret_cast<u32*>(cs);
+    using PreDrawFn = s32 (*)(DualScreenMethodTreeMgr*);
+    PreDrawFn pre = reinterpret_cast<PreDrawFn>(*reinterpret_cast<u32*>(vtable + 0xC));
+    if (pre(mgr) == 0)
+        return nullptr;
+    return mgr;
+}
+
+void* loadGraphicsContextState_()
+{
+    void* graphics = *reinterpret_cast<void**>(kGraphicsInstanceLo);
+    return *reinterpret_cast<void**>(static_cast<u8*>(graphics) + 0x134);
+}
+
+using FrameBufferBindFn = void (*)();
+
+void bindFrameBuffer_(void* frame_buffer)
+{
+    if (frame_buffer == nullptr)
+        return;
+
+    u8* fb = static_cast<u8*>(frame_buffer);
+    void* inner = *reinterpret_cast<void**>(fb + 0x18);
+    u32 vtable = *reinterpret_cast<u32*>(inner);
+    FrameBufferBindFn bind =
+        reinterpret_cast<FrameBufferBindFn>(*reinterpret_cast<u32*>(vtable + 0x3C));
+    bind();
+}
+
+using CopyToDisplayFn = void (*)(void*, u32);
+
+void invokeCopyToDisplay_(void* copy_object, u32 copy_arg)
+{
+    u8* object = static_cast<u8*>(copy_object);
+    void* inner = *reinterpret_cast<void**>(object + 0x18);
+    u32 vtable = *reinterpret_cast<u32*>(inner);
+    CopyToDisplayFn copy =
+        reinterpret_cast<CopyToDisplayFn>(*reinterpret_cast<u32*>(vtable + 0x24));
+    copy(copy_object, copy_arg);
+}
+
+// Address: 0x02A058F0
+void sub_02A058F0(void* frame_buffer)
+{
+    bindFrameBuffer_(frame_buffer);
+}
+
 // Address: 0x02A03464
-void sub_02A03464(GameFrameworkCafe* self);
+void sub_02A03464(GameFrameworkCafe* self)
+{
+    u8* bytes = reinterpret_cast<u8*>(self);
+    void* pending = *reinterpret_cast<void**>(bytes + 0x360);
+    if (pending != nullptr)
+    {
+        invokeCopyToDisplay_(pending, *reinterpret_cast<u32*>(bytes + 0x358));
+        *reinterpret_cast<void**>(bytes + 0x360) = nullptr;
+        GX2SetContextState(loadGraphicsContextState_());
+        return;
+    }
+
+    void* tv_buffer = *reinterpret_cast<void**>(bytes + 0x80);
+    if (tv_buffer != nullptr)
+        invokeCopyToDisplay_(tv_buffer, *reinterpret_cast<u32*>(bytes + 0x358));
+
+    GX2SetContextState(loadGraphicsContextState_());
+}
 
 // Address: 0x02A034F8
-void sub_02A034F8(GameFrameworkCafe* self);
+void sub_02A034F8(GameFrameworkCafe* self)
+{
+    u8* bytes = reinterpret_cast<u8*>(self);
+    void* pending = *reinterpret_cast<void**>(bytes + 0x364);
+    if (pending != nullptr)
+    {
+        invokeCopyToDisplay_(pending, *reinterpret_cast<u32*>(bytes + 0x35C));
+        *reinterpret_cast<void**>(bytes + 0x364) = nullptr;
+        GX2SetContextState(loadGraphicsContextState_());
+        return;
+    }
+
+    void* drc_buffer = *reinterpret_cast<void**>(bytes + 0x84);
+    if (drc_buffer != nullptr)
+        invokeCopyToDisplay_(drc_buffer, *reinterpret_cast<u32*>(bytes + 0x35C));
+
+    GX2SetContextState(loadGraphicsContextState_());
+}
+
+// Address: 0x02A032C8
+void GameFrameworkCafe_drawTvScreen_(GameFrameworkCafe* self)
+{
+    u8* bytes = reinterpret_cast<u8*>(self);
+    DualScreenMethodTreeMgr* tree =
+        reinterpret_cast<DualScreenMethodTreeMgr*>(bytes + 0x1C);
+    initLayerMgrDrawOnce_(tree);
+    DualScreenMethodTreeMgr* mgr = prepareMethodTreeForDraw_(tree);
+
+    u32* gpu_counters = static_cast<u32*>(*reinterpret_cast<void**>(bytes + 0x370));
+    GX2SampleTopGPUCycle(gpu_counters);
+
+    void* tv_buffer = *reinterpret_cast<void**>(bytes + 0x80);
+    if (tv_buffer != nullptr)
+        sub_02A058F0(tv_buffer);
+
+    loadDrawSlot_(self)(self, 6);
+
+    if (mgr != nullptr)
+        DualScreenMethodTreeMgr_drawTop_(mgr);
+
+    GX2SampleBottomGPUCycle(gpu_counters + 2);
+}
+
+// Address: 0x02A03394
+void GameFrameworkCafe_drawDrcScreen_(GameFrameworkCafe* self)
+{
+    u8* bytes = reinterpret_cast<u8*>(self);
+    DualScreenMethodTreeMgr* tree =
+        reinterpret_cast<DualScreenMethodTreeMgr*>(bytes + 0x1C);
+    initLayerMgrDrawOnce_(tree);
+    DualScreenMethodTreeMgr* mgr = prepareMethodTreeForDraw_(tree);
+
+    u32* gpu_counters = static_cast<u32*>(*reinterpret_cast<void**>(bytes + 0x370));
+    GX2SampleTopGPUCycle(gpu_counters + 4);
+
+    void* drc_buffer = *reinterpret_cast<void**>(bytes + 0x84);
+    if (drc_buffer != nullptr)
+        sub_02A058F0(drc_buffer);
+
+    loadDrawSlot_(self)(self, 9);
+
+    if (mgr != nullptr)
+        DualScreenMethodTreeMgr_drawBtm_(mgr);
+
+    GX2SampleBottomGPUCycle(gpu_counters + 6);
+}
+
+// Address: 0x02A0358C
+void GameFrameworkCafe_procDraw_(GameFrameworkCafe* self)
+{
+    if (!shouldRunHalfFrameSwap_(self))
+        return;
+
+    u8* bytes = reinterpret_cast<u8*>(self);
+    u32 draw_order = *reinterpret_cast<u32*>(bytes + 0xC0);
+
+    if (draw_order == 0)
+        GameFrameworkCafe_drawTvScreen_(self);
+    else
+        GameFrameworkCafe_drawDrcScreen_(self);
+
+    if (bytes[0x36C] != 0)
+        goto L_03614;
+
+    if (draw_order == 0)
+        sub_02A03464(self);
+    else
+        sub_02A034F8(self);
+
+    if (draw_order == 0)
+        goto L_03624;
+    goto L_03638;
+
+L_03614:
+    if (draw_order == 0)
+        goto L_03624;
+
+    GameFrameworkCafe_drawTvScreen_(self);
+    if (*reinterpret_cast<u32*>(bytes + 0x368) != 0)
+        goto L_036a0;
+    goto L_03648;
+
+L_03624:
+    GameFrameworkCafe_drawDrcScreen_(self);
+    if (*reinterpret_cast<u32*>(bytes + 0x368) != 0)
+        goto L_036a0;
+    goto L_03648;
+
+L_03638:
+    GameFrameworkCafe_drawTvScreen_(self);
+    if (*reinterpret_cast<u32*>(bytes + 0x368) != 0)
+        goto L_036a0;
+    goto L_03648;
+
+L_03648:
+    if (bytes[0x36C] == 0)
+        goto L_03680;
+
+    if (draw_order == 0)
+        sub_02A03464(self);
+    else
+        sub_02A034F8(self);
+
+    if (draw_order == 0)
+        goto L_03690;
+
+    sub_02A03464(self);
+    goto L_036a0;
+
+L_03680:
+    if (draw_order == 0)
+        goto L_03690;
+
+    sub_02A034F8(self);
+    goto L_036a0;
+
+L_03690:
+    sub_02A034F8(self);
+
+L_036a0:
+    GX2Flush();
+}
 
 void toggleHalfFramePhase_(GameFrameworkCafe* self)
 {
