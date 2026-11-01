@@ -89,7 +89,7 @@ Plan mod packages against both docs.
 ### Hook targets (USA v1.3.0)
 
 Use the address as the key.
-Add a name in a comment when you edit `tools/recomp/hooks.txt` ([names.md](../../../docs/developer/names.md)).
+Add a name in a comment when you edit `recomp/hooks.txt` ([names.md](../../../docs/developer/names.md)).
 
 **Modal UI (pause, quit confirm, save prompts).**
 
@@ -196,8 +196,8 @@ Good for always-on mod panels in levels.
 
 ### Runtime hook workflow (C++ today)
 
-1. Pick a USA address from the list above; confirm in `tools/recomp/headers_names.txt`.
-2. Add a line to `tools/recomp/hooks.txt` (function entry) or `@XXXXXXXX` for a site hook ([names.md](../../../docs/developer/names.md)).
+1. Pick a USA address from the list above; confirm in `recomp/headers_names.txt`.
+2. Add a line to `recomp/hooks.txt` (function entry) or `@XXXXXXXX` for a site hook ([names.md](../../../docs/developer/names.md)).
 3. `nsmbu game usa-1.3.0 --recomp` then `nsmbu build` (hook list change forces recomp).
 4. Implement `hook_XXXXXXXX` in `runtime/src/hooks/` (pattern in existing hook files).
 5. Call `f_XXXXXXXX_orig` when wrapping; respect game thread only.
@@ -238,4 +238,4 @@ Use guest hooks when you need native fonts, layout animation, or GamePad focus.
 ## Tools
 
 - Disassemble: `python3 tools/rpx/ppcdis.py 0x026711C8` (uses `game/active`).
-- Names: `tools/recomp/headers_names.txt` for `Multi2D::`, `CommonWindowMgr::`, etc.
+- Names: `recomp/headers_names.txt` for `Multi2D::`, `CommonWindowMgr::`, etc.

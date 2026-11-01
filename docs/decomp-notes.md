@@ -14,8 +14,8 @@ The notes below are the crash fixes that still match this port.
   not interior jump-table slots.
   Unknown-branch diagnostics then called `ld32(r12+4)` with `r12=0`, which faulted at guest address 4 before
   `fatal()` could run.
-- **Fix.** `tools/recomp/analyze.py` discovers these branch islands.
-  `tools/recomp/recomp.py` lowers them to `switch (c->ctr)` and registers interior slots on the owning
+- **Fix.** `recomp/analyze.py` discovers these branch islands.
+  `recomp/recomp.py` lowers them to `switch (c->ctr)` and registers interior slots on the owning
   function.
   `ppc_dispatch` logging only peeks guest memory at `ea >= 0x10000`.
 
