@@ -117,6 +117,7 @@ Near the end (`0x024BE210`):
   `sub_02916F7C` clears entry `+0x1D`, runs staff-credit (`0x02916CB8`), title (`0x02916EDC`), or per-entry `sub_02916BF8` spawn paths, then `sub_029170BC` clears `+0x1E` when `0x02917040` allows.
 - **`sub_02742F9C`** (`0x02742F9C`) — second helper with the same **`FieldGameData*`**; first argument is `*(0x101EC398)` (course owner singleton; symbol not in `headers_names.txt`).
   Decomp: `vendor/decomp/src/game/CourseFieldGameApply.cpp`.
+  Lazy singleton init: `sub_02742D2C` in `CourseOwnerSingleton.cpp`.
   Helpers `sub_02742DD0`, `sub_024C21DC`, `sub_024C2198`, and `sub_02742DA8` are in the same file.
   `sub_02742F88` / `sub_02742EA0` spawn course-apply actors via the profile table at `0x10221564`.
   `sub_027430C0` / `sub_027431C8` scan the course-owner challenge list at `+0x18` for the stored entry index at `+0x130`.

@@ -442,7 +442,7 @@ void CourseTask::setupCourse()
 
     f_0268BE54(0);
     f_02916AF0(0);
-    f_02742D2C(0);
+    sub_02742D2C(0);
     CoinBattleScoreMgr::createInstance(nullptr);
     ActorCollisionCheckMgr_createInstance(0);
     f_0269BB7C(0);

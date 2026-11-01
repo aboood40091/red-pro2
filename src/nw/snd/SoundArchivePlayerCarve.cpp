@@ -10,7 +10,13 @@ s32 sub_02AD6968(void* archive_slice);
 s32 sub_02AD6C58(void* archive_slice, u32 index, u32* out_pair);
 
 // Address: 0x02ADAD4C
-s32 sub_02ADAD4C(void* sound_startable, u32* cursor, u32 limit);
+s32 sub_02ADAD4C(void* sound_startable, u32* cursor, u32 limit, u32 bump_bytes);
+
+// Address: 0x02AF5A90
+void sub_02AF5A90(u32 address);
+
+// Address: 0x02AF5B60
+void sub_02AF5B60(void* dest, u32 size, u32 value);
 
 // Address: 0x02ADE508
 void* sub_02ADE508(void* table_entry);
@@ -63,7 +69,7 @@ s32 sub_02ADAE50(void* sound_startable, void* archive_slice, u32* cursor, u32 li
 
         for (u32 step = 0; step < pair[0]; ++step)
         {
-            if (sub_02ADAD4C(sound_startable, cursor, limit) == 0)
+            if (sub_02ADAD4C(sound_startable, cursor, limit, pair[1]) == 0)
                 return 0;
             sub_02ADECE4(handle);
             if (step + 1 < pair[0])
@@ -73,5 +79,35 @@ s32 sub_02ADAE50(void* sound_startable, void* archive_slice, u32* cursor, u32 li
         entry += 0x78;
     }
 
+    return 1;
+}
+
+// Address: 0x02ADAD4C
+s32 sub_02ADAD4C(void* sound_startable, u32* cursor, u32 limit, u32 bump_bytes)
+{
+    u32 base = *cursor;
+    if ((base & 0x80000000u) == 0)
+    {
+        u32 probe = alignUp32_(base + 0x3bu);
+        if (probe > limit)
+            return 0;
+        if (base != 0)
+        {
+            *cursor = base;
+            sub_02AF5A90(base);
+            base = *cursor;
+        }
+        u32 next = alignUp32_(base + 0x1fu) + alignUp32_(bump_bytes + 0x1fu);
+        if (next > limit)
+            return 0;
+        *cursor = next;
+        sub_02AF5B60(reinterpret_cast<void*>(base), bump_bytes, 0);
+        return 1;
+    }
+
+    u32 next = alignUp32_(base + 0x1fu) + alignUp32_(bump_bytes + 0x1fu);
+    if (next > limit)
+        return 0;
+    *cursor = next;
     return 1;
 }
