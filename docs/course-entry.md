@@ -118,6 +118,8 @@ Near the end (`0x024BE210`):
 - **`sub_02742F9C`** (`0x02742F9C`) — second helper with the same **`FieldGameData*`**; first argument is `*(0x101EC398)` (course owner singleton; symbol not in `headers_names.txt`).
   Decomp: `vendor/decomp/src/game/CourseFieldGameApply.cpp`.
   Helpers `sub_02742DD0`, `sub_024C21DC`, `sub_024C2198`, and `sub_02742DA8` are in the same file.
+  `sub_02742F88` / `sub_02742EA0` spawn course-apply actors via the profile table at `0x10221564`.
+  Course-type probes `sub_024D37B0`–`sub_024D38F8` read `CourseInfo` at `0x101D18EC`.
 - **`sub_02918780`** (`PlayerMgr.cpp`) reads **`getGameData()->getPlayerData(n).is_entry`** once actors exist.
 
 Until that init, **`PlayerMgr::getGameData()`** falls back to **`FieldGame::instance()`** if **`CourseTask`** is null (`0x02918758`).
