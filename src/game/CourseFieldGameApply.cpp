@@ -9,6 +9,7 @@
 #include <map/CourseData.h>
 #include <player/PlayerMgr.h>
 #include <player/PlayerObject.h>
+#include <course_select/CourseSelectMgr.h>
 #include <system/MainGame.h>
 
 bool sub_02918780(PlayerMgr* mgr, s32 player_no);
@@ -353,6 +354,52 @@ s32 sub_02743270(s32 value)
     if (value < 1)
         return 0xA;
     return 0xB;
+}
+
+// Address: 0x02743294
+void sub_02743294(void* course_owner, u8* game_data)
+{
+    u8* owner = reinterpret_cast<u8*>(course_owner);
+    s32 entry_index = *reinterpret_cast<s32*>(owner + 0x130);
+    if (entry_index == -1)
+        return;
+    if (owner[0x135] != 0)
+        return;
+
+    MainGame* main_game = MainGame::instance();
+    u32 mode = 0;
+    if (main_game != nullptr)
+        mode = *reinterpret_cast<u32*>(reinterpret_cast<u8*>(main_game) + 0x20);
+
+    s32 probe = 0;
+    if (mode == 2)
+        probe = sub_027430C0(course_owner);
+    else if (mode == 3)
+        probe = sub_027431C8(course_owner);
+
+    CourseSelectMgr* select_mgr = CourseSelectMgr::instance();
+    u8 on_course_select = 0;
+    if (select_mgr != nullptr)
+        on_course_select = reinterpret_cast<u8*>(select_mgr)[0x59C];
+
+    bool apply = false;
+    if (mode == 2 || mode == 3)
+    {
+        if (on_course_select != 0)
+            apply = true;
+        else if (probe != 0)
+            apply = true;
+    }
+    else if (on_course_select != 0)
+    {
+        apply = true;
+    }
+
+    if (!apply)
+        return;
+
+    s32 mapped = sub_02743270(entry_index);
+    *reinterpret_cast<u32*>(game_data + kFieldGameCourseTypeOffset) = static_cast<u32>(mapped);
 }
 
 } // namespace

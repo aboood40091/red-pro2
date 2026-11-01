@@ -53,7 +53,8 @@ A soft restart must:
      That is exactly the virtual order in `include/sound/SndAudioMgr.h`, which already records `vtbl Address: 0x1017C814`.
      An earlier note wrote the table as `0x1018C814`; the correct address is `0x1017C814`.
      `src/sound/SndAudioMgr.cpp` is the decompiled `startSound` and `startSystemSe`.
-     `src/audio/seadAudioPlayerCafeInit.cpp` decompiles bootstrap slot **`0x029E8324`** (vtable pre-check, then **`0x029E6C38`** buffer setup).
+     `src/audio/seadAudioPlayerCafeInit.cpp` decompiles bootstrap slot **`0x029E8324`** and buffer setup **`0x029E6C38`** (SoundStartable at child **`+4`**, Setup via **`0x02ADB634`**).
+     `src/nw/snd/SoundArchivePlayerSetup.cpp` decompiles **`0x02ADB530`**, **`0x02ADB338`**, and the **`0x02ADB634`** wrapper (Setup core still calls forward **`0x02ADAE50`** / carve helpers).
      `AudAudioMgr` is not polymorphic (its ctor `0x029B1AAC` sets no vptr), so `+0x3D0` is the only method table `SndAudioMgr` has.
      Bootstrap order (USA v1.3.0, static sweep):
      - **`0x029E8324`** is the first `{0, fn}` slot in **`.rodata 0x1017C284`**.
@@ -73,7 +74,8 @@ A soft restart must:
      The `NO_AUDIO` park wait is the only path that waits; the normal path starts the frame thread without it.
    - Host fix: join AX frame thread, `retire_service_cpu`, keep `g_host_top` across soft restart.
      None of this ever landed: `frame_thread` is started detached (`runtime/src/ax/ax.cpp:603`) and is never joined, `retire_service_cpu` has no caller, and the deleted `do_reboot` called `mem::reset_allocators()`, which reset `g_host_top`.
-   - Do not start the AX frame thread from `AXInit`; start it when SoundArchivePlayer Setup (`0x02ADB338`) returns. Starting AX earlier races callbacks into Setup (table pointer is stored before Setup finishes) and after soft restart can prevent Setup from running at all.
+   - Do not start the AX frame thread from `AXInit`; start it when SoundArchivePlayer Setup (`0x02ADB338`) returns.
+     Starting AX earlier races callbacks into Setup (table pointer is stored before Setup finishes) and after soft restart can prevent Setup from running at all.
      This gate never landed either: `AXInit` still starts the thread, and no Setup-done flag exists.
    - Gate sound-info walks / `startSoundImpl` on that Setup-done flag; defer the sound-info write (`0x029B7448`) until replayed after Setup; do not skip `SndAudioMgr::calc`.
 
