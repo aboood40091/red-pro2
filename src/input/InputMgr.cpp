@@ -220,6 +220,75 @@ void sub_0250C3EC(InputMgr* mgr)
     game_data_bytes[0x140] = save_entry[kSaveAreaParam];
 }
 
+// Address: 0x0250F9BC
+void sub_0250F9BC(void* dst, sead::Heap* heap);
+
+// Address: 0x0250F878
+void sub_0250F878(void* obj);
+
+// Address: 0x02514150
+void sub_02514150(void* obj);
+
+// Address: 0x029F1858
+void* sub_029F1858(u32 size, u32 align, sead::Heap* heap);
+
+}
+
+// Address: 0x0250CDBC
+void InputMgr::applySaveEntry_(const u32* p_mode_word, void* p_arg, sead::Heap* heap)
+{
+    u8* self = reinterpret_cast<u8*>(this);
+    u32* disable_stride_a = reinterpret_cast<u32*>(self + 0x4F4);
+    u32* disable_stride_b = reinterpret_cast<u32*>(self + 0x504);
+    u32 zero = 0;
+
+    for (s32 i = 0; i < 4; ++i)
+    {
+        disable_stride_a[i] = zero;
+        disable_stride_b[i] = zero;
+    }
+
+    self[0x53C] = 0;
+    u32 mode = p_mode_word != nullptr ? *p_mode_word : 0;
+    *reinterpret_cast<u32*>(self + 0x514) = mode;
+
+    u8** working_save = reinterpret_cast<u8**>(self + 0x55C);
+
+    if (mode == 1)
+    {
+        *working_save = nullptr;
+    }
+    else if (mode == 2)
+    {
+        u8* buffer = static_cast<u8*>(sub_029F1858(0xE8, 4, heap));
+        if (buffer != nullptr)
+        {
+            sub_0250F878(buffer);
+            *working_save = buffer;
+            sub_0250F9BC(buffer, heap);
+        }
+        else
+        {
+            *working_save = nullptr;
+        }
+    }
+
+    u32* controller_table = reinterpret_cast<u32*>(self + 0x4E0);
+    for (s32 slot = 0; slot < 4; ++slot)
+    {
+        void* controller = sub_029F1858(0x194, 4, heap);
+        if (controller != nullptr)
+            sub_02514150(controller);
+        controller_table[slot] = reinterpret_cast<u32>(controller);
+    }
+
+    void* extra = sub_029F1858(0x194, 4, heap);
+    if (extra != nullptr)
+        sub_02514150(extra);
+    *reinterpret_cast<u32*>(self + 0x4F0) = reinterpret_cast<u32>(extra);
+
+    if (mode == 1 || mode == 2)
+        sub_0250C3EC(this);
 }
 
 // Address: 0x0250D1EC

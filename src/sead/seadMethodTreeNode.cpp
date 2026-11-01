@@ -4,13 +4,31 @@ class MethodTreeNode;
 
 namespace {
 
-// Address: 0x029FF410
-void sub_029FF410(MethodTreeNode* node);
+// Address: 0x02A18F20
+void sub_02A18F20(void* cs);
 
-// Address: 0x029FF420
-void sub_029FF420(MethodTreeNode* node);
+// Address: 0x02A18F54
+void sub_02A18F54(void* cs);
 
 } // namespace
+
+// Address: 0x029FF410
+void sub_029FF410(MethodTreeNode* node)
+{
+    void* cs = *reinterpret_cast<void**>(reinterpret_cast<u8*>(node) + 0x3C);
+    if (cs == nullptr)
+        return;
+    sub_02A18F20(cs);
+}
+
+// Address: 0x029FF420
+void sub_029FF420(MethodTreeNode* node)
+{
+    void* cs = *reinterpret_cast<void**>(reinterpret_cast<u8*>(node) + 0x3C);
+    if (cs == nullptr)
+        return;
+    sub_02A18F54(cs);
+}
 
 // Address: 0x029FF588
 void MethodTreeNode_callRecursive_(MethodTreeNode* node)

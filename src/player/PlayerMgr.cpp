@@ -21,7 +21,22 @@ void sub_028F21DC(void* mgr, s32 player_no);
 bool sub_02918780(PlayerMgr* mgr, s32 player_no);
 
 // Address: 0x029167BC
-void sub_029167BC(PlayerMgr* mgr);
+void sub_029167BC(PlayerMgr* mgr)
+{
+    u8* bytes = reinterpret_cast<u8*>(mgr);
+    u32* ring_a = reinterpret_cast<u32*>(bytes + 0x1C);
+    for (s32 i = 0; i < 4; ++i)
+        ring_a[i] = 0;
+
+    u32* ring_b = reinterpret_cast<u32*>(bytes + 0x2C);
+    for (s32 i = 0; i < 4; ++i)
+        ring_b[i] = 0;
+
+    *reinterpret_cast<u32*>(bytes + 0x50) = 0;
+    *reinterpret_cast<u32*>(bytes + 0x6C) = 0;
+    *reinterpret_cast<u32*>(bytes + 0x4C) = 0;
+    *reinterpret_cast<u32*>(bytes + 0x70) = 0;
+}
 
 // Address: 0x02916F7C
 void sub_02916F7C(PlayerMgr* mgr);

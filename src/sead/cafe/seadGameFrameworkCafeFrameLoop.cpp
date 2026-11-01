@@ -1,4 +1,5 @@
 #include <cafe/base/PPCArch.h>
+#include <gx2/event.h>
 #include <gx2/swap.h>
 
 namespace sead {
@@ -52,15 +53,52 @@ void sub_02A07A54(void* lock);
 void sub_02A07AF8(void* lock);
 
 // Address: 0x02A0183C
-void sub_02A0183C(TaskMgr* task_mgr);
-
-// Address: 0x02A02F74
-void sub_02A02F74(GameFrameworkCafe* self);
+void TaskMgr_afterCalc_thunk_(TaskMgr* task_mgr);
 
 // Address: 0x02A1A31C
 void sub_02A1A31C(u64* stamp, u32* out_hi, u32* out_lo);
 
 } // namespace
+
+// Address: 0x02A02F74
+void GameFrameworkCafe_gpuMesureEnd_(GameFrameworkCafe* self)
+{
+    u8* bytes = reinterpret_cast<u8*>(self);
+    void* gpu_counters = *reinterpret_cast<void**>(bytes + 0x370);
+    DCInvalidateRange(gpu_counters, 0x20);
+
+    u32 draw_order = *reinterpret_cast<u32*>(bytes + 0xC0);
+    u32 index = (draw_order != 0) ? 2u : 1u;
+    u32 tv_index = (index == 0) ? 1u : 3u;
+    u32 drc_index = (index == 0) ? 2u : 1u;
+
+    u32* counter_pairs = static_cast<u32*>(gpu_counters);
+    u32 pair_base = index << 3;
+
+    u32 gpu_begin = counter_pairs[pair_base / 4];
+    u32 gpu_end = counter_pairs[pair_base / 4 + 1];
+    u32 cpu_end = *reinterpret_cast<u32*>(bytes + 0x7C);
+    u32 cpu_begin = *reinterpret_cast<u32*>(bytes + 0x78);
+
+    u32 converted_end = static_cast<u32>(GX2GPUTimeToCPUTime(gpu_begin, gpu_end));
+    u32 delta_hi = cpu_begin - converted_end;
+    u32 delta_lo = cpu_end - converted_end;
+
+    u32 tv_pair = tv_index << 3;
+    u32 tv_gpu_begin = counter_pairs[tv_pair / 4];
+    u32 tv_gpu_end = counter_pairs[tv_pair / 4 + 1];
+    u32 tv_cpu = static_cast<u32>(GX2GPUTimeToCPUTime(tv_gpu_begin, tv_gpu_end));
+
+    u32 drc_pair = drc_index << 3;
+    u32 drc_gpu_begin = counter_pairs[drc_pair / 4];
+    u32 drc_gpu_end = counter_pairs[drc_pair / 4 + 1];
+    u32 drc_cpu = static_cast<u32>(GX2GPUTimeToCPUTime(drc_gpu_begin, drc_gpu_end));
+
+    (void)delta_hi;
+    (void)delta_lo;
+    (void)tv_cpu;
+    (void)drc_cpu;
+}
 
 // Address: 0x02A02EB4
 void GameFrameworkCafe_runImpl_(GameFrameworkCafe* self)
@@ -91,7 +129,7 @@ void GameFrameworkCafe_procFrame_(GameFrameworkCafe* self)
     sub_02A07A54(lock);
 
     TaskMgr* task_mgr = *reinterpret_cast<TaskMgr**>(reinterpret_cast<u8*>(self) + 0x18);
-    sub_02A0183C(task_mgr);
+    TaskMgr_afterCalc_thunk_(task_mgr);
 
     invokeDispatch_(self, 0xD4);
     invokeDispatch_(self, 0xDC);
@@ -100,7 +138,7 @@ void GameFrameworkCafe_procFrame_(GameFrameworkCafe* self)
     if (shouldRunSwapAndGpuMeasure_(self))
     {
         invokeDispatch_(self, 0xEC);
-        sub_02A02F74(self);
+        GameFrameworkCafe_gpuMesureEnd_(self);
     }
 
     lock = *reinterpret_cast<void**>(kGraphicsInstanceLo);

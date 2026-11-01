@@ -15,6 +15,8 @@ Ctor is `0x029C4DC0`-family; it sets `mCalcPassCount = 1` and `mSkippedCalcCount
 Addresses (USA v1.3.0): `runImpl_` `0x02A02EB4`, `mainLoop_` `0x02A02F48`, `procFrame_` `0x02A031A0`, base `procDraw_` `0x02A0358C`, `waitForNextFrame_` `0x02A03748`, base `swapBuffer_` `0x02A03798`.
 
 Decompiled bodies live in `vendor/decomp/src/sead/cafe/seadGameFrameworkCafeFrameLoop.cpp` and `vendor/decomp/src/sead/seadMethodTreeNode.cpp` / `seadDualScreenMethodTreeMgr.cpp`.
+`TaskMgr::afterCalc` (`0x02A01730`) is in `vendor/decomp/src/sead/seadTaskMgrAfterCalc.cpp`.
+`gpuMesureEnd_` (`0x02A02F74`) is in `seadGameFrameworkCafeFrameLoop.cpp`.
 `CourseCameraUpdater::execute` in this tree was once tagged at `0x02A031A0`; that PC is `GameFrameworkCafe::procFrame_`, not course camera code.
 
 The overridable steps are a static dispatch table at `0x10185280`, held at `this+0x24`, not a vtable.

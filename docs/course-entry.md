@@ -10,6 +10,7 @@ Relates to directed `nsmbu open` / `run` and normal map → course.
 Decomp: `src/input/InputMgr.cpp` (`sub_0250C3EC`).
 
 Callers: only `InputMgr_applySaveEntry_` (`0x0250CDBC`) via `bl 0x0250C3EC` at `0x0250CFA0` and `0x0250CFC0`.
+Decomp: `InputMgr::applySaveEntry_` in `vendor/decomp/src/input/InputMgr.cpp`.
 Course setup reaches it from `CourseTask::setupCourse` (`0x024BD86C`) after `InputMgr::createInstance`.
 
 ### Per-player block (×4, stride `0x10`, base `+0x3C`)
