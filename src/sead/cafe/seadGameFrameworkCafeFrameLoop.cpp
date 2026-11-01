@@ -27,7 +27,7 @@ void invokeDispatch_(GameFrameworkCafe* self, u32 slot_offset)
     loadDispatch_(self, slot_offset)(self);
 }
 
-bool shouldRunSwapAndGpuMeasure_(GameFrameworkCafe* self)
+bool shouldRunHalfFrameSwap_(GameFrameworkCafe* self)
 {
     u32 flag = *reinterpret_cast<u32*>(reinterpret_cast<u8*>(self) + 0x6C);
     if ((flag & 1) == 0)
@@ -36,6 +36,14 @@ bool shouldRunSwapAndGpuMeasure_(GameFrameworkCafe* self)
         return false;
     return true;
 }
+
+using SwapFn = void (*)(GameFrameworkCafe*, s32);
+
+// Address: 0x02A03464
+void sub_02A03464(GameFrameworkCafe* self);
+
+// Address: 0x02A034F8
+void sub_02A034F8(GameFrameworkCafe* self);
 
 void toggleHalfFramePhase_(GameFrameworkCafe* self)
 {
@@ -100,6 +108,44 @@ void GameFrameworkCafe_gpuMesureEnd_(GameFrameworkCafe* self)
     (void)drc_cpu;
 }
 
+// Address: 0x02A03798
+void GameFrameworkCafe_swapBuffer_(GameFrameworkCafe* self)
+{
+    if (!shouldRunHalfFrameSwap_(self))
+        return;
+
+    u8* bytes = reinterpret_cast<u8*>(self);
+    SwapFn swap_fn = reinterpret_cast<SwapFn>(*reinterpret_cast<u32*>(bytes + 0x368));
+    if (swap_fn == nullptr)
+        return;
+
+    swap_fn(self, 0);
+    GX2DrawDone();
+
+    if (bytes[0x36C] == 0)
+    {
+        if (*reinterpret_cast<u32*>(bytes + 0xC0) == 0)
+            sub_02A03464(self);
+        else
+            sub_02A034F8(self);
+    }
+    else
+    {
+        if (*reinterpret_cast<u32*>(bytes + 0xC0) != 0)
+            sub_02A034F8(self);
+        else
+            sub_02A034F8(self);
+    }
+
+    GX2Flush();
+    swap_fn(self, 1);
+
+    if (*reinterpret_cast<u32*>(bytes + 0x28) == 2)
+        GX2SwapScanBuffers();
+
+    GX2DrawDone();
+}
+
 // Address: 0x02A02EB4
 void GameFrameworkCafe_runImpl_(GameFrameworkCafe* self)
 {
@@ -135,7 +181,7 @@ void GameFrameworkCafe_procFrame_(GameFrameworkCafe* self)
     invokeDispatch_(self, 0xDC);
     invokeDispatch_(self, 0x6C);
 
-    if (shouldRunSwapAndGpuMeasure_(self))
+    if (shouldRunHalfFrameSwap_(self))
     {
         invokeDispatch_(self, 0xEC);
         GameFrameworkCafe_gpuMesureEnd_(self);

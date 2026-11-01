@@ -1,7 +1,7 @@
 #include <player/PlayerMgr.h>
 
-#include <game/CourseTask.h>
 #include <game/FieldGame.h>
+#include <game/CourseTask.h>
 #include <player/PlayerBase.h>
 #include <player/PlayerObject.h>
 #include <player/Yoshi.h>
@@ -38,11 +38,64 @@ void sub_029167BC(PlayerMgr* mgr)
     *reinterpret_cast<u32*>(bytes + 0x70) = 0;
 }
 
+// Address: 0x02916B94
+void sub_02916B94(PlayerMgr* mgr);
+
+// Address: 0x02916CB8
+s32 sub_02916CB8(PlayerMgr* mgr, FieldGameData* game_data);
+
+// Address: 0x02916EDC
+s32 sub_02916EDC(PlayerMgr* mgr, FieldGameData* game_data);
+
+// Address: 0x02916BF8
+void sub_02916BF8(s32 player_no, const char* name, s32 arg2, s32 arg3, s32 arg4, u8* player_entry);
+
+// Address: 0x02917040
+s32 sub_02917040();
+
+// Address: 0x02916B6C
+FieldGameData* sub_02916B6C(PlayerMgr* mgr);
+
 // Address: 0x02916F7C
-void sub_02916F7C(PlayerMgr* mgr);
+void sub_02916F7C(PlayerMgr* mgr, FieldGameData* game_data)
+{
+    sub_02916B94(mgr);
+    if (sub_02916CB8(mgr, game_data) != 0)
+        return;
+    if (sub_02916EDC(mgr, game_data) != 0)
+        return;
+
+    u8* player_base = reinterpret_cast<u8*>(game_data) + 0x14;
+    const char* name = reinterpret_cast<const char*>(0x105FA760u);
+
+    for (s32 i = 0; i < 4; ++i)
+    {
+        u8* entry = player_base + i * 0x48;
+        if (entry[0] == 0)
+            continue;
+
+        sub_02916BF8(i, name, 0, 0, 0, entry);
+        entry[0x1D] = 1;
+    }
+}
 
 // Address: 0x029170BC
-void sub_029170BC(PlayerMgr* mgr);
+void sub_029170BC(PlayerMgr* mgr)
+{
+    if (sub_02917040() == 0)
+        return;
+
+    FieldGameData* game_data = sub_02916B6C(mgr);
+    if (game_data == nullptr)
+        game_data = getGameData();
+
+    u8* player_base = reinterpret_cast<u8*>(game_data) + 0x14;
+    for (s32 i = 0; i < 4; ++i)
+    {
+        u8* entry = player_base + i * 0x48;
+        entry[0x1E] = 0;
+    }
+}
 
 }
 
@@ -54,7 +107,7 @@ void PlayerMgr::initializeForCourseSetup()
     sub_029167BC(this);
     _88 = 0;
     _a8 = zero;
-    sub_02916F7C(this);
+    sub_02916F7C(this, getGameData());
     sub_029170BC(this);
     _a8 = zero;
 }
