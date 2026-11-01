@@ -252,6 +252,109 @@ s32 sub_029190B4(void* main_game)
     return 0;
 }
 
+constexpr u32 kChallengeEntryTypeOffset = 0x1860u;
+constexpr u32 kChallengeEntryIndexOffset = 0x185cu;
+constexpr u32 kChallengeEntryFlagsOffset = 0x1868u;
+
+void* courseOwner_listEntry_(u8* owner, s32 logical_index)
+{
+    u8* list = owner + 0x18;
+    void** data = *reinterpret_cast<void***>(list);
+    u32 end = *reinterpret_cast<u32*>(list + 4);
+    u32 start = *reinterpret_cast<u32*>(list + 8);
+    u32 physical = start + static_cast<u32>(logical_index);
+    if (physical >= end)
+        physical -= end;
+    return data[physical];
+}
+
+bool challengeEntry_matchesCourseIndex_(void* entry, s32 entry_index)
+{
+    u8* bytes = reinterpret_cast<u8*>(entry);
+    if (*reinterpret_cast<u32*>(bytes + kChallengeEntryTypeOffset) != 1)
+        return false;
+    return *reinterpret_cast<u32*>(bytes + kChallengeEntryIndexOffset) == static_cast<u32>(entry_index);
+}
+
+// Address: 0x027430C0
+s32 sub_027430C0(void* course_owner)
+{
+    u8* owner = reinterpret_cast<u8*>(course_owner);
+    s32 entry_index = *reinterpret_cast<s32*>(owner + 0x130);
+    if (entry_index == -1)
+        return 0;
+
+    bool short_play = sub_024D38F8(CourseInfo::instance()) != 0;
+    u8 main_flag = 0;
+    if (MainGame::instance() != nullptr)
+        main_flag = reinterpret_cast<u8*>(MainGame::instance())[0x21DFA];
+
+    u32 count = *reinterpret_cast<u32*>(owner + 0x24);
+    for (u32 i = 0; i < count; ++i)
+    {
+        void* entry = courseOwner_listEntry_(owner, static_cast<s32>(i));
+        if (!challengeEntry_matchesCourseIndex_(entry, entry_index))
+            continue;
+
+        u32 flags = *reinterpret_cast<u32*>(reinterpret_cast<u8*>(entry) + kChallengeEntryFlagsOffset);
+        if ((flags >> 15) & 1)
+            continue;
+
+        if (short_play)
+        {
+            if (main_flag == 0)
+                continue;
+            if (((flags >> 5) & 1) == 0)
+                continue;
+        }
+
+        return 1;
+    }
+
+    return 0;
+}
+
+// Address: 0x027431C8
+s32 sub_027431C8(void* course_owner)
+{
+    u8* owner = reinterpret_cast<u8*>(course_owner);
+    s32 entry_index = *reinterpret_cast<s32*>(owner + 0x130);
+    if (entry_index == -1)
+        return 0;
+
+    MainGame* main_game = MainGame::instance();
+    if (main_game == nullptr)
+        return 0;
+    if (reinterpret_cast<u8*>(main_game)[0x21DFA] == 0)
+        return 0;
+
+    u32 count = *reinterpret_cast<u32*>(owner + 0x24);
+    for (u32 i = 0; i < count; ++i)
+    {
+        void* entry = courseOwner_listEntry_(owner, static_cast<s32>(i));
+        if (!challengeEntry_matchesCourseIndex_(entry, entry_index))
+            continue;
+
+        u32 flags = *reinterpret_cast<u32*>(reinterpret_cast<u8*>(entry) + kChallengeEntryFlagsOffset);
+        if (((flags >> 4) & 1) == 0)
+            continue;
+
+        return 1;
+    }
+
+    return 0;
+}
+
+// Address: 0x02743270
+s32 sub_02743270(s32 value)
+{
+    if (value > 1)
+        return 0xE;
+    if (value < 1)
+        return 0xA;
+    return 0xB;
+}
+
 } // namespace
 
 // Address: 0x02742F9C

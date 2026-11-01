@@ -119,6 +119,7 @@ Near the end (`0x024BE210`):
   Decomp: `vendor/decomp/src/game/CourseFieldGameApply.cpp`.
   Helpers `sub_02742DD0`, `sub_024C21DC`, `sub_024C2198`, and `sub_02742DA8` are in the same file.
   `sub_02742F88` / `sub_02742EA0` spawn course-apply actors via the profile table at `0x10221564`.
+  `sub_027430C0` / `sub_027431C8` scan the course-owner challenge list at `+0x18` for the stored entry index at `+0x130`.
   Course-type probes `sub_024D37B0`–`sub_024D38F8` read `CourseInfo` at `0x101D18EC`.
 - **`sub_02918780`** (`PlayerMgr.cpp`) reads **`getGameData()->getPlayerData(n).is_entry`** once actors exist.
 

@@ -53,6 +53,7 @@ A soft restart must:
      That is exactly the virtual order in `include/sound/SndAudioMgr.h`, which already records `vtbl Address: 0x1017C814`.
      An earlier note wrote the table as `0x1018C814`; the correct address is `0x1017C814`.
      `src/sound/SndAudioMgr.cpp` is the decompiled `startSound` and `startSystemSe`.
+     `src/audio/seadAudioPlayerCafeInit.cpp` decompiles bootstrap slot **`0x029E8324`** (vtable pre-check, then **`0x029E6C38`** buffer setup).
      `AudAudioMgr` is not polymorphic (its ctor `0x029B1AAC` sets no vptr), so `+0x3D0` is the only method table `SndAudioMgr` has.
      Bootstrap order (USA v1.3.0, static sweep):
      - **`0x029E8324`** is the first `{0, fn}` slot in **`.rodata 0x1017C284`**.
